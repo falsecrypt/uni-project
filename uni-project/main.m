@@ -1,18 +1,18 @@
 //
 //  main.m
-//  uni-project
+//  MultipleMasterDetailViews
 //
-//  Created by Erna on 28.08.12.
-//  Copyright (c) 2012 test. All rights reserved.
+//  Created by Todd Bates on 11/14/11.
+//  Copyright (c) 2011 Science At Hand LLC. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-#import "AppDelegate.h"
+#import "MDAppDelegate.h"
 
 int main(int argc, char *argv[])
 {
     @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([MDAppDelegate class]));
     }
 }

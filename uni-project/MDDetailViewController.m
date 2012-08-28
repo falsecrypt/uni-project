@@ -1,24 +1,30 @@
 //
-//  DetailViewController.m
-//  uni-project
+//  MDDetailViewController.m
+//  MultipleMasterDetailViews
 //
-//  Created by Erna on 28.08.12.
-//  Copyright (c) 2012 test. All rights reserved.
+//  Created by Todd Bates on 11/14/11.
+//  Copyright (c) 2011 Science At Hand LLC. All rights reserved.
 //
 
-#import "DetailViewController.h"
+#import "MDDetailViewController.h"
 
-@interface DetailViewController ()
+@interface MDDetailViewController ()
 @property (strong, nonatomic) UIPopoverController *masterPopoverController;
 - (void)configureView;
 @end
 
-@implementation DetailViewController
+@implementation MDDetailViewController
+
+@synthesize detailItem = _detailItem;
+@synthesize detailDescriptionLabel = _detailDescriptionLabel;
+@synthesize masterPopoverController = _masterPopoverController;
 
 #pragma mark - Managing the detail item
 
 - (void)setDetailItem:(id)newDetailItem
 {
+    //NSLog(@"setDetailItem:newDetailItem: %@", newDetailItem);
+    //NSLog(@"setDetailItem:self.detailItem: %@", self.detailItem);
     if (_detailItem != newDetailItem) {
         _detailItem = newDetailItem;
         
@@ -34,11 +40,18 @@
 - (void)configureView
 {
     // Update the user interface for the detail item.
-
-    if (self.detailItem) {
-        self.detailDescriptionLabel.text = [self.detailItem description];
-    }
+    
+    self.detailDescriptionLabel.text = [self.detailItem description];
+    
 }
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Release any cached data, images, etc that aren't in use.
+}
+
+#pragma mark - View lifecycle
 
 - (void)viewDidLoad
 {
@@ -49,12 +62,35 @@
 
 - (void)viewDidUnload
 {
+    [self setDetailDescriptionLabel:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+	[super viewWillDisappear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+	[super viewDidDisappear:animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
+    // Return YES for supported orientations
     return YES;
 }
 
@@ -73,5 +109,14 @@
     [self.navigationItem setLeftBarButtonItem:nil animated:YES];
     self.masterPopoverController = nil;
 }
+
+
+- (NSString *)description {
+    
+    NSString *descriptionString =
+    [NSString stringWithFormat:@"\nObject MDDetailViewController - detailItem: %@; detailDescriptionLabel: %@;", self.detailItem, self.detailDescriptionLabel];
+    return descriptionString;
+}
+
 
 @end
