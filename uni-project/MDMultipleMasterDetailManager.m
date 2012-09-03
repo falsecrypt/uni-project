@@ -7,6 +7,7 @@
 //
 
 #import "MDMultipleMasterDetailManager.h"
+#import "MDDetailViewController.h"
 
 @interface MDMultipleMasterDetailManager()
 @property (weak,nonatomic)UISplitViewController* splitViewController;
@@ -104,6 +105,9 @@
         if([self.masterPopoverController isPopoverVisible]){
             self.masterPopoverController.passthroughViews = [NSArray arrayWithObject:detailRootController.navigationBar];
         }
+    }
+    if(tabBarController.selectedIndex == 1){
+        [(MDDetailViewController *)detailControler setDetailItem:@"Pie Chart"];
     }
     NSLog(@"Manager,self.splitViewController.viewControllers: %@", self.splitViewController.viewControllers); 
 }

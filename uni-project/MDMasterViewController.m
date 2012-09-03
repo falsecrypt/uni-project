@@ -39,7 +39,6 @@
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    //[self.view sizeToFit];
     
     NSLog(@"MASTER frame w:%f h:%f", self.view.frame.size.width, self.view.frame.size.height);
     NSLog(@"MASTER bounds w:%f h:%f", self.view.bounds.size.width, self.view.bounds.size.height);
@@ -55,11 +54,13 @@
     self.detailViewController = (MDDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
     //NSLog(@"viewDidLoad:self.detailViewController: %@", [self.detailViewController description]);
     [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
-    
-    self.objectsArray = [[NSMutableArray alloc] initWithObjects:@"Pie Chart",
-                         @"Bar Graph",
-                         @"Scatter Plot",
-                         nil];
+    if ([self.objectsArray count] < 1) {
+        self.objectsArray = [[NSMutableArray alloc] initWithObjects:@"Pie Chart",
+                             @"Bar Graph",
+                             @"Scatter Plot",
+                             nil];
+    }
+
 }
 
 - (void)viewDidUnload

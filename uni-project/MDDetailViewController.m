@@ -98,6 +98,11 @@ UIPopoverController *masterPopoverController;
         [self initPlotForScatterPlot];
         
     }
+    // der benutzer kommt ueber tabbar -> zuerst pieChart anzeigen
+   /* else {
+        self.detailItem = @"Pie Chart";
+        [self initPlotForPieChart];
+    } */
     
     
 }
@@ -139,8 +144,6 @@ UIPopoverController *masterPopoverController;
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    NSLog(@"viewDidAppear, frame w:%f h:%f", self.view.frame.size.width, self.view.frame.size.height);
-    NSLog(@"viewDidAppear, bounds w:%f h:%f", self.view.bounds.size.width, self.view.bounds.size.height);
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -239,15 +242,15 @@ UIPopoverController *masterPopoverController;
 }
 
 -(void)configureHostForPieChart {
-    
+    NSLog(@"Calling configureHostForPieChart");
     //self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     //[self.view sizeToFit];
     // 1 - Set up view frame
     CGRect parentRect = self.view.bounds;
-    NSLog(@"self.view: %@", self.view);
-    NSLog(@"self: %@", self);
-    NSLog(@"frame w:%f h:%f", self.view.frame.size.width, self.view.frame.size.height);
-    NSLog(@"bounds w:%f h:%f", self.view.bounds.size.width, self.view.bounds.size.height);
+    //NSLog(@"self.view: %@", self.view);
+    //NSLog(@"self: %@", self);
+    //NSLog(@"frame w:%f h:%f", self.view.frame.size.width, self.view.frame.size.height);
+    //NSLog(@"bounds w:%f h:%f", self.view.bounds.size.width, self.view.bounds.size.height);
 
     //CGSize toolbarSize = self.toolbar.bounds.size;
     parentRect = CGRectMake(parentRect.origin.x,
@@ -318,6 +321,7 @@ UIPopoverController *masterPopoverController;
 }
 
 -(void)configureChartForPieChart {
+    NSLog(@"Calling configureChartForPieChart");
     // 1 - Get reference to graph
     CPTGraph *graph = self.hostView.hostedGraph;
     // 2 - Create chart
@@ -339,6 +343,7 @@ UIPopoverController *masterPopoverController;
 }
 
 -(void)configureLegendForPieChart {
+    NSLog(@"Calling configureLegendForPieChart");
     // 1 - Get graph instance
     CPTGraph *graph = self.hostView.hostedGraph;
     // 2 - Create legend
@@ -358,6 +363,7 @@ UIPopoverController *masterPopoverController;
 #pragma mark - CPTPlotDataSource methods
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot {
     if ([pieChart isEqualToString:[self.detailItem description] ] ) {
+        NSLog(@"numberOfRecordsForPlot: %i", [[[CPDStockPriceStore sharedInstance] tickerSymbols] count]);
         return [[[CPDStockPriceStore sharedInstance] tickerSymbols] count];
     }
     else {
@@ -432,8 +438,8 @@ UIPopoverController *masterPopoverController;
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     //[self.view sizeToFit];
     
-    NSLog(@"DETAIL frame w:%f h:%f", self.view.frame.size.width, self.view.frame.size.height);
-    NSLog(@"DETAIL bounds w:%f h:%f", self.view.bounds.size.width, self.view.bounds.size.height);
+    //NSLog(@"DETAIL frame w:%f h:%f", self.view.frame.size.width, self.view.frame.size.height);
+    //NSLog(@"DETAIL bounds w:%f h:%f", self.view.bounds.size.width, self.view.bounds.size.height);
     
 
 }
