@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MDDetailViewController : UIViewController <UISplitViewControllerDelegate>
+@interface MDDetailViewController : UIViewController <UISplitViewControllerDelegate, CPTPlotDataSource, UIActionSheetDelegate, CPTBarPlotDataSource, CPTBarPlotDelegate>
 
 @property (strong, nonatomic) id detailItem;
 

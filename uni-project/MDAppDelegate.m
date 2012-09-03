@@ -23,12 +23,18 @@
     UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
 
     UIViewController* detail1 = [splitViewController.viewControllers objectAtIndex:1];
-    UIViewController* detail2 = [splitViewController.storyboard instantiateViewControllerWithIdentifier:@"Detail 2_1 Root"];
-    UIViewController* detail3 = [splitViewController.storyboard instantiateViewControllerWithIdentifier:@"Detail 2_2 Root"];
-
+    UIViewController* default1 = [splitViewController.storyboard instantiateViewControllerWithIdentifier:@"Detail_1"];
+    UIViewController* pieChartRootController = [splitViewController.storyboard instantiateViewControllerWithIdentifier:@"pieChartRootController"];
+    UIViewController* barGraphRootController = [splitViewController.storyboard instantiateViewControllerWithIdentifier:@"barGraphRootController"];
+    UIViewController* scatterPlotRootController = [splitViewController.storyboard instantiateViewControllerWithIdentifier:@"scatterPlotRootController"];
+    UITabBarController* tabBarController = [splitViewController.viewControllers objectAtIndex:0];
+    UITabBar* tabBar = tabBarController.tabBar;
+    UIImage* tabBarBackground = [UIImage imageNamed:@"tabbar_back_opt.jpg"];
+    tabBar.backgroundImage = tabBarBackground;
     
     self.masterDetailManager = [[MDMultipleMasterDetailManager alloc] initWithSplitViewController:splitViewController
-                                withDetailRootControllers:[NSArray arrayWithObjects:detail1,detail2,detail3,nil]];
+                                withDetailRootControllers:[NSArray arrayWithObjects:detail1,default1,
+                                                           pieChartRootController,barGraphRootController,scatterPlotRootController,nil]];
     
      
     return YES;

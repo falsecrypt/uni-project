@@ -10,9 +10,12 @@
 
 #import "MDDetailViewController.h"
 
+#import "MDMultipleMasterDetailManager.h"
+
 @interface MDMasterViewController ()
 
 @property (nonatomic, strong) NSMutableArray *objectsArray;
+@property (strong,nonatomic)MDMultipleMasterDetailManager* masterDetailManager;
 
 @end
 
@@ -20,6 +23,7 @@
 
 @synthesize detailViewController = _detailViewController;
 @synthesize objectsArray = _objectsArray;
+@synthesize masterDetailManager = __masterDetailManager;
 
 - (void)awakeFromNib
 {
@@ -34,6 +38,14 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    //[self.view sizeToFit];
+    
+    NSLog(@"MASTER frame w:%f h:%f", self.view.frame.size.width, self.view.frame.size.height);
+    NSLog(@"MASTER bounds w:%f h:%f", self.view.bounds.size.width, self.view.bounds.size.height);
+}
+
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -41,10 +53,13 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     self.detailViewController = (MDDetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
-    NSLog(@"viewDidLoad:self.detailViewController: %@", [self.detailViewController description]);
+    //NSLog(@"viewDidLoad:self.detailViewController: %@", [self.detailViewController description]);
     [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:NO scrollPosition:UITableViewScrollPositionMiddle];
     
-    self.objectsArray = [NSMutableArray arrayWithObjects:@"Detail 2_1 Root", @"Detail 2_2 Root", nil];
+    self.objectsArray = [[NSMutableArray alloc] initWithObjects:@"Pie Chart",
+                         @"Bar Graph",
+                         @"Scatter Plot",
+                         nil];
 }
 
 - (void)viewDidUnload
@@ -82,15 +97,26 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"detail_2_1"]) {
+
+    if ([[segue identifier] isEqualToString:@"show_pie_chart"]) {
+        NSLog(@"Calling prepareForSegue - pie chart");
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         NSDate *object = [self.objectsArray objectAtIndex:indexPath.row];
         [(MDDetailViewController *)[[segue destinationViewController] topViewController] setDetailItem:object];
+        NSLog(@"Calling prepareForSegue - object: %@", object);
+        self.detailViewController = (MDDetailViewController *)[[segue destinationViewController] topViewController];
     }
-    else if ([[segue identifier] isEqualToString:@"detail_2_2"]){
+    else if ([[segue identifier] isEqualToString:@"show_bar_graph"]){
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         NSDate *object = [self.objectsArray objectAtIndex:indexPath.row];
         [(MDDetailViewController *)[[segue destinationViewController] topViewController] setDetailItem:object];
+        self.detailViewController = (MDDetailViewController *)[[segue destinationViewController] topViewController];
+    }
+    else if ([[segue identifier] isEqualToString:@"show_scatter_plot"]){
+        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        NSDate *object = [self.objectsArray objectAtIndex:indexPath.row];
+        [(MDDetailViewController *)[[segue destinationViewController] topViewController] setDetailItem:object];
+        self.detailViewController = (MDDetailViewController *)[[segue destinationViewController] topViewController];
     }
 }
 

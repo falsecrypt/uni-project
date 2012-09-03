@@ -74,10 +74,21 @@
 #pragma mark - UITabBarControllerDelegate
 
 // change detail view to reflect the current master controller
--(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{ 
-    UINavigationController* detailRootController = [self.detailControllers objectAtIndex:tabBarController.selectedIndex];
-    UIViewController* detailControler = detailRootController.topViewController;
+-(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController{
+    NSLog(@"Manager,self.detailControllers: %@", self.detailControllers);
     
+    UINavigationController* detailRootController;
+    if(tabBarController.selectedIndex == 1){
+        detailRootController = [self.detailControllers objectAtIndex:tabBarController.selectedIndex + 1];
+    }
+    else {
+        detailRootController = [self.detailControllers objectAtIndex:tabBarController.selectedIndex];
+    }
+    
+    UIViewController* detailControler = detailRootController.topViewController;
+    NSLog(@"Manager,detailRootController: %@", detailRootController);
+    NSLog(@"Manager,detailControler: %@", detailControler);
+    NSLog(@"Manager,tabBarController.selectedIndex: %i", tabBarController.selectedIndex);
     if(detailControler != self.currentDetailController)
     {
         // swap button in detail controller
@@ -93,7 +104,8 @@
         if([self.masterPopoverController isPopoverVisible]){
             self.masterPopoverController.passthroughViews = [NSArray arrayWithObject:detailRootController.navigationBar];
         }
-    }      
+    }
+    NSLog(@"Manager,self.splitViewController.viewControllers: %@", self.splitViewController.viewControllers); 
 }
 
 @end
