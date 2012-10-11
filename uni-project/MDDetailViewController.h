@@ -12,6 +12,10 @@
 
 @property (strong, nonatomic) id detailItem;
 
+@property (strong, nonatomic) IBOutlet UISwitch *switchAAPL;
+@property (strong, nonatomic) IBOutlet UISwitch *switchGOOG;
+@property (strong, nonatomic) IBOutlet UISwitch *switchMSFT;
 @property (strong, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
 
+@property (strong, nonatomic) IBOutlet CPTGraphHostingView *hostViewForBarGraph;
 @end
