@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE0AE4821646049C00EC15B4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE0AE4811646049C00EC15B4 /* Security.framework */; };
+		CE0AE4861646051A00EC15B4 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */; };
 		CE8B7F5515ED358B006CD57C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5415ED358B006CD57C /* UIKit.framework */; };
 		CE8B7F5715ED358B006CD57C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5615ED358B006CD57C /* Foundation.framework */; };
 		CE8B7F5915ED358B006CD57C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5815ED358B006CD57C /* CoreGraphics.framework */; };
@@ -16,6 +18,9 @@
 		CE8B7F7E15ED35D1006CD57C /* MDMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F7915ED35D1006CD57C /* MDMasterViewController.m */; };
 		CE8B7F7F15ED35D1006CD57C /* MDMultipleMasterDetailManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F7B15ED35D1006CD57C /* MDMultipleMasterDetailManager.m */; };
 		CE8B7F8315ED3630006CD57C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F8215ED3630006CD57C /* main.m */; };
+		CEA0BE9C163CD2D700ED0599 /* LoginScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0BE9A163CD2D700ED0599 /* LoginScreenViewController.m */; };
+		CEA0BEA1163CD99B00ED0599 /* FirstTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0BEA0163CD99B00ED0599 /* FirstTableViewController.m */; };
+		CEDDE0F61641611800BEFE0A /* StartDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEDDE0F51641611800BEFE0A /* StartDetailViewController.m */; };
 		CEE88E2715F3C26300382450 /* tabbar_back_opt.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEE88E2615F3C26300382450 /* tabbar_back_opt.jpg */; };
 		CEE88E3915F42BD800382450 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEE88E3815F42BD800382450 /* MainStoryboard.storyboard */; };
 		CEEAE27215F273AB00A550FA /* libCorePlot-CocoaTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEAE27115F273AB00A550FA /* libCorePlot-CocoaTouch.a */; };
@@ -24,9 +29,16 @@
 		CEEAE27B15F275CA00A550FA /* CPDStockPriceStore.m in Sources */ = {isa = PBXBuildFile; fileRef = CEEAE27915F275CA00A550FA /* CPDStockPriceStore.m */; };
 		CEEAE27E15F2BEA100A550FA /* icon_piechart.png in Resources */ = {isa = PBXBuildFile; fileRef = CEEAE27D15F2BEA100A550FA /* icon_piechart.png */; };
 		CEEAE28015F2C06000A550FA /* icon_smile_face.png in Resources */ = {isa = PBXBuildFile; fileRef = CEEAE27F15F2C06000A550FA /* icon_smile_face.png */; };
+		CEF5657B163F17270066F2A2 /* FirstDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */; };
+		CEF5657F163F1D600066F2A2 /* SecondTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657E163F1D600066F2A2 /* SecondTableViewController.m */; };
+		CEF56586163F2DCE0066F2A2 /* SecondDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF56584163F2DCD0066F2A2 /* SecondDetailViewController.m */; };
+		CEFDC23C163E15480011C3CF /* DetailViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFDC23B163E15480011C3CF /* DetailViewManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CE0AE4811646049C00EC15B4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		CE0AE4841646051A00EC15B4 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
+		CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		CE8B7F5015ED358B006CD57C /* uni-project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "uni-project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8B7F5415ED358B006CD57C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CE8B7F5615ED358B006CD57C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -43,6 +55,12 @@
 		CE8B7F7A15ED35D1006CD57C /* MDMultipleMasterDetailManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDMultipleMasterDetailManager.h; sourceTree = "<group>"; };
 		CE8B7F7B15ED35D1006CD57C /* MDMultipleMasterDetailManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDMultipleMasterDetailManager.m; sourceTree = "<group>"; };
 		CE8B7F8215ED3630006CD57C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		CEA0BE99163CD2D700ED0599 /* LoginScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginScreenViewController.h; sourceTree = "<group>"; };
+		CEA0BE9A163CD2D700ED0599 /* LoginScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginScreenViewController.m; sourceTree = "<group>"; };
+		CEA0BE9F163CD99B00ED0599 /* FirstTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstTableViewController.h; sourceTree = "<group>"; };
+		CEA0BEA0163CD99B00ED0599 /* FirstTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstTableViewController.m; sourceTree = "<group>"; };
+		CEDDE0F41641611800BEFE0A /* StartDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartDetailViewController.h; sourceTree = "<group>"; };
+		CEDDE0F51641611800BEFE0A /* StartDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartDetailViewController.m; sourceTree = "<group>"; };
 		CEE88E2615F3C26300382450 /* tabbar_back_opt.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tabbar_back_opt.jpg; sourceTree = "<group>"; };
 		CEE88E3815F42BD800382450 /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard.storyboard; sourceTree = "<group>"; };
 		CEEAE22215F273AB00A550FA /* _CPTConstraintsFixed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _CPTConstraintsFixed.h; sourceTree = "<group>"; };
@@ -132,6 +150,14 @@
 		CEEAE27915F275CA00A550FA /* CPDStockPriceStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPDStockPriceStore.m; sourceTree = "<group>"; };
 		CEEAE27D15F2BEA100A550FA /* icon_piechart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_piechart.png; sourceTree = "<group>"; };
 		CEEAE27F15F2C06000A550FA /* icon_smile_face.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_smile_face.png; sourceTree = "<group>"; };
+		CEF56579163F17270066F2A2 /* FirstDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstDetailViewController.h; sourceTree = "<group>"; };
+		CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstDetailViewController.m; sourceTree = "<group>"; };
+		CEF5657D163F1D600066F2A2 /* SecondTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondTableViewController.h; sourceTree = "<group>"; };
+		CEF5657E163F1D600066F2A2 /* SecondTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondTableViewController.m; sourceTree = "<group>"; };
+		CEF56583163F2DCD0066F2A2 /* SecondDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondDetailViewController.h; sourceTree = "<group>"; };
+		CEF56584163F2DCD0066F2A2 /* SecondDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondDetailViewController.m; sourceTree = "<group>"; };
+		CEFDC23A163E15480011C3CF /* DetailViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewManager.h; sourceTree = "<group>"; };
+		CEFDC23B163E15480011C3CF /* DetailViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +165,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE0AE4821646049C00EC15B4 /* Security.framework in Frameworks */,
 				CEEAE27415F2749500A550FA /* QuartzCore.framework in Frameworks */,
 				CE8B7F5515ED358B006CD57C /* UIKit.framework in Frameworks */,
 				CE8B7F5715ED358B006CD57C /* Foundation.framework in Frameworks */,
@@ -150,9 +177,53 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CE0AE47A1645F53C00EC15B4 /* Manager-Classes */ = {
+			isa = PBXGroup;
+			children = (
+				CE8B7F7A15ED35D1006CD57C /* MDMultipleMasterDetailManager.h */,
+				CE8B7F7B15ED35D1006CD57C /* MDMultipleMasterDetailManager.m */,
+				CEFDC23A163E15480011C3CF /* DetailViewManager.h */,
+				CEFDC23B163E15480011C3CF /* DetailViewManager.m */,
+			);
+			name = "Manager-Classes";
+			sourceTree = "<group>";
+		};
+		CE0AE47C1645F54E00EC15B4 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				CE8B7F7815ED35D1006CD57C /* MDMasterViewController.h */,
+				CE8B7F7915ED35D1006CD57C /* MDMasterViewController.m */,
+				CEA0BE99163CD2D700ED0599 /* LoginScreenViewController.h */,
+				CEA0BE9A163CD2D700ED0599 /* LoginScreenViewController.m */,
+				CEA0BE9F163CD99B00ED0599 /* FirstTableViewController.h */,
+				CEA0BEA0163CD99B00ED0599 /* FirstTableViewController.m */,
+				CEF56579163F17270066F2A2 /* FirstDetailViewController.h */,
+				CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */,
+				CEF5657D163F1D600066F2A2 /* SecondTableViewController.h */,
+				CEF5657E163F1D600066F2A2 /* SecondTableViewController.m */,
+				CEF56583163F2DCD0066F2A2 /* SecondDetailViewController.h */,
+				CEF56584163F2DCD0066F2A2 /* SecondDetailViewController.m */,
+				CEDDE0F41641611800BEFE0A /* StartDetailViewController.h */,
+				CEDDE0F51641611800BEFE0A /* StartDetailViewController.m */,
+				CE8B7F7615ED35D1006CD57C /* MDDetailViewController.h */,
+				CE8B7F7715ED35D1006CD57C /* MDDetailViewController.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		CE0AE483164604F700EC15B4 /* KeychainWrapper */ = {
+			isa = PBXGroup;
+			children = (
+				CE0AE4841646051A00EC15B4 /* KeychainItemWrapper.h */,
+				CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */,
+			);
+			name = KeychainWrapper;
+			sourceTree = "<group>";
+		};
 		CE8B7F4515ED358B006CD57C = {
 			isa = PBXGroup;
 			children = (
+				CE0AE4811646049C00EC15B4 /* Security.framework */,
 				CEEAE27315F2749500A550FA /* QuartzCore.framework */,
 				CE8B7F5A15ED358B006CD57C /* uni-project */,
 				CE8B7F5315ED358B006CD57C /* Frameworks */,
@@ -181,17 +252,14 @@
 		CE8B7F5A15ED358B006CD57C /* uni-project */ = {
 			isa = PBXGroup;
 			children = (
+				CE0AE483164604F700EC15B4 /* KeychainWrapper */,
+				CE0AE47C1645F54E00EC15B4 /* Controllers */,
+				CE0AE47A1645F53C00EC15B4 /* Manager-Classes */,
 				CEEAE27C15F2BE8F00A550FA /* Images */,
 				CEEAE07615F271A500A550FA /* CorePlot */,
 				CE8B7F7415ED35D1006CD57C /* MDAppDelegate.h */,
 				CE8B7F7515ED35D1006CD57C /* MDAppDelegate.m */,
-				CE8B7F7615ED35D1006CD57C /* MDDetailViewController.h */,
-				CE8B7F7715ED35D1006CD57C /* MDDetailViewController.m */,
 				CEE88E3815F42BD800382450 /* MainStoryboard.storyboard */,
-				CE8B7F7815ED35D1006CD57C /* MDMasterViewController.h */,
-				CE8B7F7915ED35D1006CD57C /* MDMasterViewController.m */,
-				CE8B7F7A15ED35D1006CD57C /* MDMultipleMasterDetailManager.h */,
-				CE8B7F7B15ED35D1006CD57C /* MDMultipleMasterDetailManager.m */,
 				CEEAE27515F275CA00A550FA /* Starter Files */,
 				CE8B7F5B15ED358B006CD57C /* Supporting Files */,
 			);
@@ -399,6 +467,14 @@
 				CE8B7F8315ED3630006CD57C /* main.m in Sources */,
 				CEEAE27A15F275CA00A550FA /* CPDConstants.m in Sources */,
 				CEEAE27B15F275CA00A550FA /* CPDStockPriceStore.m in Sources */,
+				CEA0BE9C163CD2D700ED0599 /* LoginScreenViewController.m in Sources */,
+				CEA0BEA1163CD99B00ED0599 /* FirstTableViewController.m in Sources */,
+				CEFDC23C163E15480011C3CF /* DetailViewManager.m in Sources */,
+				CEF5657B163F17270066F2A2 /* FirstDetailViewController.m in Sources */,
+				CEF5657F163F1D600066F2A2 /* SecondTableViewController.m in Sources */,
+				CEF56586163F2DCE0066F2A2 /* SecondDetailViewController.m in Sources */,
+				CEDDE0F61641611800BEFE0A /* StartDetailViewController.m in Sources */,
+				CE0AE4861646051A00EC15B4 /* KeychainItemWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
