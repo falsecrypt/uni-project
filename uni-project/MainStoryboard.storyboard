@@ -696,7 +696,7 @@
                                 <rect key="frame" x="58" y="185" width="424" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="rc1-Zd-P5Q">
                                 <rect key="frame" x="58" y="231" width="424" height="39"/>
@@ -709,6 +709,9 @@
                                 <state key="highlighted">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="logInButtonPressed:" destination="sdU-Fh-XBN" eventType="touchUpInside" id="TdY-PX-OjX"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.90196079015731812" green="0.90196079015731812" blue="0.90196079015731812" alpha="1" colorSpace="calibratedRGB"/>
@@ -717,6 +720,8 @@
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="cancelButton" destination="Ndn-on-y4X" id="oEY-Gx-Dqg"/>
+                        <outlet property="passwordField" destination="zst-Ad-FRv" id="CZm-0s-RbY"/>
+                        <outlet property="usernameField" destination="VXG-dl-05p" id="8ZP-7m-m1g"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rQN-Dd-SSM" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -744,7 +749,11 @@
         <class className="LoginScreenViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/LoginScreenViewController.h"/>
             <relationships>
+                <relationship kind="action" name="didSelectCancel:" candidateClass="UIButton"/>
+                <relationship kind="action" name="logInButtonPressed:"/>
                 <relationship kind="outlet" name="cancelButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="usernameField" candidateClass="UITextField"/>
             </relationships>
         </class>
         <class className="MDDetailViewController" superclassName="UIViewController">

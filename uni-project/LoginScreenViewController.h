@@ -15,4 +15,7 @@
 @interface LoginScreenViewController : UIViewController
 @property (nonatomic, weak) id<LoginScreenViewControllerDelegate> delegate;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
+@property (strong, nonatomic) IBOutlet UITextField *usernameField;
+@property (strong, nonatomic) IBOutlet UITextField *passwordField;
+- (IBAction)logInButtonPressed:(id)sender;
 @end
