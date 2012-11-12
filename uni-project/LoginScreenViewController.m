@@ -33,31 +33,46 @@
 
 - (IBAction)didSelectCancel:(UIButton *)sender
 {
-    [self.delegate didDismissPresentedViewController];
+    [self.delegate didDismissPresentedViewControllerLogin];
 }
 
-- (BOOL) shouldAutorotateToInterfaceOrientation:
-(UIInterfaceOrientation)toInterfaceOrientation
+- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
 {
     return YES;
+}
+
+- (void)showAlertAfterValidationFailed:(NSString *)message {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Validation Failed" message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    [alert show];
 }
 
 - (IBAction)logInButtonPressed:(id)sender
 {
     KeychainItemWrapper *keychain =
     [[KeychainItemWrapper alloc] initWithIdentifier:@"TestAppLoginData" accessGroup:nil];
-        // Store username to keychain
-        if ([self.usernameField text])
-            [keychain setObject:[_usernameField text] forKey:(__bridge id)kSecAttrAccount];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:NO forKey:@"userLoggedIn"];
+    
+    if( [self.usernameField.text length] < 1 || [self.passwordField.text length] < 1  ){
+        [self showAlertAfterValidationFailed:@"Username and Password cannot be Blank"];
+    }
+    // Validation
+    else if ([self.usernameField.text isEqualToString:[keychain objectForKey:(__bridge id)kSecAttrAccount]] &&
+        [self.passwordField.text isEqualToString:[keychain objectForKey:(__bridge id)kSecValueData]]) {
+        // now set UserLoggedIn = true, using NSUserDefaults
         
-        // Store password to keychain
-        if ([self.passwordField text])
-            [keychain setObject:[_passwordField text] forKey:(__bridge id)kSecValueData];
-    
-    NSLog(@"username from keychain: %@", [keychain objectForKey:(__bridge id)kSecAttrAccount]);
-    NSLog(@"password from keychain: %@", [keychain objectForKey:(__bridge id)kSecValueData]);
-    
-    [self.delegate didDismissPresentedViewController];
+        [defaults setBool:YES forKey:@"userLoggedIn"];
+        
+        BOOL loggedIN = [defaults boolForKey:@"userLoggedIn"];
+        NSLog(@"userLoggedIn from NSUserDefaults: %d", loggedIN);
+        [self.delegate didDismissPresentedViewControllerLogin];
+    }
+    // Sorry, something went wrong
+    else {
+        [self showAlertAfterValidationFailed:@"The username or password you entered is incorrect"];
+    }
+
+
     
 }
 

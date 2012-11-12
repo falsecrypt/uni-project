@@ -13,9 +13,7 @@
 // if the button should be shown (the device is in portrait).
 // Will be nil otherwise.
 @property (nonatomic, retain) UIBarButtonItem *navigationPaneButtonItem;
-// Holds a reference to the popover that will be displayed
-// when the navigation button is pressed.
-@property (nonatomic, retain) UIPopoverController *navigationPopoverController;
+
 @end
 
 
@@ -88,6 +86,7 @@
           withBarButtonItem:(UIBarButtonItem *)barButtonItem
        forPopoverController:(UIPopoverController *)pc
 {
+    NSLog(@"calling splitViewController:willHideViewController");
     // If the barButtonItem does not have a title (or image) adding it to a toolbar
     // will do nothing.
     barButtonItem.title = @"Navigation";
@@ -111,6 +110,13 @@
     
     // Tell the detail view controller to remove the navigation button.
     self.detailViewController.navigationPaneBarButtonItem = nil;
+}
+
+
+- (void)splitViewController:(UISplitViewController *)svc
+          popoverController:(UIPopoverController *)pc
+  willPresentViewController:(UIViewController *)aViewController {
+    NSLog(@"calling splitViewController:popoverController:willPresentViewController");
 }
 
 

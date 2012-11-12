@@ -29,6 +29,10 @@
 //@property (nonatomic, assign) IBOutlet UIViewController<SubstitutableDetailViewController> *detailViewController;
 @property (strong, nonatomic) UIViewController<SubstitutableDetailViewController> *detailViewController;
 
+// Holds a reference to the popover that will be displayed
+// when the navigation button is pressed.
+@property (strong, nonatomic) UIPopoverController *navigationPopoverController;
+
 -(id)initWithSplitViewController:(UISplitViewController*)splitViewController;
 
 @end

@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "LoginScreenViewController.h"
+#import "RegisterTableViewController.h"
 
-@interface FirstTableViewController : UITableViewController <LoginScreenViewControllerDelegate>
+@interface FirstTableViewController : UITableViewController <LoginScreenViewControllerDelegate, RegisterScreenViewControllerDelegate>
 
+@property (strong, nonatomic) IBOutlet UITableView *firstTableView;
 @end

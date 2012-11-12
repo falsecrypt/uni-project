@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		CE0AE4821646049C00EC15B4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE0AE4811646049C00EC15B4 /* Security.framework */; };
 		CE0AE4861646051A00EC15B4 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */; };
+		CE348C1A1647668100B14B55 /* RegisterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE348C191647668000B14B55 /* RegisterTableViewController.m */; };
 		CE8B7F5515ED358B006CD57C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5415ED358B006CD57C /* UIKit.framework */; };
 		CE8B7F5715ED358B006CD57C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5615ED358B006CD57C /* Foundation.framework */; };
 		CE8B7F5915ED358B006CD57C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5815ED358B006CD57C /* CoreGraphics.framework */; };
@@ -39,6 +40,8 @@
 		CE0AE4811646049C00EC15B4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CE0AE4841646051A00EC15B4 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
 		CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
+		CE348C181647668000B14B55 /* RegisterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterTableViewController.h; sourceTree = "<group>"; };
+		CE348C191647668000B14B55 /* RegisterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterTableViewController.m; sourceTree = "<group>"; };
 		CE8B7F5015ED358B006CD57C /* uni-project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "uni-project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8B7F5415ED358B006CD57C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CE8B7F5615ED358B006CD57C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -207,6 +210,8 @@
 				CEDDE0F51641611800BEFE0A /* StartDetailViewController.m */,
 				CE8B7F7615ED35D1006CD57C /* MDDetailViewController.h */,
 				CE8B7F7715ED35D1006CD57C /* MDDetailViewController.m */,
+				CE348C181647668000B14B55 /* RegisterTableViewController.h */,
+				CE348C191647668000B14B55 /* RegisterTableViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -223,8 +228,6 @@
 		CE8B7F4515ED358B006CD57C = {
 			isa = PBXGroup;
 			children = (
-				CE0AE4811646049C00EC15B4 /* Security.framework */,
-				CEEAE27315F2749500A550FA /* QuartzCore.framework */,
 				CE8B7F5A15ED358B006CD57C /* uni-project */,
 				CE8B7F5315ED358B006CD57C /* Frameworks */,
 				CE8B7F5115ED358B006CD57C /* Products */,
@@ -242,6 +245,8 @@
 		CE8B7F5315ED358B006CD57C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CEEAE27315F2749500A550FA /* QuartzCore.framework */,
+				CE0AE4811646049C00EC15B4 /* Security.framework */,
 				CE8B7F5415ED358B006CD57C /* UIKit.framework */,
 				CE8B7F5615ED358B006CD57C /* Foundation.framework */,
 				CE8B7F5815ED358B006CD57C /* CoreGraphics.framework */,
@@ -429,6 +434,18 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				da,
+				de,
+				fr,
+				it,
+				ja,
+				ko,
+				nb,
+				pl,
+				"pt-PT",
+				ro,
+				ru,
+				sv,
 			);
 			mainGroup = CE8B7F4515ED358B006CD57C;
 			productRefGroup = CE8B7F5115ED358B006CD57C /* Products */;
@@ -475,6 +492,7 @@
 				CEF56586163F2DCE0066F2A2 /* SecondDetailViewController.m in Sources */,
 				CEDDE0F61641611800BEFE0A /* StartDetailViewController.m in Sources */,
 				CE0AE4861646051A00EC15B4 /* KeychainItemWrapper.m in Sources */,
+				CE348C1A1647668100B14B55 /* RegisterTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -32,7 +32,7 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
+
     }
     return self;
 }
@@ -41,6 +41,7 @@
 {
     [super viewDidLoad];
     NSLog(@"calling viewDidLoad in FirstTableViewController");
+
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -93,6 +94,12 @@
 }
 */
 
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
+}
+
 #pragma mark - Table view delegate
 
 // -------------------------------------------------------------------------------
@@ -132,18 +139,56 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if ([[segue identifier] isEqualToString:@"ModalViewSegue"])
+    if ([[segue identifier] isEqualToString:@"LoginSegue"])
     {
         LoginScreenViewController *viewController = segue.destinationViewController;
+        viewController.delegate = self;
+    }
+    if ([[segue identifier] isEqualToString:@"RegisterSegue"])
+    {
+        // There is a navigation controller in the middle, between firsttableVC and registertableVC
+        //RegisterTableViewController *viewController = [[[segue destinationViewController] viewControllers] objectAtIndex:0];
+        // OR JUST:
+        RegisterTableViewController *viewController = (RegisterTableViewController*)[segue.destinationViewController topViewController];
+        
+        /*NSLog(@"calling prepareForSegue segue.destinationViewController viewControllers: %@",
+              [[[segue destinationViewController] viewControllers] objectAtIndex:0]); */
         viewController.delegate = self;
     }
 }
 
 
-- (void)didDismissPresentedViewController
+- (void)didDismissPresentedViewControllerLogin
 {
     [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES]; // deselects the "Login"-Button
     [self dismissViewControllerAnimated:YES completion:NULL]; //removes the Login Screen
+    
+    //dismiss the hidden view (popover on the left) or not?
+    DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
+    if (detailViewManager.navigationPopoverController) {
+        [detailViewManager.navigationPopoverController dismissPopoverAnimated:YES];
+    }
+    
+}
+
+- (void)didDismissPresentedViewControllerRegister
+{
+    [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow] animated:YES]; // deselects the "Login"-Button
+    [self dismissViewControllerAnimated:YES completion:NULL]; //removes the Login Screen
+    
+    //dismiss the hidden view (popover on the left) or not?
+    DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
+    if (detailViewManager.navigationPopoverController) {
+        [detailViewManager.navigationPopoverController dismissPopoverAnimated:YES];
+    }
+    
+}
+
+#pragma mark - LoginScreen delegate
+
+-(void)userLoggedIn
+{
+    // User has logged in, we must change layout etc.
     
 }
 

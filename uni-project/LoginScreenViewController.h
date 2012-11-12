@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @protocol LoginScreenViewControllerDelegate <NSObject>
-- (void)didDismissPresentedViewController;
+- (void)didDismissPresentedViewControllerLogin;
+- (void)userLoggedIn;
 @end
 
 @interface LoginScreenViewController : UIViewController
