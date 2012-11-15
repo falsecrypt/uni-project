@@ -4,6 +4,7 @@
 
 #import "MDAppDelegate.h"
 #import "DetailViewManager.h"
+#import "KeychainItemWrapper.h"
 
 @interface MDAppDelegate()
 //@property (strong,nonatomic)MDMultipleMasterDetailManager* masterDetailManager;
@@ -41,6 +42,11 @@
     self.detailViewManager = [[DetailViewManager alloc] initWithSplitViewController:splitViewController];
     NSLog(@"calling didFinishLaunchingWithOptions, detailViewManager: %@", self.detailViewManager);
     self.splitViewController.delegate = self.detailViewManager;
+    
+    KeychainItemWrapper *keychain =
+    [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
+    
+    [keychain resetKeychainItem];
 
     
     
@@ -102,6 +108,7 @@
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
+
 }
 
 @end

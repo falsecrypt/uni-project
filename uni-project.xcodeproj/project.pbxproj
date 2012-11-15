@@ -518,7 +518,8 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Pavel Ermolin (38Z8P7525U)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pavel Ermolin (38Z8P7525U)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -533,6 +534,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "D1D4511E-F8F5-421B-92EE-C15ED9701D1F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D1D4511E-F8F5-421B-92EE-C15ED9701D1F";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
@@ -546,7 +550,8 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Pavel Ermolin (38Z8P7525U)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pavel Ermolin (38Z8P7525U)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -554,7 +559,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "D1D4511E-F8F5-421B-92EE-C15ED9701D1F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D1D4511E-F8F5-421B-92EE-C15ED9701D1F";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;
 				VALIDATE_PRODUCT = YES;
@@ -570,7 +578,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/uni-project/Downloads/Core Plot Introduction/Libs/CorePlot\"",
+					"\"$(SRCROOT)/uni-project/CorePlotHeaders\"",
 					"\"$(SRCROOT)/uni-project\"",
 				);
 				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
@@ -589,7 +597,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/uni-project/Downloads/Core Plot Introduction/Libs/CorePlot\"",
+					"\"$(SRCROOT)/uni-project/CorePlotHeaders\"",
 					"\"$(SRCROOT)/uni-project\"",
 				);
 				"OTHER_LDFLAGS[arch=*]" = "-ObjC";

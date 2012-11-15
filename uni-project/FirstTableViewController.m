@@ -2,7 +2,6 @@
 //  FirstTableViewController.m
 //  uni-project
 //
-//  Created by Erna on 28.10.12.
 //  Copyright (c) 2012 test. All rights reserved.
 //
 
@@ -10,12 +9,17 @@
 #import "FirstDetailViewController.h"
 #import "DetailViewManager.h"
 #import "SecondTableViewController.h"
+#import "KeychainItemWrapper.h"
 
 @interface FirstTableViewController ()
 
+@property (nonatomic) BOOL userLoggedInVar;
+@property (nonatomic) BOOL hideLoginSection;
+@property (nonatomic) BOOL hideAccountSection;
 @end
 
 @implementation FirstTableViewController
+
 
 #pragma mark -
 #pragma mark Rotation support
@@ -37,9 +41,83 @@
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    NSLog(@"calling viewWillAppear in FirstTableViewController");
+    
+    KeychainItemWrapper *keychain =
+    [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:2];
+    [self.tableView cellForRowAtIndexPath:indexPath].hidden = YES;
+    NSIndexPath *indexPathLogin = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self.tableView cellForRowAtIndexPath:indexPathLogin].hidden = NO;
+    NSIndexPath *indexPathCreateAccount = [NSIndexPath indexPathForRow:0 inSection:1];
+    [self.tableView cellForRowAtIndexPath:indexPathCreateAccount].hidden = NO;
+    NSLog(@"1 calling viewWillAppear: mein buero.hidden = %i", [self.tableView cellForRowAtIndexPath:indexPath].hidden);
+    
+    // if there ist no existing account, remove the "login"-section
+    if (![[keychain objectForKey:(__bridge id)kSecAttrAccount] length]) {
+        
+        NSLog(@"there ist no existing account, remove the login-section");
+        /*
+        [self.tableView  beginUpdates];
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
+                                                [NSIndexPath indexPathForRow:0 inSection:0], nil] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:0]
+                      withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView  endUpdates];*/
+        self.hideLoginSection = true;
+        [self.tableView cellForRowAtIndexPath:indexPathLogin].hidden = YES;
+    }
+    // user account was already created, remove the "create account"-section
+    else {
+        
+        NSLog(@"user account was already created, remove the create account-section");
+        
+        // user already logged in?
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        self.userLoggedInVar = [defaults boolForKey:@"userLoggedIn"];
+        if (self.userLoggedInVar) {
+            NSLog(@"user already logged in");
+            //self.hideLoginSection = true;
+            [self.tableView cellForRowAtIndexPath:indexPathLogin].hidden = YES;
+            [self.tableView cellForRowAtIndexPath:indexPath].hidden = NO;
+            NSLog(@"2 calling viewWillAppear: mein buero.hidden = %i", [self.tableView cellForRowAtIndexPath:indexPath].hidden);
+        }
+        else {
+
+        }
+        self.hideAccountSection = true;
+        NSIndexPath *indexPathCreateAccount = [NSIndexPath indexPathForRow:0 inSection:1];
+        [self.tableView cellForRowAtIndexPath:indexPathCreateAccount].hidden = YES;
+        
+        /*[self.tableView  beginUpdates];
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:
+                                                [NSIndexPath indexPathForRow:0 inSection:1], nil] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1]
+                      withRowAnimation:UITableViewRowAnimationNone];
+        
+        [self.tableView  endUpdates];
+        
+        [self.tableView  reloadData];*/
+        
+    }
+    
+}
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.userLoggedInVar = false;
+    self.hideLoginSection = false;
+    self.hideAccountSection = false;
+    
+    //NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    //[defaults setBool:FALSE forKey:@"userLoggedIn"];
+    
     NSLog(@"calling viewDidLoad in FirstTableViewController");
 
     // Uncomment the following line to preserve selection between presentations.
@@ -95,10 +173,38 @@
 */
 
 
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    NSLog(@"calling numberOfRowsInSection in FirstTableViewController with section number %i", section);
+    //NSLog(@"calling numberOfRowsInSection in FirstTableViewController with hideLoginSection %d", self.hideLoginSection);
+    /*if ( section == 0 && self.hideLoginSection ){
+        // Hide this section
+         NSLog(@"return 0 (section == 0)");
+        return 0;
+    }*/
+    /*
+    if ( section == 1 && self.hideAccountSection ) {
+        // Hide this section
+        NSLog(@"return 0 (section == 1)");
+        return 0;
+    }*/
+    // Mein Buero
+    /*
+    if ( section == 2 && !self.userLoggedInVar ) {
+        // Hide this section
+        NSLog(@"return 0 (section == 2)");
+        return 0;
+    } */
+    //else {
+        //return [super tableView:self.tableView numberOfRowsInSection:section];
+       // NSLog(@"return 1");
+        return 1;
+   // }
+
 }
+
+
 
 #pragma mark - Table view delegate
 
@@ -184,11 +290,120 @@
     
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    int section = indexPath.section;
+   //NSLog(@"calling heightForRowAtIndexPath with self.hideAccountSection = %d", self.hideAccountSection);
+
+    // if dynamic section make all rows the same height as row 0
+    if (section == 0 && self.userLoggedInVar) {
+        NSLog(@"calling heightForRowAtIndexPath, section=0, return 0");
+        return 0;
+    }
+    else if (section == 1 && self.hideAccountSection) {
+        NSLog(@"calling heightForRowAtIndexPath, section=1, return 0");
+        return 0;
+    }
+    else if (section == 2 && !self.userLoggedInVar) {
+        NSLog(@"calling heightForRowAtIndexPath, section=2, return 0");
+        return 0;
+    }
+    else {
+        NSLog(@"calling heightForRowAtIndexPath else: return default");
+        return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+    }
+}
+
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if(self.userLoggedInVar && section == 0)
+        return [[UIView alloc] initWithFrame:CGRectZero];
+    else if(section == 1 && self.hideAccountSection)
+        return [[UIView alloc] initWithFrame:CGRectZero];
+    else if(section == 2 && !self.userLoggedInVar)
+        return [[UIView alloc] initWithFrame:CGRectZero];
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if((self.userLoggedInVar && section == 0) || (section == 1 && self.hideAccountSection) || (section == 2 && !self.userLoggedInVar))
+        return 1;
+    return 32;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{   
+    if(self.userLoggedInVar && section == 2) {
+        return @"Private";
+    }
+    else {
+        return [super tableView:tableView titleForHeaderInSection:section];
+    }
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if((self.userLoggedInVar && section == 0) || (section == 1 && self.hideAccountSection) || (section == 2 && !self.userLoggedInVar))
+        return 1;
+    return 16;
+}
+
+-(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    if(self.userLoggedInVar && section == 0)
+        return [[UIView alloc] initWithFrame:CGRectZero];
+    else if(section == 1 && self.hideAccountSection)
+        return [[UIView alloc] initWithFrame:CGRectZero];
+    else if(section == 2 && !self.userLoggedInVar)
+        return [[UIView alloc] initWithFrame:CGRectZero];
+    return nil;
+}
+
+
+
 #pragma mark - LoginScreen delegate
 
 -(void)userLoggedIn
 {
+    NSLog(@"calling userLoggedIn in FirstTableViewController");
     // User has logged in, we must change layout etc.
+    self.userLoggedInVar = true;
+    
+    NSIndexPath *indexPathMeinBuero = [NSIndexPath indexPathForRow:0 inSection:2];
+    [self.tableView cellForRowAtIndexPath:indexPathMeinBuero].hidden = NO;
+    NSIndexPath *indexPathLogin = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self.tableView cellForRowAtIndexPath:indexPathLogin].hidden = YES;
+    
+    NSLog(@"1 calling userLoggedIn: mein buero.hidden = %i", [self.tableView cellForRowAtIndexPath:indexPathMeinBuero].hidden);
+    
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 2)] withRowAnimation:UITableViewRowAnimationAutomatic];
+    //[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+    //[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+    NSLog(@"2 calling userLoggedIn: mein buero.hidden = %i", [self.tableView cellForRowAtIndexPath:indexPathMeinBuero].hidden);
+
+    /*
+    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObjects:
+                                            [NSIndexPath indexPathForRow:0 inSection:0], nil]
+                            withRowAnimation:UITableViewRowAnimationTop];
+     */
+
+    //[self.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadData];
+}
+
+-(void)userDidRegistered {
+    self.userLoggedInVar = true;
+    self.hideAccountSection = true;
+    NSIndexPath *indexPathMeinBuero = [NSIndexPath indexPathForRow:0 inSection:2];
+    [self.tableView cellForRowAtIndexPath:indexPathMeinBuero].hidden = NO;
+    NSIndexPath *indexPathLogin = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self.tableView cellForRowAtIndexPath:indexPathLogin].hidden = YES;
+    NSIndexPath *indexPathCreateAccount = [NSIndexPath indexPathForRow:0 inSection:1];
+    [self.tableView cellForRowAtIndexPath:indexPathCreateAccount].hidden = YES;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 2)] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadData];
     
 }
 

@@ -12,5 +12,4 @@
 
 @interface FirstTableViewController : UITableViewController <LoginScreenViewControllerDelegate, RegisterScreenViewControllerDelegate>
 
-@property (strong, nonatomic) IBOutlet UITableView *firstTableView;
 @end

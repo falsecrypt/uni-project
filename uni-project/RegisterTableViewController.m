@@ -121,7 +121,8 @@
         
         BOOL loggedIN = [defaults boolForKey:@"userLoggedIn"];
         NSLog(@"userLoggedIn from NSUserDefaults: %d", loggedIN);
-        [self.delegate didDismissPresentedViewControllerRegister]; 
+        [self.delegate didDismissPresentedViewControllerRegister];
+        [self.delegate userDidRegistered];
         
     }
 
