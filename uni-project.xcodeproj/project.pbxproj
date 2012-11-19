@@ -7,9 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE071EC01659ABF1007290B1 /* icon_user.png in Resources */ = {isa = PBXBuildFile; fileRef = CE071EBF1659ABF1007290B1 /* icon_user.png */; };
+		CE071EC31659C58B007290B1 /* ProfilePopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE071EC21659C58B007290B1 /* ProfilePopoverViewController.m */; };
 		CE0AE4821646049C00EC15B4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE0AE4811646049C00EC15B4 /* Security.framework */; };
 		CE0AE4861646051A00EC15B4 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */; };
 		CE348C1A1647668100B14B55 /* RegisterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE348C191647668000B14B55 /* RegisterTableViewController.m */; };
+		CE3F51CD1659D4BD008EE7DF /* defaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3F51CC1659D4BD008EE7DF /* defaultAvatar.png */; };
 		CE8B7F5515ED358B006CD57C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5415ED358B006CD57C /* UIKit.framework */; };
 		CE8B7F5715ED358B006CD57C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5615ED358B006CD57C /* Foundation.framework */; };
 		CE8B7F5915ED358B006CD57C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5815ED358B006CD57C /* CoreGraphics.framework */; };
@@ -37,12 +40,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CE071EBF1659ABF1007290B1 /* icon_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_user.png; sourceTree = "<group>"; };
+		CE071EC11659C58B007290B1 /* ProfilePopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfilePopoverViewController.h; sourceTree = "<group>"; };
+		CE071EC21659C58B007290B1 /* ProfilePopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfilePopoverViewController.m; sourceTree = "<group>"; };
 		CE0AE4811646049C00EC15B4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CE0AE4841646051A00EC15B4 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
 		CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		CE348C181647668000B14B55 /* RegisterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterTableViewController.h; sourceTree = "<group>"; };
 		CE348C191647668000B14B55 /* RegisterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterTableViewController.m; sourceTree = "<group>"; };
-		CE8B7F5015ED358B006CD57C /* uni-project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "uni-project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE3F51CC1659D4BD008EE7DF /* defaultAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultAvatar.png; sourceTree = "<group>"; };
+		CE8B7F5015ED358B006CD57C /* EcoMeter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EcoMeter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8B7F5415ED358B006CD57C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CE8B7F5615ED358B006CD57C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		CE8B7F5815ED358B006CD57C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -212,6 +219,8 @@
 				CE8B7F7715ED35D1006CD57C /* MDDetailViewController.m */,
 				CE348C181647668000B14B55 /* RegisterTableViewController.h */,
 				CE348C191647668000B14B55 /* RegisterTableViewController.m */,
+				CE071EC11659C58B007290B1 /* ProfilePopoverViewController.h */,
+				CE071EC21659C58B007290B1 /* ProfilePopoverViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -237,7 +246,7 @@
 		CE8B7F5115ED358B006CD57C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CE8B7F5015ED358B006CD57C /* uni-project.app */,
+				CE8B7F5015ED358B006CD57C /* EcoMeter.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -392,6 +401,8 @@
 		CEEAE27C15F2BE8F00A550FA /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CE3F51CC1659D4BD008EE7DF /* defaultAvatar.png */,
+				CE071EBF1659ABF1007290B1 /* icon_user.png */,
 				CEE88E2615F3C26300382450 /* tabbar_back_opt.jpg */,
 				CEEAE27F15F2C06000A550FA /* icon_smile_face.png */,
 				CEEAE27D15F2BEA100A550FA /* icon_piechart.png */,
@@ -402,9 +413,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CE8B7F4F15ED358B006CD57C /* uni-project */ = {
+		CE8B7F4F15ED358B006CD57C /* EcoMeter */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CE8B7F7115ED358B006CD57C /* Build configuration list for PBXNativeTarget "uni-project" */;
+			buildConfigurationList = CE8B7F7115ED358B006CD57C /* Build configuration list for PBXNativeTarget "EcoMeter" */;
 			buildPhases = (
 				CE8B7F4C15ED358B006CD57C /* Sources */,
 				CE8B7F4D15ED358B006CD57C /* Frameworks */,
@@ -414,9 +425,9 @@
 			);
 			dependencies = (
 			);
-			name = "uni-project";
+			name = EcoMeter;
 			productName = "uni-project";
-			productReference = CE8B7F5015ED358B006CD57C /* uni-project.app */;
+			productReference = CE8B7F5015ED358B006CD57C /* EcoMeter.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -452,7 +463,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CE8B7F4F15ED358B006CD57C /* uni-project */,
+				CE8B7F4F15ED358B006CD57C /* EcoMeter */,
 			);
 		};
 /* End PBXProject section */
@@ -467,6 +478,8 @@
 				CEEAE28015F2C06000A550FA /* icon_smile_face.png in Resources */,
 				CEE88E2715F3C26300382450 /* tabbar_back_opt.jpg in Resources */,
 				CEE88E3915F42BD800382450 /* MainStoryboard.storyboard in Resources */,
+				CE071EC01659ABF1007290B1 /* icon_user.png in Resources */,
+				CE3F51CD1659D4BD008EE7DF /* defaultAvatar.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,6 +506,7 @@
 				CEDDE0F61641611800BEFE0A /* StartDetailViewController.m in Sources */,
 				CE0AE4861646051A00EC15B4 /* KeychainItemWrapper.m in Sources */,
 				CE348C1A1647668100B14B55 /* RegisterTableViewController.m in Sources */,
+				CE071EC31659C58B007290B1 /* ProfilePopoverViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -619,7 +633,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CE8B7F7115ED358B006CD57C /* Build configuration list for PBXNativeTarget "uni-project" */ = {
+		CE8B7F7115ED358B006CD57C /* Build configuration list for PBXNativeTarget "EcoMeter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CE8B7F7215ED358B006CD57C /* Debug */,

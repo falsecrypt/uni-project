@@ -6,6 +6,7 @@
 //
 
 #import "FirstDetailViewController.h"
+#import "ProfilePopoverViewController.h"
 
 @implementation FirstDetailViewController
 
@@ -81,4 +82,14 @@
     return YES;
 }
 
+- (IBAction)profileButtonTapped:(id)sender {
+    if (_userProfile == nil) {
+        self.userProfile = [[ProfilePopoverViewController alloc] init];
+        //_userProfile.delegate = self;
+        self.profilePopover = [[UIPopoverController alloc] initWithContentViewController:_userProfile];
+        
+    }
+    [self.profilePopover presentPopoverFromBarButtonItem:sender
+                                    permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+}
 @end

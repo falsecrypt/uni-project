@@ -294,9 +294,8 @@
 {
     int section = indexPath.section;
    //NSLog(@"calling heightForRowAtIndexPath with self.hideAccountSection = %d", self.hideAccountSection);
-
-    // if dynamic section make all rows the same height as row 0
-    if (section == 0 && self.userLoggedInVar) {
+    // user has just logged in or he hasnot created an account yet
+    if (section == 0 && (self.userLoggedInVar || self.hideLoginSection)) {
         NSLog(@"calling heightForRowAtIndexPath, section=0, return 0");
         return 0;
     }
@@ -309,14 +308,14 @@
         return 0;
     }
     else {
-        NSLog(@"calling heightForRowAtIndexPath else: return default");
+        NSLog(@"calling heightForRowAtIndexPath else: return default for section %i", section);
         return [super tableView:tableView heightForRowAtIndexPath:indexPath];
     }
 }
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if(self.userLoggedInVar && section == 0)
+    if((self.userLoggedInVar || self.hideLoginSection) && section == 0)
         return [[UIView alloc] initWithFrame:CGRectZero];
     else if(section == 1 && self.hideAccountSection)
         return [[UIView alloc] initWithFrame:CGRectZero];
@@ -327,7 +326,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if((self.userLoggedInVar && section == 0) || (section == 1 && self.hideAccountSection) || (section == 2 && !self.userLoggedInVar))
+    if(((self.userLoggedInVar || self.hideLoginSection) && section == 0) || (section == 1 && self.hideAccountSection) || (section == 2 && !self.userLoggedInVar))
         return 1;
     return 32;
 }
@@ -337,6 +336,9 @@
     if(self.userLoggedInVar && section == 2) {
         return @"Private";
     }
+    else if (self.hideLoginSection && section == 1){
+        return @"Register";
+    }
     else {
         return [super tableView:tableView titleForHeaderInSection:section];
     }
@@ -344,14 +346,14 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if((self.userLoggedInVar && section == 0) || (section == 1 && self.hideAccountSection) || (section == 2 && !self.userLoggedInVar))
+    if(((self.userLoggedInVar || self.hideLoginSection) && section == 0) || (section == 1 && self.hideAccountSection) || (section == 2 && !self.userLoggedInVar))
         return 1;
     return 16;
 }
 
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    if(self.userLoggedInVar && section == 0)
+    if((self.userLoggedInVar || self.hideLoginSection) && section == 0)
         return [[UIView alloc] initWithFrame:CGRectZero];
     else if(section == 1 && self.hideAccountSection)
         return [[UIView alloc] initWithFrame:CGRectZero];
