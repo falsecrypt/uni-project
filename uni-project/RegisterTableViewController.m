@@ -122,7 +122,12 @@
         BOOL loggedIN = [defaults boolForKey:@"userLoggedIn"];
         NSLog(@"userLoggedIn from NSUserDefaults: %d", loggedIN);
         [self.delegate didDismissPresentedViewControllerRegister];
-        [self.delegate userDidRegistered];
+        //[self.delegate userDidRegistered];
+        
+        NSString *notificationName = @"UserRegisteredNotification";
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:notificationName
+         object:nil];
         
     }
 

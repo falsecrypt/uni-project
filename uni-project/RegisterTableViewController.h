@@ -10,8 +10,9 @@
 
 @protocol RegisterScreenViewControllerDelegate <NSObject>
 - (void)didDismissPresentedViewControllerRegister;
-- (void)userDidRegistered;
+//- (void)userDidRegistered;
 @end
+
 
 @interface RegisterTableViewController : UITableViewController
 
@@ -25,5 +26,5 @@
 @property (strong, nonatomic) IBOutlet UITextField *passwordField;
 
 @property (nonatomic, weak) id<RegisterScreenViewControllerDelegate> delegate;
-
+//@property (nonatomic, weak) id<ProfilePopoverDelegateRegister> profileDelegate;
 @end

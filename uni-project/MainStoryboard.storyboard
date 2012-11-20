@@ -19,7 +19,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="13" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3748" y="-1758"/>
+            <point key="canvasLocation" x="4978" y="-1758"/>
         </scene>
         <!--First Detail View Controller-->
         <scene sceneID="16">
@@ -51,6 +51,7 @@
                     <splitViewDetailSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="navigationBar" destination="Reg-O4-yf7" id="64k-Y3-lR8"/>
+                        <outlet property="profileBarButtonItem" destination="W9U-sK-jzG" id="kBo-dS-8pF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="15" sceneMemberID="firstResponder"/>
@@ -226,7 +227,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="23" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4279" y="-1758"/>
+            <point key="canvasLocation" x="5509" y="-1758"/>
         </scene>
         <!--First Table View Controller-->
         <scene sceneID="vEf-32-9rE">
@@ -259,7 +260,7 @@
                                         </view>
                                         <color key="backgroundColor" red="0.40000000000000002" green="0.80000000000000004" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
-                                            <segue destination="sdU-Fh-XBN" kind="modal" identifier="LoginSegue" modalPresentationStyle="formSheet" id="HzR-82-vYf"/>
+                                            <segue destination="1M1-jO-Rph" kind="modal" identifier="LoginSegue" modalPresentationStyle="formSheet" id="khh-1V-ikc"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -378,7 +379,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KVf-rX-mmi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2244" y="-1491"/>
+            <point key="canvasLocation" x="2034" y="-1301"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="K0P-dQ-9VO">
@@ -418,7 +419,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PVN-GR-Mdl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4878" y="-1731"/>
+            <point key="canvasLocation" x="6108" y="-1731"/>
         </scene>
         <!--Detail View Controller - Detail 2-1-->
         <scene sceneID="x1V-X7-rJd">
@@ -437,7 +438,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bhf-Rb-3fT" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5744" y="-1715"/>
+            <point key="canvasLocation" x="6974" y="-1715"/>
         </scene>
         <!--Detail View Controller - Detail 2-2-->
         <scene sceneID="7h6-56-YXW">
@@ -857,70 +858,123 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ff5-ot-xaI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2320" y="-405"/>
+            <point key="canvasLocation" x="2232" y="-405"/>
         </scene>
-        <!--Login Screen View Controller-->
-        <scene sceneID="LbG-Jb-SRw">
+        <!--Login Screen Table View Controller - Login-->
+        <scene sceneID="sj6-7H-Hqc">
             <objects>
-                <viewController modalPresentationStyle="formSheet" id="sdU-Fh-XBN" customClass="LoginScreenViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="YXR-rk-eUa" customClass="UIControl">
-                        <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <navigationBar contentMode="scaleToFill" id="eKH-9s-jxq">
-                                <rect key="frame" x="0.0" y="0.0" width="540" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <items>
-                                    <navigationItem title="Login" id="5bo-5F-gFV">
-                                        <barButtonItem key="rightBarButtonItem" title="Cancel" id="Ndn-on-y4X">
-                                            <connections>
-                                                <action selector="didSelectCancel:" destination="sdU-Fh-XBN" id="Ma4-N7-i2q"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" minimumFontSize="17" id="VXG-dl-05p">
-                                <rect key="frame" x="58" y="147" width="424" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" minimumFontSize="17" id="zst-Ad-FRv">
-                                <rect key="frame" x="58" y="185" width="424" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="rc1-Zd-P5Q">
-                                <rect key="frame" x="58" y="231" width="424" height="39"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Log In">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="logInButtonPressed:" destination="sdU-Fh-XBN" eventType="touchUpInside" id="TdY-PX-OjX"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" red="0.90196079015731812" green="0.90196079015731812" blue="0.90196079015731812" alpha="1" colorSpace="calibratedRGB"/>
+                <tableViewController modalPresentationStyle="formSheet" id="ESf-QJ-P2r" customClass="LoginScreenTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="VcO-PQ-aGw">
+                        <rect key="frame" x="0.0" y="64" width="540" height="556"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
-                    </view>
+                        <sections>
+                            <tableViewSection headerTitle="Login" footerTitle="Please log in to access your EcoMeter account" id="bM0-VZ-V6o">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="cNw-zk-phu">
+                                        <rect key="frame" x="0.0" y="54" width="540" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="31" y="1" width="478" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8XU-xe-e7q">
+                                                    <rect key="frame" x="20" y="11" width="83" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="My Username" minimumFontSize="17" id="Hlf-KK-1zm">
+                                                    <rect key="frame" x="111" y="7" width="347" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                </textField>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="4xV-aa-yBy">
+                                        <rect key="frame" x="0.0" y="99" width="540" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="31" y="0.0" width="478" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="H0T-U1-3Ih">
+                                                    <rect key="frame" x="20" y="11" width="81" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="My Secret Password" minimumFontSize="17" id="4od-sG-gia">
+                                                    <rect key="frame" x="111" y="7" width="347" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
+                                                </textField>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection id="GA4-Sa-gk7">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" rowHeight="52" id="lQe-YD-c8F">
+                                        <rect key="frame" x="0.0" y="194" width="540" height="53"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="31" y="1" width="478" height="51"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="RnT-bi-J8Z">
+                                                    <rect key="frame" x="0.0" y="0.0" width="478" height="52"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <state key="normal" title="Submit">
+                                                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <state key="highlighted">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="logInButtonPressed:" destination="ESf-QJ-P2r" eventType="touchUpInside" id="0ja-48-QZ7"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="ESf-QJ-P2r" id="AbA-s0-iak"/>
+                            <outlet property="delegate" destination="ESf-QJ-P2r" id="7uL-Lc-fD6"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Login" id="2v0-Kk-ppS">
+                        <barButtonItem key="rightBarButtonItem" title="Cancel" id="fS3-vm-ZuU">
+                            <connections>
+                                <action selector="didSelectCancel:" destination="ESf-QJ-P2r" id="gxa-pH-zkS"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="cancelButton" destination="Ndn-on-y4X" id="oEY-Gx-Dqg"/>
-                        <outlet property="passwordField" destination="zst-Ad-FRv" id="CZm-0s-RbY"/>
-                        <outlet property="usernameField" destination="VXG-dl-05p" id="8ZP-7m-m1g"/>
+                        <outlet property="cancelButton" destination="fS3-vm-ZuU" id="XUk-ro-xGO"/>
+                        <outlet property="passwordField" destination="4od-sG-gia" id="UO8-K1-MEf"/>
+                        <outlet property="usernameField" destination="Hlf-KK-1zm" id="1qI-5Z-7rD"/>
                     </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rQN-Dd-SSM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1gD-Jk-PrX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1556" y="-2040"/>
+            <point key="canvasLocation" x="2219" y="-2048"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="F7P-cZ-WBI">
@@ -939,7 +993,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R4u-U9-ncI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1631" y="-405"/>
+            <point key="canvasLocation" x="1549" y="-405"/>
         </scene>
         <!--Table View Controller-->
         <scene sceneID="LHh-tc-qFJ">
@@ -1022,12 +1076,94 @@
             </objects>
             <point key="canvasLocation" x="1549" y="342"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="CUf-4N-ec3">
+            <objects>
+                <navigationController id="1M1-jO-Rph" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <modalFormSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="oPK-Ng-iha">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="ESf-QJ-P2r" kind="relationship" relationship="rootViewController" id="XGk-Ko-w8N"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wTh-ok-cKS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1549" y="-2048"/>
+        </scene>
     </scenes>
     <resources>
         <image name="icon_piechart.png" width="30" height="30"/>
         <image name="icon_smile_face.png" width="30" height="30"/>
         <image name="icon_user.png" width="30" height="30"/>
     </resources>
+    <classes>
+        <class className="CPTGraphHostingView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/CPTGraphHostingView.h"/>
+        </class>
+        <class className="FirstDetailViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FirstDetailViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="profileButtonTapped:"/>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
+                <relationship kind="outlet" name="profileBarButtonItem" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
+        <class className="FirstTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FirstTableViewController.h"/>
+        </class>
+        <class className="LoginScreenTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/LoginScreenTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="didSelectCancel:"/>
+                <relationship kind="action" name="logInButtonPressed:"/>
+                <relationship kind="outlet" name="cancelButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="usernameField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="MDDetailViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MDDetailViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="aaplSwitched:"/>
+                <relationship kind="action" name="googSwitched:"/>
+                <relationship kind="action" name="msftSwitched:"/>
+                <relationship kind="outlet" name="detailDescriptionLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="hostViewForBarGraph" candidateClass="CPTGraphHostingView"/>
+                <relationship kind="outlet" name="switchAAPL" candidateClass="UISwitch"/>
+                <relationship kind="outlet" name="switchGOOG" candidateClass="UISwitch"/>
+                <relationship kind="outlet" name="switchMSFT" candidateClass="UISwitch"/>
+            </relationships>
+        </class>
+        <class className="MDMasterViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MDMasterViewController.h"/>
+        </class>
+        <class className="RegisterTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RegisterTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancelBarButtonItemPressed:"/>
+                <relationship kind="action" name="submitButtonPressed:"/>
+                <relationship kind="outlet" name="cancelButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="emailField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="submitButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="usernameField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="SecondDetailViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SecondDetailViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
+            </relationships>
+        </class>
+        <class className="SecondTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SecondTableViewController.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>

@@ -115,6 +115,22 @@
     self.hideLoginSection = false;
     self.hideAccountSection = false;
     
+    // we use notification center for broadcasting information
+    // Register to Receive a Notification
+    NSString *registeredNotificationName = @"UserRegisteredNotification";
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(userDidRegistered)
+     name:registeredNotificationName
+     object:nil];
+    
+    NSString *loggedInNotificationName = @"UserLoggedInNotification";
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(userLoggedIn)
+     name:loggedInNotificationName
+     object:nil];
+    
     //NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     //[defaults setBool:FALSE forKey:@"userLoggedIn"];
     
@@ -247,7 +263,8 @@
 {
     if ([[segue identifier] isEqualToString:@"LoginSegue"])
     {
-        LoginScreenViewController *viewController = segue.destinationViewController;
+        //LoginScreenTableViewController *viewController = segue.destinationViewController;
+        LoginScreenTableViewController *viewController = (LoginScreenTableViewController*)[segue.destinationViewController topViewController];
         viewController.delegate = self;
     }
     if ([[segue identifier] isEqualToString:@"RegisterSegue"])

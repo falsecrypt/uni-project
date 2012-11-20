@@ -1,20 +1,20 @@
 //
-//  LoginScreenViewController.m
+//  LoginScreenTableViewController.m
 //  uni-project
 //  Copyright (c) 2012 test. All rights reserved.
 //
 
-#import "LoginScreenViewController.h"
+#import "LoginScreenTableViewController.h"
 #import "KeychainItemWrapper.h"
 #import <TargetConditionals.h>
 
 
 
-@interface LoginScreenViewController ()
+@interface LoginScreenTableViewController ()
 
 @end
 
-@implementation LoginScreenViewController
+@implementation LoginScreenTableViewController
 
 @synthesize cancelButton = _cancelButton;
 @synthesize usernameField = _usernameField;
@@ -24,17 +24,13 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (IBAction)didSelectCancel:(UIButton *)sender
-{
-    [self.delegate didDismissPresentedViewControllerLogin];
 }
 
 - (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
@@ -45,6 +41,19 @@
 - (void)showAlertAfterValidationFailed:(NSString *)message {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Validation Failed" message:message delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alert show];
+}
+
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Navigation logic may go here. Create and push another view controller.
+    /*
+     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
+     // ...
+     // Pass the selected object to the new view controller.
+     [self.navigationController pushViewController:detailViewController animated:YES];
+     */
 }
 
 - (IBAction)logInButtonPressed:(id)sender
@@ -70,8 +79,21 @@
         
         BOOL loggedIN = [defaults boolForKey:@"userLoggedIn"];
         NSLog(@"Simulator-Credentials accepted-userLoggedIn from NSUserDefaults: %d", loggedIN);
-        [self.delegate didDismissPresentedViewControllerLogin];
-        [self.delegate userLoggedIn];
+        if( [ self.delegate respondsToSelector: @selector( didDismissPresentedViewControllerLogin ) ] ) {
+            [self.delegate didDismissPresentedViewControllerLogin]; 
+            NSLog(@"self.delegate 1: %@", self.delegate);
+        }
+        /*if( [ self.delegate respondsToSelector: @selector( showProfileAfterUserLoggedIn ) ] ) {
+            [self.delegate showProfileAfterUserLoggedIn]; // profileDelegate == null ???
+            NSLog(@"self.delegate 2: %@", self.delegate);
+        }*/
+        
+        NSString *notificationName = @"UserLoggedInNotification";
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:notificationName
+         object:nil];
+        
+        
     }
     // Sorry, something went wrong
     else {
@@ -83,8 +105,6 @@
     // Validation deploying on real device
     else if ([self.usernameField.text isEqualToString:[keychain objectForKey:(__bridge id)kSecAttrAccount]] &&
              [self.passwordField.text isEqualToString:[keychain objectForKey:(__bridge id)kSecValueData]]) {
-    
-
 
         // now set UserLoggedIn = true, using NSUserDefaults
         
@@ -93,7 +113,11 @@
         BOOL loggedIN = [defaults boolForKey:@"userLoggedIn"];
         NSLog(@"Credentials accepted-userLoggedIn from NSUserDefaults: %d", loggedIN);
         [self.delegate didDismissPresentedViewControllerLogin];
-        [self.delegate userLoggedIn];
+        
+        NSString *notificationName = @"UserLoggedInNotification";
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:notificationName
+         object:nil];
     }
     // Sorry, something went wrong
     else {
@@ -103,6 +127,11 @@
 #endif
 
     
+}
+
+- (IBAction)didSelectCancel:(id)sender {
+    
+        [self.delegate didDismissPresentedViewControllerLogin];
 }
 
 @end

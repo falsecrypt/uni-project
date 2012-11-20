@@ -7,9 +7,7 @@
 //
 
 #import "MDMasterViewController.h"
-
 #import "MDDetailViewController.h"
-
 #import "MDMultipleMasterDetailManager.h"
 
 @interface MDMasterViewController ()

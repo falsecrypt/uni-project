@@ -8,14 +8,15 @@
 #import <UIKit/UIKit.h>
 #import "DetailViewManager.h"
 #import "ProfilePopoverViewController.h"
+#import "LoginScreenTableViewController.h"
+//#import "RegisterTableViewController.h"
 
-@interface FirstDetailViewController : UIViewController <SubstitutableDetailViewController>
+@interface FirstDetailViewController : UIViewController <SubstitutableDetailViewController, LoginScreenViewControllerDelegate>
 
-//@property (strong, nonatomic) IBOutlet UILabel *titleLabel;
-//@property (strong, nonatomic) IBOutlet UIToolbar *toolbar;
 /// SubstitutableDetailViewController
 
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *profileBarButtonItem;
 @property (nonatomic, retain) UIBarButtonItem *navigationPaneBarButtonItem;
 
 @property (nonatomic, retain) ProfilePopoverViewController *userProfile;

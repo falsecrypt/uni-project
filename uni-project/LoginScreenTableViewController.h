@@ -1,8 +1,7 @@
 //
-//  LoginScreenViewController.h
+//  LoginScreenTableViewController.h
 //  uni-project
-//
-//  Created by Erna on 28.10.12.
+
 //  Copyright (c) 2012 test. All rights reserved.
 //
 
@@ -10,13 +9,21 @@
 
 @protocol LoginScreenViewControllerDelegate <NSObject>
 - (void)didDismissPresentedViewControllerLogin;
-- (void)userLoggedIn;
+//- (void)userLoggedIn;
 @end
 
-@interface LoginScreenViewController : UIViewController
+/*@protocol ProfilePopoverDelegate <NSObject>
+- (void)showProfileAfterUserLoggedIn;
+@end*/
+
+@interface LoginScreenTableViewController : UITableViewController
+
 @property (nonatomic, weak) id<LoginScreenViewControllerDelegate> delegate;
+//@property (nonatomic, weak) id<ProfilePopoverDelegate> profileDelegate;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *cancelButton;
 @property (strong, nonatomic) IBOutlet UITextField *usernameField;
 @property (strong, nonatomic) IBOutlet UITextField *passwordField;
 - (IBAction)logInButtonPressed:(id)sender;
+
+- (IBAction)didSelectCancel:(id)sender;
 @end

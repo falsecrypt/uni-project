@@ -41,9 +41,9 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    self.contentSizeForViewInPopover = CGSizeMake(140.0, 150.0);
-    UIView* popoverView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 140, 150)];
-    popoverView.backgroundColor = [UIColor whiteColor];
+    self.contentSizeForViewInPopover = CGSizeMake(150.0, 180.0);
+    UIView* popoverView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 140, 180)];
+    popoverView.backgroundColor = [UIColor lightGrayColor];
     /*UITableView *table = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, 150, 140) style:UITableViewStylePlain];
     table.backgroundColor=[UIColor whiteColor];
     [table setDataSource:self];
@@ -58,6 +58,8 @@
     [profilePic setImage:img];
     
     self.userName = [[UILabel alloc] initWithFrame:CGRectMake(10,110,120,20)];
+    self.userName.backgroundColor = [UIColor clearColor];
+    self.userName.textColor = [UIColor whiteColor];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     KeychainItemWrapper *keychain =
     [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
@@ -68,9 +70,18 @@
         self.userName.text = @"User is not logged in";
     }
     
+    CGRect logOffButtonFrame = CGRectMake( 10, 140, 100, 30 );
+    //UIButton *logOffButton = [[UIButton alloc] initWithFrame: buttonFrame];
+    UIButton *logOffButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    logOffButton.frame = logOffButtonFrame;
+    [logOffButton setTitle: @"Abmelden" forState: UIControlStateNormal];
+    //[logOffButton addTarget:self action:@selector(userLogOff:) forControlEvents:UIControlEventTouchUpInside];
+    [logOffButton setTitleColor: [UIColor lightGrayColor] forState: UIControlStateNormal];
+    //[logOffButton setBackgroundColor: [UIColor lightGrayColor]];
     
     [popoverView addSubview:profilePic];
     [popoverView addSubview:self.userName];
+    [popoverView addSubview:logOffButton];
     
     self.view = popoverView;
 }

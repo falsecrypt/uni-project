@@ -22,7 +22,7 @@
 		CE8B7F7E15ED35D1006CD57C /* MDMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F7915ED35D1006CD57C /* MDMasterViewController.m */; };
 		CE8B7F7F15ED35D1006CD57C /* MDMultipleMasterDetailManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F7B15ED35D1006CD57C /* MDMultipleMasterDetailManager.m */; };
 		CE8B7F8315ED3630006CD57C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F8215ED3630006CD57C /* main.m */; };
-		CEA0BE9C163CD2D700ED0599 /* LoginScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0BE9A163CD2D700ED0599 /* LoginScreenViewController.m */; };
+		CEA0BE9C163CD2D700ED0599 /* LoginScreenTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0BE9A163CD2D700ED0599 /* LoginScreenTableViewController.m */; };
 		CEA0BEA1163CD99B00ED0599 /* FirstTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0BEA0163CD99B00ED0599 /* FirstTableViewController.m */; };
 		CEDDE0F61641611800BEFE0A /* StartDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEDDE0F51641611800BEFE0A /* StartDetailViewController.m */; };
 		CEE88E2715F3C26300382450 /* tabbar_back_opt.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEE88E2615F3C26300382450 /* tabbar_back_opt.jpg */; };
@@ -65,8 +65,8 @@
 		CE8B7F7A15ED35D1006CD57C /* MDMultipleMasterDetailManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDMultipleMasterDetailManager.h; sourceTree = "<group>"; };
 		CE8B7F7B15ED35D1006CD57C /* MDMultipleMasterDetailManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDMultipleMasterDetailManager.m; sourceTree = "<group>"; };
 		CE8B7F8215ED3630006CD57C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		CEA0BE99163CD2D700ED0599 /* LoginScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginScreenViewController.h; sourceTree = "<group>"; };
-		CEA0BE9A163CD2D700ED0599 /* LoginScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginScreenViewController.m; sourceTree = "<group>"; };
+		CEA0BE99163CD2D700ED0599 /* LoginScreenTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginScreenTableViewController.h; sourceTree = "<group>"; };
+		CEA0BE9A163CD2D700ED0599 /* LoginScreenTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginScreenTableViewController.m; sourceTree = "<group>"; };
 		CEA0BE9F163CD99B00ED0599 /* FirstTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstTableViewController.h; sourceTree = "<group>"; };
 		CEA0BEA0163CD99B00ED0599 /* FirstTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstTableViewController.m; sourceTree = "<group>"; };
 		CEDDE0F41641611800BEFE0A /* StartDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartDetailViewController.h; sourceTree = "<group>"; };
@@ -203,8 +203,8 @@
 			children = (
 				CE8B7F7815ED35D1006CD57C /* MDMasterViewController.h */,
 				CE8B7F7915ED35D1006CD57C /* MDMasterViewController.m */,
-				CEA0BE99163CD2D700ED0599 /* LoginScreenViewController.h */,
-				CEA0BE9A163CD2D700ED0599 /* LoginScreenViewController.m */,
+				CEA0BE99163CD2D700ED0599 /* LoginScreenTableViewController.h */,
+				CEA0BE9A163CD2D700ED0599 /* LoginScreenTableViewController.m */,
 				CEA0BE9F163CD99B00ED0599 /* FirstTableViewController.h */,
 				CEA0BEA0163CD99B00ED0599 /* FirstTableViewController.m */,
 				CEF56579163F17270066F2A2 /* FirstDetailViewController.h */,
@@ -497,7 +497,7 @@
 				CE8B7F8315ED3630006CD57C /* main.m in Sources */,
 				CEEAE27A15F275CA00A550FA /* CPDConstants.m in Sources */,
 				CEEAE27B15F275CA00A550FA /* CPDStockPriceStore.m in Sources */,
-				CEA0BE9C163CD2D700ED0599 /* LoginScreenViewController.m in Sources */,
+				CEA0BE9C163CD2D700ED0599 /* LoginScreenTableViewController.m in Sources */,
 				CEA0BEA1163CD99B00ED0599 /* FirstTableViewController.m in Sources */,
 				CEFDC23C163E15480011C3CF /* DetailViewManager.m in Sources */,
 				CEF5657B163F17270066F2A2 /* FirstDetailViewController.m in Sources */,

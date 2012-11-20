@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LoginScreenViewController.h"
+#import "LoginScreenTableViewController.h"
 #import "RegisterTableViewController.h"
 
 @interface FirstTableViewController : UITableViewController <LoginScreenViewControllerDelegate, RegisterScreenViewControllerDelegate>
