@@ -14,4 +14,6 @@
     #import "CorePlot-CocoaTouch.h"
     #import "CPDConstants.h"
     #import "CPDStockPriceStore.h"
+    #import "CoreData+MagicalRecord.h"
+
 #endif

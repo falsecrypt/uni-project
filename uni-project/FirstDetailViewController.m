@@ -64,11 +64,18 @@ NSMutableArray *navigationBarItems;
     
     // we use notification center for broadcasting information
     // Register to Receive a Notification
-    NSString *notificationName = @"UserLoggedInNotification";
+    NSString *firstNotificationName = @"UserLoggedInNotification";
     [[NSNotificationCenter defaultCenter]
      addObserver:self
      selector:@selector(showProfileAfterUserLoggedIn)
-     name:notificationName
+     name:firstNotificationName
+     object:nil];
+    
+    NSString *secondNotificationName = @"UserLoggedOffNotification";
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(hideProfileAfterUserLoggedOff)
+     name:secondNotificationName
      object:nil];
 }
 
@@ -124,6 +131,13 @@ NSMutableArray *navigationBarItems;
 - (void)showProfileAfterUserLoggedIn {
     //NSLog(@"!!!!! 1 calling showProfileAfterUserLoggedIn !!!!!!!!!!");
     [navigationBarItems addObject:self.profileBarButtonItem];
+    [self.navigationBar.topItem setRightBarButtonItems:navigationBarItems animated:YES];
+}
+
+- (void)hideProfileAfterUserLoggedOff {
+    if (self.profilePopover)
+        [self.profilePopover dismissPopoverAnimated:YES];
+    [navigationBarItems removeObject:self.profileBarButtonItem];
     [self.navigationBar.topItem setRightBarButtonItems:navigationBarItems animated:YES];
 }
 @end

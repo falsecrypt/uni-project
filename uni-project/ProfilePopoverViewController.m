@@ -40,10 +40,9 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    
     self.contentSizeForViewInPopover = CGSizeMake(150.0, 180.0);
     UIView* popoverView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 140, 180)];
-    popoverView.backgroundColor = [UIColor lightGrayColor];
+    popoverView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
     /*UITableView *table = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, 150, 140) style:UITableViewStylePlain];
     table.backgroundColor=[UIColor whiteColor];
     [table setDataSource:self];
@@ -59,7 +58,7 @@
     
     self.userName = [[UILabel alloc] initWithFrame:CGRectMake(10,110,120,20)];
     self.userName.backgroundColor = [UIColor clearColor];
-    self.userName.textColor = [UIColor whiteColor];
+    self.userName.textColor = [UIColor colorWithWhite:0.5 alpha:1.0];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     KeychainItemWrapper *keychain =
     [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
@@ -75,7 +74,7 @@
     UIButton *logOffButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     logOffButton.frame = logOffButtonFrame;
     [logOffButton setTitle: @"Abmelden" forState: UIControlStateNormal];
-    //[logOffButton addTarget:self action:@selector(userLogOff:) forControlEvents:UIControlEventTouchUpInside];
+    [logOffButton addTarget:self action:@selector(didSelectLogOff:) forControlEvents:UIControlEventTouchUpInside];
     [logOffButton setTitleColor: [UIColor lightGrayColor] forState: UIControlStateNormal];
     //[logOffButton setBackgroundColor: [UIColor lightGrayColor]];
     
@@ -91,6 +90,16 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (void)didSelectLogOff:(id)sender {
+
+    NSString *notificationName = @"UserLoggedOffNotification";
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:notificationName
+     object:nil];
+    
+}
+
 
 /*
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView {

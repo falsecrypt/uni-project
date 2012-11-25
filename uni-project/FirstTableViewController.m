@@ -131,6 +131,13 @@
      name:loggedInNotificationName
      object:nil];
     
+    NSString *loggedOffNotificationName = @"UserLoggedOffNotification";
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(hidePrivateDataAfterUserLoggedOff)
+     name:loggedOffNotificationName
+     object:nil];
+    
     //NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     //[defaults setBool:FALSE forKey:@"userLoggedIn"];
     
@@ -421,6 +428,20 @@
     [self.tableView cellForRowAtIndexPath:indexPathLogin].hidden = YES;
     NSIndexPath *indexPathCreateAccount = [NSIndexPath indexPathForRow:0 inSection:1];
     [self.tableView cellForRowAtIndexPath:indexPathCreateAccount].hidden = YES;
+    
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 2)] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadData];
+    
+}
+
+-(void)hidePrivateDataAfterUserLoggedOff {
+    self.userLoggedInVar = false;
+    
+    NSIndexPath *indexPathMeinBuero = [NSIndexPath indexPathForRow:0 inSection:2];
+    [self.tableView cellForRowAtIndexPath:indexPathMeinBuero].hidden = YES;
+    NSIndexPath *indexPathLogin = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self.tableView cellForRowAtIndexPath:indexPathLogin].hidden = NO;
+    
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 2)] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.tableView reloadData];
     
