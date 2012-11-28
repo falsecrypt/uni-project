@@ -1202,20 +1202,20 @@
                     </view>
                     <splitViewDetailSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="spNumberEight" destination="8X3-lT-Pve" id="FKx-b4-6HN"/>
-                        <outlet property="spNumberEleven" destination="JZP-Io-cmn" id="E3i-KU-XPp"/>
-                        <outlet property="spNumberFive" destination="9E3-np-BfR" id="PRJ-jU-POM"/>
-                        <outlet property="spNumberFour" destination="SMg-Ag-UhE" id="Ljs-Ug-zZf"/>
-                        <outlet property="spNumberNine" destination="CCU-mr-6EH" id="NAA-Mx-Ht5"/>
-                        <outlet property="spNumberOne" destination="INk-7B-aCz" id="k59-B1-u9c"/>
-                        <outlet property="spNumberSeven" destination="mqf-YT-SE6" id="VPU-9Z-56S"/>
-                        <outlet property="spNumberSix" destination="5Tf-2l-f66" id="KoM-TN-rGu"/>
-                        <outlet property="spNumberTen" destination="X6N-LM-oHn" id="rP7-v6-Q9q"/>
-                        <outlet property="spNumberThree" destination="YtC-NA-T5G" id="ESC-0z-82d"/>
-                        <outlet property="spNumberTwelve" destination="lBR-RL-5sU" id="zET-aR-cu3"/>
-                        <outlet property="spNumberTwo" destination="Bcv-F9-1ft" id="uHp-qw-OYS"/>
                         <outlet property="speedometerImageView" destination="QxV-s4-9zn" id="CfW-qv-T78"/>
                         <outlet property="speedometerReading" destination="Oix-4t-XVd" id="tLl-dp-5Zq"/>
+                        <outletCollection property="labelsWithNumbersCollection" destination="INk-7B-aCz" id="YGd-V3-ofE"/>
+                        <outletCollection property="labelsWithNumbersCollection" destination="Bcv-F9-1ft" id="674-3G-UpN"/>
+                        <outletCollection property="labelsWithNumbersCollection" destination="YtC-NA-T5G" id="lYg-qR-xNs"/>
+                        <outletCollection property="labelsWithNumbersCollection" destination="SMg-Ag-UhE" id="Ze9-3p-gTK"/>
+                        <outletCollection property="labelsWithNumbersCollection" destination="9E3-np-BfR" id="OVe-t0-pvj"/>
+                        <outletCollection property="labelsWithNumbersCollection" destination="5Tf-2l-f66" id="fzc-la-z4M"/>
+                        <outletCollection property="labelsWithNumbersCollection" destination="mqf-YT-SE6" id="U1u-gL-zN9"/>
+                        <outletCollection property="labelsWithNumbersCollection" destination="8X3-lT-Pve" id="Rc4-nd-7we"/>
+                        <outletCollection property="labelsWithNumbersCollection" destination="CCU-mr-6EH" id="MnS-EW-boV"/>
+                        <outletCollection property="labelsWithNumbersCollection" destination="X6N-LM-oHn" id="Saa-un-0Yl"/>
+                        <outletCollection property="labelsWithNumbersCollection" destination="JZP-Io-cmn" id="RpX-tv-9XZ"/>
+                        <outletCollection property="labelsWithNumbersCollection" destination="lBR-RL-5sU" id="WdM-vr-ANQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wJ3-4n-yM8" userLabel="First Responder" sceneMemberID="firstResponder"/>

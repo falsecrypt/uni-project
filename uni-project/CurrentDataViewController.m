@@ -4,13 +4,14 @@
 
 //  Copyright (c) 2012 test. All rights reserved.
 //
+//  TEST: userID = 3
 
 #import "CurrentDataViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
 #import "AFAppDotNetAPIClient.h"
 
-@interface CurrentDataViewController ()
+@interface CurrentDataViewController ()     
 
 @end
 
@@ -28,19 +29,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    
+    [self startSynchronization];
     
     [self addMeterViewContents];
-    
-    // TEST: ID = 3
-    [[AFAppDotNetAPIClient sharedClient] getPath:@"rpc.php?userID=3&action=get&what=watt" parameters:nil success:^(AFHTTPRequestOperation *operation, id data) {
-        NSString *userCurrentWattString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSInteger userCurrentWatt = [userCurrentWattString intValue];
-        NSLog(@"Success! user's current watt consumption: %i Watt",userCurrentWatt);
-
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Failed: %@",[error localizedDescription]);
-    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -49,11 +41,52 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)startSynchronization {
+    
+    // Another possibility: performSelectorInBackground and performSelectorOnMainThread, but its slower
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // This code is running in a different thread
+        NSTimer* timer = [NSTimer timerWithTimeInterval:120.0 // 2 minutes
+                                                 target:self
+                                               selector:@selector(getDataFromServer:)
+                                               userInfo:nil
+                                                repeats:YES];
+        
+        [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+        [[NSRunLoop currentRunLoop] run];
+    });
+}
+
+- (void)getDataFromServer:(NSTimer *)timer {
+    
+    [[AFAppDotNetAPIClient sharedClient] getPath:@"rpc.php?userID=3&action=get&what=watt" parameters:nil success:^(AFHTTPRequestOperation *operation, id data) {
+        NSString *userCurrentWattString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        self.userCurrentWatt = [userCurrentWattString intValue];
+        NSLog(@"Success! user's current watt consumption: %i Watt", self.userCurrentWatt);
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Failed during getting current watt: %@",[error localizedDescription]);
+    }];
+    
+    //max consumption is a value, beeing aggregated during a period of time, i.e. 14 days
+    // we should store this value in our DB, using Core Data
+    // TODO
+    [[AFAppDotNetAPIClient sharedClient] getPath:@"rpc.php?userID=3&action=get&what=max" parameters:nil success:^(AFHTTPRequestOperation *operation, id data) {
+        NSString *userMaxWattString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        self.userMaximumWatt = [userMaxWattString intValue];
+        NSLog(@"Success! user's maximum watt consumption: %i Watt", self.userMaximumWatt);
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Failed during getting maximum watt: %@",[error localizedDescription]);
+    }];
+    
+}
+
 
 #pragma mark -
 #pragma mark Public Methods
 
--(void) addMeterViewContents
+- (void)addMeterViewContents
 {
 	//  Needle //
     // CGRectMake : x,  y,  width,  height
