@@ -11,12 +11,12 @@
 
 
 @property (strong, nonatomic) UIImageView *needleImageView;
-@property (nonatomic,assign) float speedometerCurrentValue;
+@property (nonatomic,assign) int speedometerCurrentValue;
 @property (nonatomic,assign) float prevAngleFactor;
 @property (nonatomic,assign) float angle;
-@property (strong, nonatomic) NSTimer *speedometer_Timer;
+//@property (strong, nonatomic) NSTimer *speedometer_Timer;
 //@property(nonatomic,retain) UILabel *speedometerReading;
-@property (strong, nonatomic) NSString *maxVal;
+@property (assign, nonatomic) int maxVal;
 @property (strong, nonatomic) IBOutlet UIImageView *speedometerImageView;
 @property (strong, nonatomic) IBOutlet UILabel *speedometerReading;
 @property (assign, nonatomic) int userMaximumWatt;
