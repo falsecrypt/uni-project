@@ -18,24 +18,16 @@
 //@property(nonatomic,retain) UILabel *speedometerReading;
 @property (assign, nonatomic) int maxVal;
 @property (strong, nonatomic) IBOutlet UIImageView *speedometerImageView;
-@property (strong, nonatomic) IBOutlet UILabel *speedometerReading;
+//@property (strong, nonatomic) IBOutlet UILabel *speedometerReading;
 @property (assign, nonatomic) int userMaximumWatt;
 @property (assign, nonatomic) int userCurrentWatt;
 
-/*
-@property (strong, nonatomic) IBOutlet UILabel *spNumberOne;
-@property (strong, nonatomic) IBOutlet UILabel *spNumberTwo;
-@property (strong, nonatomic) IBOutlet UILabel *spNumberThree;
-@property (strong, nonatomic) IBOutlet UILabel *spNumberFour;
-@property (strong, nonatomic) IBOutlet UILabel *spNumberFive;
-@property (strong, nonatomic) IBOutlet UILabel *spNumberSix;
-@property (strong, nonatomic) IBOutlet UILabel *spNumberSeven;
-@property (strong, nonatomic) IBOutlet UILabel *spNumberEight;
-@property (strong, nonatomic) IBOutlet UILabel *spNumberNine;
-@property (strong, nonatomic) IBOutlet UILabel *spNumberTen;
-@property (strong, nonatomic) IBOutlet UILabel *spNumberEleven;
-@property (strong, nonatomic) IBOutlet UILabel *spNumberTwelve;
- */
+
+@property (strong, nonatomic) IBOutlet UILabel *spReadingFirstNumber;
+@property (strong, nonatomic) IBOutlet UILabel *spReadingSecondNumber;
+@property (strong, nonatomic) IBOutlet UILabel *spReadingThirdNumber;
+@property (strong, nonatomic) IBOutlet UILabel *spReadingFourthNumber;
+
 
 
 // for (UILabel *spLabel in labelsWithNumbersCollection) { ...
