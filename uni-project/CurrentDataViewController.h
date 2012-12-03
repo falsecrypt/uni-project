@@ -6,6 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ProfilePopoverViewController.h"
 
 @interface CurrentDataViewController : UIViewController
 
@@ -28,6 +29,10 @@
 @property (strong, nonatomic) IBOutlet UILabel *spReadingThirdNumber;
 @property (strong, nonatomic) IBOutlet UILabel *spReadingFourthNumber;
 
+@property (nonatomic, retain) ProfilePopoverViewController *userProfile;
+@property (nonatomic, retain) UIPopoverController *profilePopover;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *profileBarButtonItem;
+@property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
 
 
 // for (UILabel *spLabel in labelsWithNumbersCollection) { ...

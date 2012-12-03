@@ -93,6 +93,10 @@
 
 - (void)didSelectLogOff:(id)sender {
 
+    // Log off user
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:NO forKey:@"userLoggedIn"];
+    
     NSString *notificationName = @"UserLoggedOffNotification";
     [[NSNotificationCenter defaultCenter]
      postNotificationName:notificationName

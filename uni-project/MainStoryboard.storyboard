@@ -1091,7 +1091,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="703" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
-                                    <navigationItem title="Meine Daten" id="BYc-GL-wOl"/>
+                                    <navigationItem title="Meine Daten" id="BYc-GL-wOl">
+                                        <barButtonItem key="rightBarButtonItem" image="icon_user.png" id="6KT-tO-HDD">
+                                            <connections>
+                                                <action selector="profileButtonTapped:" destination="Xj3-ih-VLP" id="2iZ-Zy-reM"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
                                 </items>
                             </navigationBar>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="speedometerBody.png" id="QxV-s4-9zn">
@@ -1101,28 +1107,28 @@
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Oix-4t-XVd">
                                 <rect key="frame" x="366" y="313" width="18" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="kmG-gh-h4W">
                                 <rect key="frame" x="384" y="313" width="18" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="g9b-Yb-j1v">
                                 <rect key="frame" x="349" y="313" width="18" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="YbE-7y-rS5">
                                 <rect key="frame" x="332" y="313" width="18" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -1223,6 +1229,8 @@
                     </view>
                     <splitViewDetailSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="navigationBar" destination="2oB-BV-xF0" id="0H0-mb-R6r"/>
+                        <outlet property="profileBarButtonItem" destination="6KT-tO-HDD" id="yO7-du-XYI"/>
                         <outlet property="spReadingFirstNumber" destination="kmG-gh-h4W" id="GrA-9Z-hB9"/>
                         <outlet property="spReadingFourthNumber" destination="YbE-7y-rS5" id="aUX-NC-EoX"/>
                         <outlet property="spReadingSecondNumber" destination="Oix-4t-XVd" id="i5l-pP-cm1"/>
@@ -1272,6 +1280,82 @@
         <image name="icon_user.png" width="30" height="30"/>
         <image name="speedometerBody.png" width="366" height="364"/>
     </resources>
+    <classes>
+        <class className="CPTGraphHostingView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/CPTGraphHostingView.h"/>
+        </class>
+        <class className="CurrentDataViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/CurrentDataViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
+                <relationship kind="outlet" name="profileBarButtonItem" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="spReadingFirstNumber" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="spReadingFourthNumber" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="spReadingSecondNumber" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="spReadingThirdNumber" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="speedometerImageView" candidateClass="UIImageView"/>
+                <relationship kind="outletCollection" name="labelsWithNumbersCollection" candidateClass="UILabel"/>
+            </relationships>
+        </class>
+        <class className="FirstDetailViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FirstDetailViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="profileButtonTapped:"/>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
+                <relationship kind="outlet" name="profileBarButtonItem" candidateClass="UIBarButtonItem"/>
+            </relationships>
+        </class>
+        <class className="FirstTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FirstTableViewController.h"/>
+        </class>
+        <class className="LoginScreenTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/LoginScreenTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="didSelectCancel:"/>
+                <relationship kind="action" name="logInButtonPressed:"/>
+                <relationship kind="outlet" name="cancelButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="usernameField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="MDDetailViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MDDetailViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="aaplSwitched:"/>
+                <relationship kind="action" name="googSwitched:"/>
+                <relationship kind="action" name="msftSwitched:"/>
+                <relationship kind="outlet" name="detailDescriptionLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="hostViewForBarGraph" candidateClass="CPTGraphHostingView"/>
+                <relationship kind="outlet" name="switchAAPL" candidateClass="UISwitch"/>
+                <relationship kind="outlet" name="switchGOOG" candidateClass="UISwitch"/>
+                <relationship kind="outlet" name="switchMSFT" candidateClass="UISwitch"/>
+            </relationships>
+        </class>
+        <class className="MDMasterViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MDMasterViewController.h"/>
+        </class>
+        <class className="RegisterTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/RegisterTableViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="cancelBarButtonItemPressed:"/>
+                <relationship kind="action" name="submitButtonPressed:"/>
+                <relationship kind="outlet" name="cancelButton" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="emailField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
+                <relationship kind="outlet" name="submitButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="usernameField" candidateClass="UITextField"/>
+            </relationships>
+        </class>
+        <class className="SecondDetailViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SecondDetailViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
+            </relationships>
+        </class>
+        <class className="SecondTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SecondTableViewController.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>

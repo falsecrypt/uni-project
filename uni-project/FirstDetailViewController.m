@@ -95,7 +95,7 @@ NSMutableArray *navigationBarItems;
     }
     
     
-    //NSLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
+    NSLog(@"[defaults boolForKey:@'userLoggedIn'] %i", [defaults boolForKey:@"userLoggedIn"]);
     
 }
 
