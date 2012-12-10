@@ -7,8 +7,9 @@
 
 #import <UIKit/UIKit.h>
 #import "ProfilePopoverViewController.h"
+#import "DetailViewManager.h"
 
-@interface CurrentDataViewController : UIViewController
+@interface CurrentDataViewController : UIViewController <SubstitutableDetailViewController>
 
 
 @property (strong, nonatomic) UIImageView *needleImageView;
@@ -33,6 +34,8 @@
 @property (nonatomic, retain) UIPopoverController *profilePopover;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *profileBarButtonItem;
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
+
+@property (nonatomic, retain) UIBarButtonItem *navigationPaneBarButtonItem;
 
 
 // for (UILabel *spLabel in labelsWithNumbersCollection) { ...

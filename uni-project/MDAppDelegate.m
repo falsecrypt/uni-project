@@ -29,6 +29,14 @@
     self.window.rootViewController = self.splitViewController;
     [self.window makeKeyAndVisible];
      */
+    
+    //--------------------------------------------------------------------
+    // MagicalRecord Setup - creating the NSPersistentStoreCoordinator,
+    // the NSManagedObjectModel and the NSManagedObjectContext. We are using
+    // the active record pattern.
+    //--------------------------------------------------------------------
+    //[MagicalRecord setupCoreDataStackWithStoreNamed:@"ecoMeterDB.sqlite"];
+    
     UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
     self.splitViewController = splitViewController;
     
@@ -44,9 +52,11 @@
     
 
     // Log off user
+    /*
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setBool:NO forKey:@"userLoggedIn"];
     NSLog(@"calling didFinishLaunchingWithOptions, userLoggedIn: %i", [defaults boolForKey:@"userLoggedIn"]);
+     */
 
     
     

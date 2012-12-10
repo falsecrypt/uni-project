@@ -18,6 +18,7 @@
 @property NSTimer *pendingTimer;
 @property NSTimer *continiousTimer;
 @property MBProgressHUD *HUD;
+@property UIImageView *meterImageViewDot;
 
 @end
 
@@ -46,6 +47,20 @@ NSMutableArray *navigationBarItems;
      object:nil];
      */
     
+    DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
+    detailViewManager.detailViewController = self;
+    
+    // -setNavigationPaneBarButtonItem may have been invoked when before the
+    // interface was loaded.  This will occur when setNavigationPaneBarButtonItem
+    // is called as part of DetailViewManager preparing this view controller
+    // for presentation as this is before the view is unarchived from the NIB.
+    // When viewidLoad is invoked, the interface is loaded and hooked up.
+    // Check if we are supposed to be displaying a navigationPaneBarButtonItem
+    // and if so, add it to the navigationBar.
+    if (self.navigationPaneBarButtonItem)
+        [self.navigationBar.topItem setLeftBarButtonItem:self.navigationPaneBarButtonItem
+                                                animated:NO];
+    
     NSString *secondNotificationName = @"UserLoggedOffNotification";
     [[NSNotificationCenter defaultCenter]
      addObserver:self
@@ -55,13 +70,23 @@ NSMutableArray *navigationBarItems;
     
     self.labelsWithNumbersCollection = [self sortCollection:self.labelsWithNumbersCollection];
     
-    [self addMeterViewContents];
+    //[self addMeterViewContents];
     
     [self startSynchronization];
 }
 
+
 // -------------------------------------------------------------------------------
 //	viewWillAppear:
+//  Called when the view has been fully transitioned onto the screen
+// -------------------------------------------------------------------------------
+- (void)viewDidAppear:(BOOL)animated {
+    [self addMeterViewContents];
+}
+
+// -------------------------------------------------------------------------------
+//	viewWillAppear:
+//  Called when the view is about to made visible
 // -------------------------------------------------------------------------------
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -70,11 +95,10 @@ NSMutableArray *navigationBarItems;
     // NSLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (![defaults boolForKey:@"userLoggedIn"]) {
-        [navigationBarItems removeObject:self.profileBarButtonItem];
-        [self.navigationBar.topItem setRightBarButtonItems:navigationBarItems animated:NO];
+        //[navigationBarItems removeObject:self.profileBarButtonItem];
+        [self.navigationBar.topItem setRightBarButtonItem:self.profileBarButtonItem animated:NO];
     }
-    
-    
+
     //NSLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
     
 }
@@ -111,7 +135,7 @@ NSMutableArray *navigationBarItems;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // This code is running in a different thread
         // After 120 seconds have elapsed, the timer fires, sending the message to target.
-        self.continiousTimer = [NSTimer timerWithTimeInterval:20.0 // 2 minutes
+        self.continiousTimer = [NSTimer timerWithTimeInterval:60.0 // 1 minute
                                                  target:self
                                                selector:@selector(getDataFromServer:)
                                                userInfo:nil
@@ -136,12 +160,12 @@ NSMutableArray *navigationBarItems;
             });
             self.userMaximumWatt = [userMaxWattString intValue];
             self.maxVal = [userMaxWattString intValue];
-            NSLog(@"setting maxVal: %i ", self.maxVal);
+            NSLog(@"Max Watt changed! setting maxVal: %i, setting userMaximumWatt: %i ", self.maxVal, self.userMaximumWatt);
             [self changeSpeedometerNumbers];
             [self calculateDeviationAngle];
             
         }
-        NSLog(@"Success! user's maximum watt consumption: %i Watt", self.userMaximumWatt);
+        NSLog(@"Success! user's maximum watt consumption(userMaximumWatt): %i Watt, maxVal: %i Watt", self.userMaximumWatt, self.maxVal);
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failed during getting maximum watt: %@",[error localizedDescription]);
@@ -188,70 +212,73 @@ NSMutableArray *navigationBarItems;
         NSNumber *tag2 = [NSNumber numberWithInt:[(UILabel*)b tag]];
         return [tag1 compare:tag2];
     }];
-    
     return sortedArray;
 }
 
 - (void)changeSpeedometerNumbers {
     
-    int step = self.userMaximumWatt/12;
-    step = ((step)/5)*5;
-    NSLog(@"changeSpeedometerNumbers, step: %i", step);
-    int temp = step;
+    int step = (int)floorf(self.userMaximumWatt/12);
+    step = ((step+2)/5)*5;
     //NSLog(@"changeSpeedometerNumbers, step: %i", step);
+    int temp = step;
+    NSLog(@"changeSpeedometerNumbers, step: %i", step);
     for (UILabel *spLabel in self.labelsWithNumbersCollection) {
         NSLog(@"changeSpeedometerNumbers, temp: %i", temp);
         spLabel.text = [NSString stringWithFormat:@"%i", temp];
         temp += step;
-        
     }
-    self.maxVal = temp - step;
+//    self.maxVal = temp - step;
+//    NSLog(@"changeSpeedometerNumbers, setting new maxVal: %i", self.maxVal);
     self.userMaximumWatt = temp - step;
+    NSLog(@"changeSpeedometerNumbers, setting new userMaximumWatt: %i", self.userMaximumWatt);
 }
 
 
 #pragma mark -
 #pragma mark Public Methods
 
-- (void)addMeterViewContents
-{
+- (void)addMeterViewContents {
 	//  Needle //
     // CGRectMake : x,  y,  width,  height
-	UIImageView *imgNeedle = [[UIImageView alloc]initWithFrame:CGRectMake(340, 168, 19, 147)];
+	//UIImageView *imgNeedle = [[UIImageView alloc]initWithFrame:CGRectMake(340, 168, 19, 147)];
+    
+    //[self.speedometerImageView setCenter:CGPointMake((self.view.frame.size.width/2), 246.0)];
+
+//    NSLog(@"self.view.frame.size.width/2: %f", (self.view.frame.size.width/2));
+//     NSLog(@"self.view.frame.size.width: %f", self.view.frame.size.width);
+//    NSLog(@"self.view.bounds.size.width: %f", self.view.bounds.size.width);
+    
+    //UIImageView *imgNeedle = [[UIImageView alloc]initWithFrame:CGRectMake(340, 168, 19, 147)];
+    UIImageView *imgNeedle = [[UIImageView alloc]initWithFrame:CGRectMake((self.speedometerImageView.frame.origin.x)+(175), 168, 19, 147)];
 	self.needleImageView = imgNeedle;
+    [self.needleImageView setAutoresizingMask:UIViewAutoresizingNone];
 	self.needleImageView.layer.anchorPoint = CGPointMake(self.needleImageView.layer.anchorPoint.x, self.needleImageView.layer.anchorPoint.y*2);
 	self.needleImageView.backgroundColor = [UIColor clearColor];
 	self.needleImageView.image = [UIImage imageNamed:@"speedometerArrow.png"];
 	[self.view addSubview:self.needleImageView];
-    
+
     // Needle Dot //
-	UIImageView *meterImageViewDot = [[UIImageView alloc]initWithFrame:CGRectMake(320, 213, 57, 57)];
-	meterImageViewDot.image = [UIImage imageNamed:@"speedometerCenterWheel.png"];
-	[self.view addSubview:meterImageViewDot];
+	//UIImageView *meterImageViewDot = [[UIImageView alloc]initWithFrame:CGRectMake(320, 213, 57, 57)];
+    //self.meterImageViewDot = [[UIImageView alloc]initWithFrame:CGRectMake(320, 213, 57, 57)];
+    self.meterImageViewDot = [[UIImageView alloc]initWithFrame:CGRectMake((self.speedometerImageView.frame.origin.x)+(155), 213, 57, 57)];
+    
+    [self.meterImageViewDot setAutoresizingMask:UIViewAutoresizingNone];
+	self.meterImageViewDot.image = [UIImage imageNamed:@"speedometerCenterWheel.png"];
+	[self.view addSubview:self.meterImageViewDot];
 	
 	// Speedometer Reading //
-	//self.speedometerReading.text= @"0";
 	//self.speedometerReading.textColor = [UIColor colorWithRed:114/255.f green:146/255.f blue:38/255.f alpha:1.0];
     self.spReadingFirstNumber.text = @"0";
     
 	
-	// Set Max Value //
-    if(self.userMaximumWatt){
-        self.maxVal = self.userMaximumWatt;
-    }
-    else{
+	// 
+    if(!self.userMaximumWatt){
+        
         self.maxVal = 0; // get maxVal from DB, TODO
+        [self rotateIt:-120.5];
+        self.prevAngleFactor = -120.5;
+        [self setSpeedometerCurrentValue:0];
     }
-	
-    
-	[self rotateIt:-120.5];
-	self.prevAngleFactor = -120.5;
-    
-    //[self rotateIt:-120.5];
-	//self.prevAngleFactor = 120.5;
-    
-    
-	[self setSpeedometerCurrentValue:0];
 }
 
 #pragma mark -
@@ -260,25 +287,21 @@ NSMutableArray *navigationBarItems;
 -(void) calculateDeviationAngle
 {
 	NSLog(@"calculateDeviationAngle - self.maxVal: %i", self.maxVal);
+    NSLog(@"calculateDeviationAngle - userMaximumWatt: %i", self.userMaximumWatt);
     
-	if(self.maxVal>0)
-	{
-		self.angle = ((self.speedometerCurrentValue * 241)/self.maxVal-120.5);  // 241 - Total angle between 0 - maxVal
-        NSLog(@"calculateDeviationAngle - case 1");
-        NSLog(@"with self.speedometerCurrentValue: %i", self.speedometerCurrentValue);
-        NSLog(@"with self.maxVal: %i", self.maxVal);
+	if(self.userMaximumWatt>0){
+		self.angle = ((self.speedometerCurrentValue * 241)/self.userMaximumWatt-120.5);  // 241 - Total angle between 0 - maxVal
+        //NSLog(@"calculateDeviationAngle - case 1");
+        //NSLog(@"with self.speedometerCurrentValue: %i", self.speedometerCurrentValue);
+        //NSLog(@"with self.maxVal: %i", self.maxVal);
 	}
-	else
-	{
+	else{
 		self.angle = -120.5;
 	}
-	
-	if(self.angle<=-120.5)
-	{
+	if(self.angle<=-120.5){
 		self.angle = -120.5;
 	}
-	if(self.angle>=120.5)
-	{
+	if(self.angle>=120.5){
 		self.angle = 120.5;
 	}
 	
@@ -312,7 +335,7 @@ NSMutableArray *navigationBarItems;
 #pragma mark rotatePendingNeedle Method
 -(void) rotatePendingNeedle
 {
-    NSLog(@"rotatePendingNeedle...");
+    //NSLog(@"rotatePendingNeedle...");
     
     [UIView animateWithDuration: 2.0 delay: 0.0 options: UIViewAnimationOptionCurveLinear animations:^{
                         [self.needleImageView setTransform: CGAffineTransformMakeRotation((M_PI / 180) * self.angle + 0.02)];
@@ -335,7 +358,7 @@ NSMutableArray *navigationBarItems;
 #pragma mark rotateNeedle Method
 -(void) rotateNeedle
 {
-    NSLog(@"rotateNeedle...");
+   // NSLog(@"rotateNeedle...");
     /*
 	[UIView beginAnimations:nil context:nil];
 	[UIView setAnimationDuration:2.5f];
@@ -350,7 +373,7 @@ NSMutableArray *navigationBarItems;
      }
 
 
-    NSLog(@"rotateNeedle...");
+   // NSLog(@"rotateNeedle...");
     [UIView animateWithDuration: 2.5 delay: 1.0 options: UIViewAnimationOptionCurveLinear animations:^{
         [self.needleImageView setTransform: CGAffineTransformMakeRotation((M_PI / 180) * self.angle + 0.02)];
     }
@@ -419,9 +442,7 @@ NSMutableArray *navigationBarItems;
 {
 	[UIView beginAnimations:nil context:nil];
 	[UIView setAnimationDuration:0.01f];
-	
 	[self.needleImageView setTransform: CGAffineTransformMakeRotation((M_PI / 180) *angl)];
-	
 	[UIView commitAnimations];
 }
 
@@ -429,10 +450,17 @@ NSMutableArray *navigationBarItems;
 #pragma mark Profile Button Methods
 
 - (void)hideProfileAfterUserLoggedOff {
-    if (self.profilePopover)
+    NSLog(@"hideProfileAfterUserLoggedOff...");
+    if (self.profilePopover){
         [self.profilePopover dismissPopoverAnimated:YES];
+        NSLog(@"profile popover dissmissed...");
+    }
     [navigationBarItems removeObject:self.profileBarButtonItem];
     [self.navigationBar.topItem setRightBarButtonItems:navigationBarItems animated:YES];
+    [self.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
+    NSLog(@"rightBarButtonItems: %@", [self.navigationBar.topItem rightBarButtonItems]);
+    NSLog(@"navigationBarItems: %@", navigationBarItems);
+    NSLog(@"self.profileBarButtonItem: %@", self.profileBarButtonItem);
     if (self.pendingTimer) {
         [self.pendingTimer invalidate];
         _pendingTimer = nil;
@@ -447,9 +475,6 @@ NSMutableArray *navigationBarItems;
     FirstDetailViewController *startDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
     detailViewManager.detailViewController = startDetailViewController;
     startDetailViewController.navigationBar.topItem.title = @"Summary";
-    //
-    //NSLog(@"self.splitViewController.viewControllers: %@", self.splitViewController.viewControllers);
-    
 
 }
 
@@ -464,4 +489,73 @@ NSMutableArray *navigationBarItems;
                                 permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
     
 }
+
+
+#pragma mark -
+#pragma mark SubstitutableDetailViewController
+
+// -------------------------------------------------------------------------------
+//	setNavigationPaneBarButtonItem:
+//  Custom implementation for the navigationPaneBarButtonItem setter.
+//  In addition to updating the _navigationPaneBarButtonItem ivar, it
+//  reconfigures the navigationBar to either show or hide the
+//  navigationPaneBarButtonItem.
+// -------------------------------------------------------------------------------
+- (void)setNavigationPaneBarButtonItem:(UIBarButtonItem *)navigationPaneBarButtonItem
+{
+    if (navigationPaneBarButtonItem != _navigationPaneBarButtonItem) {
+        // Add the popover button to the left navigation item.
+        [self.navigationBar.topItem setLeftBarButtonItem:navigationPaneBarButtonItem
+                                                animated:NO];
+        
+        _navigationPaneBarButtonItem = navigationPaneBarButtonItem;
+    }
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+
+    NSLog(@"DETAIL frame w:%f h:%f", self.view.frame.size.width, self.view.frame.size.height);
+    NSLog(@"DETAIL bounds w:%f h:%f", self.view.bounds.size.width, self.view.bounds.size.height);
+    
+//    UILabel *firstLabel = [self.labelsWithNumbersCollection objectAtIndex:0];
+    
+//    for (UILabel *spLabel in self.labelsWithNumbersCollection) {
+//        NSLog(@"spLabel height: %f", spLabel.frame.size.height);
+//        NSLog(@"spLabel width: %f", spLabel.frame.size.width);
+//        NSLog(@"spLabel: x=%f, y=%f", spLabel.frame.origin.x, spLabel.frame.origin.y);
+//    }
+//
+//    NSLog(@"firstLabel height: %f", firstLabel.frame.size.height);
+//    NSLog(@"firstLabel width: %f", firstLabel.frame.size.width);
+//    NSLog(@"firstLabel: x=%f, y=%f", firstLabel.frame.origin.x, firstLabel.frame.origin.y);
+//    
+//    NSLog(@"speedometerImageView height: %f", self.speedometerImageView.frame.size.height);
+//    NSLog(@"speedometerImageView width: %f", self.speedometerImageView.frame.size.width);
+//    NSLog(@"speedometerImageView: x=%f, y=%f", self.speedometerImageView.frame.origin.x, self.speedometerImageView.frame.origin.y);
+
+    
+}
+
+// Faster one-part variant, called from within a rotating animation block
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration {
+    
+    if(interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    {
+        NSLog(@"Rotating to Landscape");
+        [self.needleImageView setCenter:self.speedometerImageView.center];
+        [self.meterImageViewDot setFrame:CGRectMake((self.speedometerImageView.frame.origin.x)+(155), 213, 57, 57)];
+    }
+    else {
+        NSLog(@"Rotating to Portrait");
+        [self.needleImageView setCenter:self.speedometerImageView.center];
+        [self.meterImageViewDot setFrame:CGRectMake((self.speedometerImageView.frame.origin.x)+(155), 213, 57, 57)];
+    }
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    // Return YES for supported orientations
+    return YES;
+}
+
 @end

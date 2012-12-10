@@ -90,12 +90,16 @@ NSMutableArray *navigationBarItems;
     self.navigationBar.topItem.title = @"Summary";
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if (![defaults boolForKey:@"userLoggedIn"]) {
-        [navigationBarItems removeObject:self.profileBarButtonItem];
-        [self.navigationBar.topItem setRightBarButtonItems:navigationBarItems animated:NO];
+        NSLog(@"user is not logged in, removing profileBarButtonItem");
+        //[navigationBarItems removeObject:self.profileBarButtonItem];
+        //[self.navigationBar.topItem setRightBarButtonItems:navigationBarItems animated:NO]; // not working?
+        [self.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
     }
     
-    
-    NSLog(@"[defaults boolForKey:@'userLoggedIn'] %i", [defaults boolForKey:@"userLoggedIn"]);
+    //NSLog(@"navigationBarItems: %@", navigationBarItems);
+    //NSLog(@"rightBarButtonItems: %@", [self.navigationBar.topItem rightBarButtonItems]);
+   // NSLog(@"[defaults boolForKey:@'userLoggedIn'] %i", [defaults boolForKey:@"userLoggedIn"]);
+    //NSLog(@"self.profileBarButtonItem: %@", self.profileBarButtonItem);
     
 }
 
@@ -130,14 +134,17 @@ NSMutableArray *navigationBarItems;
 
 - (void)showProfileAfterUserLoggedIn {
     //NSLog(@"!!!!! 1 calling showProfileAfterUserLoggedIn !!!!!!!!!!");
-    [navigationBarItems addObject:self.profileBarButtonItem];
-    [self.navigationBar.topItem setRightBarButtonItems:navigationBarItems animated:YES];
+    //[navigationBarItems addObject:self.profileBarButtonItem];
+    NSLog(@"FirstDetail: user logged in: adding profileBarButtonItem: %@", self.profileBarButtonItem);
+    [self.navigationBar.topItem setRightBarButtonItem:self.profileBarButtonItem animated:YES];
 }
 
 - (void)hideProfileAfterUserLoggedOff {
     if (self.profilePopover)
         [self.profilePopover dismissPopoverAnimated:YES];
-    [navigationBarItems removeObject:self.profileBarButtonItem];
-    [self.navigationBar.topItem setRightBarButtonItems:navigationBarItems animated:YES];
+    //[navigationBarItems removeObject:self.profileBarButtonItem];
+    //NSLog(@"FirstDetail: user logged off: removing profileBarButtonItem: %@", self.profileBarButtonItem);
+    [self.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
+    //NSLog(@"FirstDetail: user logged off: after removing profileBarButtonItem, navigationBarItems: %@", navigationBarItems);
 }
 @end
