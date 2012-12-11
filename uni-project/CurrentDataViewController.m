@@ -70,9 +70,171 @@ NSMutableArray *navigationBarItems;
     
     self.labelsWithNumbersCollection = [self sortCollection:self.labelsWithNumbersCollection];
     
-    //[self addMeterViewContents];
-    
     [self startSynchronization];
+    
+    [self initPlotForScatterPlot];
+}
+
+-(void)initPlotForScatterPlot {
+    
+    NSLog(@"Calling initPlotForScatterPlot");
+    self.hostingView.allowPinchScaling = NO;
+    [self createScatterPlot];
+    
+}
+
+-(void)createScatterPlot {
+    
+#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
+    CGRect bounds = self.hostingView.bounds;
+#else
+    CGRect bounds = NSRectToCGRect(self.hostingView.bounds);
+#endif
+    BOOL drawAxis = YES;
+    if ( bounds.size.width < 200.0f ) {
+        drawAxis = NO;
+    }
+    self.scatterPlot = [[CPTXYGraph alloc] initWithFrame:bounds];
+    self.hostingView.hostedGraph = self.scatterPlot;
+    
+    [self.scatterPlot applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
+    
+    if ( drawAxis ) {
+        self.scatterPlot.paddingLeft   = 70.0;
+        self.scatterPlot.paddingTop    = 20.0;
+        self.scatterPlot.paddingRight  = 20.0;
+        self.scatterPlot.paddingBottom = 80.0;
+    }
+    else {
+        [self setPaddingDefaultsForGraph:self.scatterPlot withBounds:bounds];
+    }
+    
+    // Setup plot space
+    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.scatterPlot.defaultPlotSpace;
+    plotSpace.allowsUserInteraction = YES;
+    plotSpace.xRange                = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(1.0) length:CPTDecimalFromFloat(2.0)];
+    plotSpace.yRange                = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(1.0) length:CPTDecimalFromFloat(3.0)];
+    
+    
+    // Axes
+    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.scatterPlot.axisSet;
+    CPTXYAxis *x          = axisSet.xAxis;
+    x.majorIntervalLength         = CPTDecimalFromString(@"0.5");
+    x.orthogonalCoordinateDecimal = CPTDecimalFromString(@"2");
+    x.minorTicksPerInterval       = 2;
+    NSArray *exclusionRanges = [NSArray arrayWithObjects:
+                                [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(1.99) length:CPTDecimalFromFloat(0.02)],
+                                [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.99) length:CPTDecimalFromFloat(0.02)],
+                                [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(2.99) length:CPTDecimalFromFloat(0.02)],
+                                nil];
+    x.labelExclusionRanges = exclusionRanges;
+    
+    CPTXYAxis *y = axisSet.yAxis;
+    y.majorIntervalLength         = CPTDecimalFromString(@"0.5");
+    y.minorTicksPerInterval       = 5;
+    y.orthogonalCoordinateDecimal = CPTDecimalFromString(@"2");
+    exclusionRanges               = [NSArray arrayWithObjects:
+                                     [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(1.99) length:CPTDecimalFromFloat(0.02)],
+                                     [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.99) length:CPTDecimalFromFloat(0.02)],
+                                     [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(3.99) length:CPTDecimalFromFloat(0.02)],
+                                     nil];
+    y.labelExclusionRanges = exclusionRanges;
+    
+    // Create a blue plot area
+    CPTScatterPlot *boundLinePlot = [[CPTScatterPlot alloc] init];
+    boundLinePlot.identifier = @"Blue Plot";
+    
+    CPTMutableLineStyle *lineStyle = [boundLinePlot.dataLineStyle mutableCopy];
+    lineStyle.miterLimit        = 1.0f;
+    lineStyle.lineWidth         = 3.0f;
+    lineStyle.lineColor         = [CPTColor blueColor];
+    boundLinePlot.dataLineStyle = lineStyle;
+    boundLinePlot.dataSource    = self;
+    [self.scatterPlot addPlot:boundLinePlot];
+    
+    // Do a blue gradient
+    CPTColor *areaColor1       = [CPTColor colorWithComponentRed:0.3 green:0.3 blue:1.0 alpha:0.8];
+    CPTGradient *areaGradient1 = [CPTGradient gradientWithBeginningColor:areaColor1 endingColor:[CPTColor clearColor]];
+    areaGradient1.angle = -90.0f;
+    CPTFill *areaGradientFill = [CPTFill fillWithGradient:areaGradient1];
+    boundLinePlot.areaFill      = areaGradientFill;
+    boundLinePlot.areaBaseValue = [[NSDecimalNumber zero] decimalValue];
+    
+    // Add plot symbols
+    CPTMutableLineStyle *symbolLineStyle = [CPTMutableLineStyle lineStyle];
+    symbolLineStyle.lineColor = [CPTColor blackColor];
+    CPTPlotSymbol *plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];
+    plotSymbol.fill          = [CPTFill fillWithColor:[CPTColor blueColor]];
+    plotSymbol.lineStyle     = symbolLineStyle;
+    plotSymbol.size          = CGSizeMake(10.0, 10.0);
+    boundLinePlot.plotSymbol = plotSymbol;
+    
+    // Add some initial data
+    NSMutableArray *contentArray = [NSMutableArray arrayWithCapacity:100];
+    NSUInteger i;
+    for ( i = 0; i < 60; i++ ) {
+        id x = [NSNumber numberWithFloat:1 + i * 0.05];
+        id y = [NSNumber numberWithFloat:1.2 * rand() / (float)RAND_MAX + 1.2];
+        [contentArray addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:x, @"x", y, @"y", nil]];
+    }
+    self.dataForPlot = contentArray;
+    
+    
+}
+
+#pragma mark -
+#pragma mark Plot Data Source Methods
+
+-(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
+{
+//    if ( [plot isKindOfClass:[CPTPieChart class]] ) {
+//        return [self.dataForChart count];
+//    }
+//    else if ( [plot isKindOfClass:[CPTBarPlot class]] ) {
+//        return 16;
+//    }
+    
+    return [self.dataForPlot count];
+    
+}
+
+/*-(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
+{
+    NSDecimalNumber *num = nil;
+
+    NSString *key = (fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y");
+    num = [[self.dataForPlot objectAtIndex:index] valueForKey:key];
+    
+    return num;
+}*/
+
+-(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
+{
+    NSString *key = (fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y");
+    NSNumber *num = [[self.dataForPlot objectAtIndex:index] valueForKey:key];
+    
+    if ( fieldEnum == CPTScatterPlotFieldY ) {
+        num = [NSNumber numberWithDouble:[num doubleValue]];
+    }
+    
+    return num;
+}
+
+-(void)setPaddingDefaultsForGraph:(CPTGraph *)graph withBounds:(CGRect)bounds
+{
+    CGFloat boundsPadding = round(bounds.size.width / (CGFloat)20.0); // Ensure that padding falls on an integral pixel
+    
+    graph.paddingLeft = boundsPadding;
+    
+    if ( graph.titleDisplacement.y > 0.0 ) {
+        graph.paddingTop = graph.titleDisplacement.y * 2;
+    }
+    else {
+        graph.paddingTop = boundsPadding;
+    }
+    
+    graph.paddingRight  = boundsPadding;
+    graph.paddingBottom = boundsPadding;
 }
 
 
