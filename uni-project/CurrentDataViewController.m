@@ -19,6 +19,7 @@
 @property NSTimer *continiousTimer;
 @property MBProgressHUD *HUD;
 @property UIImageView *meterImageViewDot;
+@property NSMutableArray *lastWattValues;
 
 @end
 
@@ -69,16 +70,21 @@ NSMutableArray *navigationBarItems;
      object:nil];
     
     self.labelsWithNumbersCollection = [self sortCollection:self.labelsWithNumbersCollection];
+    self.lastWattValues = [[NSMutableArray alloc] init];
     
     [self startSynchronization];
     
     [self initPlotForScatterPlot];
+    
+    
+    
+    [self initDataDisplayView];
 }
 
 -(void)initPlotForScatterPlot {
     
     NSLog(@"Calling initPlotForScatterPlot");
-    self.hostingView.allowPinchScaling = NO;
+    self.hostingView.allowPinchScaling = YES;
     [self createScatterPlot];
     
 }
@@ -170,6 +176,7 @@ NSMutableArray *navigationBarItems;
     boundLinePlot.plotSymbol = plotSymbol;
     
     // Add some initial data
+    // TODO
     NSMutableArray *contentArray = [NSMutableArray arrayWithCapacity:100];
     NSUInteger i;
     for ( i = 0; i < 60; i++ ) {
@@ -187,15 +194,7 @@ NSMutableArray *navigationBarItems;
 
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
-//    if ( [plot isKindOfClass:[CPTPieChart class]] ) {
-//        return [self.dataForChart count];
-//    }
-//    else if ( [plot isKindOfClass:[CPTBarPlot class]] ) {
-//        return 16;
-//    }
-    
     return [self.dataForPlot count];
-    
 }
 
 /*-(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
@@ -212,29 +211,63 @@ NSMutableArray *navigationBarItems;
 {
     NSString *key = (fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y");
     NSNumber *num = [[self.dataForPlot objectAtIndex:index] valueForKey:key];
-    
     if ( fieldEnum == CPTScatterPlotFieldY ) {
         num = [NSNumber numberWithDouble:[num doubleValue]];
     }
-    
     return num;
 }
 
 -(void)setPaddingDefaultsForGraph:(CPTGraph *)graph withBounds:(CGRect)bounds
 {
     CGFloat boundsPadding = round(bounds.size.width / (CGFloat)20.0); // Ensure that padding falls on an integral pixel
-    
     graph.paddingLeft = boundsPadding;
-    
     if ( graph.titleDisplacement.y > 0.0 ) {
         graph.paddingTop = graph.titleDisplacement.y * 2;
     }
     else {
         graph.paddingTop = boundsPadding;
     }
-    
     graph.paddingRight  = boundsPadding;
     graph.paddingBottom = boundsPadding;
+}
+
+- (void) initDataDisplayView {
+    NSLog(@"calling initDataDisplayView");
+    NSLog(@"count: %i", [self.lastWattValues count]);
+    if ([self.lastWattValues count] > 0) {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        
+        [dateFormatter setDateFormat:@"HH"];
+        int hours = [[dateFormatter stringFromDate:[NSDate date]] intValue];
+        NSLog(@"hours: %i", hours);
+        //NSNumber *total = [self.lastWattValues valueForKeyPath:@"@sum.value"];
+        float total = 0.00;
+        for(int i=0;i<[self.lastWattValues count];i++){
+            total += [[self.lastWattValues objectAtIndex:i] floatValue];
+        }
+        total = total/[self.lastWattValues count]; // calculate average value
+        float averageKwhTemp = (total/1000)*hours;
+         NSLog(@"averageKwhTemp: %f", averageKwhTemp);
+        averageKwhTemp = (ceil(averageKwhTemp * 100.0)) / 100.0;
+        NSLog(@"total: %f", total);
+        NSLog(@"averageKwhTemp: %f", averageKwhTemp);
+        //NSString *averageKwh = [NSString stringWithFormat:@"%.2f", averageKwhTemp];
+        NSString *averageKwh = [NSString stringWithFormat:@"%.2f", averageKwhTemp];
+        
+        NSLog(@"averageKwh: %@", averageKwh);
+        self.kwhDataLabel.text = averageKwh;
+        
+        // electricity tariff: Stadtwerke Strom Basis, over 10000 kWh
+        float averageCostsTemp = averageKwhTemp * (28.77/100.0);
+        NSString *averageCosts = [NSString stringWithFormat:@"%.2f", averageCostsTemp];
+        NSLog(@"averageCosts: %@", averageCosts);
+        self.eurDataLabel.text = averageCosts;
+    }
+    else {
+        NSLog(@"setting kwhDataLabel and eurDataLabel = 0");
+        self.kwhDataLabel.text = @"0.00";
+        self.eurDataLabel.text = @"0.00";
+    }
 }
 
 
@@ -260,6 +293,13 @@ NSMutableArray *navigationBarItems;
         //[navigationBarItems removeObject:self.profileBarButtonItem];
         [self.navigationBar.topItem setRightBarButtonItem:self.profileBarButtonItem animated:NO];
     }
+    
+    NSDate *today = [NSDate date];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"dd.MM.yyyy"];
+    NSString *dateString = [dateFormat stringFromDate:today];
+    NSString *startText = @"Daten für heute, ";
+    self.navigationBar.topItem.title = [startText stringByAppendingString:dateString];
 
     //NSLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
     
@@ -352,12 +392,32 @@ NSMutableArray *navigationBarItems;
              */
             [self setSpeedometerCurrentValue:self.userCurrentWatt];
             
+            // store the new value in this array, but max 20 values
+            if ([self.lastWattValues count] <= 20) {
+                [self.lastWattValues addObject:[NSNumber numberWithInt:self.userCurrentWatt]];
+                //[self.lastWattValues addObject:[NSNull null]];
+                NSLog(@"__lastWattValues: %@", self.lastWattValues);
+                NSLog(@"__object: %@", [self.lastWattValues objectAtIndex:0]);
+            }
+            else {
+                [self.lastWattValues removeObjectAtIndex:0];
+                [self.lastWattValues addObject:[NSNumber numberWithInt:self.userCurrentWatt]];
+                //[self.lastWattValues addObject:[NSNull null]];
+                NSLog(@"_lastWattValues: %@", self.lastWattValues);
+            }
+            
+            // Update the dataDisplayView
+            [self initDataDisplayView];
+        
+            
         }
         else {
             //pendingTimer = [NSTimer  scheduledTimerWithTimeInterval:5 target:self selector:@selector(rotatePendingNeedle) userInfo:nil repeats:YES];
             //[self rotatePendingNeedle];
         }
         NSLog(@"Success! user's current watt consumption: %i Watt", self.userCurrentWatt);
+        // Update the dataDisplayView
+        [self initDataDisplayView];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failed during getting current watt: %@",[error localizedDescription]);

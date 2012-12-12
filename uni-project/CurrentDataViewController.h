@@ -33,6 +33,13 @@
 @property (strong, nonatomic) CPTXYGraph *scatterPlot;
 @property (strong, nonatomic) NSMutableArray *dataForPlot;
 
+// Bottom Area, Current Day - total power consumption and Total Cost on the right side
+@property (strong, nonatomic) IBOutlet UIView *dataDisplayView;
+@property (strong, nonatomic) IBOutlet UILabel *kwhDataLabel;
+@property (strong, nonatomic) IBOutlet UILabel *eurDataLabel;
+
+
+
 @property (nonatomic, retain) ProfilePopoverViewController *userProfile;
 @property (nonatomic, retain) UIPopoverController *profilePopover;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *profileBarButtonItem;
