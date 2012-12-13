@@ -30,7 +30,7 @@
 // Bottom Area, Scatter Plot on the left side
 @property (strong, nonatomic) IBOutlet CPTGraphHostingView *hostingView;
 @property (strong, nonatomic) CPTGraphHostingView *scatterPlotView;
-@property (strong, nonatomic) CPTXYGraph *scatterPlot;
+@property (strong, nonatomic) CPTGraph *scatterGraph;
 @property (strong, nonatomic) NSMutableArray *dataForPlot;
 
 // Bottom Area, Current Day - total power consumption and Total Cost on the right side

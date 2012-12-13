@@ -13,6 +13,14 @@
 #import "DetailViewManager.h"
 #import "FirstDetailViewController.h"
 
+// Real Time Plot
+const double kFrameRate         = 5.0;  // frames per second
+const double kAlpha             = 0.25; // smoothing constant
+const NSUInteger kMaxDataPoints = 10;
+NSString *kPlotIdentifier       = @"Data Source Plot";
+NSUInteger currentIndex;
+NSTimer *dataTimer;
+
 @interface CurrentDataViewController ()
 
 @property NSTimer *pendingTimer;
@@ -39,14 +47,6 @@ NSMutableArray *navigationBarItems;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    /*
-     NSString *NotificationName = @"UserCurrentWattChanged";
-     [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(userCurrentWattChanged)
-     name:NotificationName
-     object:nil];
-     */
     
     DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
     detailViewManager.detailViewController = self;
@@ -74,19 +74,40 @@ NSMutableArray *navigationBarItems;
     
     [self startSynchronization];
     
-    [self initPlotForScatterPlot];
-    
-    
-    
     [self initDataDisplayView];
 }
+
+//----------------------------------------------------------------------------------------
+//                              Real Time Plot Methods - START
+//----------------------------------------------------------------------------------------
 
 -(void)initPlotForScatterPlot {
     
     NSLog(@"Calling initPlotForScatterPlot");
     self.hostingView.allowPinchScaling = YES;
+    self.dataForPlot  = [[NSMutableArray alloc] initWithCapacity:kMaxDataPoints];
     [self createScatterPlot];
+    [self generateData];
     
+}
+
+-(void)generateData
+{
+    [self.dataForPlot removeAllObjects];
+    currentIndex = 0;
+    NSTimer* firstTimer = [NSTimer timerWithTimeInterval:0.1
+                                                  target:self
+                                                selector:@selector(newData:)
+                                                userInfo:nil
+                                                 repeats:NO];
+    [[NSRunLoop mainRunLoop] addTimer:firstTimer forMode:NSDefaultRunLoopMode];
+    
+    dataTimer = [NSTimer timerWithTimeInterval:60.0 //60.0
+                                         target:self
+                                       selector:@selector(newData:)
+                                       userInfo:nil
+                                        repeats:YES];
+    [[NSRunLoop mainRunLoop] addTimer:dataTimer forMode:NSDefaultRunLoopMode];
 }
 
 -(void)createScatterPlot {
@@ -99,93 +120,88 @@ NSMutableArray *navigationBarItems;
     BOOL drawAxis = YES;
     if ( bounds.size.width < 200.0f ) {
         drawAxis = NO;
+        NSLog(@"drawAxis=NO");
     }
-    self.scatterPlot = [[CPTXYGraph alloc] initWithFrame:bounds];
-    self.hostingView.hostedGraph = self.scatterPlot;
+    self.scatterGraph = [[CPTXYGraph alloc] initWithFrame:bounds];
+    self.hostingView.hostedGraph = self.scatterGraph;
     
-    [self.scatterPlot applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
+    [self.scatterGraph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
     
     if ( drawAxis ) {
-        self.scatterPlot.paddingLeft   = 70.0;
-        self.scatterPlot.paddingTop    = 20.0;
-        self.scatterPlot.paddingRight  = 20.0;
-        self.scatterPlot.paddingBottom = 80.0;
+        NSLog(@"drawAxis=YES");
+        self.scatterGraph.paddingLeft   = 1.0;
+        self.scatterGraph.paddingTop    = 1.0;
+        self.scatterGraph.paddingRight  = 1.0;
+        self.scatterGraph.paddingBottom = 1.0;
     }
     else {
-        [self setPaddingDefaultsForGraph:self.scatterPlot withBounds:bounds];
+        [self setPaddingDefaultsForGraph:self.scatterGraph withBounds:bounds];
     }
     
-    // Setup plot space
-    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.scatterPlot.defaultPlotSpace;
-    plotSpace.allowsUserInteraction = YES;
-    plotSpace.xRange                = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(1.0) length:CPTDecimalFromFloat(2.0)];
-    plotSpace.yRange                = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(1.0) length:CPTDecimalFromFloat(3.0)];
+    self.scatterGraph.plotAreaFrame.paddingTop    = 15.0;
+    self.scatterGraph.plotAreaFrame.paddingRight  = 10.0;
+    self.scatterGraph.plotAreaFrame.paddingBottom = 45.0;
+    self.scatterGraph.plotAreaFrame.paddingLeft   = 45.0;
     
+    // Grid line styles
+    CPTMutableLineStyle *majorGridLineStyle = [CPTMutableLineStyle lineStyle];
+    majorGridLineStyle.lineWidth = 0.50;
+    majorGridLineStyle.lineColor = [[CPTColor colorWithGenericGray:0.2] colorWithAlphaComponent:0.75];
+    
+    CPTMutableLineStyle *minorGridLineStyle = [CPTMutableLineStyle lineStyle];
+    minorGridLineStyle.lineWidth = 0.25;
+    minorGridLineStyle.lineColor = [[CPTColor whiteColor] colorWithAlphaComponent:0.1];
     
     // Axes
-    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.scatterPlot.axisSet;
+    // X axis
+    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.scatterGraph.axisSet;
     CPTXYAxis *x          = axisSet.xAxis;
-    x.majorIntervalLength         = CPTDecimalFromString(@"0.5");
-    x.orthogonalCoordinateDecimal = CPTDecimalFromString(@"2");
-    x.minorTicksPerInterval       = 2;
-    NSArray *exclusionRanges = [NSArray arrayWithObjects:
-                                [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(1.99) length:CPTDecimalFromFloat(0.02)],
-                                [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.99) length:CPTDecimalFromFloat(0.02)],
-                                [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(2.99) length:CPTDecimalFromFloat(0.02)],
-                                nil];
-    x.labelExclusionRanges = exclusionRanges;
+    x.labelingPolicy              = CPTAxisLabelingPolicyAutomatic;
+    x.orthogonalCoordinateDecimal = CPTDecimalFromUnsignedInteger(0);
+    x.majorGridLineStyle          = majorGridLineStyle;
+    x.minorGridLineStyle          = minorGridLineStyle;
+    x.minorTicksPerInterval       = 1;
+    x.title                       = @"Zeit (Min.)";
+    x.titleOffset                 = 23.0;
+    NSNumberFormatter *labelFormatter = [[NSNumberFormatter alloc] init];
+    labelFormatter.numberStyle = kCFNumberFormatterDecimalStyle;
+    labelFormatter.maximumFractionDigits = 0;
+    x.labelFormatter           = labelFormatter;
     
+    // Y axis
     CPTXYAxis *y = axisSet.yAxis;
-    y.majorIntervalLength         = CPTDecimalFromString(@"0.5");
-    y.minorTicksPerInterval       = 5;
-    y.orthogonalCoordinateDecimal = CPTDecimalFromString(@"2");
-    exclusionRanges               = [NSArray arrayWithObjects:
-                                     [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(1.99) length:CPTDecimalFromFloat(0.02)],
-                                     [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(0.99) length:CPTDecimalFromFloat(0.02)],
-                                     [CPTPlotRange plotRangeWithLocation:CPTDecimalFromFloat(3.99) length:CPTDecimalFromFloat(0.02)],
-                                     nil];
-    y.labelExclusionRanges = exclusionRanges;
+    y.labelingPolicy              = CPTAxisLabelingPolicyAutomatic;
+    y.orthogonalCoordinateDecimal = CPTDecimalFromUnsignedInteger(0);
+    y.majorGridLineStyle          = majorGridLineStyle;
+    y.minorGridLineStyle          = minorGridLineStyle;
+    y.minorTicksPerInterval       = 100;
+    y.labelOffset                 = 1.0;
+    y.title                       = @"Leistung (Watt)";
+    y.titleOffset                 = 26.0;
+    y.axisConstraints             = [CPTConstraints constraintWithLowerOffset:0.0];
+    y.labelFormatter           = labelFormatter;
     
-    // Create a blue plot area
-    CPTScatterPlot *boundLinePlot = [[CPTScatterPlot alloc] init];
-    boundLinePlot.identifier = @"Blue Plot";
+    // Rotate the labels by 45 degrees, just to show it can be done.
+    x.labelRotation = M_PI * 0.25;
     
-    CPTMutableLineStyle *lineStyle = [boundLinePlot.dataLineStyle mutableCopy];
-    lineStyle.miterLimit        = 1.0f;
-    lineStyle.lineWidth         = 3.0f;
-    lineStyle.lineColor         = [CPTColor blueColor];
-    boundLinePlot.dataLineStyle = lineStyle;
-    boundLinePlot.dataSource    = self;
-    [self.scatterPlot addPlot:boundLinePlot];
+    // Create the plot
+    CPTScatterPlot *dataSourceLinePlot = [[CPTScatterPlot alloc] init];
+    dataSourceLinePlot.identifier     = kPlotIdentifier;
+    dataSourceLinePlot.cachePrecision = CPTPlotCachePrecisionAuto;
     
-    // Do a blue gradient
-    CPTColor *areaColor1       = [CPTColor colorWithComponentRed:0.3 green:0.3 blue:1.0 alpha:0.8];
-    CPTGradient *areaGradient1 = [CPTGradient gradientWithBeginningColor:areaColor1 endingColor:[CPTColor clearColor]];
-    areaGradient1.angle = -90.0f;
-    CPTFill *areaGradientFill = [CPTFill fillWithGradient:areaGradient1];
-    boundLinePlot.areaFill      = areaGradientFill;
-    boundLinePlot.areaBaseValue = [[NSDecimalNumber zero] decimalValue];
+    CPTMutableLineStyle *lineStyle = [dataSourceLinePlot.dataLineStyle mutableCopy];
+    lineStyle.lineWidth              = 3.0;
+    lineStyle.lineColor              = [CPTColor greenColor];
+    dataSourceLinePlot.dataLineStyle = lineStyle;
     
-    // Add plot symbols
-    CPTMutableLineStyle *symbolLineStyle = [CPTMutableLineStyle lineStyle];
-    symbolLineStyle.lineColor = [CPTColor blackColor];
-    CPTPlotSymbol *plotSymbol = [CPTPlotSymbol ellipsePlotSymbol];
-    plotSymbol.fill          = [CPTFill fillWithColor:[CPTColor blueColor]];
-    plotSymbol.lineStyle     = symbolLineStyle;
-    plotSymbol.size          = CGSizeMake(10.0, 10.0);
-    boundLinePlot.plotSymbol = plotSymbol;
+    dataSourceLinePlot.dataSource = self;
+    [self.scatterGraph addPlot:dataSourceLinePlot];
     
-    // Add some initial data
-    // TODO
-    NSMutableArray *contentArray = [NSMutableArray arrayWithCapacity:100];
-    NSUInteger i;
-    for ( i = 0; i < 60; i++ ) {
-        id x = [NSNumber numberWithFloat:1 + i * 0.05];
-        id y = [NSNumber numberWithFloat:1.2 * rand() / (float)RAND_MAX + 1.2];
-        [contentArray addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:x, @"x", y, @"y", nil]];
-    }
-    self.dataForPlot = contentArray;
-    
+    // Plot space
+    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.scatterGraph.defaultPlotSpace;
+    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(0) length:CPTDecimalFromUnsignedInteger(kMaxDataPoints - 1)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(0) length:CPTDecimalFromUnsignedInteger(400)];
+     NSLog(@"self.userCurrentWatt: %i", self.userCurrentWatt);
     
 }
 
@@ -197,23 +213,24 @@ NSMutableArray *navigationBarItems;
     return [self.dataForPlot count];
 }
 
-/*-(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
-{
-    NSDecimalNumber *num = nil;
-
-    NSString *key = (fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y");
-    num = [[self.dataForPlot objectAtIndex:index] valueForKey:key];
-    
-    return num;
-}*/
 
 -(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
 {
-    NSString *key = (fieldEnum == CPTScatterPlotFieldX ? @"x" : @"y");
-    NSNumber *num = [[self.dataForPlot objectAtIndex:index] valueForKey:key];
-    if ( fieldEnum == CPTScatterPlotFieldY ) {
-        num = [NSNumber numberWithDouble:[num doubleValue]];
+    NSNumber *num = nil;
+    
+    switch ( fieldEnum ) {
+        case CPTScatterPlotFieldX:
+            num = [NSNumber numberWithUnsignedInteger:index + currentIndex - self.dataForPlot.count];
+            break;
+            
+        case CPTScatterPlotFieldY:
+            num = [self.dataForPlot objectAtIndex:index];
+            break;
+            
+        default:
+            break;
     }
+    
     return num;
 }
 
@@ -231,15 +248,52 @@ NSMutableArray *navigationBarItems;
     graph.paddingBottom = boundsPadding;
 }
 
+#pragma mark -
+#pragma mark Timer callback
+
+-(void)newData:(NSTimer *)theTimer
+{
+    CPTGraph *theGraph = self.scatterGraph;
+    CPTPlot *thePlot   = [theGraph plotWithIdentifier:kPlotIdentifier];
+    
+    if ( thePlot ) {
+        if ( self.dataForPlot.count >= kMaxDataPoints ) {
+            [self.dataForPlot removeObjectAtIndex:0];
+            [thePlot deleteDataInIndexRange:NSMakeRange(0, 1)];
+        }
+        
+        CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)theGraph.defaultPlotSpace;
+        NSUInteger location       = (currentIndex >= kMaxDataPoints ? currentIndex - kMaxDataPoints + 1 : 0);
+        plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(location)
+                                                        length:CPTDecimalFromUnsignedInteger(kMaxDataPoints - 1)];
+        plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(0) length:CPTDecimalFromUnsignedInteger(self.userMaximumWatt)];
+        
+        currentIndex++;
+        //float kWhrData = (self.userCurrentWatt/1000.00)*(1.0/60.0);
+        [self.dataForPlot addObject:[NSNumber numberWithInt:self.userCurrentWatt]];
+        //[self.dataForPlot addObject:[NSNumber numberWithDouble:(1.0 - kAlpha) * [[self.dataForPlot lastObject] doubleValue] + kAlpha * rand() / (double)RAND_MAX]];
+        [thePlot insertDataAtIndex:self.dataForPlot.count - 1 numberOfRecords:1];
+    }
+    
+    NSLog(@"self.dataForPlot: %@", self.dataForPlot);
+    
+}
+
+
+
+//----------------------------------------------------------------------------------------
+//                              Real Time Plot Methods - END
+//----------------------------------------------------------------------------------------
+
 - (void) initDataDisplayView {
     NSLog(@"calling initDataDisplayView");
-    NSLog(@"count: %i", [self.lastWattValues count]);
+    //NSLog(@"count: %i", [self.lastWattValues count]);
     if ([self.lastWattValues count] > 0) {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         
         [dateFormatter setDateFormat:@"HH"];
         int hours = [[dateFormatter stringFromDate:[NSDate date]] intValue];
-        NSLog(@"hours: %i", hours);
+        //NSLog(@"hours: %i", hours);
         //NSNumber *total = [self.lastWattValues valueForKeyPath:@"@sum.value"];
         float total = 0.00;
         for(int i=0;i<[self.lastWattValues count];i++){
@@ -247,24 +301,24 @@ NSMutableArray *navigationBarItems;
         }
         total = total/[self.lastWattValues count]; // calculate average value
         float averageKwhTemp = (total/1000)*hours;
-         NSLog(@"averageKwhTemp: %f", averageKwhTemp);
+         //NSLog(@"averageKwhTemp: %f", averageKwhTemp);
         averageKwhTemp = (ceil(averageKwhTemp * 100.0)) / 100.0;
-        NSLog(@"total: %f", total);
-        NSLog(@"averageKwhTemp: %f", averageKwhTemp);
+        //NSLog(@"total: %f", total);
+        //NSLog(@"averageKwhTemp: %f", averageKwhTemp);
         //NSString *averageKwh = [NSString stringWithFormat:@"%.2f", averageKwhTemp];
         NSString *averageKwh = [NSString stringWithFormat:@"%.2f", averageKwhTemp];
         
-        NSLog(@"averageKwh: %@", averageKwh);
+        //NSLog(@"averageKwh: %@", averageKwh);
         self.kwhDataLabel.text = averageKwh;
         
         // electricity tariff: Stadtwerke Strom Basis, over 10000 kWh
         float averageCostsTemp = averageKwhTemp * (28.77/100.0);
         NSString *averageCosts = [NSString stringWithFormat:@"%.2f", averageCostsTemp];
-        NSLog(@"averageCosts: %@", averageCosts);
+        //NSLog(@"averageCosts: %@", averageCosts);
         self.eurDataLabel.text = averageCosts;
     }
     else {
-        NSLog(@"setting kwhDataLabel and eurDataLabel = 0");
+        //NSLog(@"setting kwhDataLabel and eurDataLabel = 0");
         self.kwhDataLabel.text = @"0.00";
         self.eurDataLabel.text = @"0.00";
     }
@@ -277,6 +331,8 @@ NSMutableArray *navigationBarItems;
 // -------------------------------------------------------------------------------
 - (void)viewDidAppear:(BOOL)animated {
     [self addMeterViewContents];
+    
+    [self initPlotForScatterPlot];
 }
 
 // -------------------------------------------------------------------------------
@@ -383,27 +439,21 @@ NSMutableArray *navigationBarItems;
             self.userCurrentWatt = [userCurrentWattString intValue];
             [self.pendingTimer invalidate];
             _pendingTimer = nil;
-            /*
-             //value has changed -> send notification to the observers
-             NSString *notificationName = @"UserCurrentWattChanged";
-             [[NSNotificationCenter defaultCenter]
-             postNotificationName:notificationName
-             object:nil];
-             */
+
             [self setSpeedometerCurrentValue:self.userCurrentWatt];
             
             // store the new value in this array, but max 20 values
             if ([self.lastWattValues count] <= 20) {
                 [self.lastWattValues addObject:[NSNumber numberWithInt:self.userCurrentWatt]];
                 //[self.lastWattValues addObject:[NSNull null]];
-                NSLog(@"__lastWattValues: %@", self.lastWattValues);
-                NSLog(@"__object: %@", [self.lastWattValues objectAtIndex:0]);
+                //NSLog(@"__lastWattValues: %@", self.lastWattValues);
+                //NSLog(@"__object: %@", [self.lastWattValues objectAtIndex:0]);
             }
             else {
                 [self.lastWattValues removeObjectAtIndex:0];
                 [self.lastWattValues addObject:[NSNumber numberWithInt:self.userCurrentWatt]];
                 //[self.lastWattValues addObject:[NSNull null]];
-                NSLog(@"_lastWattValues: %@", self.lastWattValues);
+                //NSLog(@"_lastWattValues: %@", self.lastWattValues);
             }
             
             // Update the dataDisplayView
@@ -422,9 +472,7 @@ NSMutableArray *navigationBarItems;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failed during getting current watt: %@",[error localizedDescription]);
     }];
-    
-    
-    
+     
 }
 
 -(NSArray *)sortCollection:(NSArray *)toSort {
@@ -449,7 +497,6 @@ NSMutableArray *navigationBarItems;
         spLabel.text = [NSString stringWithFormat:@"%i", temp];
         temp += step;
     }
-//    self.maxVal = temp - step;
 //    NSLog(@"changeSpeedometerNumbers, setting new maxVal: %i", self.maxVal);
     self.userMaximumWatt = temp - step;
     NSLog(@"changeSpeedometerNumbers, setting new userMaximumWatt: %i", self.userMaximumWatt);
@@ -462,15 +509,6 @@ NSMutableArray *navigationBarItems;
 - (void)addMeterViewContents {
 	//  Needle //
     // CGRectMake : x,  y,  width,  height
-	//UIImageView *imgNeedle = [[UIImageView alloc]initWithFrame:CGRectMake(340, 168, 19, 147)];
-    
-    //[self.speedometerImageView setCenter:CGPointMake((self.view.frame.size.width/2), 246.0)];
-
-//    NSLog(@"self.view.frame.size.width/2: %f", (self.view.frame.size.width/2));
-//     NSLog(@"self.view.frame.size.width: %f", self.view.frame.size.width);
-//    NSLog(@"self.view.bounds.size.width: %f", self.view.bounds.size.width);
-    
-    //UIImageView *imgNeedle = [[UIImageView alloc]initWithFrame:CGRectMake(340, 168, 19, 147)];
     UIImageView *imgNeedle = [[UIImageView alloc]initWithFrame:CGRectMake((self.speedometerImageView.frame.origin.x)+(175), 168, 19, 147)];
 	self.needleImageView = imgNeedle;
     [self.needleImageView setAutoresizingMask:UIViewAutoresizingNone];
@@ -480,8 +518,6 @@ NSMutableArray *navigationBarItems;
 	[self.view addSubview:self.needleImageView];
 
     // Needle Dot //
-	//UIImageView *meterImageViewDot = [[UIImageView alloc]initWithFrame:CGRectMake(320, 213, 57, 57)];
-    //self.meterImageViewDot = [[UIImageView alloc]initWithFrame:CGRectMake(320, 213, 57, 57)];
     self.meterImageViewDot = [[UIImageView alloc]initWithFrame:CGRectMake((self.speedometerImageView.frame.origin.x)+(155), 213, 57, 57)];
     
     [self.meterImageViewDot setAutoresizingMask:UIViewAutoresizingNone];
@@ -489,7 +525,6 @@ NSMutableArray *navigationBarItems;
 	[self.view addSubview:self.meterImageViewDot];
 	
 	// Speedometer Reading //
-	//self.speedometerReading.textColor = [UIColor colorWithRed:114/255.f green:146/255.f blue:38/255.f alpha:1.0];
     self.spReadingFirstNumber.text = @"0";
     
 	
@@ -558,7 +593,6 @@ NSMutableArray *navigationBarItems;
 -(void) rotatePendingNeedle
 {
     //NSLog(@"rotatePendingNeedle...");
-    
     [UIView animateWithDuration: 2.0 delay: 0.0 options: UIViewAnimationOptionCurveLinear animations:^{
                         [self.needleImageView setTransform: CGAffineTransformMakeRotation((M_PI / 180) * self.angle + 0.02)];
                      }
@@ -570,9 +604,7 @@ NSMutableArray *navigationBarItems;
                                           completion:^(BOOL finished){
                                               
                                           }];
-
                      }];
-
 }
 
 
@@ -580,20 +612,10 @@ NSMutableArray *navigationBarItems;
 #pragma mark rotateNeedle Method
 -(void) rotateNeedle
 {
-   // NSLog(@"rotateNeedle...");
-    /*
-	[UIView beginAnimations:nil context:nil];
-	[UIView setAnimationDuration:2.5f];
-    [UIView setAnimationCurve:UIViewAnimationCurveLinear];
-	[self.needleImageView setTransform: CGAffineTransformMakeRotation((M_PI / 180) * self.angle)];
-	[UIView commitAnimations];
-     */
-    
     if(self.pendingTimer){
         [self.pendingTimer invalidate];
         self.pendingTimer = nil;
      }
-
 
    // NSLog(@"rotateNeedle...");
     [UIView animateWithDuration: 2.5 delay: 1.0 options: UIViewAnimationOptionCurveLinear animations:^{
@@ -608,10 +630,7 @@ NSMutableArray *navigationBarItems;
                                               
                                           }];
                      }];
-
-    
   self.pendingTimer = [NSTimer  scheduledTimerWithTimeInterval:5 target:self selector:@selector(rotatePendingNeedle) userInfo:nil repeats:YES];
-	
 }
 
 #pragma mark -
@@ -619,15 +638,6 @@ NSMutableArray *navigationBarItems;
 
 -(void) setSpeedometerCurrentValue:(int)value
 {
-	/*if(self.speedometer_Timer)
-     {
-     [self.speedometer_Timer invalidate];
-     self.speedometer_Timer = nil;
-     }*/
-	//self.speedometerCurrentValue =  arc4random() % 100; // Generate Random value between 0 to 100. //
-	
-	//self.speedometer_Timer = [NSTimer  scheduledTimerWithTimeInterval:2 target:self selector:@selector(setSpeedometerCurrentValue) userInfo:nil repeats:YES];
-    
 	_speedometerCurrentValue = value;
 	NSString *currentValueAsString = [NSString stringWithFormat:@"%i", self.speedometerCurrentValue];
     NSMutableArray *characters = [[NSMutableArray alloc] initWithCapacity:[currentValueAsString length]];
@@ -653,7 +663,6 @@ NSMutableArray *navigationBarItems;
         }
     }
     
-	
 	// Calculate the Angle by which the needle should rotate //
 	[self calculateDeviationAngle];
 }
@@ -709,7 +718,6 @@ NSMutableArray *navigationBarItems;
     }
     [self.profilePopover presentPopoverFromBarButtonItem:sender
                                 permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-    
 }
 
 
@@ -738,23 +746,6 @@ NSMutableArray *navigationBarItems;
 
     NSLog(@"DETAIL frame w:%f h:%f", self.view.frame.size.width, self.view.frame.size.height);
     NSLog(@"DETAIL bounds w:%f h:%f", self.view.bounds.size.width, self.view.bounds.size.height);
-    
-//    UILabel *firstLabel = [self.labelsWithNumbersCollection objectAtIndex:0];
-    
-//    for (UILabel *spLabel in self.labelsWithNumbersCollection) {
-//        NSLog(@"spLabel height: %f", spLabel.frame.size.height);
-//        NSLog(@"spLabel width: %f", spLabel.frame.size.width);
-//        NSLog(@"spLabel: x=%f, y=%f", spLabel.frame.origin.x, spLabel.frame.origin.y);
-//    }
-//
-//    NSLog(@"firstLabel height: %f", firstLabel.frame.size.height);
-//    NSLog(@"firstLabel width: %f", firstLabel.frame.size.width);
-//    NSLog(@"firstLabel: x=%f, y=%f", firstLabel.frame.origin.x, firstLabel.frame.origin.y);
-//    
-//    NSLog(@"speedometerImageView height: %f", self.speedometerImageView.frame.size.height);
-//    NSLog(@"speedometerImageView width: %f", self.speedometerImageView.frame.size.width);
-//    NSLog(@"speedometerImageView: x=%f, y=%f", self.speedometerImageView.frame.origin.x, self.speedometerImageView.frame.origin.y);
-
     
 }
 
