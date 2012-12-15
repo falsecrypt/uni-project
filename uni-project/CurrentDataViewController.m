@@ -20,6 +20,7 @@ const NSUInteger kMaxDataPoints = 10;
 NSString *kPlotIdentifier       = @"Data Source Plot";
 NSUInteger currentIndex;
 NSTimer *dataTimer;
+BOOL firstTime;
 
 @interface CurrentDataViewController ()
 
@@ -47,7 +48,7 @@ NSMutableArray *navigationBarItems;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    NSLog(@"viewDidLoad...");
     DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
     detailViewManager.detailViewController = self;
     
@@ -76,6 +77,45 @@ NSMutableArray *navigationBarItems;
     
     [self initDataDisplayView];
 }
+
+// -------------------------------------------------------------------------------
+//	viewWillAppear:
+//  Called when the view has been fully transitioned onto the screen
+// -------------------------------------------------------------------------------
+- (void)viewDidAppear:(BOOL)animated {
+
+    NSLog(@"viewDidAppear...");
+    [self addMeterViewContents];
+    [self initPlotForScatterPlot];
+}
+
+// -------------------------------------------------------------------------------
+//	viewWillAppear:
+//  Called when the view is about to made visible
+// -------------------------------------------------------------------------------
+- (void)viewWillAppear:(BOOL)animated
+{
+    NSLog(@"calling FirstDetailViewController - viewWillAppear start");
+    [super viewWillAppear:animated];
+    // NSLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if (![defaults boolForKey:@"userLoggedIn"]) {
+        //[navigationBarItems removeObject:self.profileBarButtonItem];
+        [self.navigationBar.topItem setRightBarButtonItem:self.profileBarButtonItem animated:NO];
+    }
+    
+    NSDate *today = [NSDate date];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"dd.MM.yyyy"];
+    NSString *dateString = [dateFormat stringFromDate:today];
+    NSString *startText = @"Daten für heute, ";
+    self.navigationBar.topItem.title = [startText stringByAppendingString:dateString];
+    
+    //NSLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
+    
+}
+
+
 
 //----------------------------------------------------------------------------------------
 //                              Real Time Plot Methods - START
@@ -225,6 +265,7 @@ NSMutableArray *navigationBarItems;
             
         case CPTScatterPlotFieldY:
             num = [self.dataForPlot objectAtIndex:index];
+            NSLog(@"num = %@", num);
             break;
             
         default:
@@ -325,41 +366,7 @@ NSMutableArray *navigationBarItems;
 }
 
 
-// -------------------------------------------------------------------------------
-//	viewWillAppear:
-//  Called when the view has been fully transitioned onto the screen
-// -------------------------------------------------------------------------------
-- (void)viewDidAppear:(BOOL)animated {
-    [self addMeterViewContents];
-    
-    [self initPlotForScatterPlot];
-}
 
-// -------------------------------------------------------------------------------
-//	viewWillAppear:
-//  Called when the view is about to made visible
-// -------------------------------------------------------------------------------
-- (void)viewWillAppear:(BOOL)animated
-{
-    NSLog(@"calling FirstDetailViewController - viewWillAppear start");
-    [super viewWillAppear:animated];
-    // NSLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if (![defaults boolForKey:@"userLoggedIn"]) {
-        //[navigationBarItems removeObject:self.profileBarButtonItem];
-        [self.navigationBar.topItem setRightBarButtonItem:self.profileBarButtonItem animated:NO];
-    }
-    
-    NSDate *today = [NSDate date];
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"dd.MM.yyyy"];
-    NSString *dateString = [dateFormat stringFromDate:today];
-    NSString *startText = @"Daten für heute, ";
-    self.navigationBar.topItem.title = [startText stringByAppendingString:dateString];
-
-    //NSLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
-    
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -393,7 +400,7 @@ NSMutableArray *navigationBarItems;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // This code is running in a different thread
         // After 120 seconds have elapsed, the timer fires, sending the message to target.
-        self.continiousTimer = [NSTimer timerWithTimeInterval:60.0 // 1 minute
+        self.continiousTimer = [NSTimer timerWithTimeInterval:10.0 // 1 minute
                                                  target:self
                                                selector:@selector(getDataFromServer:)
                                                userInfo:nil
