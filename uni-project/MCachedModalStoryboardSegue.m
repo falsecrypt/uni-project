@@ -112,6 +112,7 @@ static NSMutableDictionary * _MCachedModalStoryboardSegueCache;
     
     // Swizzle for the cached destination
     UIViewController *newDest = _MCachedModalStoryboardSegueCache[key];
+    
     return [super initWithIdentifier:identifier source:source destination:newDest];
     
 }
@@ -124,9 +125,10 @@ static NSMutableDictionary * _MCachedModalStoryboardSegueCache;
     MDAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     DetailViewManager *detailViewManager = appDelegate.detailViewManager;
     // some kind of a custom replace segue with detail split as destination ;)
-    if (![detailViewManager.detailViewController isEqual:self.destinationViewController]) {
+    //if (![detailViewManager.detailViewController isEqual:self.destinationViewController]) {
         detailViewManager.detailViewController = self.destinationViewController;
-    }
+    NSLog(@"custom segue, self.destination: %@", self.destinationViewController);
+    //}
 
 }
 

@@ -52,6 +52,8 @@ NSMutableArray *navigationBarItems;
     DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
     detailViewManager.detailViewController = self;
     
+    firstTime = YES;
+    
     // -setNavigationPaneBarButtonItem may have been invoked when before the
     // interface was loaded.  This will occur when setNavigationPaneBarButtonItem
     // is called as part of DetailViewManager preparing this view controller
@@ -83,10 +85,13 @@ NSMutableArray *navigationBarItems;
 //  Called when the view has been fully transitioned onto the screen
 // -------------------------------------------------------------------------------
 - (void)viewDidAppear:(BOOL)animated {
+    if (firstTime) {
+        NSLog(@"viewDidAppear...");
+        [self addMeterViewContents];
+        [self initPlotForScatterPlot];
+        firstTime = NO;
+    }
 
-    NSLog(@"viewDidAppear...");
-    [self addMeterViewContents];
-    [self initPlotForScatterPlot];
 }
 
 // -------------------------------------------------------------------------------

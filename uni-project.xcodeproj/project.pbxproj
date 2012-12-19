@@ -40,6 +40,7 @@
 		CE8B7F7E15ED35D1006CD57C /* MDMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F7915ED35D1006CD57C /* MDMasterViewController.m */; };
 		CE8B7F7F15ED35D1006CD57C /* MDMultipleMasterDetailManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F7B15ED35D1006CD57C /* MDMultipleMasterDetailManager.m */; };
 		CE8B7F8315ED3630006CD57C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F8215ED3630006CD57C /* main.m */; };
+		CE8DCEB916815ABB0030FA4C /* LastWeekViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8DCEB816815ABB0030FA4C /* LastWeekViewController.m */; };
 		CEA0BE9C163CD2D700ED0599 /* LoginScreenTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0BE9A163CD2D700ED0599 /* LoginScreenTableViewController.m */; };
 		CEA0BEA1163CD99B00ED0599 /* FirstTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0BEA0163CD99B00ED0599 /* FirstTableViewController.m */; };
 		CEA0CE431661A6F60086151D /* MagicalImportFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0CE0B1661A6F60086151D /* MagicalImportFunctions.m */; };
@@ -142,6 +143,8 @@
 		CE8B7F7A15ED35D1006CD57C /* MDMultipleMasterDetailManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDMultipleMasterDetailManager.h; sourceTree = "<group>"; };
 		CE8B7F7B15ED35D1006CD57C /* MDMultipleMasterDetailManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDMultipleMasterDetailManager.m; sourceTree = "<group>"; };
 		CE8B7F8215ED3630006CD57C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		CE8DCEB716815ABB0030FA4C /* LastWeekViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LastWeekViewController.h; sourceTree = "<group>"; };
+		CE8DCEB816815ABB0030FA4C /* LastWeekViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LastWeekViewController.m; sourceTree = "<group>"; };
 		CEA0BE99163CD2D700ED0599 /* LoginScreenTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginScreenTableViewController.h; sourceTree = "<group>"; };
 		CEA0BE9A163CD2D700ED0599 /* LoginScreenTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginScreenTableViewController.m; sourceTree = "<group>"; };
 		CEA0BE9F163CD99B00ED0599 /* FirstTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstTableViewController.h; sourceTree = "<group>"; };
@@ -359,6 +362,8 @@
 				CE071EC21659C58B007290B1 /* ProfilePopoverViewController.m */,
 				CE32C36E16658A6000C3ED81 /* CurrentDataViewController.h */,
 				CE32C36F16658A6000C3ED81 /* CurrentDataViewController.m */,
+				CE8DCEB716815ABB0030FA4C /* LastWeekViewController.h */,
+				CE8DCEB816815ABB0030FA4C /* LastWeekViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -849,6 +854,7 @@
 				CE32C39D1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m in Sources */,
 				CE0325F5166C20AF00BAB4C6 /* MBProgressHUD.m in Sources */,
 				CE1458B4167C06F400F7D82F /* MCachedModalStoryboardSegue.m in Sources */,
+				CE8DCEB916815ABB0030FA4C /* LastWeekViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
