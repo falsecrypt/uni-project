@@ -1,10 +1,4 @@
-//
-//  CPDConstants.m
-//  CorePlotDemo
-//
-//  Created by Steve Baranski on 5/3/12.
-//  Copyright (c) 2012 komorka technology, llc. All rights reserved.
-//
+
 
 #import "CPDConstants.h"
 
@@ -24,4 +18,6 @@ NSString *  const pieChart                  = @"Pie Chart";
 NSString *  const barGraph                  = @"Bar Graph";
 NSString *  const scatterPlot               = @"Scatter Plot";
 
+NSString *  const currentCostServerBaseURLString = @"http://www.hcm-lab.de/downloads/buehling/adaptiveart/CurrentCostTreeOnline/";
+NSString *  const currentCostServerBaseURLHome   = @"www.hcm-lab.de";
 @end

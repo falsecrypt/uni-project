@@ -1,10 +1,3 @@
-//
-//  CPDConstants.h
-//  CorePlotDemo
-//
-//  Created by Steve Baranski on 5/3/12.
-//  Copyright (c) 2012 komorka technology, llc. All rights reserved.
-//
 
 @interface CPDConstants : NSObject
 
@@ -22,5 +15,7 @@ extern NSString * const CPDTickerSymbolMSFT;
 extern NSString * const pieChart;
 extern NSString * const barGraph;
 extern NSString * const scatterPlot;
+extern NSString * const currentCostServerBaseURLString;
+extern NSString * const currentCostServerBaseURLHome;
 
 @end

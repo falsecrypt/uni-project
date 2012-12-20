@@ -7,8 +7,13 @@
 
 #import "LastWeekViewController.h"
 #import "DetailViewManager.h"
+#import "FirstDetailViewController.h"
+#import "MBProgressHUD.h"
+#import "AFAppDotNetAPIClient.h"
+#import "WeekData.h"
+#import "Reachability.h"
 
-NSString *const pieChartName = @"7WeeksPieChart";
+NSString *const pieChartName = @"7DaysPieChart";
 #define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
 
 CGPoint lastLocation;
@@ -16,13 +21,19 @@ CPTPieChart *piePlot;
 BOOL selecting;
 BOOL repeatingTouch;
 BOOL firstTime;
+BOOL deviceIsOnline;
 NSUInteger currentSliceIndex;
+NSMutableDictionary *dayDataDictionary;
 
 @interface LastWeekViewController ()
+
+@property MBProgressHUD *HUD;
 
 @end
 
 @implementation LastWeekViewController
+
+NSMutableArray *navigationBarItems;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -54,21 +65,222 @@ NSUInteger currentSliceIndex;
      name:secondNotificationName
      object:nil];
     
-    [self initPieChart];
+    self.HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:self.HUD];
+	//self.HUD.delegate = self;
+	self.HUD.labelText = @"Loading";
+    self.HUD.yOffset = -125.f;
+    [self.HUD show:YES];
+    
+    // allocate a reachability object
+    Reachability* reach = [Reachability reachabilityWithHostname:currentCostServerBaseURLHome];
+    
+    reach.reachableBlock = ^(Reachability * reachability)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Block Says Reachable");
+            deviceIsOnline = YES;
+            [self initPieChartOnline];
+        });
+    };
+    
+    reach.unreachableBlock = ^(Reachability * reachability)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Block Says Unreachable");
+            deviceIsOnline = NO;
+            [self initPieChartOffline];
+        });
+    };
+    
+    // tell the reachability that we DONT want to be reachable on 3G/EDGE/CDMA
+    // reach.reachableOnWWAN = NO;
+    
+    // here we set up a NSNotification observer. The Reachability that caused the notification
+    // is passed in the object parameter
+    /*[[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reachabilityChanged:)
+                                                 name:kReachabilityChangedNotification
+                                               object:nil]; */
+    
+    [reach startNotifier];
+    
+    NSLog(@"calling viewDidLoad - Last Week!");
+}
+/*
+-(void)reachabilityChanged:(NSNotification*)note {
+    Reachability * reach = [note object];
+    
+    if([reach isReachable])
+    {
+        NSLog(@"Notification Says Reachable");
+    }
+    else
+    {
+        NSLog(@"Notification Says Unreachable");
+    }
+}
+ */
+
+- (void) initPieChartOnline {
+    NSLog(@"calling initPieChartOnline!");
+    // Prepare Data for the 7-Days-Pie Chart TODO
+    
+    if ( dayDataDictionary == nil ) {
+        /*
+         plotData = [[NSMutableArray alloc] initWithObjects:
+         [NSNumber numberWithDouble:20.0],
+         [NSNumber numberWithDouble:30.0],
+         [NSNumber numberWithDouble:60.0],
+         nil];
+         */
+        // Lets look for Week Data in our DB
+        NSNumber *numberofentities = [WeekData numberOfEntities];
+        
+        // We are online
+        NSLog(@"deviceIsOnline : %i", deviceIsOnline);
+        
+        // No Data, our App has been started for the first time
+        if ([numberofentities intValue]==0) {
+            NSLog(@"No Data in the WeekData Table!");
+            [self getWeekData];
+        }
+        // We have some data, we are online so lets sync
+        else {
+            NSLog(@"number of entities before sync : %@", numberofentities);
+            [WeekData truncateAll];
+            [self getWeekData];
+        }
+
+    }
 }
 
-- (void) initPieChart {
-    // NSLog(@"calling initDataDisplayView");
-    // Prepare Data for the 7-Weeks-Pie Chart TODO
+- (void) initPieChartOffline{
+    NSLog(@"calling initPieChart!");
+    // Prepare Data for the 7-Days-Pie Chart TODO
     
-    if ( plotData == nil ) {
-        plotData = [[NSMutableArray alloc] initWithObjects:
-                    [NSNumber numberWithDouble:20.0],
-                    [NSNumber numberWithDouble:30.0],
-                    [NSNumber numberWithDouble:60.0],
-                    nil];
+    if ( dayDataDictionary == nil ) {
+        /*
+         plotData = [[NSMutableArray alloc] initWithObjects:
+         [NSNumber numberWithDouble:20.0],
+         [NSNumber numberWithDouble:30.0],
+         [NSNumber numberWithDouble:60.0],
+         nil];
+         */
+        // Lets look for Week Data in our DB
+        NSNumber *numberofentities = [WeekData numberOfEntities];
+        
+        // We are offline
+        // retrieve the data from the DB
+        NSLog(@"deviceIsOnline : %i", deviceIsOnline);
+        // ooops, No Data. Show error
+        if ([numberofentities intValue]==0) {
+            NSLog(@"No Data in the WeekData Table! and the Device is not connected to the internet..");
+            
+        }
+        else {
+            NSArray *results = [WeekData findAllSortedBy:@"day" ascending:YES];
+            dayDataDictionary = [[NSMutableDictionary alloc] init];
+            for (WeekData *weekdata in results){
+                [dayDataDictionary setObject:[weekdata day] forKey:[weekdata consumption]];
+            }
+            
+        }
+        
+        
+        /* WeekData *newData = [WeekData createEntity];
+         [newData setDay:[NSDate date]];
+         [newData setConsumption:(NSDecimalNumber *)[NSDecimalNumber numberWithFloat:2.34f]];
+         [[NSManagedObjectContext defaultContext] saveNestedContexts];
+         NSArray *result = [WeekData findAllSortedBy:@"day" ascending:YES];
+         NSLog(@"TEST, result: %@", result);*/
+        
+        NSLog(@"initPieChart END-> dayDataDictionary: %@", dayDataDictionary);
     }
+}
 
+-(void)getWeekData {
+    NSLog(@"startSynchronization...");
+
+    // Start this first timer immediately, without delay
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSTimer* firstTimer = [NSTimer timerWithTimeInterval:0.01
+                                                      target:self
+                                                    selector:@selector(getDataFromServer:)
+                                                    userInfo:nil
+                                                     repeats:NO];
+        
+        [[NSRunLoop currentRunLoop] addTimer:firstTimer forMode:NSRunLoopCommonModes];
+        [[NSRunLoop currentRunLoop] run];
+    });
+}
+
+-(void)readyToMakePieChart {
+    NSArray *results = [WeekData findAllSortedBy:@"day" ascending:YES];
+    NSLog(@"readyToMakePieChart -> results: %@", results);
+    WeekData *weekdata = [results objectAtIndex:0];
+    NSLog(@"readyToMakePieChart -> first: %@", [weekdata day]);
+    dayDataDictionary = [[NSMutableDictionary alloc] init];
+    plotDataConsumption = [[NSMutableArray alloc] init];
+    plotDataDates = [[NSMutableArray alloc] init];
+    
+    for (WeekData *weekdata in results){
+        [dayDataDictionary setObject:[weekdata day] forKey:[weekdata consumption]]; //NSMutableDictionary is unordered
+        [plotDataConsumption addObject:[weekdata consumption]];
+        [plotDataDates addObject:[weekdata day]];
+    }
+    NSRange r;
+    r.location = 7;
+    r.length = [plotDataConsumption count]-7;
+    [plotDataConsumption removeObjectsInRange:r]; // delete the last 7 days
+    
+    [self createPieChart];
+    
+    NSLog(@"readyToMakePieChart -> dayDataDictionary: %@", dayDataDictionary);
+    NSLog(@"readyToMakePieChart -> plotDataConsumption: %@", plotDataConsumption);
+    NSLog(@"readyToMakePieChart -> plotDataDates: %@", plotDataDates);
+}
+
+- (void)getDataFromServer:(NSTimer *)timer {
+    
+    NSLog(@"getDataFromServer...");
+    //Get user's aggregated kilowatt values per day (max 14 days, semicolon separated, latest first).
+    [[AFAppDotNetAPIClient sharedClient] getPath:@"rpc.php?userID=3&action=get&what=aggregation_d" parameters:nil
+                                         success:^(AFHTTPRequestOperation *operation, id data) {
+                                             NSString *oneWeekData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                                             NSArray *components   = [oneWeekData componentsSeparatedByString:@";"];
+                                             
+                                             for (NSString *obj in components) {
+                                                 NSArray *day = [obj componentsSeparatedByString:@"="];
+                                                 NSLog(@"day : %@", day);
+                                                 NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+                                                 [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
+                                                 [dateFormatter setDateFormat:@"yy-MM-dd"];
+                                                 NSDate *date = [dateFormatter dateFromString:[day objectAtIndex:0]];
+                                                 NSString *withoutComma = [[day objectAtIndex:1] stringByReplacingOccurrencesOfString:@"," withString:@"."];
+                                                 double temp = [withoutComma doubleValue];
+                                                 NSDecimalNumber *dayConsumption = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:temp];
+                                                 NSLog(@"dayConsumption : %@", dayConsumption);
+
+                                                 WeekData *newData = [WeekData createEntity];
+                                                 [newData setDay:date];
+                                                 [newData setConsumption:dayConsumption];
+
+                                             }
+
+                                             [[NSManagedObjectContext defaultContext] saveNestedContexts];
+                                             
+                                             dispatch_async(dispatch_get_main_queue(), ^{
+                                                 [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                 [self readyToMakePieChart];
+                                             });
+
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Failed during getting 7-Weeks-Data: %@",[error localizedDescription]);
+    }];
+    
+
+    
 }
 
 -(void)createPieChart
@@ -164,7 +376,7 @@ NSUInteger currentSliceIndex;
 
 -(void)pieChart:(CPTPieChart *)plot sliceWasSelectedAtRecordIndex:(NSUInteger)index
 {
-    NSLog(@"%@ slice was selected at index %lu. Value = %@", plot.identifier, (unsigned long)index, [plotData objectAtIndex:index]);
+    NSLog(@"%@ slice was selected at index %lu. Value = %@", plot.identifier, (unsigned long)index, [plotDataConsumption objectAtIndex:index]);
     
     selecting = TRUE;
     if (currentSliceIndex==index && !repeatingTouch) {
@@ -248,7 +460,7 @@ NSUInteger currentSliceIndex;
 
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
-    return [plotData count];
+    return [plotDataConsumption count];
 }
 
 -(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
@@ -256,7 +468,7 @@ NSUInteger currentSliceIndex;
     NSNumber *num;
     
     if ( fieldEnum == CPTPieChartFieldSliceWidth ) {
-        num = [plotData objectAtIndex:index];
+        num = [plotDataConsumption objectAtIndex:index];
     }
     else {
         return [NSNumber numberWithInt:index];
@@ -277,7 +489,7 @@ NSUInteger currentSliceIndex;
             whiteText.color = [CPTColor whiteColor];
         }
         
-        newLayer                 = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%.0f", [[plotData objectAtIndex:index] floatValue]] style:whiteText];
+        newLayer                 = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%.0f", [[plotDataConsumption objectAtIndex:index] floatValue]] style:whiteText];
         newLayer.fill            = [CPTFill fillWithColor:[CPTColor darkGrayColor]];
         newLayer.cornerRadius    = 5.0;
         newLayer.paddingLeft     = 3.0;
@@ -317,6 +529,30 @@ NSUInteger currentSliceIndex;
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark -
+#pragma mark Profile Button Methods
+
+- (void)hideProfileAfterUserLoggedOff {
+    NSLog(@"hideProfileAfterUserLoggedOff...");
+    if (self.profilePopover){
+        [self.profilePopover dismissPopoverAnimated:YES];
+        NSLog(@"profile popover dissmissed...");
+    }
+    [navigationBarItems removeObject:self.profileBarButtonItem];
+    [self.navigationBar.topItem setRightBarButtonItems:navigationBarItems animated:YES];
+    [self.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
+//    NSLog(@"rightBarButtonItems: %@", [self.navigationBar.topItem rightBarButtonItems]);
+//    NSLog(@"navigationBarItems: %@", navigationBarItems);
+//    NSLog(@"self.profileBarButtonItem: %@", self.profileBarButtonItem);
+    // Going back
+    [[self.splitViewController.viewControllers objectAtIndex:0]popToRootViewControllerAnimated:TRUE];
+    DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
+    FirstDetailViewController *startDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
+    detailViewManager.detailViewController = startDetailViewController;
+    startDetailViewController.navigationBar.topItem.title = @"Summary";
+    
 }
 
 @end

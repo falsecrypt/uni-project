@@ -13,7 +13,9 @@
     #import <Foundation/Foundation.h>
     #import "CorePlot-CocoaTouch.h"
     #import "CPDConstants.h"
+    #import <SystemConfiguration/SystemConfiguration.h>
     #import "CPDStockPriceStore.h"
+    #define MR_SHORTHAND
     #import "CoreData+MagicalRecord.h"
 
 #endif

@@ -1,11 +1,8 @@
 // AFAppDotNetAPIClient.h
 
 #import "AFAppDotNetAPIClient.h"
-
 #import "AFJSONRequestOperation.h"
 
-static NSString * const currentCostServerBaseURLString =
-        @"http://www.hcm-lab.de/downloads/buehling/adaptiveart/CurrentCostTreeOnline/";
 
 @implementation AFAppDotNetAPIClient
 

@@ -10,7 +10,8 @@
 
 @interface LastWeekViewController : UIViewController<CPTPlotSpaceDelegate, CPTPlotDataSource, CPTPieChartDelegate, SubstitutableDetailViewController> {
     
-    NSArray *plotData;
+    NSMutableArray *plotDataConsumption;
+    NSMutableArray *plotDataDates;
     
 }
 
@@ -18,6 +19,7 @@
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *profileBarButtonItem;
 @property (nonatomic, retain) UIBarButtonItem *navigationPaneBarButtonItem;
+@property (nonatomic, retain) UIPopoverController *profilePopover;
 
 @property (strong, nonatomic) CPTGraphHostingView *pieChartView;
 @property (strong, nonatomic) CPTGraph *graph;
