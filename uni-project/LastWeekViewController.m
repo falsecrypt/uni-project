@@ -49,10 +49,10 @@ NSMutableArray *navigationBarItems;
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    if (!self.instanceWasCached) {
+    
     DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
     detailViewManager.detailViewController = self;
-    
-    firstTime = YES;
     
     if (self.navigationPaneBarButtonItem)
         [self.navigationBar.topItem setLeftBarButtonItem:self.navigationPaneBarButtonItem
@@ -106,6 +106,8 @@ NSMutableArray *navigationBarItems;
     [reach startNotifier];
     
     NSLog(@"calling viewDidLoad - Last Week!");
+        
+    }
 }
 /*
 -(void)reachabilityChanged:(NSNotification*)note {
@@ -153,6 +155,9 @@ NSMutableArray *navigationBarItems;
         }
 
     }
+    else {
+        [self readyToMakePieChart];
+    }
 }
 
 - (void) initPieChartOffline{
@@ -179,14 +184,9 @@ NSMutableArray *navigationBarItems;
             
         }
         else {
-            NSArray *results = [WeekData findAllSortedBy:@"day" ascending:YES];
-            dayDataDictionary = [[NSMutableDictionary alloc] init];
-            for (WeekData *weekdata in results){
-                [dayDataDictionary setObject:[weekdata day] forKey:[weekdata consumption]];
-            }
+            [self readyToMakePieChart];
             
         }
-        
         
         /* WeekData *newData = [WeekData createEntity];
          [newData setDay:[NSDate date]];
@@ -197,6 +197,10 @@ NSMutableArray *navigationBarItems;
         
         NSLog(@"initPieChart END-> dayDataDictionary: %@", dayDataDictionary);
     }
+    else {
+       [self readyToMakePieChart]; 
+    }
+    
 }
 
 -(void)getWeekData {
@@ -216,6 +220,7 @@ NSMutableArray *navigationBarItems;
 }
 
 -(void)readyToMakePieChart {
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
     NSArray *results = [WeekData findAllSortedBy:@"day" ascending:YES];
     NSLog(@"readyToMakePieChart -> results: %@", results);
     WeekData *weekdata = [results objectAtIndex:0];
@@ -290,6 +295,8 @@ NSMutableArray *navigationBarItems;
 #else
     CGRect bounds = NSRectToCGRect(self.graphHostingView.bounds);
 #endif
+    
+    
     
     self.graph = [[CPTXYGraph alloc] initWithFrame:bounds];
     self.graphHostingView.hostedGraph = self.graph;
@@ -393,12 +400,12 @@ NSMutableArray *navigationBarItems;
     
     [plot setNeedsDisplay];
     
-    CABasicAnimation *fadeInAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+    /*CABasicAnimation *fadeInAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
     fadeInAnimation.duration = 1.0f;
     fadeInAnimation.removedOnCompletion = NO;
     fadeInAnimation.fillMode = kCAFillModeForwards;
     fadeInAnimation.toValue = [NSNumber numberWithFloat:1.0];
-    [piePlot addAnimation:fadeInAnimation forKey:@"animateOpacity"];
+    [piePlot addAnimation:fadeInAnimation forKey:@"animateOpacity"];*/
     
     
     /*CABasicAnimation *rotation = [CABasicAnimation animationWithKeyPath:@"startAngle"];
@@ -460,6 +467,7 @@ NSMutableArray *navigationBarItems;
 
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
+    NSLog(@"[plotDataConsumption count]: %i", [plotDataConsumption count]);
     return [plotDataConsumption count];
 }
 
@@ -517,7 +525,7 @@ NSMutableArray *navigationBarItems;
     NSLog(@"radialOffsetForPieChart: recordIndex %i, currentSliceIndex %i, selecting %i, repeatingTouch %i", index, currentSliceIndex, selecting, repeatingTouch);
     
     if ( [(NSString *)pieChart.identifier isEqualToString:pieChartName] && selecting && index==currentSliceIndex) {
-        result = 15.0;
+        result = 20.0;
         if (repeatingTouch) {
             result = 0.0;
         }

@@ -46,6 +46,8 @@
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property (nonatomic, retain) UIBarButtonItem *navigationPaneBarButtonItem;
 
+@property (nonatomic, assign) BOOL instanceWasCached; // for MyOfficeTableViewController
+
 
 -(void) addMeterViewContents;
 -(void) rotateIt:(float)angl;

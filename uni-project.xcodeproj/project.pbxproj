@@ -15,6 +15,8 @@
 		CE0D631916611B1600381D05 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE0D631816611B1600381D05 /* CoreData.framework */; };
 		CE0D631D16611E7500381D05 /* EcoMeterModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE0D631B16611E7500381D05 /* EcoMeterModel.xcdatamodeld */; };
 		CE1458B4167C06F400F7D82F /* MCachedModalStoryboardSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1458B2167C06F400F7D82F /* MCachedModalStoryboardSegue.m */; };
+		CE1793D11683E8E60030723A /* MyOfficeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D01683E8E60030723A /* MyOfficeTableViewController.m */; };
+		CE1793D51683F3970030723A /* DataOverviewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D41683F3970030723A /* DataOverviewTableViewController.m */; };
 		CE32C3681665890900C3ED81 /* speedometerArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = CE32C3661665890900C3ED81 /* speedometerArrow.png */; };
 		CE32C37016658A6000C3ED81 /* CurrentDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C36F16658A6000C3ED81 /* CurrentDataViewController.m */; };
 		CE32C37216659B4200C3ED81 /* speedometerBody.png in Resources */ = {isa = PBXBuildFile; fileRef = CE32C37116659B4200C3ED81 /* speedometerBody.png */; };
@@ -103,6 +105,10 @@
 		CE0D631C16611E7500381D05 /* EcoMeterModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EcoMeterModel.xcdatamodel; sourceTree = "<group>"; };
 		CE1458B2167C06F400F7D82F /* MCachedModalStoryboardSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCachedModalStoryboardSegue.m; sourceTree = "<group>"; };
 		CE1458B3167C06F400F7D82F /* MCachedModalStoryboardSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCachedModalStoryboardSegue.h; sourceTree = "<group>"; };
+		CE1793CF1683E8E60030723A /* MyOfficeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOfficeTableViewController.h; sourceTree = "<group>"; };
+		CE1793D01683E8E60030723A /* MyOfficeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOfficeTableViewController.m; sourceTree = "<group>"; };
+		CE1793D31683F3970030723A /* DataOverviewTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataOverviewTableViewController.h; sourceTree = "<group>"; };
+		CE1793D41683F3970030723A /* DataOverviewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataOverviewTableViewController.m; sourceTree = "<group>"; };
 		CE32C3661665890900C3ED81 /* speedometerArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speedometerArrow.png; sourceTree = "<group>"; };
 		CE32C36E16658A6000C3ED81 /* CurrentDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurrentDataViewController.h; sourceTree = "<group>"; };
 		CE32C36F16658A6000C3ED81 /* CurrentDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CurrentDataViewController.m; sourceTree = "<group>"; };
@@ -355,6 +361,10 @@
 		CE0AE47C1645F54E00EC15B4 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				CE1793D31683F3970030723A /* DataOverviewTableViewController.h */,
+				CE1793D41683F3970030723A /* DataOverviewTableViewController.m */,
+				CE1793CF1683E8E60030723A /* MyOfficeTableViewController.h */,
+				CE1793D01683E8E60030723A /* MyOfficeTableViewController.m */,
 				CE8B7F7815ED35D1006CD57C /* MDMasterViewController.h */,
 				CE8B7F7915ED35D1006CD57C /* MDMasterViewController.m */,
 				CEA0BE99163CD2D700ED0599 /* LoginScreenTableViewController.h */,
@@ -891,6 +901,8 @@
 				CE54E7BA168230B400F91C5E /* User.m in Sources */,
 				CE54E7BD168230B400F91C5E /* MonthData.m in Sources */,
 				CE54E7C21682943400F91C5E /* Reachability.m in Sources */,
+				CE1793D11683E8E60030723A /* MyOfficeTableViewController.m in Sources */,
+				CE1793D51683F3970030723A /* DataOverviewTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

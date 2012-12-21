@@ -24,4 +24,6 @@
 @property (strong, nonatomic) CPTGraphHostingView *pieChartView;
 @property (strong, nonatomic) CPTGraph *graph;
 
+@property (nonatomic, assign) BOOL instanceWasCached; // for DataOverviewTableViewController
+
 @end

@@ -20,7 +20,6 @@ const NSUInteger kMaxDataPoints = 10;
 NSString *kPlotIdentifier       = @"Data Source Plot";
 NSUInteger currentIndex;
 NSTimer *dataTimer;
-BOOL firstTime;
 
 @interface CurrentDataViewController ()
 
@@ -52,7 +51,6 @@ NSMutableArray *navigationBarItems;
     DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
     detailViewManager.detailViewController = self;
     
-    firstTime = YES;
     
     // -setNavigationPaneBarButtonItem may have been invoked when before the
     // interface was loaded.  This will occur when setNavigationPaneBarButtonItem
@@ -85,11 +83,10 @@ NSMutableArray *navigationBarItems;
 //  Called when the view has been fully transitioned onto the screen
 // -------------------------------------------------------------------------------
 - (void)viewDidAppear:(BOOL)animated {
-    if (firstTime) {
+    if (!self.instanceWasCached) {
         NSLog(@"viewDidAppear...");
         [self addMeterViewContents];
         [self initPlotForScatterPlot];
-        firstTime = NO;
     }
 
 }
@@ -100,7 +97,7 @@ NSMutableArray *navigationBarItems;
 // -------------------------------------------------------------------------------
 - (void)viewWillAppear:(BOOL)animated
 {
-    NSLog(@"calling FirstDetailViewController - viewWillAppear start");
+    NSLog(@"calling CurrentDataViewController - viewWillAppear start");
     [super viewWillAppear:animated];
     // NSLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

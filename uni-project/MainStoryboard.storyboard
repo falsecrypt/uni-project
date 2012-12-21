@@ -653,10 +653,10 @@
             </objects>
             <point key="canvasLocation" x="1549" y="-405"/>
         </scene>
-        <!--Table View Controller-->
+        <!--My Office Table View Controller-->
         <scene sceneID="LHh-tc-qFJ">
             <objects>
-                <tableViewController id="Khm-Oc-9wf" sceneMemberID="viewController">
+                <tableViewController id="Khm-Oc-9wf" customClass="MyOfficeTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="g6G-8b-DY4">
                         <rect key="frame" x="0.0" y="64" width="320" height="704"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1602,10 +1602,10 @@
             </objects>
             <point key="canvasLocation" x="3989" y="3533"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Data Overview Table View Controller-->
         <scene sceneID="imE-i9-1HI">
             <objects>
-                <tableViewController id="KJ0-Xv-vWK" sceneMemberID="viewController">
+                <tableViewController id="KJ0-Xv-vWK" customClass="DataOverviewTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="v7j-Ae-DWA">
                         <rect key="frame" x="0.0" y="64" width="320" height="704"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1637,7 +1637,7 @@
                                             <constraint firstItem="opl-q7-SFh" firstAttribute="leading" secondItem="QrZ-3v-xgX" secondAttribute="leading" constant="20" type="default" id="SHs-Ko-3cr"/>
                                         </constraints>
                                         <connections>
-                                            <segue destination="ak2-fO-ZL4" kind="replace" splitViewControllerTargetIndex="1" id="JVr-6y-ddS"/>
+                                            <segue destination="ak2-fO-ZL4" kind="custom" identifier="showLastWeekData" customClass="MCachedModalStoryboardSegue" id="JVr-6y-ddS"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="nN4-Mr-Oom">
@@ -1986,7 +1986,6 @@
         <class className="CurrentDataViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CurrentDataViewController.h"/>
             <relationships>
-                <relationship kind="action" name="profileButtonTapped:"/>
                 <relationship kind="outlet" name="dataDisplayView" candidateClass="UIView"/>
                 <relationship kind="outlet" name="eurDataLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="hostingView" candidateClass="CPTGraphHostingView"/>
@@ -2000,6 +1999,9 @@
                 <relationship kind="outlet" name="speedometerImageView" candidateClass="UIImageView"/>
                 <relationship kind="outletCollection" name="labelsWithNumbersCollection" candidateClass="UILabel"/>
             </relationships>
+        </class>
+        <class className="DataOverviewTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DataOverviewTableViewController.h"/>
         </class>
         <class className="FirstDetailViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/FirstDetailViewController.h"/>
@@ -2029,6 +2031,9 @@
                 <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
                 <relationship kind="outlet" name="usernameField" candidateClass="UITextField"/>
             </relationships>
+        </class>
+        <class className="MyOfficeTableViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MyOfficeTableViewController.h"/>
         </class>
         <class className="NSLayoutConstraint" superclassName="NSObject">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
