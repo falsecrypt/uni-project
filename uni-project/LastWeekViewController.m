@@ -47,65 +47,64 @@ NSMutableArray *navigationBarItems;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
     
     if (!self.instanceWasCached) {
     
-    DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
-    detailViewManager.detailViewController = self;
-    
-    if (self.navigationPaneBarButtonItem)
-        [self.navigationBar.topItem setLeftBarButtonItem:self.navigationPaneBarButtonItem
-                                                animated:NO];
-    
-    NSString *secondNotificationName = @"UserLoggedOffNotification";
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(hideProfileAfterUserLoggedOff)
-     name:secondNotificationName
-     object:nil];
-    
-    self.HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:self.HUD];
-	//self.HUD.delegate = self;
-	self.HUD.labelText = @"Loading";
-    self.HUD.yOffset = -125.f;
-    [self.HUD show:YES];
-    
-    // allocate a reachability object
-    Reachability* reach = [Reachability reachabilityWithHostname:currentCostServerBaseURLHome];
-    
-    reach.reachableBlock = ^(Reachability * reachability)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"Block Says Reachable");
-            deviceIsOnline = YES;
-            [self initPieChartOnline];
-        });
-    };
-    
-    reach.unreachableBlock = ^(Reachability * reachability)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"Block Says Unreachable");
-            deviceIsOnline = NO;
-            [self initPieChartOffline];
-        });
-    };
-    
-    // tell the reachability that we DONT want to be reachable on 3G/EDGE/CDMA
-    // reach.reachableOnWWAN = NO;
-    
-    // here we set up a NSNotification observer. The Reachability that caused the notification
-    // is passed in the object parameter
-    /*[[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(reachabilityChanged:)
-                                                 name:kReachabilityChangedNotification
-                                               object:nil]; */
-    
-    [reach startNotifier];
-    
-    NSLog(@"calling viewDidLoad - Last Week!");
+        DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
+        detailViewManager.detailViewController = self;
+        
+        if (self.navigationPaneBarButtonItem)
+            [self.navigationBar.topItem setLeftBarButtonItem:self.navigationPaneBarButtonItem
+                                                    animated:NO];
+        
+        NSString *secondNotificationName = @"UserLoggedOffNotification";
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(hideProfileAfterUserLoggedOff)
+         name:secondNotificationName
+         object:nil];
+        
+        self.HUD = [[MBProgressHUD alloc] initWithView:self.view];
+        [self.view addSubview:self.HUD];
+        //self.HUD.delegate = self;
+        self.HUD.labelText = @"Loading";
+        self.HUD.yOffset = -125.f;
+        [self.HUD show:YES];
+        
+        // allocate a reachability object
+        Reachability* reach = [Reachability reachabilityWithHostname:currentCostServerBaseURLHome];
+        
+        reach.reachableBlock = ^(Reachability * reachability)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSLog(@"Block Says Reachable");
+                deviceIsOnline = YES;
+                [self initPieChartOnline];
+            });
+        };
+        
+        reach.unreachableBlock = ^(Reachability * reachability)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSLog(@"Block Says Unreachable");
+                deviceIsOnline = NO;
+                [self initPieChartOffline];
+            });
+        };
+        
+        // tell the reachability that we DONT want to be reachable on 3G/EDGE/CDMA
+        // reach.reachableOnWWAN = NO;
+        
+        // here we set up a NSNotification observer. The Reachability that caused the notification
+        // is passed in the object parameter
+        /*[[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(reachabilityChanged:)
+                                                     name:kReachabilityChangedNotification
+                                                   object:nil]; */
+        
+        [reach startNotifier];
+        
+        NSLog(@"calling viewDidLoad - Last Week!");
         
     }
 }
@@ -276,7 +275,7 @@ NSMutableArray *navigationBarItems;
                                              [[NSManagedObjectContext defaultContext] saveNestedContexts];
                                              
                                              dispatch_async(dispatch_get_main_queue(), ^{
-                                                 [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                                 //[MBProgressHUD hideHUDForView:self.view animated:YES];
                                                  [self readyToMakePieChart];
                                              });
 

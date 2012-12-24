@@ -14,6 +14,9 @@
 		CE0AE4861646051A00EC15B4 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */; };
 		CE0D631916611B1600381D05 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE0D631816611B1600381D05 /* CoreData.framework */; };
 		CE0D631D16611E7500381D05 /* EcoMeterModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE0D631B16611E7500381D05 /* EcoMeterModel.xcdatamodeld */; };
+		CE12C0271687D4C8001C4959 /* LastMonthsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12C0261687D4C8001C4959 /* LastMonthsViewController.m */; };
+		CE12C02B1687D8EA001C4959 /* CircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12C02A1687D8EA001C4959 /* CircleView.m */; };
+		CE12C02F1687F9DF001C4959 /* MonthData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12C02E1687F9DF001C4959 /* MonthData.m */; };
 		CE1458B4167C06F400F7D82F /* MCachedModalStoryboardSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1458B2167C06F400F7D82F /* MCachedModalStoryboardSegue.m */; };
 		CE1793D11683E8E60030723A /* MyOfficeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D01683E8E60030723A /* MyOfficeTableViewController.m */; };
 		CE1793D51683F3970030723A /* DataOverviewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D41683F3970030723A /* DataOverviewTableViewController.m */; };
@@ -35,7 +38,6 @@
 		CE3F51CD1659D4BD008EE7DF /* defaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3F51CC1659D4BD008EE7DF /* defaultAvatar.png */; };
 		CE54E7B7168230B300F91C5E /* WeekData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE54E7B6168230B300F91C5E /* WeekData.m */; };
 		CE54E7BA168230B400F91C5E /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = CE54E7B9168230B400F91C5E /* User.m */; };
-		CE54E7BD168230B400F91C5E /* MonthData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE54E7BC168230B400F91C5E /* MonthData.m */; };
 		CE54E7BF168292B600F91C5E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE54E7BE168292B500F91C5E /* SystemConfiguration.framework */; };
 		CE54E7C21682943400F91C5E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = CE54E7C11682943400F91C5E /* Reachability.m */; };
 		CE8B7F5515ED358B006CD57C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5415ED358B006CD57C /* UIKit.framework */; };
@@ -103,6 +105,12 @@
 		CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		CE0D631816611B1600381D05 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		CE0D631C16611E7500381D05 /* EcoMeterModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EcoMeterModel.xcdatamodel; sourceTree = "<group>"; };
+		CE12C0251687D4C8001C4959 /* LastMonthsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LastMonthsViewController.h; sourceTree = "<group>"; };
+		CE12C0261687D4C8001C4959 /* LastMonthsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LastMonthsViewController.m; sourceTree = "<group>"; };
+		CE12C0291687D8EA001C4959 /* CircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleView.h; sourceTree = "<group>"; };
+		CE12C02A1687D8EA001C4959 /* CircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleView.m; sourceTree = "<group>"; };
+		CE12C02D1687F9DF001C4959 /* MonthData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthData.h; sourceTree = "<group>"; };
+		CE12C02E1687F9DF001C4959 /* MonthData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthData.m; sourceTree = "<group>"; };
 		CE1458B2167C06F400F7D82F /* MCachedModalStoryboardSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCachedModalStoryboardSegue.m; sourceTree = "<group>"; };
 		CE1458B3167C06F400F7D82F /* MCachedModalStoryboardSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCachedModalStoryboardSegue.h; sourceTree = "<group>"; };
 		CE1793CF1683E8E60030723A /* MyOfficeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOfficeTableViewController.h; sourceTree = "<group>"; };
@@ -142,8 +150,6 @@
 		CE54E7B6168230B300F91C5E /* WeekData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeekData.m; sourceTree = "<group>"; };
 		CE54E7B8168230B400F91C5E /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		CE54E7B9168230B400F91C5E /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
-		CE54E7BB168230B400F91C5E /* MonthData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthData.h; sourceTree = "<group>"; };
-		CE54E7BC168230B400F91C5E /* MonthData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthData.m; sourceTree = "<group>"; };
 		CE54E7BE168292B500F91C5E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		CE54E7C01682943400F91C5E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		CE54E7C11682943400F91C5E /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
@@ -389,6 +395,8 @@
 				CE32C36F16658A6000C3ED81 /* CurrentDataViewController.m */,
 				CE8DCEB716815ABB0030FA4C /* LastWeekViewController.h */,
 				CE8DCEB816815ABB0030FA4C /* LastWeekViewController.m */,
+				CE12C0251687D4C8001C4959 /* LastMonthsViewController.h */,
+				CE12C0261687D4C8001C4959 /* LastMonthsViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -405,9 +413,9 @@
 		CE0D631E16611E8600381D05 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CE12C02D1687F9DF001C4959 /* MonthData.h */,
+				CE12C02E1687F9DF001C4959 /* MonthData.m */,
 				CE0D631B16611E7500381D05 /* EcoMeterModel.xcdatamodeld */,
-				CE54E7BB168230B400F91C5E /* MonthData.h */,
-				CE54E7BC168230B400F91C5E /* MonthData.m */,
 				CE54E7B8168230B400F91C5E /* User.h */,
 				CE54E7B9168230B400F91C5E /* User.m */,
 				CE54E7B5168230B300F91C5E /* WeekData.h */,
@@ -415,6 +423,15 @@
 			);
 			name = Models;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		CE12C02C1687D917001C4959 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				CE12C0291687D8EA001C4959 /* CircleView.h */,
+				CE12C02A1687D8EA001C4959 /* CircleView.m */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		CE1458B6167C152F00F7D82F /* CustomSegues */ = {
@@ -513,9 +530,10 @@
 				CE32C37D1665AB8E00C3ED81 /* AFNetworking */,
 				CEA0CE071661A6F60086151D /* MagicalRecord */,
 				CE0AE483164604F700EC15B4 /* KeychainWrapper */,
+				CE0D631E16611E8600381D05 /* Models */,
+				CE12C02C1687D917001C4959 /* Views */,
 				CE0AE47C1645F54E00EC15B4 /* Controllers */,
 				CE0AE47A1645F53C00EC15B4 /* Manager-Classes */,
-				CE0D631E16611E8600381D05 /* Models */,
 				CEEAE27C15F2BE8F00A550FA /* Images */,
 				CE8B7F7415ED35D1006CD57C /* MDAppDelegate.h */,
 				CE8B7F7515ED35D1006CD57C /* MDAppDelegate.m */,
@@ -899,10 +917,12 @@
 				CE8DCEB916815ABB0030FA4C /* LastWeekViewController.m in Sources */,
 				CE54E7B7168230B300F91C5E /* WeekData.m in Sources */,
 				CE54E7BA168230B400F91C5E /* User.m in Sources */,
-				CE54E7BD168230B400F91C5E /* MonthData.m in Sources */,
 				CE54E7C21682943400F91C5E /* Reachability.m in Sources */,
 				CE1793D11683E8E60030723A /* MyOfficeTableViewController.m in Sources */,
 				CE1793D51683F3970030723A /* DataOverviewTableViewController.m in Sources */,
+				CE12C0271687D4C8001C4959 /* LastMonthsViewController.m in Sources */,
+				CE12C02B1687D8EA001C4959 /* CircleView.m in Sources */,
+				CE12C02F1687F9DF001C4959 /* MonthData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

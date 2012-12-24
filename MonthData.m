@@ -11,9 +11,10 @@
 
 @implementation MonthData
 
+@dynamic consumption;
 @dynamic month;
 @dynamic year;
-@dynamic consumption;
+@dynamic circleradius;
 @dynamic user;
 
 @end

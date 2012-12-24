@@ -8,6 +8,7 @@
 #import "DataOverviewTableViewController.h"
 #import "MCachedModalStoryboardSegue.h"
 #import "LastWeekViewController.h"
+#import "LastMonthsViewController.h"
 
 
 @interface DataOverviewTableViewController ()
@@ -129,6 +130,14 @@
         LastWeekViewController *destViewController = customSegue.destinationViewController;
         destViewController.instanceWasCached  = customSegue.destinationWasCached;
     }
+    else if ([segue.identifier isEqualToString:@"showLastMonthsData"]) {
+        NSLog(@"segue : %@", segue);
+        //here is segue an instance of our MCachedModalStoryboardSegue
+        MCachedModalStoryboardSegue *customSegue = (MCachedModalStoryboardSegue *)segue;
+        LastMonthsViewController *destViewController = customSegue.destinationViewController;
+        destViewController.instanceWasCached  = customSegue.destinationWasCached;
+    }
+    
 }
 
 @end

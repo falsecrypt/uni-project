@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1811" systemVersion="12C60" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="MonthData" representedClassName="MonthData" syncable="YES">
+        <attribute name="circleradius" optional="YES" attributeType="Integer 16" defaultValueString="0.0" syncable="YES"/>
         <attribute name="consumption" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="month" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="year" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -18,8 +19,8 @@
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="weekData" inverseEntity="User" syncable="YES"/>
     </entity>
     <elements>
+        <element name="MonthData" positionX="-137" positionY="95" width="128" height="120"/>
         <element name="User" positionX="63" positionY="243" width="128" height="103"/>
         <element name="WeekData" positionX="243" positionY="90" width="128" height="88"/>
-        <element name="MonthData" positionX="-137" positionY="95" width="128" height="103"/>
     </elements>
 </model>
