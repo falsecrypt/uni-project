@@ -79,7 +79,7 @@ BOOL deviceIsOnline;
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"Block Says Unreachable");
                 deviceIsOnline = NO;
-          //      [self initCirclesOffline];
+                [self initCirclesOffline];
             });
         };
         
@@ -93,8 +93,6 @@ BOOL deviceIsOnline;
 
 - (void) initCirclesOnline {
     NSLog(@"calling initCirclesOnline!");
-    
-    if ( monthsDataDictionary == nil ) {
 
         // Lets look for Week Data in our DB
         NSNumber *numberofentities = [MonthData numberOfEntities];
@@ -113,11 +111,28 @@ BOOL deviceIsOnline;
             [MonthData truncateAll];
             [self getMonthsData];
         }
+}
+
+- (void) initCirclesOffline{
+    NSLog(@"calling initCirclesOffline!");
+    
+        // Lets look for Week Data in our DB
+        NSNumber *numberofentities = [MonthData numberOfEntities];
         
-    }
-    else {
-       // [self readyToMakePieChart];
-    }
+        // We are offline
+        // retrieve the data from the DB
+        NSLog(@"deviceIsOnline : %i", deviceIsOnline);
+        // ooops, No Data. Show error TODO
+        if ([numberofentities intValue]==0) {
+            
+            NSLog(@"No Data in the WeekData Table! and the Device is not connected to the internet..");
+            
+        }
+        else {
+            self.dataView.monthDataObjects = [MonthData findAllSortedBy:@"date" ascending:YES]; // pass monthData to the view
+            [self.dataView setNeedsDisplay]; 
+        }
+    
 }
 
 -(void)getMonthsData {
@@ -156,10 +171,18 @@ BOOL deviceIsOnline;
                                                  NSLog(@"monthConsumption : %@", monthConsumption);
                                                  NSNumber *yearNumber = (NSNumber *)[NSNumber numberWithDouble:[[monthAndYear objectAtIndex:1] doubleValue]];
                                                  NSNumber *monthNumber = (NSNumber *)[NSNumber numberWithDouble:[[monthAndYear objectAtIndex:0] doubleValue]];
+                                                 NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+                                                 //[dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
+                                                 [dateFormatter setDateFormat:@"yy-MM"];
+                                                 // set timezone for correct date, example: 2012-06 -> 2012-06-01 00:00:00 +0000
+                                                 dateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+                                                 NSDate *date = [dateFormatter dateFromString:[month objectAtIndex:0]];
+                                                 
                                                  MonthData *newData = [MonthData createEntity];
                                                  [newData setMonth:yearNumber];
                                                  [newData setYear:monthNumber];
                                                  [newData setConsumption:monthConsumption];
+                                                 [newData setDate:date];
                                                  
                                              }
                                              
@@ -168,7 +191,6 @@ BOOL deviceIsOnline;
                                              
                                              dispatch_async(dispatch_get_main_queue(), ^{
                                                  [MBProgressHUD hideHUDForView:self.view animated:YES];
-                                            //     [self readyToDrawCircles]; // TODO
                                              });
                                              
                                          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -188,6 +210,7 @@ BOOL deviceIsOnline;
     // Calculate radius for every object
     for (MonthData *monthdata in results){
         int circleradius = ([[monthdata consumption] intValue]*50)/[consumptionMax intValue];
+        circleradius = circleradius > 19 ? circleradius : circleradius > 0 ? 20 : 0; // if bigger than 0 : min. 20
         [monthdata setCircleradius:(NSDecimalNumber *)[NSDecimalNumber numberWithInt:circleradius]];
     }
     [[NSManagedObjectContext defaultContext] saveNestedContexts]; // SAVE
@@ -195,6 +218,7 @@ BOOL deviceIsOnline;
     //NSArray *resultsEND = [MonthData findAllSortedBy:@"consumption" ascending:NO];
     //NSLog(@"calculateRadiusForCircle -> resultsEND: %@", resultsEND);
     
+    self.dataView.monthDataObjects = [MonthData findAllSortedBy:@"date" ascending:YES]; // pass monthData to the view
     [self.dataView setNeedsDisplay];
 }
 

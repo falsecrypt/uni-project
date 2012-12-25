@@ -16,7 +16,6 @@
 		CE0D631D16611E7500381D05 /* EcoMeterModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE0D631B16611E7500381D05 /* EcoMeterModel.xcdatamodeld */; };
 		CE12C0271687D4C8001C4959 /* LastMonthsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12C0261687D4C8001C4959 /* LastMonthsViewController.m */; };
 		CE12C02B1687D8EA001C4959 /* CircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12C02A1687D8EA001C4959 /* CircleView.m */; };
-		CE12C02F1687F9DF001C4959 /* MonthData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12C02E1687F9DF001C4959 /* MonthData.m */; };
 		CE1458B4167C06F400F7D82F /* MCachedModalStoryboardSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1458B2167C06F400F7D82F /* MCachedModalStoryboardSegue.m */; };
 		CE1793D11683E8E60030723A /* MyOfficeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D01683E8E60030723A /* MyOfficeTableViewController.m */; };
 		CE1793D51683F3970030723A /* DataOverviewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D41683F3970030723A /* DataOverviewTableViewController.m */; };
@@ -37,7 +36,6 @@
 		CE348C1A1647668100B14B55 /* RegisterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE348C191647668000B14B55 /* RegisterTableViewController.m */; };
 		CE3F51CD1659D4BD008EE7DF /* defaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3F51CC1659D4BD008EE7DF /* defaultAvatar.png */; };
 		CE54E7B7168230B300F91C5E /* WeekData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE54E7B6168230B300F91C5E /* WeekData.m */; };
-		CE54E7BA168230B400F91C5E /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = CE54E7B9168230B400F91C5E /* User.m */; };
 		CE54E7BF168292B600F91C5E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE54E7BE168292B500F91C5E /* SystemConfiguration.framework */; };
 		CE54E7C21682943400F91C5E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = CE54E7C11682943400F91C5E /* Reachability.m */; };
 		CE8B7F5515ED358B006CD57C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5415ED358B006CD57C /* UIKit.framework */; };
@@ -91,6 +89,8 @@
 		CEF5657B163F17270066F2A2 /* FirstDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */; };
 		CEF5657F163F1D600066F2A2 /* SecondTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657E163F1D600066F2A2 /* SecondTableViewController.m */; };
 		CEF56586163F2DCE0066F2A2 /* SecondDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF56584163F2DCD0066F2A2 /* SecondDetailViewController.m */; };
+		CEFAD6E416890EB200179017 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFAD6E316890EB200179017 /* User.m */; };
+		CEFAD6E81689115600179017 /* MonthData.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFAD6E71689115600179017 /* MonthData.m */; };
 		CEFDC23C163E15480011C3CF /* DetailViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFDC23B163E15480011C3CF /* DetailViewManager.m */; };
 /* End PBXBuildFile section */
 
@@ -109,8 +109,6 @@
 		CE12C0261687D4C8001C4959 /* LastMonthsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LastMonthsViewController.m; sourceTree = "<group>"; };
 		CE12C0291687D8EA001C4959 /* CircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleView.h; sourceTree = "<group>"; };
 		CE12C02A1687D8EA001C4959 /* CircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleView.m; sourceTree = "<group>"; };
-		CE12C02D1687F9DF001C4959 /* MonthData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthData.h; sourceTree = "<group>"; };
-		CE12C02E1687F9DF001C4959 /* MonthData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthData.m; sourceTree = "<group>"; };
 		CE1458B2167C06F400F7D82F /* MCachedModalStoryboardSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCachedModalStoryboardSegue.m; sourceTree = "<group>"; };
 		CE1458B3167C06F400F7D82F /* MCachedModalStoryboardSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCachedModalStoryboardSegue.h; sourceTree = "<group>"; };
 		CE1793CF1683E8E60030723A /* MyOfficeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOfficeTableViewController.h; sourceTree = "<group>"; };
@@ -148,8 +146,6 @@
 		CE3F51CC1659D4BD008EE7DF /* defaultAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultAvatar.png; sourceTree = "<group>"; };
 		CE54E7B5168230B300F91C5E /* WeekData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeekData.h; sourceTree = "<group>"; };
 		CE54E7B6168230B300F91C5E /* WeekData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeekData.m; sourceTree = "<group>"; };
-		CE54E7B8168230B400F91C5E /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		CE54E7B9168230B400F91C5E /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		CE54E7BE168292B500F91C5E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		CE54E7C01682943400F91C5E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		CE54E7C11682943400F91C5E /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
@@ -321,6 +317,10 @@
 		CEF5657E163F1D600066F2A2 /* SecondTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondTableViewController.m; sourceTree = "<group>"; };
 		CEF56583163F2DCD0066F2A2 /* SecondDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondDetailViewController.h; sourceTree = "<group>"; };
 		CEF56584163F2DCD0066F2A2 /* SecondDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondDetailViewController.m; sourceTree = "<group>"; };
+		CEFAD6E216890EB200179017 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		CEFAD6E316890EB200179017 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		CEFAD6E61689115600179017 /* MonthData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthData.h; sourceTree = "<group>"; };
+		CEFAD6E71689115600179017 /* MonthData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthData.m; sourceTree = "<group>"; };
 		CEFDC23A163E15480011C3CF /* DetailViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewManager.h; sourceTree = "<group>"; };
 		CEFDC23B163E15480011C3CF /* DetailViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -413,11 +413,11 @@
 		CE0D631E16611E8600381D05 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				CE12C02D1687F9DF001C4959 /* MonthData.h */,
-				CE12C02E1687F9DF001C4959 /* MonthData.m */,
+				CEFAD6E216890EB200179017 /* User.h */,
+				CEFAD6E316890EB200179017 /* User.m */,
 				CE0D631B16611E7500381D05 /* EcoMeterModel.xcdatamodeld */,
-				CE54E7B8168230B400F91C5E /* User.h */,
-				CE54E7B9168230B400F91C5E /* User.m */,
+				CEFAD6E61689115600179017 /* MonthData.h */,
+				CEFAD6E71689115600179017 /* MonthData.m */,
 				CE54E7B5168230B300F91C5E /* WeekData.h */,
 				CE54E7B6168230B300F91C5E /* WeekData.m */,
 			);
@@ -916,13 +916,13 @@
 				CE1458B4167C06F400F7D82F /* MCachedModalStoryboardSegue.m in Sources */,
 				CE8DCEB916815ABB0030FA4C /* LastWeekViewController.m in Sources */,
 				CE54E7B7168230B300F91C5E /* WeekData.m in Sources */,
-				CE54E7BA168230B400F91C5E /* User.m in Sources */,
 				CE54E7C21682943400F91C5E /* Reachability.m in Sources */,
 				CE1793D11683E8E60030723A /* MyOfficeTableViewController.m in Sources */,
 				CE1793D51683F3970030723A /* DataOverviewTableViewController.m in Sources */,
 				CE12C0271687D4C8001C4959 /* LastMonthsViewController.m in Sources */,
 				CE12C02B1687D8EA001C4959 /* CircleView.m in Sources */,
-				CE12C02F1687F9DF001C4959 /* MonthData.m in Sources */,
+				CEFAD6E416890EB200179017 /* User.m in Sources */,
+				CEFAD6E81689115600179017 /* MonthData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

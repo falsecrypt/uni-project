@@ -1,7 +1,8 @@
 //
 //  MonthData.m
 //  uni-project
-
+//
+//  Created by Erna on 24.12.12.
 //  Copyright (c) 2012 test. All rights reserved.
 //
 
@@ -11,10 +12,11 @@
 
 @implementation MonthData
 
+@dynamic circleradius;
 @dynamic consumption;
 @dynamic month;
 @dynamic year;
-@dynamic circleradius;
+@dynamic date;
 @dynamic user;
 
 @end

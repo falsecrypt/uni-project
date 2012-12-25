@@ -6,13 +6,16 @@
 //
 
 #import "User.h"
+#import "MonthData.h"
+#import "WeekData.h"
 
 
 @implementation User
 
 @dynamic created;
-@dynamic profileImage;
-@dynamic weekData;
+@dynamic profileimage;
+@dynamic sensorid;
 @dynamic monthData;
+@dynamic weekData;
 
 @end

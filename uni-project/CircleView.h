@@ -9,4 +9,7 @@
 
 @interface CircleView : UIView
 
+@property (strong, nonatomic) NSArray *monthDataObjects;
+@property (strong, nonatomic) NSMutableDictionary *circleObjectsDictionary;
+
 @end
