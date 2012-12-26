@@ -44,9 +44,16 @@ BOOL deviceIsOnline;
         DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
         detailViewManager.detailViewController = self;
         
+        self.dataView.delegate = self;
+        
+        self.monthNameLabel.text = @" ";
+        self.consumptionMonthLabel.text = @" ";
+        
         if (self.navigationPaneBarButtonItem)
             [self.navigationBar.topItem setLeftBarButtonItem:self.navigationPaneBarButtonItem
                                                     animated:NO];
+        
+        self.circleDetailsView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"circleDetailsDataBackg.png"]];
         
         NSString *secondNotificationName = @"UserLoggedOffNotification";
         [[NSNotificationCenter defaultCenter]
@@ -221,6 +228,12 @@ BOOL deviceIsOnline;
     self.dataView.monthDataObjects = [MonthData findAllSortedBy:@"date" ascending:YES]; // pass monthData to the view
     [self.dataView setNeedsDisplay];
 }
+
+- (void)setLabelsWithMonth:(NSString *)month andConsumption:(NSString *)kwh{
+    self.monthNameLabel.text = month;
+    self.consumptionMonthLabel.text = kwh;
+}
+
 
 - (void)didReceiveMemoryWarning
 {

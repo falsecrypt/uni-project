@@ -9,11 +9,14 @@
 #import "CircleView.h"
 #import "DetailViewManager.h"
 
-@interface LastMonthsViewController : UIViewController <SubstitutableDetailViewController>
+@interface LastMonthsViewController : UIViewController <SubstitutableDetailViewController, circleViewDelegate>
 
 @property (nonatomic, retain) UIBarButtonItem *navigationPaneBarButtonItem;
 @property (nonatomic, retain) UIPopoverController *profilePopover;
 @property (nonatomic, assign) BOOL instanceWasCached; // for DataOverviewTableViewController
+@property (strong, nonatomic) IBOutlet UIView *circleDetailsView;
+@property (strong, nonatomic) IBOutlet UILabel *consumptionMonthLabel;
+@property (strong, nonatomic) IBOutlet UILabel *monthNameLabel;
 
 @property (strong, nonatomic) IBOutlet CircleView *dataView;
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;

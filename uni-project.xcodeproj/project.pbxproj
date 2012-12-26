@@ -14,6 +14,7 @@
 		CE0AE4861646051A00EC15B4 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */; };
 		CE0D631916611B1600381D05 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE0D631816611B1600381D05 /* CoreData.framework */; };
 		CE0D631D16611E7500381D05 /* EcoMeterModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE0D631B16611E7500381D05 /* EcoMeterModel.xcdatamodeld */; };
+		CE11FA85168AC53600425EB8 /* circleDetailsDataBackg.png in Resources */ = {isa = PBXBuildFile; fileRef = CE11FA84168AC53600425EB8 /* circleDetailsDataBackg.png */; };
 		CE12C0271687D4C8001C4959 /* LastMonthsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12C0261687D4C8001C4959 /* LastMonthsViewController.m */; };
 		CE12C02B1687D8EA001C4959 /* CircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12C02A1687D8EA001C4959 /* CircleView.m */; };
 		CE1458B4167C06F400F7D82F /* MCachedModalStoryboardSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1458B2167C06F400F7D82F /* MCachedModalStoryboardSegue.m */; };
@@ -105,6 +106,7 @@
 		CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		CE0D631816611B1600381D05 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		CE0D631C16611E7500381D05 /* EcoMeterModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EcoMeterModel.xcdatamodel; sourceTree = "<group>"; };
+		CE11FA84168AC53600425EB8 /* circleDetailsDataBackg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circleDetailsDataBackg.png; sourceTree = "<group>"; };
 		CE12C0251687D4C8001C4959 /* LastMonthsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LastMonthsViewController.h; sourceTree = "<group>"; };
 		CE12C0261687D4C8001C4959 /* LastMonthsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LastMonthsViewController.m; sourceTree = "<group>"; };
 		CE12C0291687D8EA001C4959 /* CircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleView.h; sourceTree = "<group>"; };
@@ -761,6 +763,7 @@
 		CEEAE27C15F2BE8F00A550FA /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CE11FA84168AC53600425EB8 /* circleDetailsDataBackg.png */,
 				CE32C37316659B4C00C3ED81 /* speedometerCenterWheel.png */,
 				CE32C37116659B4200C3ED81 /* speedometerBody.png */,
 				CE32C3661665890900C3ED81 /* speedometerArrow.png */,
@@ -846,6 +849,7 @@
 				CE32C3681665890900C3ED81 /* speedometerArrow.png in Resources */,
 				CE32C37216659B4200C3ED81 /* speedometerBody.png in Resources */,
 				CE32C37416659B4C00C3ED81 /* speedometerCenterWheel.png in Resources */,
+				CE11FA85168AC53600425EB8 /* circleDetailsDataBackg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
