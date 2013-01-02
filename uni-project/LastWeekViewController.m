@@ -64,6 +64,10 @@ NSMutableArray *navigationBarItems;
          name:secondNotificationName
          object:nil];
         
+        self.dayNameLabel.text = @" ";
+        self.consumptionMonthLabel.text = @" ";
+        //self.graphHostingView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"mainViewHistoryBackg.png"]];
+        self.mainView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"mainViewHistoryBackg.png"]];
         self.HUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:self.HUD];
         //self.HUD.delegate = self;
@@ -184,7 +188,6 @@ NSMutableArray *navigationBarItems;
         }
         else {
             [self readyToMakePieChart];
-            
         }
         
         /* WeekData *newData = [WeekData createEntity];
@@ -232,11 +235,10 @@ NSMutableArray *navigationBarItems;
         [dayDataDictionary setObject:[weekdata day] forKey:[weekdata consumption]]; //NSMutableDictionary is unordered
         [plotDataConsumption addObject:[weekdata consumption]];
         [plotDataDates addObject:[weekdata day]];
+        NSLog(@"adding [weekdata day]: %@", [weekdata day]);
     }
-    NSRange r;
-    r.location = 7;
-    r.length = [plotDataConsumption count]-7;
-    [plotDataConsumption removeObjectsInRange:r]; // delete the last 7 days
+    [plotDataConsumption removeObjectsInRange:NSMakeRange(0, 7)]; // delete the first 7 days
+    [plotDataDates removeObjectsInRange:NSMakeRange(0, 7)]; // start at position 0, length = 7
     
     [self createPieChart];
     
@@ -299,12 +301,11 @@ NSMutableArray *navigationBarItems;
     
     self.graph = [[CPTXYGraph alloc] initWithFrame:bounds];
     self.graphHostingView.hostedGraph = self.graph;
-    [self.graph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
+    //[self.graph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
     
     self.graph.delegate = self;
-    
-    
-    self.graph.title = @"Pie Chart";
+
+    self.graph.title = @"";
     CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
     textStyle.color                = [CPTColor grayColor];
     textStyle.fontName             = @"Helvetica-Bold";
@@ -316,9 +317,9 @@ NSMutableArray *navigationBarItems;
     self.graph.plotAreaFrame.masksToBorder = NO;
     
     // Graph padding
-    float boundsPadding = bounds.size.width / 20.0f;
+    float boundsPadding = bounds.size.width / 30.0f;
     self.graph.paddingLeft   = boundsPadding;
-    self.graph.paddingTop    = self.graph.titleDisplacement.y * 2;
+    self.graph.paddingTop    = boundsPadding; //self.graph.titleDisplacement.y * 2;
     self.graph.paddingRight  = boundsPadding;
     self.graph.paddingBottom = boundsPadding;
     
@@ -327,10 +328,10 @@ NSMutableArray *navigationBarItems;
     CPTMutableLineStyle *whiteLineStyle = [CPTMutableLineStyle lineStyle];
     whiteLineStyle.lineColor = [CPTColor whiteColor];
     
-    CPTMutableShadow *whiteShadow = [CPTMutableShadow shadow];
-    whiteShadow.shadowOffset     = CGSizeMake(2.0, -4.0);
-    whiteShadow.shadowBlurRadius = 4.0;
-    whiteShadow.shadowColor      = [[CPTColor whiteColor] colorWithAlphaComponent:0.25];
+    CPTMutableShadow *greenShadow = [CPTMutableShadow shadow];
+    greenShadow.shadowOffset     = CGSizeMake(2.0, -4.0);
+    greenShadow.shadowBlurRadius = 4.0;
+    greenShadow.shadowColor      = [CPTColor blackColor];
     
     // Add pie chart
     /*piePlot = [[CPTPieChart alloc] init];
@@ -359,7 +360,7 @@ NSMutableArray *navigationBarItems;
     
     
     
-    // Add another pie chart
+    // Add pie chart
     piePlot                 = [[CPTPieChart alloc] init];
     piePlot.dataSource      = self;
     piePlot.pieRadius  = MIN(0.7 * (self.graphHostingView.frame.size.height - 2 * self.graph.paddingLeft) / 2.0,
@@ -368,7 +369,7 @@ NSMutableArray *navigationBarItems;
     piePlot.borderLineStyle = whiteLineStyle;
     piePlot.startAngle      = M_PI_4;
     piePlot.sliceDirection  = CPTPieDirectionClockwise;
-    piePlot.shadow          = whiteShadow;
+    piePlot.shadow          = greenShadow;
     piePlot.delegate        = self;
     piePlot.plotSpace.delegate = self;
     piePlot.plotSpace.allowsUserInteraction = YES;
@@ -393,6 +394,17 @@ NSMutableArray *navigationBarItems;
     }
     currentSliceIndex = index;
     
+    NSDate *dayDate = [dayDataDictionary objectForKey:[plotDataConsumption objectAtIndex:index]];
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:kCFDateFormatterLongStyle];
+    [formatter setDateFormat:@"EEEE, dd.MM.yy"];
+    NSLocale *deLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"];
+    formatter.locale = deLocale;
+    NSString *dayNameLong = [formatter stringFromDate:dayDate];
+    self.dayNameLabel.text = dayNameLong;
+    NSString *consumptionAndKwh = [[NSString alloc] initWithString:[[plotDataConsumption objectAtIndex:index] stringValue]];
+    consumptionAndKwh = [consumptionAndKwh stringByAppendingString:@" kWh"];
+    self.consumptionMonthLabel.text = consumptionAndKwh;
     //[self radialOffsetForPieChart:plot recordIndex:index];
     
     [plot reloadData];
@@ -428,9 +440,11 @@ NSMutableArray *navigationBarItems;
 
 -(CPTFill *)sliceFillForPieChart:(CPTPieChart *)pieChart recordIndex:(NSUInteger)index{
     
-    CPTFill *sector=[[CPTFill alloc]init];
-    UIColor *color1 = [UIColor clearColor];
-    UIColor *color2 =[UIColor clearColor];
+    CPTFill *sector = [[CPTFill alloc] init];
+    
+    /*
+    UIColor *color1;
+    UIColor *color2;
     
     if (index==currentSliceIndex) {
         color1 = [UIColor colorWithRed:35/255.0f green:82/255.0f blue:0/255.0f alpha:1.0f];
@@ -455,8 +469,13 @@ NSMutableArray *navigationBarItems;
     overlayGradient              = [overlayGradient addColorStop:[[CPTColor greenColor] colorWithAlphaComponent:0.9] atPosition:0.3];
     overlayGradient              = [overlayGradient addColorStop:[[CPTColor greenColor] colorWithAlphaComponent:0.9] atPosition:0.5];
     overlayGradient              = [overlayGradient addColorStop:[[CPTColor blueColor] colorWithAlphaComponent:0.6] atPosition:0.8];
-    
-    sector=[CPTFill fillWithGradient:overlayGradient];
+     
+    */
+    CPTColor *startColor = [CPTColor colorWithComponentRed:1/255.0f green:56/255.0f blue:1/255.0f alpha:1.0f];
+    CPTColor *endColor = [CPTColor colorWithComponentRed:2/255.0f green:96/255.0f blue:2/255.0f alpha:1.0f];
+    CPTGradient *areaGradientUI = [CPTGradient gradientWithBeginningColor:startColor
+                                                              endingColor:endColor];
+    sector=[CPTFill fillWithGradient:areaGradientUI];
     
     return sector;
 }
@@ -493,17 +512,26 @@ NSMutableArray *navigationBarItems;
     if ( [(NSString *)plot.identifier isEqualToString:pieChartName] ) {
         if ( !whiteText ) {
             whiteText       = [[CPTMutableTextStyle alloc] init];
-            whiteText.color = [CPTColor whiteColor];
+            whiteText.color = [CPTColor blackColor];
+            whiteText.fontSize = 18.0f;
         }
+        NSDate *dayDate = [dayDataDictionary objectForKey:[plotDataConsumption objectAtIndex:index]];
+        NSLog(@"dayDate: %@", dayDate);
+        NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateStyle:kCFDateFormatterLongStyle];
+        [formatter setDateFormat:@"EE"];
+        NSLocale *deLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"];
+        formatter.locale = deLocale;
+        NSString *dayNameShort = [formatter stringFromDate:dayDate];
         
-        newLayer                 = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%.0f", [[plotDataConsumption objectAtIndex:index] floatValue]] style:whiteText];
-        newLayer.fill            = [CPTFill fillWithColor:[CPTColor darkGrayColor]];
-        newLayer.cornerRadius    = 5.0;
+        newLayer                 = [[CPTTextLayer alloc] initWithText:dayNameShort style:whiteText];
+        newLayer.fill            = [CPTFill fillWithColor:[CPTColor clearColor]];
+        //newLayer.cornerRadius    = 5.0;
         newLayer.paddingLeft     = 3.0;
         newLayer.paddingTop      = 3.0;
         newLayer.paddingRight    = 3.0;
         newLayer.paddingBottom   = 3.0;
-        newLayer.borderLineStyle = [CPTLineStyle lineStyle];
+        //newLayer.borderLineStyle = [CPTLineStyle lineStyle];
     }
     
     return newLayer;

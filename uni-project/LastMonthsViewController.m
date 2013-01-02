@@ -53,7 +53,7 @@ BOOL deviceIsOnline;
             [self.navigationBar.topItem setLeftBarButtonItem:self.navigationPaneBarButtonItem
                                                     animated:NO];
         
-        self.circleDetailsView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"circleDetailsDataBackg.png"]];
+        self.dataView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"mainViewHistoryBackg.png"]];
         
         NSString *secondNotificationName = @"UserLoggedOffNotification";
         [[NSNotificationCenter defaultCenter]

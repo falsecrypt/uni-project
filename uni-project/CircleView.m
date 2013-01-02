@@ -77,7 +77,7 @@ CircleObjectView *currentSelectedCircle;
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     if (currentSelectedCircle!=nil) {
-        currentSelectedCircle.backgroundColor = [UIColor redColor];
+        currentSelectedCircle.backgroundColor = [UIColor colorWithRed:2/255.0f green:96/255.0f blue:2/255.0f alpha:1.0f];
     }
 }
 
@@ -97,7 +97,7 @@ CircleObjectView *currentSelectedCircle;
         CGPoint point;
         self.circleObjectsDictionary = [[NSMutableDictionary alloc] init];
         point.x = self.bounds.origin.x + (self.bounds.size.width/5);
-        point.y = self.bounds.origin.y + (self.bounds.size.height/4);
+        point.y = self.bounds.origin.y + (self.bounds.size.height/3);
         
         NSLog(@"START point.x = %f, point.y = %f", point.x, point.y);
         
@@ -121,12 +121,18 @@ CircleObjectView *currentSelectedCircle;
             MonthData *monthObj = [self.monthDataObjects objectAtIndex:i-1];
             
             CircleObjectView *circleObjectView = [[CircleObjectView alloc] initWithFrame:CGRectZero];
-            [circleObjectView setBackgroundColor:[UIColor redColor]];
+            //[circleObjectView setBackgroundColor:[UIColor redColor]];
+            [circleObjectView setBackgroundColor:[UIColor colorWithRed:2/255.0f green:96/255.0f blue:2/255.0f alpha:1.0f]];
+
             //circleObjectView.frame = CGRectMake(point.x, point.y, 2*radius, 2*radius);
             circleObjectView.layer.cornerRadius = radius;
             circleObjectView.bounds = CGRectMake(0, 0, 2*radius, 2*radius); //bounds of the view’s own coordinates
             circleObjectView.center = CGPointMake(point.x, point.y); //center of frame, superview’s coordinates
             circleObjectView.tag = [monthObj.month intValue]; //unique identifier
+            [[circleObjectView layer] setShadowOffset:CGSizeMake(0, 1)];
+            [[circleObjectView layer] setShadowColor:[[UIColor darkGrayColor] CGColor]];
+            [[circleObjectView layer] setShadowRadius:3.0];
+            [[circleObjectView layer] setShadowOpacity:0.8];
             [self addSubview:circleObjectView];
             [self.circleObjectsDictionary setObject:circleObjectView forKey:[monthObj.month stringValue]];
 

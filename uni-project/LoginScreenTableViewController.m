@@ -58,10 +58,11 @@
 
 - (IBAction)logInButtonPressed:(id)sender
 {
-    KeychainItemWrapper *keychain =
-    [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
+
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setBool:NO forKey:@"userLoggedIn"];
+    KeychainItemWrapper *keychain =
+    [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
     
     if( [self.usernameField.text length] < 1 || [self.passwordField.text length] < 1  ){
         [self showAlertAfterValidationFailed:@"Username and Password cannot be Blank"];
@@ -101,6 +102,7 @@
     }
     
 #else
+    
     
     // Validation deploying on real device
     else if ([self.usernameField.text isEqualToString:[keychain objectForKey:(__bridge id)kSecAttrAccount]] &&

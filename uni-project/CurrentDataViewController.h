@@ -27,6 +27,9 @@
 // for (UILabel *spLabel in labelsWithNumbersCollection) { ...
 @property (strong, nonatomic) IBOutletCollection(UILabel) NSArray *labelsWithNumbersCollection;
 
+// Bottom Main View
+@property (strong, nonatomic) IBOutlet UIView *bottomMainView;
+
 // Bottom Area, Scatter Plot on the left side
 @property (strong, nonatomic) IBOutlet CPTGraphHostingView *hostingView;
 @property (strong, nonatomic) CPTGraphHostingView *scatterPlotView;

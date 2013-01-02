@@ -14,7 +14,6 @@
 @property (nonatomic, retain) UIBarButtonItem *navigationPaneBarButtonItem;
 @property (nonatomic, retain) UIPopoverController *profilePopover;
 @property (nonatomic, assign) BOOL instanceWasCached; // for DataOverviewTableViewController
-@property (strong, nonatomic) IBOutlet UIView *circleDetailsView;
 @property (strong, nonatomic) IBOutlet UILabel *consumptionMonthLabel;
 @property (strong, nonatomic) IBOutlet UILabel *monthNameLabel;
 

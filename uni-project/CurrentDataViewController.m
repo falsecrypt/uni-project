@@ -63,6 +63,8 @@ NSMutableArray *navigationBarItems;
         [self.navigationBar.topItem setLeftBarButtonItem:self.navigationPaneBarButtonItem
                                                 animated:NO];
     
+    self.bottomMainView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"currentDataBottomViewBackg.png"]];
+    
     NSString *secondNotificationName = @"UserLoggedOffNotification";
     [[NSNotificationCenter defaultCenter]
      addObserver:self
@@ -167,7 +169,7 @@ NSMutableArray *navigationBarItems;
     self.scatterGraph = [[CPTXYGraph alloc] initWithFrame:bounds];
     self.hostingView.hostedGraph = self.scatterGraph;
     
-    [self.scatterGraph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
+    //[self.scatterGraph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
     
     if ( drawAxis ) {
         NSLog(@"drawAxis=YES");
