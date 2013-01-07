@@ -174,7 +174,9 @@ CircleObjectView *currentSelectedCircle;
         int64_t delayInSeconds = 1.0;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            CircleObjectView *currentCircle = [self.circleObjectsDictionary objectForKey:[NSString stringWithFormat:@"%d",11]];
+            MonthData *monthLastObj = [self.monthDataObjects objectAtIndex:[self.monthDataObjects count]-1];
+            CircleObjectView *currentCircle =
+            [self.circleObjectsDictionary objectForKey:[NSString stringWithFormat:@"%i",[[monthLastObj month]intValue]]];
             //NSLog(@"self.circleObjectsDictionary = %@, self.monthDataObjects = %@", self.circleObjectsDictionary, self.monthDataObjects);
             [UIView animateWithDuration:0.3 animations:^{
                 currentCircle.backgroundColor = [UIColor greenColor];
