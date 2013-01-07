@@ -116,6 +116,11 @@
     self.hideLoginSection = false;
     self.hideAccountSection = false;
     
+    UIView *tempImageView = [[UIImageView alloc] init];
+    [tempImageView setFrame:self.tableView.frame];
+    tempImageView.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"patternBg"]];
+    self.tableView.backgroundView = tempImageView;
+    
     // we use notification center for broadcasting information
     // Register to Receive a Notification
     NSString *registeredNotificationName = @"UserRegisteredNotification";

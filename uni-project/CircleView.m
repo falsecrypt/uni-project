@@ -170,6 +170,35 @@ CircleObjectView *currentSelectedCircle;
                 point.x += (self.bounds.size.width/5);
             }
         }
+        
+        int64_t delayInSeconds = 1.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            CircleObjectView *currentCircle = [self.circleObjectsDictionary objectForKey:[NSString stringWithFormat:@"%d",11]];
+            //NSLog(@"self.circleObjectsDictionary = %@, self.monthDataObjects = %@", self.circleObjectsDictionary, self.monthDataObjects);
+            [UIView animateWithDuration:0.3 animations:^{
+                currentCircle.backgroundColor = [UIColor greenColor];
+            }];
+            [UIView animateWithDuration:0.3 animations:^{
+                currentCircle.backgroundColor = [UIColor colorWithRed:2/255.0f green:96/255.0f blue:2/255.0f alpha:1.0f];
+            }];
+
+            //Is anyone listening?
+            if([self.delegate respondsToSelector:@selector(setLabelsWithMonth:andConsumption:)])
+            {
+                MonthData *monthObj = [self.monthDataObjects objectAtIndex:[self.monthDataObjects count]-1];
+                NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateStyle:kCFDateFormatterLongStyle];
+                [formatter setDateFormat:@"MMMM yy"];
+                NSLocale *deLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"];
+                formatter.locale = deLocale;
+                NSString *monthName = [formatter stringFromDate:monthObj.date];
+                NSString *consumptionString = [monthObj.consumption stringValue];
+                consumptionString = [consumptionString stringByAppendingString:@" kWh"];
+                [self.delegate setLabelsWithMonth:monthName andConsumption:consumptionString ];
+            } 
+        });
+
     }
     
 }

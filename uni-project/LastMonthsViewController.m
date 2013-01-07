@@ -100,10 +100,14 @@ BOOL deviceIsOnline;
 
 - (void) initCirclesOnline {
     NSLog(@"calling initCirclesOnline!");
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    });
 
         // Lets look for Week Data in our DB
         NSNumber *numberofentities = [MonthData numberOfEntities];
-        
+    
         // We are online
         NSLog(@"deviceIsOnline : %i", deviceIsOnline);
         
@@ -121,11 +125,15 @@ BOOL deviceIsOnline;
 }
 
 - (void) initCirclesOffline{
-    NSLog(@"calling initCirclesOffline!");
+        NSLog(@"calling initCirclesOffline!");
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        });
     
         // Lets look for Week Data in our DB
         NSNumber *numberofentities = [MonthData numberOfEntities];
-        
+    
         // We are offline
         // retrieve the data from the DB
         NSLog(@"deviceIsOnline : %i", deviceIsOnline);
@@ -195,10 +203,6 @@ BOOL deviceIsOnline;
                                              
                                              [[NSManagedObjectContext defaultContext] saveNestedContexts];
                                              [self calculateRadiusForCircle];
-                                             
-                                             dispatch_async(dispatch_get_main_queue(), ^{
-                                                 [MBProgressHUD hideHUDForView:self.view animated:YES];
-                                             });
                                              
                                          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                              NSLog(@"Failed during getting 12-Months-Data: %@",[error localizedDescription]);

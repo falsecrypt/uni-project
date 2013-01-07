@@ -19,6 +19,7 @@
 		CE1458B4167C06F400F7D82F /* MCachedModalStoryboardSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1458B2167C06F400F7D82F /* MCachedModalStoryboardSegue.m */; };
 		CE1793D11683E8E60030723A /* MyOfficeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D01683E8E60030723A /* MyOfficeTableViewController.m */; };
 		CE1793D51683F3970030723A /* DataOverviewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D41683F3970030723A /* DataOverviewTableViewController.m */; };
+		CE1BAC4F169528A200E3A1EA /* MyAccountTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1BAC4E169528A200E3A1EA /* MyAccountTableViewController.m */; };
 		CE32C3681665890900C3ED81 /* speedometerArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = CE32C3661665890900C3ED81 /* speedometerArrow.png */; };
 		CE32C37016658A6000C3ED81 /* CurrentDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C36F16658A6000C3ED81 /* CurrentDataViewController.m */; };
 		CE32C37216659B4200C3ED81 /* speedometerBody.png in Resources */ = {isa = PBXBuildFile; fileRef = CE32C37116659B4200C3ED81 /* speedometerBody.png */; };
@@ -77,6 +78,8 @@
 		CEA0CE5A1661A6F60086151D /* MagicalRecord+Setup.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0CE3C1661A6F60086151D /* MagicalRecord+Setup.m */; };
 		CEA0CE5B1661A6F60086151D /* MagicalRecord+ShorthandSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0CE3E1661A6F60086151D /* MagicalRecord+ShorthandSupport.m */; };
 		CEA0CE5C1661A6F60086151D /* MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0CE401661A6F60086151D /* MagicalRecord.m */; };
+		CEB5A742169A705A009EB3F2 /* navBarBg.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB5A741169A705A009EB3F2 /* navBarBg.png */; };
+		CEB5A744169A7329009EB3F2 /* patternBg.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB5A743169A7329009EB3F2 /* patternBg.png */; };
 		CEBBD6471676D6DC008051D2 /* libCorePlot-CocoaTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEBBD5FB1676D6DC008051D2 /* libCorePlot-CocoaTouch.a */; };
 		CEBBD6481676D7D4008051D2 /* libCorePlot-CocoaTouch.a in Sources */ = {isa = PBXBuildFile; fileRef = CEBBD5FB1676D6DC008051D2 /* libCorePlot-CocoaTouch.a */; };
 		CEDDE0F61641611800BEFE0A /* StartDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEDDE0F51641611800BEFE0A /* StartDetailViewController.m */; };
@@ -117,6 +120,8 @@
 		CE1793D01683E8E60030723A /* MyOfficeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOfficeTableViewController.m; sourceTree = "<group>"; };
 		CE1793D31683F3970030723A /* DataOverviewTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataOverviewTableViewController.h; sourceTree = "<group>"; };
 		CE1793D41683F3970030723A /* DataOverviewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataOverviewTableViewController.m; sourceTree = "<group>"; };
+		CE1BAC4D169528A200E3A1EA /* MyAccountTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAccountTableViewController.h; sourceTree = "<group>"; };
+		CE1BAC4E169528A200E3A1EA /* MyAccountTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAccountTableViewController.m; sourceTree = "<group>"; };
 		CE32C3661665890900C3ED81 /* speedometerArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speedometerArrow.png; sourceTree = "<group>"; };
 		CE32C36E16658A6000C3ED81 /* CurrentDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurrentDataViewController.h; sourceTree = "<group>"; };
 		CE32C36F16658A6000C3ED81 /* CurrentDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CurrentDataViewController.m; sourceTree = "<group>"; };
@@ -228,6 +233,8 @@
 		CEA0CE401661A6F60086151D /* MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicalRecord.m; sourceTree = "<group>"; };
 		CEA0CE411661A6F60086151D /* MagicalRecordShorthand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordShorthand.h; sourceTree = "<group>"; };
 		CEA0CE421661A6F60086151D /* CoreData+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CoreData+MagicalRecord.h"; sourceTree = "<group>"; };
+		CEB5A741169A705A009EB3F2 /* navBarBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navBarBg.png; sourceTree = "<group>"; };
+		CEB5A743169A7329009EB3F2 /* patternBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = patternBg.png; sourceTree = "<group>"; };
 		CEBBD5FB1676D6DC008051D2 /* libCorePlot-CocoaTouch.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libCorePlot-CocoaTouch.a"; sourceTree = "<group>"; };
 		CEBBD5FD1676D6DC008051D2 /* CorePlot-CocoaTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CorePlot-CocoaTouch.h"; sourceTree = "<group>"; };
 		CEBBD5FE1676D6DC008051D2 /* CPTAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPTAnnotation.h; sourceTree = "<group>"; };
@@ -401,6 +408,8 @@
 				CE8DCEB816815ABB0030FA4C /* LastWeekViewController.m */,
 				CE12C0251687D4C8001C4959 /* LastMonthsViewController.h */,
 				CE12C0261687D4C8001C4959 /* LastMonthsViewController.m */,
+				CE1BAC4D169528A200E3A1EA /* MyAccountTableViewController.h */,
+				CE1BAC4E169528A200E3A1EA /* MyAccountTableViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -765,6 +774,8 @@
 		CEEAE27C15F2BE8F00A550FA /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CEB5A743169A7329009EB3F2 /* patternBg.png */,
+				CEB5A741169A705A009EB3F2 /* navBarBg.png */,
 				CE9A44971694B22C00B31039 /* currentDataBottomViewBackg.png */,
 				CE32C37316659B4C00C3ED81 /* speedometerCenterWheel.png */,
 				CEFE2793169497C30004F8A1 /* mainViewHistoryBackg.png */,
@@ -854,6 +865,8 @@
 				CE32C37416659B4C00C3ED81 /* speedometerCenterWheel.png in Resources */,
 				CEFE2794169497C30004F8A1 /* mainViewHistoryBackg.png in Resources */,
 				CE9A44981694B22C00B31039 /* currentDataBottomViewBackg.png in Resources */,
+				CEB5A742169A705A009EB3F2 /* navBarBg.png in Resources */,
+				CEB5A744169A7329009EB3F2 /* patternBg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -931,6 +944,7 @@
 				CE12C02B1687D8EA001C4959 /* CircleView.m in Sources */,
 				CEFAD6E416890EB200179017 /* User.m in Sources */,
 				CEFAD6E81689115600179017 /* MonthData.m in Sources */,
+				CE1BAC4F169528A200E3A1EA /* MyAccountTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

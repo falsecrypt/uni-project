@@ -75,6 +75,8 @@ NSMutableArray *navigationBarItems;
         self.HUD.yOffset = -125.f;
         [self.HUD show:YES];
         
+        firstTime = YES;
+        
         // allocate a reachability object
         Reachability* reach = [Reachability reachabilityWithHostname:currentCostServerBaseURLHome];
         
@@ -161,6 +163,7 @@ NSMutableArray *navigationBarItems;
     else {
         [self readyToMakePieChart];
     }
+
 }
 
 - (void) initPieChartOffline{
@@ -187,7 +190,9 @@ NSMutableArray *navigationBarItems;
             
         }
         else {
-            [self readyToMakePieChart];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self readyToMakePieChart];
+            });
         }
         
         /* WeekData *newData = [WeekData createEntity];
@@ -196,6 +201,8 @@ NSMutableArray *navigationBarItems;
          [[NSManagedObjectContext defaultContext] saveNestedContexts];
          NSArray *result = [WeekData findAllSortedBy:@"day" ascending:YES];
          NSLog(@"TEST, result: %@", result);*/
+        
+        [piePlot reloadData];
         
         NSLog(@"initPieChart END-> dayDataDictionary: %@", dayDataDictionary);
     }
@@ -277,7 +284,6 @@ NSMutableArray *navigationBarItems;
                                              [[NSManagedObjectContext defaultContext] saveNestedContexts];
                                              
                                              dispatch_async(dispatch_get_main_queue(), ^{
-                                                 //[MBProgressHUD hideHUDForView:self.view animated:YES];
                                                  [self readyToMakePieChart];
                                              });
 
@@ -297,7 +303,7 @@ NSMutableArray *navigationBarItems;
     CGRect bounds = NSRectToCGRect(self.graphHostingView.bounds);
 #endif
     
-    
+    NSLog(@"__calling createPieChart");
     
     self.graph = [[CPTXYGraph alloc] initWithFrame:bounds];
     self.graphHostingView.hostedGraph = self.graph;
@@ -376,9 +382,31 @@ NSMutableArray *navigationBarItems;
     piePlot.overlayFill    = [CPTFill fillWithGradient:overlayGradient];
     [self.graph addPlot:piePlot];
     
+    NSLog(@"createPieChart: graph: %@, piePlot: %@", self.graph, piePlot);
+    
     selecting = FALSE;
     repeatingTouch = FALSE;
     currentSliceIndex = 999;
+}
+
+-(void)selectSliceOnFirstLaunch {
+    NSLog(@"calling selectSliceOnFirstLaunch");
+    /*selecting = TRUE;
+    repeatingTouch = NO;
+    firstTime = NO;
+    NSUInteger index = [plotDataConsumption count]-1;
+    currentSliceIndex = index;
+    NSLog(@"selectSliceOnFirstLaunch: graph: %@, piePlot: %@", self.graph, piePlot);
+    [piePlot reloadData];
+    
+    [piePlot setNeedsDisplay];*/
+    firstTime = NO;
+    int64_t delayInSeconds = 1.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [self pieChart:piePlot sliceWasSelectedAtRecordIndex:[plotDataConsumption count]-1];
+    });
+    
 }
 
 -(void)pieChart:(CPTPieChart *)plot sliceWasSelectedAtRecordIndex:(NSUInteger)index
@@ -420,25 +448,19 @@ NSMutableArray *navigationBarItems;
     
     
     /*CABasicAnimation *rotation = [CABasicAnimation animationWithKeyPath:@"startAngle"];
-     
      rotation.removedOnCompletion = NO;
-     
      rotation.fillMode = kCAFillModeForwards;
-     
      rotation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-     
      rotation.delegate = self;
-     
      rotation.fromValue = [NSNumber numberWithFloat:M_PI_4];
-     
      rotation.toValue = [NSNumber numberWithFloat:M_PI_4+0.5];
-     
      rotation.duration = 0.5f;
-     
      [plot addAnimation:rotation forKey:@"start_angle"];*/
 }
 
 -(CPTFill *)sliceFillForPieChart:(CPTPieChart *)pieChart recordIndex:(NSUInteger)index{
+    
+    NSLog(@"calling sliceFillForPieChart: %@", pieChart);
     
     CPTFill *sector = [[CPTFill alloc] init];
     
@@ -497,14 +519,16 @@ NSMutableArray *navigationBarItems;
         num = [plotDataConsumption objectAtIndex:index];
     }
     else {
+        NSLog(@"numberForPlot returning index = %i", index);
         return [NSNumber numberWithInt:index];
     }
-    
+    NSLog(@"numberForPlot returning num = %@", num);
     return num;
 }
 
 -(CPTLayer *)dataLabelForPlot:(CPTPlot *)plot recordIndex:(NSUInteger)index
 {
+    NSLog(@"calling dataLabelForPlot");
     static CPTMutableTextStyle *whiteText = nil;
     
     CPTTextLayer *newLayer = nil;
@@ -550,12 +574,17 @@ NSMutableArray *navigationBarItems;
     CGFloat result = 0.0;
     
     NSLog(@"radialOffsetForPieChart: recordIndex %i, currentSliceIndex %i, selecting %i, repeatingTouch %i", index, currentSliceIndex, selecting, repeatingTouch);
-    
+
+
     if ( [(NSString *)pieChart.identifier isEqualToString:pieChartName] && selecting && index==currentSliceIndex) {
         result = 20.0;
         if (repeatingTouch) {
             result = 0.0;
         }
+    }
+    
+    if (index == [plotDataConsumption count]-1 && !self.instanceWasCached && firstTime) {
+        [self selectSliceOnFirstLaunch];
     }
     return result;
 }

@@ -12,6 +12,7 @@
 #import "AFAppDotNetAPIClient.h"
 #import "DetailViewManager.h"
 #import "FirstDetailViewController.h"
+#import "Reachability.h"
 
 // Real Time Plot
 const double kFrameRate         = 5.0;  // frames per second
@@ -20,6 +21,7 @@ const NSUInteger kMaxDataPoints = 10;
 NSString *kPlotIdentifier       = @"Data Source Plot";
 NSUInteger currentIndex;
 NSTimer *dataTimer;
+BOOL deviceIsOnline;
 
 @interface CurrentDataViewController ()
 
@@ -64,6 +66,11 @@ NSMutableArray *navigationBarItems;
                                                 animated:NO];
     
     self.bottomMainView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"currentDataBottomViewBackg.png"]];
+    self.view.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"patternBg"]];
+    
+    // allocate a reachability object
+    Reachability* reach = [Reachability reachabilityWithHostname:currentCostServerBaseURLHome];
+    __block MBProgressHUD *hud;
     
     NSString *secondNotificationName = @"UserLoggedOffNotification";
     [[NSNotificationCenter defaultCenter]
@@ -75,7 +82,38 @@ NSMutableArray *navigationBarItems;
     self.labelsWithNumbersCollection = [self sortCollection:self.labelsWithNumbersCollection];
     self.lastWattValues = [[NSMutableArray alloc] init];
     
-    [self startSynchronization];
+    reach.reachableBlock = ^(Reachability * reachability)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Block Says Reachable");
+            deviceIsOnline = YES;
+            if (hud) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [hud removeFromSuperview];
+                hud = nil;
+            }
+            [self startSynchronization];
+        });
+    };
+    
+    reach.unreachableBlock = ^(Reachability * reachability)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"Block Says Unreachable");
+            deviceIsOnline = NO;
+            hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            // Configure for text only and offset down
+            hud.labelText = @"Verbindung fehlgeschlagen";
+            hud.detailsLabelText = @"Bitte überprüfen Sie Ihre Internetverbindung";
+            hud.square = YES;
+            hud.mode = MBProgressHUDModeText;
+            hud.margin = 10.f;
+            hud.yOffset = 20.f;
+            //hud.removeFromSuperViewOnHide = YES;
+        });
+    };
+    
+    [reach startNotifier];
     
     [self initDataDisplayView];
 }
@@ -131,20 +169,23 @@ NSMutableArray *navigationBarItems;
     self.hostingView.allowPinchScaling = YES;
     self.dataForPlot  = [[NSMutableArray alloc] initWithCapacity:kMaxDataPoints];
     [self createScatterPlot];
-    [self generateData];
-    
+    if (deviceIsOnline) {
+        [self generateData];
+    }
 }
 
 -(void)generateData
 {
+    NSLog(@"Calling generateData");
     [self.dataForPlot removeAllObjects];
-    currentIndex = 0;
-    NSTimer* firstTimer = [NSTimer timerWithTimeInterval:0.1
+    [self.dataForPlot addObject:[NSNumber numberWithInt:0]];
+    currentIndex = 1; //0
+    /*NSTimer* firstTimer = [NSTimer timerWithTimeInterval:0.1
                                                   target:self
                                                 selector:@selector(newData:)
                                                 userInfo:nil
                                                  repeats:NO];
-    [[NSRunLoop mainRunLoop] addTimer:firstTimer forMode:NSDefaultRunLoopMode];
+    [[NSRunLoop mainRunLoop] addTimer:firstTimer forMode:NSDefaultRunLoopMode]; */
     
     dataTimer = [NSTimer timerWithTimeInterval:60.0 //60.0
                                          target:self
@@ -155,7 +196,7 @@ NSMutableArray *navigationBarItems;
 }
 
 -(void)createScatterPlot {
-    
+    NSLog(@"Calling createScatterPlot");
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
     CGRect bounds = self.hostingView.bounds;
 #else
@@ -164,7 +205,7 @@ NSMutableArray *navigationBarItems;
     BOOL drawAxis = YES;
     if ( bounds.size.width < 200.0f ) {
         drawAxis = NO;
-        NSLog(@"drawAxis=NO");
+        //NSLog(@"drawAxis=NO");
     }
     self.scatterGraph = [[CPTXYGraph alloc] initWithFrame:bounds];
     self.hostingView.hostedGraph = self.scatterGraph;
@@ -172,7 +213,7 @@ NSMutableArray *navigationBarItems;
     //[self.scatterGraph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
     
     if ( drawAxis ) {
-        NSLog(@"drawAxis=YES");
+        //NSLog(@"drawAxis=YES");
         self.scatterGraph.paddingLeft   = 1.0;
         self.scatterGraph.paddingTop    = 1.0;
         self.scatterGraph.paddingRight  = 1.0;
@@ -198,8 +239,8 @@ NSMutableArray *navigationBarItems;
     
     // Axes
     // X axis
-    CPTXYAxisSet *axisSet = (CPTXYAxisSet *)self.scatterGraph.axisSet;
-    CPTXYAxis *x          = axisSet.xAxis;
+    CPTXYAxisSet *axisSet         = (CPTXYAxisSet *)self.scatterGraph.axisSet;
+    CPTXYAxis *x                  = axisSet.xAxis;
     x.labelingPolicy              = CPTAxisLabelingPolicyAutomatic;
     x.orthogonalCoordinateDecimal = CPTDecimalFromUnsignedInteger(0);
     x.majorGridLineStyle          = majorGridLineStyle;
@@ -210,20 +251,20 @@ NSMutableArray *navigationBarItems;
     NSNumberFormatter *labelFormatter = [[NSNumberFormatter alloc] init];
     labelFormatter.numberStyle = kCFNumberFormatterDecimalStyle;
     labelFormatter.maximumFractionDigits = 0;
-    x.labelFormatter           = labelFormatter;
+    x.labelFormatter              = labelFormatter;
     
     // Y axis
-    CPTXYAxis *y = axisSet.yAxis;
+    CPTXYAxis *y                  = axisSet.yAxis;
     y.labelingPolicy              = CPTAxisLabelingPolicyAutomatic;
     y.orthogonalCoordinateDecimal = CPTDecimalFromUnsignedInteger(0);
     y.majorGridLineStyle          = majorGridLineStyle;
     y.minorGridLineStyle          = minorGridLineStyle;
-    y.minorTicksPerInterval       = 100;
+    y.minorTicksPerInterval       = 2;
     y.labelOffset                 = 1.0;
     y.title                       = @"Leistung (Watt)";
     y.titleOffset                 = 26.0;
     y.axisConstraints             = [CPTConstraints constraintWithLowerOffset:0.0];
-    y.labelFormatter           = labelFormatter;
+    y.labelFormatter              = labelFormatter;
     
     // Rotate the labels by 45 degrees, just to show it can be done.
     x.labelRotation = M_PI * 0.25;
@@ -234,7 +275,7 @@ NSMutableArray *navigationBarItems;
     dataSourceLinePlot.cachePrecision = CPTPlotCachePrecisionAuto;
     
     CPTMutableLineStyle *lineStyle = [dataSourceLinePlot.dataLineStyle mutableCopy];
-    lineStyle.lineWidth              = 3.0;
+    lineStyle.lineWidth              = 2.0;
     lineStyle.lineColor              = [CPTColor greenColor];
     dataSourceLinePlot.dataLineStyle = lineStyle;
     
@@ -244,7 +285,7 @@ NSMutableArray *navigationBarItems;
     // Plot space
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.scatterGraph.defaultPlotSpace;
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(0) length:CPTDecimalFromUnsignedInteger(kMaxDataPoints - 1)];
-    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(0) length:CPTDecimalFromUnsignedInteger(400)];
+    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(0) length:CPTDecimalFromUnsignedInteger(100)];
      NSLog(@"self.userCurrentWatt: %i", self.userCurrentWatt);
     
 }
@@ -261,15 +302,16 @@ NSMutableArray *navigationBarItems;
 -(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
 {
     NSNumber *num = nil;
-    
+    NSLog(@"Calling numberForPlot");
     switch ( fieldEnum ) {
         case CPTScatterPlotFieldX:
             num = [NSNumber numberWithUnsignedInteger:index + currentIndex - self.dataForPlot.count];
+            NSLog(@"X Value, num = %@, index = %i", num, index);
             break;
             
         case CPTScatterPlotFieldY:
             num = [self.dataForPlot objectAtIndex:index];
-            NSLog(@"num = %@", num);
+            NSLog(@"Y value, num = %@, index = %i", num, index);
             break;
             
         default:
@@ -298,6 +340,7 @@ NSMutableArray *navigationBarItems;
 
 -(void)newData:(NSTimer *)theTimer
 {
+    NSLog(@"---newData:theTimer---");
     CPTGraph *theGraph = self.scatterGraph;
     CPTPlot *thePlot   = [theGraph plotWithIdentifier:kPlotIdentifier];
     
@@ -306,6 +349,8 @@ NSMutableArray *navigationBarItems;
             [self.dataForPlot removeObjectAtIndex:0];
             [thePlot deleteDataInIndexRange:NSMakeRange(0, 1)];
         }
+        
+        NSLog(@"---newData:theTimer---setting yRange");
         
         CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)theGraph.defaultPlotSpace;
         NSUInteger location       = (currentIndex >= kMaxDataPoints ? currentIndex - kMaxDataPoints + 1 : 0);
@@ -404,7 +449,7 @@ NSMutableArray *navigationBarItems;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         // This code is running in a different thread
         // After 120 seconds have elapsed, the timer fires, sending the message to target.
-        self.continiousTimer = [NSTimer timerWithTimeInterval:10.0 // 1 minute
+        self.continiousTimer = [NSTimer timerWithTimeInterval:60.0 // 1 minute
                                                  target:self
                                                selector:@selector(getDataFromServer:)
                                                userInfo:nil
@@ -502,9 +547,9 @@ NSMutableArray *navigationBarItems;
     step = ((step+2)/5)*5;
     //NSLog(@"changeSpeedometerNumbers, step: %i", step);
     int temp = step;
-    NSLog(@"changeSpeedometerNumbers, step: %i", step);
+    //NSLog(@"changeSpeedometerNumbers, step: %i", step);
     for (UILabel *spLabel in self.labelsWithNumbersCollection) {
-        NSLog(@"changeSpeedometerNumbers, temp: %i", temp);
+        //NSLog(@"changeSpeedometerNumbers, temp: %i", temp);
         spLabel.text = [NSString stringWithFormat:@"%i", temp];
         temp += step;
     }

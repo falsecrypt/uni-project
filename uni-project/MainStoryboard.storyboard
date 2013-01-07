@@ -543,7 +543,7 @@
                                         </constraints>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="4xV-aa-yBy">
-                                        <rect key="frame" x="0.0" y="99" width="540" height="45"/>
+                                        <rect key="frame" x="0.0" y="99" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="31" y="0.0" width="478" height="43"/>
@@ -577,7 +577,7 @@
                             <tableViewSection id="GA4-Sa-gk7">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" rowHeight="52" id="lQe-YD-c8F">
-                                        <rect key="frame" x="0.0" y="194" width="540" height="54"/>
+                                        <rect key="frame" x="0.0" y="194" width="540" height="53"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="31" y="1" width="478" height="51"/>
@@ -986,7 +986,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="SMg-Ag-UhE" firstAttribute="leading" secondItem="QxV-s4-9zn" secondAttribute="trailing" constant="-287" type="user" id="1FY-1i-C45"/>
                             <constraint firstItem="JZP-Io-cmn" firstAttribute="top" secondItem="I5H-GL-PkO" secondAttribute="top" constant="254" id="4Dt-bS-4Wj"/>
@@ -1077,10 +1077,10 @@
             </objects>
             <point key="canvasLocation" x="2126" y="342"/>
         </scene>
-        <!--Table View Controller-->
+        <!--My Account Table View Controller-->
         <scene sceneID="d1X-nV-kRV">
             <objects>
-                <tableViewController id="cSl-eD-JuR" sceneMemberID="viewController">
+                <tableViewController id="cSl-eD-JuR" customClass="MyAccountTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="QK3-FO-msa">
                         <rect key="frame" x="0.0" y="64" width="703" height="704"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2061,103 +2061,6 @@
         <image name="icon_user.png" width="30" height="30"/>
         <image name="speedometerBody.png" width="366" height="364"/>
     </resources>
-    <classes>
-        <class className="CPTGraphHostingView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CPTGraphHostingView.h"/>
-        </class>
-        <class className="CircleView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CircleView.h"/>
-        </class>
-        <class className="CurrentDataViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CurrentDataViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="bottomMainView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="dataDisplayView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="eurDataLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="hostingView" candidateClass="CPTGraphHostingView"/>
-                <relationship kind="outlet" name="kwhDataLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
-                <relationship kind="outlet" name="profileBarButtonItem" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="spReadingFirstNumber" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="spReadingFourthNumber" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="spReadingSecondNumber" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="spReadingThirdNumber" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="speedometerImageView" candidateClass="UIImageView"/>
-                <relationship kind="outletCollection" name="labelsWithNumbersCollection" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="DataOverviewTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/DataOverviewTableViewController.h"/>
-        </class>
-        <class className="FirstDetailViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FirstDetailViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="profileButtonTapped:"/>
-                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
-                <relationship kind="outlet" name="profileBarButtonItem" candidateClass="UIBarButtonItem"/>
-            </relationships>
-        </class>
-        <class className="FirstTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FirstTableViewController.h"/>
-        </class>
-        <class className="LastMonthsViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/LastMonthsViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="consumptionMonthLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="dataView" candidateClass="CircleView"/>
-                <relationship kind="outlet" name="monthNameLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
-            </relationships>
-        </class>
-        <class className="LastWeekViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/LastWeekViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="consumptionMonthLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="dayNameLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="graphHostingView" candidateClass="CPTGraphHostingView"/>
-                <relationship kind="outlet" name="mainView" candidateClass="UIView"/>
-                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
-                <relationship kind="outlet" name="profileBarButtonItem" candidateClass="UIBarButtonItem"/>
-            </relationships>
-        </class>
-        <class className="LoginScreenTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/LoginScreenTableViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="didSelectCancel:"/>
-                <relationship kind="action" name="logInButtonPressed:"/>
-                <relationship kind="outlet" name="cancelButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="usernameField" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="MyOfficeTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/MyOfficeTableViewController.h"/>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="RegisterTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/RegisterTableViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="cancelBarButtonItemPressed:"/>
-                <relationship kind="action" name="submitButtonPressed:"/>
-                <relationship kind="outlet" name="cancelButton" candidateClass="UIBarButtonItem"/>
-                <relationship kind="outlet" name="emailField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="passwordField" candidateClass="UITextField"/>
-                <relationship kind="outlet" name="submitButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="usernameField" candidateClass="UITextField"/>
-            </relationships>
-        </class>
-        <class className="SecondDetailViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SecondDetailViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
-            </relationships>
-        </class>
-        <class className="SecondTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/SecondTableViewController.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>

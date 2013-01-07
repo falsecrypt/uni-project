@@ -37,6 +37,15 @@
     
 }
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.tableView.backgroundColor = [UIColor clearColor];
+    self.parentViewController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"patternBg.png"]];
+    
+}
+
 
 
 #pragma mark -

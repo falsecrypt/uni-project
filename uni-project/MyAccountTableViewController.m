@@ -1,19 +1,17 @@
 //
-//  MyOfficeTableViewController.m
+//  MyAccountTableViewController.m
 //  uni-project
 
-//  Copyright (c) 2012 test. All rights reserved.
+//  Copyright (c) 2013 test. All rights reserved.
 //
 
-#import "MyOfficeTableViewController.h"
-#import "MCachedModalStoryboardSegue.h"
-#import "CurrentDataViewController.h"
+#import "MyAccountTableViewController.h"
 
-@interface MyOfficeTableViewController ()
+@interface MyAccountTableViewController ()
 
 @end
 
-@implementation MyOfficeTableViewController
+@implementation MyAccountTableViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -28,8 +26,11 @@
 {
     [super viewDidLoad];
 
-    self.tableView.backgroundColor = [UIColor clearColor];
-    self.parentViewController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"patternBg.png"]];
+    UIView *tempImageView = [[UIImageView alloc] init];
+    [tempImageView setFrame:self.tableView.frame];
+    tempImageView.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"patternBg"]];
+    self.tableView.backgroundView = tempImageView;
+
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -43,33 +44,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -121,19 +96,5 @@
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
 }
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"showCurrentDataVC"]) {
-        NSLog(@"segue : %@", segue);
-        //here is segue an instance of our MCachedModalStoryboardSegue
-        MCachedModalStoryboardSegue *customSegue = (MCachedModalStoryboardSegue *)segue;
-        CurrentDataViewController *destViewController = customSegue.destinationViewController;
-        destViewController.instanceWasCached  = customSegue.destinationWasCached;
-    }
-}
-/*
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"patternBg.png"]];
-}*/
 
 @end
