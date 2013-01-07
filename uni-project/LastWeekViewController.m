@@ -422,7 +422,8 @@ NSMutableArray *navigationBarItems;
     }
     currentSliceIndex = index;
     
-    NSDate *dayDate = [dayDataDictionary objectForKey:[plotDataConsumption objectAtIndex:index]];
+    //NSDate *dayDate = [dayDataDictionary objectForKey:[plotDataConsumption objectAtIndex:index]];
+    NSDate *dayDate = [plotDataDates objectAtIndex:index];
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:kCFDateFormatterLongStyle];
     [formatter setDateFormat:@"EEEE, dd.MM.yy"];
@@ -539,7 +540,8 @@ NSMutableArray *navigationBarItems;
             whiteText.color = [CPTColor blackColor];
             whiteText.fontSize = 18.0f;
         }
-        NSDate *dayDate = [dayDataDictionary objectForKey:[plotDataConsumption objectAtIndex:index]];
+        //NSDate *dayDate = [dayDataDictionary objectForKey:[plotDataConsumption objectAtIndex:index]];
+        NSDate *dayDate = [plotDataDates objectAtIndex:index];
         NSLog(@"dayDate: %@", dayDate);
         NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
         [formatter setDateStyle:kCFDateFormatterLongStyle];
