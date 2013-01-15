@@ -11,6 +11,7 @@
 #import "MonthData.h"
 #import "Reachability.h"
 #import "DetailViewManager.h"
+#import "FirstDetailViewController.h"
 
 
 NSMutableDictionary *monthsDataDictionary;
@@ -25,6 +26,8 @@ BOOL deviceIsOnline;
 
 
 @implementation LastMonthsViewController
+
+NSMutableArray *navigationBarItems;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -53,7 +56,7 @@ BOOL deviceIsOnline;
             [self.navigationBar.topItem setLeftBarButtonItem:self.navigationPaneBarButtonItem
                                                     animated:NO];
         
-        self.dataView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"mainViewHistoryBackg.png"]];
+        self.dataView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"mainHistotyViewBG.png"]];
         
         NSString *secondNotificationName = @"UserLoggedOffNotification";
         [[NSNotificationCenter defaultCenter]
@@ -202,7 +205,7 @@ BOOL deviceIsOnline;
                                              }
                                              
                                              [[NSManagedObjectContext defaultContext] saveNestedContexts];
-                                             [self calculateRadiusForCircle];
+                                             [self calculateRadiusForCircles];
                                              
                                          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                              NSLog(@"Failed during getting 12-Months-Data: %@",[error localizedDescription]);
@@ -211,7 +214,7 @@ BOOL deviceIsOnline;
     
 }
 
--(void) calculateRadiusForCircle {
+-(void) calculateRadiusForCircles {
     NSArray *results = [MonthData findAllSortedBy:@"consumption" ascending:NO];
     NSLog(@"calculateRadiusForCircle -> results: %@", results);
 
@@ -236,6 +239,41 @@ BOOL deviceIsOnline;
 - (void)setLabelsWithMonth:(NSString *)month andConsumption:(NSString *)kwh{
     self.monthNameLabel.text = month;
     self.consumptionMonthLabel.text = kwh;
+}
+
+#pragma mark -
+#pragma mark Profile Button Methods
+
+- (void)hideProfileAfterUserLoggedOff {
+    NSLog(@"hideProfileAfterUserLoggedOff...");
+    if (self.profilePopover){
+        [self.profilePopover dismissPopoverAnimated:YES];
+        NSLog(@"profile popover dissmissed...");
+    }
+    [navigationBarItems removeObject:self.profileBarButtonItem];
+    [self.navigationBar.topItem setRightBarButtonItems:navigationBarItems animated:YES];
+    [self.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
+    //    NSLog(@"rightBarButtonItems: %@", [self.navigationBar.topItem rightBarButtonItems]);
+    //    NSLog(@"navigationBarItems: %@", navigationBarItems);
+    //    NSLog(@"self.profileBarButtonItem: %@", self.profileBarButtonItem);
+    // Going back
+    [[self.splitViewController.viewControllers objectAtIndex:0]popToRootViewControllerAnimated:TRUE];
+    DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
+    FirstDetailViewController *startDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
+    detailViewManager.detailViewController = startDetailViewController;
+    startDetailViewController.navigationBar.topItem.title = @"Summary";
+    
+}
+
+- (IBAction)profileButtonTapped:(id)sender {
+    if (_userProfile == nil) {
+        self.userProfile = [[ProfilePopoverViewController alloc] init];
+        //_userProfile.delegate = self;
+        self.profilePopover = [[UIPopoverController alloc] initWithContentViewController:_userProfile];
+        
+    }
+    [self.profilePopover presentPopoverFromBarButtonItem:sender
+                                permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 }
 
 

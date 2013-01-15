@@ -24,6 +24,7 @@ BOOL firstTime;
 BOOL deviceIsOnline;
 NSUInteger currentSliceIndex;
 NSMutableDictionary *dayDataDictionary;
+MBProgressHUD *permanentHud;
 
 @interface LastWeekViewController ()
 
@@ -67,7 +68,7 @@ NSMutableArray *navigationBarItems;
         self.dayNameLabel.text = @" ";
         self.consumptionMonthLabel.text = @" ";
         //self.graphHostingView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"mainViewHistoryBackg.png"]];
-        self.mainView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"mainViewHistoryBackg.png"]];
+        self.mainView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"mainHistotyViewBG.png"]];
         self.HUD = [[MBProgressHUD alloc] initWithView:self.view];
         [self.view addSubview:self.HUD];
         //self.HUD.delegate = self;
@@ -133,6 +134,12 @@ NSMutableArray *navigationBarItems;
     NSLog(@"calling initPieChartOnline!");
     // Prepare Data for the 7-Days-Pie Chart TODO
     
+    if (permanentHud) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [permanentHud removeFromSuperview];
+        permanentHud = nil;
+    }
+    
     if ( dayDataDictionary == nil ) {
         /*
          plotData = [[NSMutableArray alloc] initWithObjects:
@@ -184,10 +191,22 @@ NSMutableArray *navigationBarItems;
         // We are offline
         // retrieve the data from the DB
         NSLog(@"deviceIsOnline : %i", deviceIsOnline);
-        // ooops, No Data. Show error
+        // ooops, No Data. Show error message
         if ([numberofentities intValue]==0) {
+            if (self.HUD) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [self.HUD removeFromSuperview];
+                self.HUD = nil;
+            }
             NSLog(@"No Data in the WeekData Table! and the Device is not connected to the internet..");
-            
+            permanentHud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            // Configure for text only and offset down
+            permanentHud.labelText = @"Keine Daten vorhanden";
+            permanentHud.detailsLabelText = @"Bitte überprüfen Sie Ihre Internetverbindung";
+            permanentHud.square = YES;
+            permanentHud.mode = MBProgressHUDModeText;
+            permanentHud.margin = 10.f;
+            permanentHud.yOffset = 20.f;
         }
         else {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -246,12 +265,13 @@ NSMutableArray *navigationBarItems;
     }
     [plotDataConsumption removeObjectsInRange:NSMakeRange(0, 7)]; // delete the first 7 days
     [plotDataDates removeObjectsInRange:NSMakeRange(0, 7)]; // start at position 0, length = 7
-    
+    NSLog(@"readyToMakePieChart -> plotDataDates: %@", plotDataDates);
+    [self calculateColorValuesForDays];
     [self createPieChart];
     
     NSLog(@"readyToMakePieChart -> dayDataDictionary: %@", dayDataDictionary);
     NSLog(@"readyToMakePieChart -> plotDataConsumption: %@", plotDataConsumption);
-    NSLog(@"readyToMakePieChart -> plotDataDates: %@", plotDataDates);
+    
 }
 
 - (void)getDataFromServer:(NSTimer *)timer {
@@ -264,6 +284,7 @@ NSMutableArray *navigationBarItems;
                                              NSArray *components   = [oneWeekData componentsSeparatedByString:@";"];
                                              
                                              for (NSString *obj in components) {
+                                                 
                                                  NSArray *day = [obj componentsSeparatedByString:@"="];
                                                  NSLog(@"day : %@", day);
                                                  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
@@ -361,10 +382,8 @@ NSMutableArray *navigationBarItems;
     CPTGradient *overlayGradient = [[CPTGradient alloc] init];
     overlayGradient.gradientType = CPTGradientTypeRadial;
     overlayGradient              = [overlayGradient addColorStop:[[CPTColor blackColor] colorWithAlphaComponent:0.0] atPosition:0.0];
-    overlayGradient              = [overlayGradient addColorStop:[[CPTColor blackColor] colorWithAlphaComponent:0.3] atPosition:0.9];
-    overlayGradient              = [overlayGradient addColorStop:[[CPTColor blackColor] colorWithAlphaComponent:0.7] atPosition:1.0];
-    
-    
+    overlayGradient              = [overlayGradient addColorStop:[[CPTColor blackColor] colorWithAlphaComponent:0.2] atPosition:0.9];
+    overlayGradient              = [overlayGradient addColorStop:[[CPTColor blackColor] colorWithAlphaComponent:0.5] atPosition:1.0];
     
     // Add pie chart
     piePlot                 = [[CPTPieChart alloc] init];
@@ -494,12 +513,16 @@ NSMutableArray *navigationBarItems;
     overlayGradient              = [overlayGradient addColorStop:[[CPTColor blueColor] colorWithAlphaComponent:0.6] atPosition:0.8];
      
     */
-    CPTColor *startColor = [CPTColor colorWithComponentRed:1/255.0f green:56/255.0f blue:1/255.0f alpha:1.0f];
-    CPTColor *endColor = [CPTColor colorWithComponentRed:2/255.0f green:96/255.0f blue:2/255.0f alpha:1.0f];
-    CPTGradient *areaGradientUI = [CPTGradient gradientWithBeginningColor:startColor
-                                                              endingColor:endColor];
-    sector=[CPTFill fillWithGradient:areaGradientUI];
-    
+    //CPTColor *startColor = [CPTColor colorWithComponentRed:1/255.0f green:56/255.0f blue:1/255.0f alpha:1.0f];
+    //CPTColor *endColor = [CPTColor colorWithComponentRed:2/255.0f green:96/255.0f blue:2/255.0f alpha:1.0f];
+    //CPTGradient *areaGradientUI = [CPTGradient gradientWithBeginningColor:startColor
+     //                                                         endingColor:endColor];
+    //sector=[CPTFill fillWithGradient:areaGradientUI];
+    NSNumber *consumption = [plotDataConsumption objectAtIndex:index];
+    NSLog(@"consumption: %@", consumption);
+    UIColor *sliceColor = [self.daysColors objectForKey:[consumption stringValue]];
+    NSLog(@"sliceColor: %@", sliceColor);
+    sector=[CPTFill fillWithColor:(CPTColor *)sliceColor];
     return sector;
 }
 
@@ -563,9 +586,9 @@ NSMutableArray *navigationBarItems;
     return newLayer;
 }
 
-/** @brief @optional Offsets the slice radially from the center point. Can be used to @quote{explode} the chart.
+/** Offsets the slice radially from the center point. Can be used to @quote{explode} the chart.
  *  This method will not be called if
- *  @link CPTPieChartDataSource::radialOffsetsForPieChart:recordIndexRange: -radialOffsetsForPieChart:recordIndexRange: @endlink
+ *  CPTPieChartDataSource::radialOffsetsForPieChart:recordIndexRange: -radialOffsetsForPieChart:recordIndexRange: @endlink
  *  is also implemented in the datasource.
  *  @param pieChart The pie chart.
  *  @param idx The data index of interest.
@@ -576,7 +599,6 @@ NSMutableArray *navigationBarItems;
     CGFloat result = 0.0;
     
     NSLog(@"radialOffsetForPieChart: recordIndex %i, currentSliceIndex %i, selecting %i, repeatingTouch %i", index, currentSliceIndex, selecting, repeatingTouch);
-
 
     if ( [(NSString *)pieChart.identifier isEqualToString:pieChartName] && selecting && index==currentSliceIndex) {
         result = 20.0;
@@ -618,6 +640,56 @@ NSMutableArray *navigationBarItems;
     FirstDetailViewController *startDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
     detailViewManager.detailViewController = startDetailViewController;
     startDetailViewController.navigationBar.topItem.title = @"Summary";
+    
+}
+
+- (IBAction)profileButtonTapped:(id)sender {
+    if (_userProfile == nil) {
+        self.userProfile = [[ProfilePopoverViewController alloc] init];
+        //_userProfile.delegate = self;
+        self.profilePopover = [[UIPopoverController alloc] initWithContentViewController:_userProfile];
+        
+    }
+    [self.profilePopover presentPopoverFromBarButtonItem:sender
+                                permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+}
+
+- (void) calculateColorValuesForDays{
+    if (!self.daysColors) {
+        self.daysColors = [[NSMutableDictionary alloc] init];
+    }
+    NSLog(@"calculateColorValuesForDays -> plotDataDates: %@", plotDataDates);
+    float avgConsumption = 0.0f;
+    float specificYearConsumption = 0.0f;
+    // Color Management
+    for (NSDecimalNumber *dayConsumption in plotDataConsumption) {
+        
+        avgConsumption = [dayConsumption floatValue]*365.0f;
+        NSLog(@"___avgConsumption: %f", avgConsumption);
+        specificYearConsumption = avgConsumption/OfficeArea;
+        NSLog(@"___specificYearConsumption: %f", specificYearConsumption);
+        if (specificYearConsumption <= 55.0) {
+            float redComponent = 255.0f - ((55.0f - specificYearConsumption)*(256.0f/55.0f));
+            if (redComponent < 0.0) {
+                redComponent = 0.0;
+            }
+            UIColor *dayColor = [UIColor colorWithRed:redComponent/255.0f green:1.0f blue:0.0f alpha:0.7f];
+            NSLog(@"___redComponent: %f", redComponent);
+            NSLog(@"___redComponent/255: %f", redComponent/255.0f);
+            [self.daysColors setValue:dayColor forKey: [dayConsumption stringValue]];
+        }
+        else {
+            float greenComponent = 255.0f - ((specificYearConsumption - 55.0f)*(256.0f/25.0f));
+            if (greenComponent < 0.0) {
+                greenComponent = 0.0;
+            }
+            UIColor *dayColor = [UIColor colorWithRed:1.0f green:greenComponent/255.0f blue:0.0f alpha:0.7f];
+            NSLog(@"___greenComponent: %f", greenComponent);
+            NSLog(@"___greenComponent/255: %f", greenComponent/255.0f);
+            [self.daysColors setValue:dayColor forKey: [dayConsumption stringValue]];
+        }
+        
+    }
     
 }
 

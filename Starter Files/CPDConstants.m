@@ -20,4 +20,6 @@ NSString *  const scatterPlot               = @"Scatter Plot";
 
 NSString *  const currentCostServerBaseURLString = @"http://www.hcm-lab.de/downloads/buehling/adaptiveart/CurrentCostTreeOnline/";
 NSString *  const currentCostServerBaseURLHome   = @"www.hcm-lab.de";
+float const OfficeArea = 20.0f;
+
 @end

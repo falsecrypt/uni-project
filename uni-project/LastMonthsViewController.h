@@ -8,6 +8,7 @@
 #import <UIKit/UIKit.h>
 #import "CircleView.h"
 #import "DetailViewManager.h"
+#import "ProfilePopoverViewController.h"
 
 @interface LastMonthsViewController : UIViewController <SubstitutableDetailViewController, circleViewDelegate>
 
@@ -19,5 +20,7 @@
 
 @property (strong, nonatomic) IBOutlet CircleView *dataView;
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *profileBarButtonItem;
+@property (nonatomic, retain) ProfilePopoverViewController *userProfile;
 
 @end

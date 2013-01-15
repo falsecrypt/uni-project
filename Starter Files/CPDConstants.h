@@ -17,5 +17,6 @@ extern NSString * const barGraph;
 extern NSString * const scatterPlot;
 extern NSString * const currentCostServerBaseURLString;
 extern NSString * const currentCostServerBaseURLHome;
+extern float const OfficeArea;
 
 @end
