@@ -34,11 +34,11 @@
     if(self){
         __splitViewController = splitViewController;
         __detailControllers = [detailControllers copy];
-        UINavigationController* detailRoot = [splitViewController.viewControllers objectAtIndex:1];
+        UINavigationController* detailRoot = (splitViewController.viewControllers)[1];
         __currentDetailController = detailRoot.topViewController;
         
         splitViewController.delegate = self;
-        UITabBarController* tabBar = [splitViewController.viewControllers objectAtIndex:0];
+        UITabBarController* tabBar = (splitViewController.viewControllers)[0];
         tabBar.delegate = self;
     }
     
@@ -80,10 +80,10 @@
     
     UINavigationController* detailRootController;
     if(tabBarController.selectedIndex == 1){
-        detailRootController = [self.detailControllers objectAtIndex:tabBarController.selectedIndex + 1];
+        detailRootController = (self.detailControllers)[tabBarController.selectedIndex + 1];
     }
     else {
-        detailRootController = [self.detailControllers objectAtIndex:tabBarController.selectedIndex];
+        detailRootController = (self.detailControllers)[tabBarController.selectedIndex];
     }
     
     UIViewController* detailControler = detailRootController.topViewController;
@@ -98,12 +98,12 @@
         [self.currentDetailController.navigationItem setLeftBarButtonItem:self.masterBarButtonItem animated:NO];
         
         // update controllers in splitview
-        UIViewController* tabBarController = [self.splitViewController.viewControllers objectAtIndex:0];
-        self.splitViewController.viewControllers = [NSArray arrayWithObjects:tabBarController,detailRootController, nil];
+        UIViewController* tabBarController = (self.splitViewController.viewControllers)[0];
+        self.splitViewController.viewControllers = @[tabBarController,detailRootController];
         
         // replace the passthrough views with current detail navigationbar
         if([self.masterPopoverController isPopoverVisible]){
-            self.masterPopoverController.passthroughViews = [NSArray arrayWithObject:detailRootController.navigationBar];
+            self.masterPopoverController.passthroughViews = @[detailRootController.navigationBar];
         }
     }
     if(tabBarController.selectedIndex == 1){

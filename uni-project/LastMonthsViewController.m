@@ -181,20 +181,20 @@ NSMutableArray *navigationBarItems;
                                              for (NSString *obj in components) {
                                                  NSArray *month = [obj componentsSeparatedByString:@"="];
                                                  NSLog(@"month : %@", month);
-                                                 NSArray *monthAndYear = [[month objectAtIndex:0] componentsSeparatedByString:@"-"];
-                                                 NSLog(@"[month objectAtIndex:0] : %@", [month objectAtIndex:0]);
+                                                 NSArray *monthAndYear = [month[0] componentsSeparatedByString:@"-"];
+                                                 NSLog(@"[month objectAtIndex:0] : %@", month[0]);
                                                  NSLog(@"monthAndYear : %@", monthAndYear);
-                                                 double temp = [[month objectAtIndex:1] doubleValue];
+                                                 double temp = [month[1] doubleValue];
                                                  NSDecimalNumber *monthConsumption = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:temp];
                                                  NSLog(@"monthConsumption : %@", monthConsumption);
-                                                 NSNumber *yearNumber = (NSNumber *)[NSNumber numberWithDouble:[[monthAndYear objectAtIndex:1] doubleValue]];
-                                                 NSNumber *monthNumber = (NSNumber *)[NSNumber numberWithDouble:[[monthAndYear objectAtIndex:0] doubleValue]];
+                                                 NSNumber *yearNumber = (NSNumber *)@([monthAndYear[1] doubleValue]);
+                                                 NSNumber *monthNumber = (NSNumber *)@([monthAndYear[0] doubleValue]);
                                                  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
                                                  //[dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
                                                  [dateFormatter setDateFormat:@"yy-MM"];
                                                  // set timezone for correct date, example: 2012-06 -> 2012-06-01 00:00:00 +0000
                                                  dateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
-                                                 NSDate *date = [dateFormatter dateFromString:[month objectAtIndex:0]];
+                                                 NSDate *date = [dateFormatter dateFromString:month[0]];
                                                  
                                                  MonthData *newData = [MonthData createEntity];
                                                  [newData setMonth:yearNumber];
@@ -219,7 +219,7 @@ NSMutableArray *navigationBarItems;
     NSLog(@"calculateRadiusForCircle -> results: %@", results);
 
     // Get the max consumption value
-    NSDecimalNumber * consumptionMax = [[results objectAtIndex:0]consumption];
+    NSDecimalNumber * consumptionMax = [results[0]consumption];
     NSLog(@"calculateRadiusForCircle -> consumptionMax after: %@", consumptionMax);
     // Calculate radius for every object
     for (MonthData *monthdata in results){
@@ -257,7 +257,7 @@ NSMutableArray *navigationBarItems;
     //    NSLog(@"navigationBarItems: %@", navigationBarItems);
     //    NSLog(@"self.profileBarButtonItem: %@", self.profileBarButtonItem);
     // Going back
-    [[self.splitViewController.viewControllers objectAtIndex:0]popToRootViewControllerAnimated:TRUE];
+    [(self.splitViewController.viewControllers)[0]popToRootViewControllerAnimated:TRUE];
     DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
     FirstDetailViewController *startDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
     detailViewManager.detailViewController = startDetailViewController;

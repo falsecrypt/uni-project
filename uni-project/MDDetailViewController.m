@@ -190,7 +190,7 @@ UIPopoverController *masterPopoverController;
         label.offset = x.majorTickLength;
         if (label) {
             [xLabels addObject:label];
-            [xLocations addObject:[NSNumber numberWithFloat:location]];
+            [xLocations addObject:@(location)];
         }
     }
     x.axisLabels = xLabels;
@@ -414,7 +414,7 @@ UIPopoverController *masterPopoverController;
     // 3 - Add plots to graph
     CPTGraph *graph = self.hostViewForBarGraph.hostedGraph;
     CGFloat barX = CPDBarInitialX;
-    NSArray *plots = [NSArray arrayWithObjects:self.aaplPlot, self.googPlot, self.msftPlot, nil];
+    NSArray *plots = @[self.aaplPlot, self.googPlot, self.msftPlot];
     for (CPTBarPlot *plot in plots) {
         plot.dataSource = self;
         plot.delegate = self;
@@ -450,7 +450,7 @@ UIPopoverController *masterPopoverController;
     [graph addPlot:msftPlot toPlotSpace:plotSpace];
     
     // 3 - Set up plot space
-    [plotSpace scaleToFitPlots:[NSArray arrayWithObjects:aaplPlot, googPlot, msftPlot, nil]];
+    [plotSpace scaleToFitPlots:@[aaplPlot, googPlot, msftPlot]];
     CPTMutablePlotRange *xRange = [plotSpace.xRange copy];
     [xRange expandRangeByFactor:CPTDecimalFromCGFloat(1.1f)];
     plotSpace.xRange = xRange;
@@ -677,8 +677,7 @@ UIPopoverController *masterPopoverController;
     // *************** PIE CHART ***************
     if ([pieChart isEqualToString:[self.detailItem description] ] ) {
         if (CPTPieChartFieldSliceWidth == fieldEnum)
-            return [[[CPDStockPriceStore sharedInstance] dailyPortfolioPrices]
-                    objectAtIndex:index];
+            return [[CPDStockPriceStore sharedInstance] dailyPortfolioPrices][index];
     }
     // *************** BAR GRAPH ***************
     else if ([barGraph isEqualToString:[self.detailItem description]]){
@@ -686,13 +685,13 @@ UIPopoverController *masterPopoverController;
             //NSLog(@"numberForPlot:field:recordIndex:, fieldEnum = %i, CPTBarPlotFieldBarTip = %i, index = %i", fieldEnum, CPTBarPlotFieldBarTip, index);
             if ([plot.identifier isEqual:CPDTickerSymbolAAPL]) {
                 //NSLog(@"numberForPlot:field:recordIndex return: %@",[[[CPDStockPriceStore sharedInstance] weeklyPrices:CPDTickerSymbolAAPL] objectAtIndex:index]);
-                return [[[CPDStockPriceStore sharedInstance] weeklyPrices:CPDTickerSymbolAAPL] objectAtIndex:index];
+                return [[CPDStockPriceStore sharedInstance] weeklyPrices:CPDTickerSymbolAAPL][index];
             } else if ([plot.identifier isEqual:CPDTickerSymbolGOOG]) {
                 //NSLog(@"numberForPlot:field:recordIndex return: %@",[[[CPDStockPriceStore sharedInstance] weeklyPrices:CPDTickerSymbolGOOG] objectAtIndex:index]);
-                return [[[CPDStockPriceStore sharedInstance] weeklyPrices:CPDTickerSymbolGOOG] objectAtIndex:index];
+                return [[CPDStockPriceStore sharedInstance] weeklyPrices:CPDTickerSymbolGOOG][index];
             } else if ([plot.identifier isEqual:CPDTickerSymbolMSFT]) {
                 //NSLog(@"numberForPlot:field:recordIndex return: %@",[[[CPDStockPriceStore sharedInstance] weeklyPrices:CPDTickerSymbolMSFT] objectAtIndex:index]);
-                return [[[CPDStockPriceStore sharedInstance] weeklyPrices:CPDTickerSymbolMSFT] objectAtIndex:index];
+                return [[CPDStockPriceStore sharedInstance] weeklyPrices:CPDTickerSymbolMSFT][index];
             }
         }
 
@@ -704,17 +703,17 @@ UIPopoverController *masterPopoverController;
         switch (fieldEnum) {
             case CPTScatterPlotFieldX:
                 if (index < valueCount) {
-                    return [NSNumber numberWithUnsignedInteger:index];
+                    return @(index);
                 }
                 break;
                 
             case CPTScatterPlotFieldY:
                 if ([plot.identifier isEqual:CPDTickerSymbolAAPL] == YES) {
-                    return [[[CPDStockPriceStore sharedInstance] monthlyPrices:CPDTickerSymbolAAPL] objectAtIndex:index];
+                    return [[CPDStockPriceStore sharedInstance] monthlyPrices:CPDTickerSymbolAAPL][index];
                 } else if ([plot.identifier isEqual:CPDTickerSymbolGOOG] == YES) {
-                    return [[[CPDStockPriceStore sharedInstance] monthlyPrices:CPDTickerSymbolGOOG] objectAtIndex:index];
+                    return [[CPDStockPriceStore sharedInstance] monthlyPrices:CPDTickerSymbolGOOG][index];
                 } else if ([plot.identifier isEqual:CPDTickerSymbolMSFT] == YES) {
-                    return [[[CPDStockPriceStore sharedInstance] monthlyPrices:CPDTickerSymbolMSFT] objectAtIndex:index];
+                    return [[CPDStockPriceStore sharedInstance] monthlyPrices:CPDTickerSymbolMSFT][index];
                 }
                 break;
         }
@@ -740,7 +739,7 @@ UIPopoverController *masterPopoverController;
         }
         // 3 - Calculate percentage value
         NSDecimalNumber *price =
-        [[[CPDStockPriceStore sharedInstance] dailyPortfolioPrices] objectAtIndex:index];
+        [[CPDStockPriceStore sharedInstance] dailyPortfolioPrices][index];
         NSDecimalNumber *percent = [price decimalNumberByDividingBy:portfolioSum];
         // 4 - Set up display label
         NSString *labelValue = [NSString stringWithFormat:@"$%0.2f USD (%0.1f %%)",
@@ -755,7 +754,7 @@ UIPopoverController *masterPopoverController;
 
 -(NSString *)legendTitleForPieChart:(CPTPieChart *)pieChart recordIndex:(NSUInteger)index {
     if (index < [[[CPDStockPriceStore sharedInstance] tickerSymbols] count]) {
-        return [[[CPDStockPriceStore sharedInstance] tickerSymbols] objectAtIndex:index];
+        return [[CPDStockPriceStore sharedInstance] tickerSymbols][index];
     }
     return @"N/A";
 }
@@ -782,9 +781,9 @@ UIPopoverController *masterPopoverController;
     NSNumber *price = [self numberForPlot:plot field:CPTBarPlotFieldBarTip recordIndex:index];
     //NSLog(@"barPlot:barWasSelectedAtRecordIndex: price: %@", price);
     if (!self.priceAnnotation) {
-        NSNumber *x = [NSNumber numberWithInt:0];
-        NSNumber *y = [NSNumber numberWithInt:0];
-        NSArray *anchorPoint = [NSArray arrayWithObjects:x, y, nil];
+        NSNumber *x = @0;
+        NSNumber *y = @0;
+        NSArray *anchorPoint = @[x, y];
         self.priceAnnotation = [[CPTPlotSpaceAnnotation alloc] initWithPlotSpace:plot.plotSpace anchorPlotPoint:anchorPoint];
         
     }
@@ -809,11 +808,11 @@ UIPopoverController *masterPopoverController;
     }
     // 7 - Get the anchor point for annotation
     CGFloat x = index + CPDBarInitialX + (plotIndex * CPDBarWidth);
-    NSNumber *anchorX = [NSNumber numberWithFloat:x];
+    NSNumber *anchorX = @(x);
     CGFloat y = [price floatValue] + (40.0f); //+ 10.0f; //(40.0f)
-    NSNumber *anchorY = [NSNumber numberWithFloat:y];
+    NSNumber *anchorY = @(y);
     
-    self.priceAnnotation.anchorPlotPoint = [NSArray arrayWithObjects:anchorX, anchorY, nil];
+    self.priceAnnotation.anchorPlotPoint = @[anchorX, anchorY];
     
     // 8 - Add the annotation 
     [plot.graph.plotAreaFrame.plotArea addAnnotation:self.priceAnnotation];

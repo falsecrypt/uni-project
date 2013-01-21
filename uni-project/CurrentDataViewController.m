@@ -13,6 +13,7 @@
 #import "DetailViewManager.h"
 #import "FirstDetailViewController.h"
 #import "Reachability.h"
+#import "KeychainItemWrapper.h"
 
 // Real Time Plot
 const double kFrameRate         = 5.0;  // frames per second
@@ -140,8 +141,9 @@ NSMutableArray *navigationBarItems;
     NSLog(@"calling CurrentDataViewController - viewWillAppear start");
     [super viewWillAppear:animated];
     // NSLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if (![defaults boolForKey:@"userLoggedIn"]) {
+    KeychainItemWrapper *keychain =
+    [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
+    if (!(BOOL)[keychain objectForKey:(__bridge id)(kSecAttrLabel)]) {
         //[navigationBarItems removeObject:self.profileBarButtonItem];
         [self.navigationBar.topItem setRightBarButtonItem:self.profileBarButtonItem animated:NO];
     }
@@ -178,7 +180,7 @@ NSMutableArray *navigationBarItems;
 {
     NSLog(@"Calling generateData");
     [self.dataForPlot removeAllObjects];
-    [self.dataForPlot addObject:[NSNumber numberWithInt:0]];
+    [self.dataForPlot addObject:@0];
     currentIndex = 1; //0
     /*NSTimer* firstTimer = [NSTimer timerWithTimeInterval:0.1
                                                   target:self
@@ -305,12 +307,12 @@ NSMutableArray *navigationBarItems;
     NSLog(@"Calling numberForPlot");
     switch ( fieldEnum ) {
         case CPTScatterPlotFieldX:
-            num = [NSNumber numberWithUnsignedInteger:index + currentIndex - self.dataForPlot.count];
+            num = @(index + currentIndex - self.dataForPlot.count);
             NSLog(@"X Value, num = %@, index = %i", num, index);
             break;
             
         case CPTScatterPlotFieldY:
-            num = [self.dataForPlot objectAtIndex:index];
+            num = (self.dataForPlot)[index];
             NSLog(@"Y value, num = %@, index = %i", num, index);
             break;
             
@@ -360,7 +362,7 @@ NSMutableArray *navigationBarItems;
         
         currentIndex++;
         //float kWhrData = (self.userCurrentWatt/1000.00)*(1.0/60.0);
-        [self.dataForPlot addObject:[NSNumber numberWithInt:self.userCurrentWatt]];
+        [self.dataForPlot addObject:@(self.userCurrentWatt)];
         //[self.dataForPlot addObject:[NSNumber numberWithDouble:(1.0 - kAlpha) * [[self.dataForPlot lastObject] doubleValue] + kAlpha * rand() / (double)RAND_MAX]];
         [thePlot insertDataAtIndex:self.dataForPlot.count - 1 numberOfRecords:1];
     }
@@ -387,7 +389,7 @@ NSMutableArray *navigationBarItems;
         //NSNumber *total = [self.lastWattValues valueForKeyPath:@"@sum.value"];
         float total = 0.00;
         for(int i=0;i<[self.lastWattValues count];i++){
-            total += [[self.lastWattValues objectAtIndex:i] floatValue];
+            total += [(self.lastWattValues)[i] floatValue];
         }
         total = total/[self.lastWattValues count]; // calculate average value
         float averageKwhTemp = (total/1000)*hours;
@@ -500,14 +502,14 @@ NSMutableArray *navigationBarItems;
             
             // store the new value in this array, but max 20 values
             if ([self.lastWattValues count] <= 20) {
-                [self.lastWattValues addObject:[NSNumber numberWithInt:self.userCurrentWatt]];
+                [self.lastWattValues addObject:@(self.userCurrentWatt)];
                 //[self.lastWattValues addObject:[NSNull null]];
                 //NSLog(@"__lastWattValues: %@", self.lastWattValues);
                 //NSLog(@"__object: %@", [self.lastWattValues objectAtIndex:0]);
             }
             else {
                 [self.lastWattValues removeObjectAtIndex:0];
-                [self.lastWattValues addObject:[NSNumber numberWithInt:self.userCurrentWatt]];
+                [self.lastWattValues addObject:@(self.userCurrentWatt)];
                 //[self.lastWattValues addObject:[NSNull null]];
                 //NSLog(@"_lastWattValues: %@", self.lastWattValues);
             }
@@ -534,8 +536,8 @@ NSMutableArray *navigationBarItems;
 -(NSArray *)sortCollection:(NSArray *)toSort {
     NSArray *sortedArray;
     sortedArray = [toSort sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
-        NSNumber *tag1 = [NSNumber numberWithInt:[(UILabel*)a tag]];
-        NSNumber *tag2 = [NSNumber numberWithInt:[(UILabel*)b tag]];
+        NSNumber *tag1 = @([(UILabel*)a tag]);
+        NSNumber *tag2 = @([(UILabel*)b tag]);
         return [tag1 compare:tag2];
     }];
     return sortedArray;
@@ -706,16 +708,16 @@ NSMutableArray *navigationBarItems;
     NSArray* reversedArray = [[characters reverseObjectEnumerator] allObjects];
     for (int i=0; i < [reversedArray count]; i++) {
         if (i==0) {
-            self.spReadingFirstNumber.text = [reversedArray objectAtIndex:0];
+            self.spReadingFirstNumber.text = reversedArray[0];
         }
         else if (i==1){
-            self.spReadingSecondNumber.text = [reversedArray objectAtIndex:1];
+            self.spReadingSecondNumber.text = reversedArray[1];
         }
         else if (i==2){
-            self.spReadingThirdNumber.text = [reversedArray objectAtIndex:2];
+            self.spReadingThirdNumber.text = reversedArray[2];
         }
         else if (i==3){
-            self.spReadingFourthNumber.text = [reversedArray objectAtIndex:3];
+            self.spReadingFourthNumber.text = reversedArray[3];
         }
     }
     
@@ -757,7 +759,7 @@ NSMutableArray *navigationBarItems;
         _continiousTimer = nil;
     }
     // Going back
-    [[self.splitViewController.viewControllers objectAtIndex:0]popToRootViewControllerAnimated:TRUE];
+    [(self.splitViewController.viewControllers)[0]popToRootViewControllerAnimated:TRUE];
     DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
     FirstDetailViewController *startDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
     detailViewManager.detailViewController = startDetailViewController;

@@ -59,14 +59,13 @@
 - (IBAction)logInButtonPressed:(id)sender
 {
 
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:NO forKey:@"userLoggedIn"];
     KeychainItemWrapper *keychain =
     [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
     
     if( [self.usernameField.text length] < 1 || [self.passwordField.text length] < 1  ){
         [self showAlertAfterValidationFailed:@"Username and Password cannot be Blank"];
     }
+/*
     
 #if TARGET_IPHONE_SIMULATOR
     
@@ -74,20 +73,15 @@
     else if ([self.usernameField.text isEqualToString:@"admin"] &&
              [self.passwordField.text isEqualToString:@"admin"]) {
         
-        // now set UserLoggedIn = true, using NSUserDefaults
-        
+        // now set the login-flag
         [defaults setBool:YES forKey:@"userLoggedIn"];
         
         BOOL loggedIN = [defaults boolForKey:@"userLoggedIn"];
-        NSLog(@"Simulator-Credentials accepted-userLoggedIn from NSUserDefaults: %d", loggedIN);
+        NSLog(@"Simulator-Credentials accepted-userLoggedIn from NSUserDefaults: %i",loggedIN);
         if( [ self.delegate respondsToSelector: @selector( didDismissPresentedViewControllerLogin ) ] ) {
             [self.delegate didDismissPresentedViewControllerLogin]; 
             NSLog(@"self.delegate 1: %@", self.delegate);
         }
-        /*if( [ self.delegate respondsToSelector: @selector( showProfileAfterUserLoggedIn ) ] ) {
-            [self.delegate showProfileAfterUserLoggedIn]; // profileDelegate == null ???
-            NSLog(@"self.delegate 2: %@", self.delegate);
-        }*/
         
         NSString *notificationName = @"UserLoggedInNotification";
         [[NSNotificationCenter defaultCenter]
@@ -102,18 +96,17 @@
     }
     
 #else
+*/
     
     
     // Validation deploying on real device
-    else if ([self.usernameField.text isEqualToString:[keychain objectForKey:(__bridge id)kSecAttrAccount]] &&
+    if ([self.usernameField.text isEqualToString:[keychain objectForKey:(__bridge id)kSecAttrAccount]] &&
              [self.passwordField.text isEqualToString:[keychain objectForKey:(__bridge id)kSecValueData]]) {
 
-        // now set UserLoggedIn = true, using NSUserDefaults
+        // now set UserLoggedIn, using keychain
+        [keychain setObject:@"LOGGEDIN" forKey:(__bridge id)(kSecAttrLabel)];
         
-        [defaults setBool:YES forKey:@"userLoggedIn"];
-        
-        BOOL loggedIN = [defaults boolForKey:@"userLoggedIn"];
-        NSLog(@"Credentials accepted-userLoggedIn from NSUserDefaults: %d", loggedIN);
+        NSLog(@"Credentials accepted-userLoggedIn from the keychain: %@", [keychain objectForKey:(__bridge id)(kSecAttrLabel)]);
         [self.delegate didDismissPresentedViewControllerLogin];
         
         NSString *notificationName = @"UserLoggedInNotification";
@@ -126,7 +119,7 @@
         [self showAlertAfterValidationFailed:@"The username or password you entered is incorrect"];
     }
     
-#endif
+//#endif
 
     
 }

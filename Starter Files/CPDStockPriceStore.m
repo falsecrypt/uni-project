@@ -41,11 +41,9 @@
     static NSArray *symbols = nil;
     if (!symbols)
     {
-        symbols = [NSArray arrayWithObjects:
-                   @"AAPL", 
+        symbols = @[@"AAPL", 
                    @"GOOG", 
-                   @"MSFT", 
-                   nil];
+                   @"MSFT"];
     }
     return symbols;
 }
@@ -55,11 +53,9 @@
     static NSArray *prices = nil;
     if (!prices)
     {
-        prices = [NSArray arrayWithObjects:
-                  [NSDecimalNumber numberWithFloat:582.13], 
+        prices = @[[NSDecimalNumber numberWithFloat:582.13], 
                   [NSDecimalNumber numberWithFloat:604.43], 
-                  [NSDecimalNumber numberWithFloat:32.01], 
-                  nil];
+                  [NSDecimalNumber numberWithFloat:32.01]];
     }
     return prices;
 }
@@ -69,13 +65,11 @@
     static NSArray *dates = nil;
     if (!dates)
     {
-        dates = [NSArray arrayWithObjects:
-                 @"4/23", 
+        dates = @[@"4/23", 
                  @"4/24", 
                  @"4/25",
                  @"4/26", 
-                 @"4/27",                   
-                 nil];
+                 @"4/27"];
     }
     return dates;
 }
@@ -94,7 +88,7 @@
     {
         return [self weeklyMsftPrices];
     }
-    return [NSArray array];
+    return @[];
 }
 
 - (NSArray *)datesInMonth
@@ -102,8 +96,7 @@
     static NSArray *dates = nil;
     if (!dates)
     {
-        dates = [NSArray arrayWithObjects:
-                 @"2", 
+        dates = @[@"2", 
                  @"3", 
                  @"4",
                  @"5",
@@ -122,8 +115,7 @@
                  @"25",
                  @"26", 
                  @"27",
-                 @"30",                   
-                 nil];
+                 @"30"];
     }
     return dates;
 }
@@ -142,7 +134,7 @@
     {
         return [self monthlyMsftPrices];
     }
-    return [NSArray array];
+    return @[];
 }
 
 #pragma mark - Private behavior
@@ -152,13 +144,11 @@
     static NSArray *prices = nil;
     if (!prices)
     {
-        prices = [NSArray arrayWithObjects:
-                  [NSDecimalNumber numberWithFloat:571.70], 
+        prices = @[[NSDecimalNumber numberWithFloat:571.70], 
                   [NSDecimalNumber numberWithFloat:560.28], 
                   [NSDecimalNumber numberWithFloat:610.00], 
                   [NSDecimalNumber numberWithFloat:607.70], 
-                  [NSDecimalNumber numberWithFloat:603.00],                   
-                  nil];
+                  [NSDecimalNumber numberWithFloat:603.00]];
     }
     return prices;
 }
@@ -168,13 +158,11 @@
     static NSArray *prices = nil;
     if (!prices)
     {
-        prices = [NSArray arrayWithObjects:
-                  [NSDecimalNumber numberWithFloat:597.60], 
+        prices = @[[NSDecimalNumber numberWithFloat:597.60], 
                   [NSDecimalNumber numberWithFloat:601.27], 
                   [NSDecimalNumber numberWithFloat:609.72], 
                   [NSDecimalNumber numberWithFloat:615.47], 
-                  [NSDecimalNumber numberWithFloat:614.98],                   
-                  nil];
+                  [NSDecimalNumber numberWithFloat:614.98]];
     }
     return prices;
 }
@@ -184,13 +172,11 @@
     static NSArray *prices = nil;
     if (!prices)
     {
-        prices = [NSArray arrayWithObjects:
-                  [NSDecimalNumber numberWithFloat:32.12], 
+        prices = @[[NSDecimalNumber numberWithFloat:32.12], 
                   [NSDecimalNumber numberWithFloat:31.92], 
                   [NSDecimalNumber numberWithFloat:32.20], 
                   [NSDecimalNumber numberWithFloat:32.11], 
-                  [NSDecimalNumber numberWithFloat:31.98],                   
-                  nil];
+                  [NSDecimalNumber numberWithFloat:31.98]];
     }
     return prices;
 }
@@ -200,8 +186,7 @@
     static NSArray *prices = nil;
     if (!prices)
     {
-        prices = [NSArray arrayWithObjects:
-                  [NSDecimalNumber numberWithFloat:618.63], 
+        prices = @[[NSDecimalNumber numberWithFloat:618.63], 
                   [NSDecimalNumber numberWithFloat:629.32], 
                   [NSDecimalNumber numberWithFloat:624.31], 
                   [NSDecimalNumber numberWithFloat:633.68], 
@@ -220,8 +205,7 @@
                   [NSDecimalNumber numberWithFloat:610.00], 
                   [NSDecimalNumber numberWithFloat:607.70], 
                   [NSDecimalNumber numberWithFloat:603.00],
-                  [NSDecimalNumber numberWithFloat:583.98],                  
-                  nil];
+                  [NSDecimalNumber numberWithFloat:583.98]];
     }
     return prices;
 }
@@ -231,8 +215,7 @@
     static NSArray *prices = nil;
     if (!prices)
     {
-        prices = [NSArray arrayWithObjects:
-                  [NSDecimalNumber numberWithFloat:646.92], 
+        prices = @[[NSDecimalNumber numberWithFloat:646.92], 
                   [NSDecimalNumber numberWithFloat:642.62], 
                   [NSDecimalNumber numberWithFloat:635.15], 
                   [NSDecimalNumber numberWithFloat:632.32], 
@@ -251,8 +234,7 @@
                   [NSDecimalNumber numberWithFloat:609.72], 
                   [NSDecimalNumber numberWithFloat:615.47], 
                   [NSDecimalNumber numberWithFloat:614.98], 
-                  [NSDecimalNumber numberWithFloat:604.85],                  
-                  nil];
+                  [NSDecimalNumber numberWithFloat:604.85]];
     }
     return prices;
 }
@@ -262,8 +244,7 @@
     static NSArray *prices = nil;
     if (!prices)
     {
-        prices = [NSArray arrayWithObjects:
-                  [NSDecimalNumber numberWithFloat:32.29], 
+        prices = @[[NSDecimalNumber numberWithFloat:32.29], 
                   [NSDecimalNumber numberWithFloat:31.94], 
                   [NSDecimalNumber numberWithFloat:31.21], 
                   [NSDecimalNumber numberWithFloat:31.52], 
@@ -282,8 +263,7 @@
                   [NSDecimalNumber numberWithFloat:32.20], 
                   [NSDecimalNumber numberWithFloat:32.11], 
                   [NSDecimalNumber numberWithFloat:31.98],  
-                  [NSDecimalNumber numberWithFloat:32.02],                  
-                  nil];
+                  [NSDecimalNumber numberWithFloat:32.02]];
     }
     return prices;
 }

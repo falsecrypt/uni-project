@@ -77,11 +77,13 @@
         NSLog(@"user account was already created, remove the create account-section");
         
         // user already logged in?
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-        self.userLoggedInVar = [defaults boolForKey:@"userLoggedIn"];
-        if (self.userLoggedInVar) {
+        //NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
+        //self.userLoggedInVar = [keychain objectForKey:(__bridge id)(kSecAttrLabel)];
+        NSLog(@"kSecAttrLabel: %@", [keychain objectForKey:(__bridge id)(kSecAttrLabel)]);
+        if ([[keychain objectForKey:(__bridge id)(kSecAttrLabel)] isEqualToString:@"LOGGEDIN"]) {
             NSLog(@"user already logged in");
-            //self.hideLoginSection = true;
+            self.userLoggedInVar = true;
             [self.tableView cellForRowAtIndexPath:indexPathLogin].hidden = YES;
             [self.tableView cellForRowAtIndexPath:indexPath].hidden = NO;
             //NSLog(@"2 calling viewWillAppear: mein buero.hidden = %i", [self.tableView cellForRowAtIndexPath:indexPath].hidden);

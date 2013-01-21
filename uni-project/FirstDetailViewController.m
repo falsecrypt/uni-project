@@ -7,6 +7,7 @@
 
 #import "FirstDetailViewController.h"
 #import "ProfilePopoverViewController.h"
+#import "KeychainItemWrapper.h"
 
 @interface FirstDetailViewController ()
 - (void)showProfileAfterUserLoggedIn;
@@ -88,8 +89,9 @@ NSMutableArray *navigationBarItems;
     [super viewWillAppear:animated];
     // NSLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
     self.navigationBar.topItem.title = @"Summary";
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if (![defaults boolForKey:@"userLoggedIn"]) {
+    KeychainItemWrapper *keychain =
+    [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
+    if ([[keychain objectForKey:(__bridge id)(kSecAttrLabel)] isEqualToString:@"LOGGEDOFF"]) {
         NSLog(@"user is not logged in, removing profileBarButtonItem");
         //[navigationBarItems removeObject:self.profileBarButtonItem];
         //[self.navigationBar.topItem setRightBarButtonItems:navigationBarItems animated:NO]; // not working?

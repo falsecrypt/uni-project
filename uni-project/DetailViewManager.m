@@ -55,8 +55,8 @@
     
     // Update the split view controller's view controllers array.
     // This causes the new detail view controller to be displayed.
-    UIViewController *navigationViewController = [self.splitViewController.viewControllers objectAtIndex:0];
-    NSArray *viewControllers = [[NSArray alloc] initWithObjects:navigationViewController, _detailViewController, nil];
+    UIViewController *navigationViewController = (self.splitViewController.viewControllers)[0];
+    NSArray *viewControllers = @[navigationViewController, _detailViewController];
     self.splitViewController.viewControllers = viewControllers;
     
     // Dismiss the navigation popover if one was present.  This will

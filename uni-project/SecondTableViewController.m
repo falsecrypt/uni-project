@@ -13,6 +13,8 @@
 
 @implementation SecondTableViewController
 
+NSArray *rooms;
+
 #pragma mark -
 #pragma mark Rotation support
 
@@ -43,6 +45,7 @@
     
     self.tableView.backgroundColor = [UIColor clearColor];
     self.parentViewController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"patternBg.png"]];
+    rooms = @[@"Büro 1", @"Büro 2", @"Büro 3"];
     
 }
 
@@ -74,7 +77,7 @@
     detailViewController.title = [tableView cellForRowAtIndexPath:indexPath].textLabel.text;
 
     //NSLog(@"didSelectRowAtIndexPath: %@", detailViewController);
-    if (indexPath.row == 0) {
+    /*if (indexPath.row == 0) {
         detailViewController.view.backgroundColor = [UIColor purpleColor];
     }
     else if (indexPath.row == 1) {
@@ -85,7 +88,7 @@
     }
     else {
         detailViewController.view.backgroundColor = [UIColor magentaColor];
-    }
+    }*/
     
     // DetailViewManager exposes a property, detailViewController.  Set this property
     // to the detail view controller we want displayed.  Configuring the detail view
@@ -94,6 +97,24 @@
     detailViewManager.detailViewController = detailViewController;
     NSLog(@"didSelectRowAtIndexPath: detailViewManager.detailViewController: %@", detailViewManager.detailViewController);
     
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return rooms.count;
+}
+
+// Customize the appearance of table view cells.
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *CellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] ;
+    }
+    
+    // Configure the cell.
+    cell.textLabel.text = rooms[indexPath.row];
+    return cell;
 }
 
 @end

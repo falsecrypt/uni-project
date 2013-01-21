@@ -48,19 +48,19 @@ CircleObjectView *currentSelectedCircle;
     UITouch *touch = [touches anyObject];
     if ([touch.view isKindOfClass: CircleObjectView.class]) {
         // Get the CircleObjectView object from the dictionary
-        currentSelectedCircle = [self.circleObjectsDictionary objectForKey:[NSString stringWithFormat:@"%d",touch.view.tag]];
-        if ([[self.monthColors objectForKey:[NSString stringWithFormat:@"%i",currentSelectedCircle.tag]] isEqual:[UIColor clearColor]]) {
-            currentSelectedCircle.backgroundColor = [self.monthColors objectForKey:[NSString stringWithFormat:@"%i",currentSelectedCircle.tag]];
+        currentSelectedCircle = (self.circleObjectsDictionary)[[NSString stringWithFormat:@"%d",touch.view.tag]];
+        if ([(self.monthColors)[[NSString stringWithFormat:@"%i",currentSelectedCircle.tag]] isEqual:[UIColor clearColor]]) {
+            currentSelectedCircle.backgroundColor = (self.monthColors)[[NSString stringWithFormat:@"%i",currentSelectedCircle.tag]];
             currentSelectedCircle.layer.borderColor = [[UIColor greenColor] colorWithAlphaComponent:1.0f].CGColor;
         }
         else {
-        currentSelectedCircle.backgroundColor = [[self.monthColors objectForKey:[NSString stringWithFormat:@"%i",currentSelectedCircle.tag]] colorWithAlphaComponent: 1.0f];
+        currentSelectedCircle.backgroundColor = [(self.monthColors)[[NSString stringWithFormat:@"%i",currentSelectedCircle.tag]] colorWithAlphaComponent: 1.0f];
         }
         
         //Is anyone listening?
         if([self.delegate respondsToSelector:@selector(setLabelsWithMonth:andConsumption:)])
         {
-            MonthData *monthObj = [MonthData findFirstByAttribute:@"month" withValue:[NSNumber numberWithInt:touch.view.tag]];
+            MonthData *monthObj = [MonthData findFirstByAttribute:@"month" withValue:@(touch.view.tag)];
             NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
             [formatter setDateStyle:kCFDateFormatterLongStyle];
             [formatter setDateFormat:@"MMMM yy"];
@@ -80,11 +80,11 @@ CircleObjectView *currentSelectedCircle;
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     if (currentSelectedCircle!=nil) {
-        if ([[self.monthColors objectForKey:[NSString stringWithFormat:@"%i",currentSelectedCircle.tag]] isEqual:[UIColor clearColor]]) {
+        if ([(self.monthColors)[[NSString stringWithFormat:@"%i",currentSelectedCircle.tag]] isEqual:[UIColor clearColor]]) {
             currentSelectedCircle.layer.borderColor = [[UIColor greenColor] colorWithAlphaComponent:0.7f].CGColor;
         }
         else {
-            currentSelectedCircle.backgroundColor = [self.monthColors objectForKey:[NSString stringWithFormat:@"%i",currentSelectedCircle.tag]];
+            currentSelectedCircle.backgroundColor = (self.monthColors)[[NSString stringWithFormat:@"%i",currentSelectedCircle.tag]];
         }
     }
 }
@@ -115,11 +115,11 @@ CircleObjectView *currentSelectedCircle;
         
         for (int i=1; i<[self.monthDataObjects count]+1; i++) {
             
-            CGFloat radius = [[[self.monthDataObjects objectAtIndex:i-1] circleradius] floatValue];
-            MonthData *monthObj = [self.monthDataObjects objectAtIndex:i-1];
+            CGFloat radius = [[(self.monthDataObjects)[i-1] circleradius] floatValue];
+            MonthData *monthObj = (self.monthDataObjects)[i-1];
             CircleObjectView *circleObjectView = [[CircleObjectView alloc] initWithFrame:CGRectZero];
-            [circleObjectView setBackgroundColor:[self.monthColors objectForKey:[monthObj.month stringValue]]];
-            NSLog(@"color: %@", [self.monthColors objectForKey:[monthObj.month stringValue]]);
+            [circleObjectView setBackgroundColor:(self.monthColors)[[monthObj.month stringValue]]];
+            NSLog(@"color: %@", (self.monthColors)[[monthObj.month stringValue]]);
             circleObjectView.layer.cornerRadius = radius;
             circleObjectView.bounds = CGRectMake(0, 0, 2*radius, 2*radius); //bounds of the view’s own coordinates
             //for consumtion = 0kWh
@@ -139,7 +139,7 @@ CircleObjectView *currentSelectedCircle;
             [[circleObjectView layer] setShadowRadius:3.0];
             [[circleObjectView layer] setShadowOpacity:0.8];
             [self addSubview:circleObjectView];
-            [self.circleObjectsDictionary setObject:circleObjectView forKey:[monthObj.month stringValue]];
+            (self.circleObjectsDictionary)[[monthObj.month stringValue]] = circleObjectView;
 
             //NSLog(@"point.x = %f, point.y = %f", point.x, point.y);
             // Add a label with a month's name
@@ -187,22 +187,22 @@ CircleObjectView *currentSelectedCircle;
     int64_t delayInSeconds = 1.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        MonthData *monthLastObj = [self.monthDataObjects objectAtIndex:[self.monthDataObjects count]-1];
+        MonthData *monthLastObj = (self.monthDataObjects)[[self.monthDataObjects count]-1];
         CircleObjectView *currentCircle =
-        [self.circleObjectsDictionary objectForKey:[NSString stringWithFormat:@"%i",[[monthLastObj month]intValue]]];
+        (self.circleObjectsDictionary)[[NSString stringWithFormat:@"%i",[[monthLastObj month]intValue]]];
         //NSLog(@"self.circleObjectsDictionary = %@, self.monthDataObjects = %@", self.circleObjectsDictionary, self.monthDataObjects);
         [UIView animateWithDuration:0.3 animations:^{
-            UIColor *animColorStart = [[self.monthColors objectForKey:[NSString stringWithFormat:@"%i",currentCircle.tag]] colorWithAlphaComponent: 1.0f];
+            UIColor *animColorStart = [(self.monthColors)[[NSString stringWithFormat:@"%i",currentCircle.tag]] colorWithAlphaComponent: 1.0f];
             currentCircle.backgroundColor = animColorStart;
         }];
         [UIView animateWithDuration:0.3 animations:^{
-            UIColor *animColorEnd = [self.monthColors objectForKey:[NSString stringWithFormat:@"%i",currentCircle.tag]];
+            UIColor *animColorEnd = (self.monthColors)[[NSString stringWithFormat:@"%i",currentCircle.tag]];
             currentCircle.backgroundColor = animColorEnd;
         }];
         
         //Is anyone listening?
         if([self.delegate respondsToSelector:@selector(setLabelsWithMonth:andConsumption:)]){
-            MonthData *monthObj = [self.monthDataObjects objectAtIndex:[self.monthDataObjects count]-1];
+            MonthData *monthObj = (self.monthDataObjects)[[self.monthDataObjects count]-1];
             NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
             [formatter setDateStyle:kCFDateFormatterLongStyle];
             [formatter setDateFormat:@"MMMM yy"];

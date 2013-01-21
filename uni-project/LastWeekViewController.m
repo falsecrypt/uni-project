@@ -251,14 +251,14 @@ NSMutableArray *navigationBarItems;
     [MBProgressHUD hideHUDForView:self.view animated:YES];
     NSArray *results = [WeekData findAllSortedBy:@"day" ascending:YES];
     NSLog(@"readyToMakePieChart -> results: %@", results);
-    WeekData *weekdata = [results objectAtIndex:0];
+    WeekData *weekdata = results[0];
     NSLog(@"readyToMakePieChart -> first: %@", [weekdata day]);
     dayDataDictionary = [[NSMutableDictionary alloc] init];
     plotDataConsumption = [[NSMutableArray alloc] init];
     plotDataDates = [[NSMutableArray alloc] init];
     
     for (WeekData *weekdata in results){
-        [dayDataDictionary setObject:[weekdata day] forKey:[weekdata consumption]]; //NSMutableDictionary is unordered
+        dayDataDictionary[[weekdata consumption]] = [weekdata day]; //NSMutableDictionary is unordered
         [plotDataConsumption addObject:[weekdata consumption]];
         [plotDataDates addObject:[weekdata day]];
         NSLog(@"adding [weekdata day]: %@", [weekdata day]);
@@ -290,8 +290,8 @@ NSMutableArray *navigationBarItems;
                                                  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
                                                  [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
                                                  [dateFormatter setDateFormat:@"yy-MM-dd"];
-                                                 NSDate *date = [dateFormatter dateFromString:[day objectAtIndex:0]];
-                                                 NSString *withoutComma = [[day objectAtIndex:1] stringByReplacingOccurrencesOfString:@"," withString:@"."];
+                                                 NSDate *date = [dateFormatter dateFromString:day[0]];
+                                                 NSString *withoutComma = [day[1] stringByReplacingOccurrencesOfString:@"," withString:@"."];
                                                  double temp = [withoutComma doubleValue];
                                                  NSDecimalNumber *dayConsumption = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:temp];
                                                  NSLog(@"dayConsumption : %@", dayConsumption);
@@ -430,7 +430,7 @@ NSMutableArray *navigationBarItems;
 
 -(void)pieChart:(CPTPieChart *)plot sliceWasSelectedAtRecordIndex:(NSUInteger)index
 {
-    NSLog(@"%@ slice was selected at index %lu. Value = %@", plot.identifier, (unsigned long)index, [plotDataConsumption objectAtIndex:index]);
+    NSLog(@"%@ slice was selected at index %lu. Value = %@", plot.identifier, (unsigned long)index, plotDataConsumption[index]);
     
     selecting = TRUE;
     if (currentSliceIndex==index && !repeatingTouch) {
@@ -442,7 +442,7 @@ NSMutableArray *navigationBarItems;
     currentSliceIndex = index;
     
     //NSDate *dayDate = [dayDataDictionary objectForKey:[plotDataConsumption objectAtIndex:index]];
-    NSDate *dayDate = [plotDataDates objectAtIndex:index];
+    NSDate *dayDate = plotDataDates[index];
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:kCFDateFormatterLongStyle];
     [formatter setDateFormat:@"EEEE, dd.MM.yy"];
@@ -450,7 +450,7 @@ NSMutableArray *navigationBarItems;
     formatter.locale = deLocale;
     NSString *dayNameLong = [formatter stringFromDate:dayDate];
     self.dayNameLabel.text = dayNameLong;
-    NSString *consumptionAndKwh = [[NSString alloc] initWithString:[[plotDataConsumption objectAtIndex:index] stringValue]];
+    NSString *consumptionAndKwh = [[NSString alloc] initWithString:[plotDataConsumption[index] stringValue]];
     consumptionAndKwh = [consumptionAndKwh stringByAppendingString:@" kWh"];
     self.consumptionMonthLabel.text = consumptionAndKwh;
     //[self radialOffsetForPieChart:plot recordIndex:index];
@@ -518,9 +518,9 @@ NSMutableArray *navigationBarItems;
     //CPTGradient *areaGradientUI = [CPTGradient gradientWithBeginningColor:startColor
      //                                                         endingColor:endColor];
     //sector=[CPTFill fillWithGradient:areaGradientUI];
-    NSNumber *consumption = [plotDataConsumption objectAtIndex:index];
+    NSNumber *consumption = plotDataConsumption[index];
     NSLog(@"consumption: %@", consumption);
-    UIColor *sliceColor = [self.daysColors objectForKey:[consumption stringValue]];
+    UIColor *sliceColor = (self.daysColors)[[consumption stringValue]];
     NSLog(@"sliceColor: %@", sliceColor);
     sector=[CPTFill fillWithColor:(CPTColor *)sliceColor];
     return sector;
@@ -540,7 +540,7 @@ NSMutableArray *navigationBarItems;
     NSNumber *num;
     
     if ( fieldEnum == CPTPieChartFieldSliceWidth ) {
-        num = [plotDataConsumption objectAtIndex:index];
+        num = plotDataConsumption[index];
     }
     else {
         NSLog(@"numberForPlot returning index = %i", index);
@@ -564,7 +564,7 @@ NSMutableArray *navigationBarItems;
             whiteText.fontSize = 18.0f;
         }
         //NSDate *dayDate = [dayDataDictionary objectForKey:[plotDataConsumption objectAtIndex:index]];
-        NSDate *dayDate = [plotDataDates objectAtIndex:index];
+        NSDate *dayDate = plotDataDates[index];
         NSLog(@"dayDate: %@", dayDate);
         NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
         [formatter setDateStyle:kCFDateFormatterLongStyle];
@@ -635,7 +635,7 @@ NSMutableArray *navigationBarItems;
 //    NSLog(@"navigationBarItems: %@", navigationBarItems);
 //    NSLog(@"self.profileBarButtonItem: %@", self.profileBarButtonItem);
     // Going back
-    [[self.splitViewController.viewControllers objectAtIndex:0]popToRootViewControllerAnimated:TRUE];
+    [(self.splitViewController.viewControllers)[0]popToRootViewControllerAnimated:TRUE];
     DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
     FirstDetailViewController *startDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
     detailViewManager.detailViewController = startDetailViewController;

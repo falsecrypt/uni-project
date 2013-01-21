@@ -25,10 +25,9 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     KeychainItemWrapper *keychain =
     [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
-    if ([defaults boolForKey:@"userLoggedIn"]) {
+    if ([[keychain objectForKey:(__bridge id)(kSecAttrLabel)] isEqualToString:@"LOGGEDIN"]) { //kSecAttrIsInvisible = NO
         self.userName.text = [keychain objectForKey:(__bridge id)kSecAttrAccount];
     }
     else {
@@ -59,10 +58,10 @@
     self.userName = [[UILabel alloc] initWithFrame:CGRectMake(10,110,120,20)];
     self.userName.backgroundColor = [UIColor clearColor];
     self.userName.textColor = [UIColor colorWithWhite:0.5 alpha:1.0];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+
     KeychainItemWrapper *keychain =
     [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
-    if ([defaults boolForKey:@"userLoggedIn"]) {
+    if ([[keychain objectForKey:(__bridge id)(kSecAttrLabel)] isEqualToString:@"LOGGEDIN" ]) {
         self.userName.text = [keychain objectForKey:(__bridge id)kSecAttrAccount];
     }
     else {
@@ -92,11 +91,11 @@
 }
 
 - (void)didSelectLogOff:(id)sender {
-
-    // Log off user
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:NO forKey:@"userLoggedIn"];
     
+    KeychainItemWrapper *keychain =
+    [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
+    // Log off user
+    [keychain setObject:@"LOGGEDOFF" forKey:(__bridge id)(kSecAttrLabel)];
     NSString *notificationName = @"UserLoggedOffNotification";
     [[NSNotificationCenter defaultCenter]
      postNotificationName:notificationName

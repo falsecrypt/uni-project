@@ -106,7 +106,7 @@
     NSString *inputEmail    = [self.emailField text];
     
     if( [inputUsername length] < 1 || [inputPassword length] < 1  ){
-        [self showAlertAfterValidationFailed:@"Username and Password cannot be Blank"];
+        [self showAlertAfterValidationFailed:@"Username and Password cannot be blank"];
     }
     else {
         // OK. lets save the new account, using keychain
@@ -115,12 +115,18 @@
         [keychain setObject:inputUsername forKey:(__bridge id)kSecAttrAccount];
         [keychain setObject:inputPassword forKey:(__bridge id)kSecValueData];
         [keychain setObject:inputEmail forKey:(__bridge id)kSecAttrDescription];
-        // now set UserLoggedIn = true, using NSUserDefaults
+        /* kSecAttrAccessibleWhenUnlockedThisDeviceOnly:
+           Only accessible when device is unlocked. Data is not migrated via backups.
+         */
+        [keychain setObject:(__bridge id)(kSecAttrAccessibleWhenUnlockedThisDeviceOnly) forKey:(__bridge id)(kSecAttrAccessible)];
+        // login-flag
+        [keychain setObject:@"1" forKey:(__bridge id)(kSecAttrLabel)];
+        /*
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [defaults setBool:YES forKey:@"userLoggedIn"];
         
-        BOOL loggedIN = [defaults boolForKey:@"userLoggedIn"];
-        NSLog(@"userLoggedIn from NSUserDefaults: %d", loggedIN);
+        BOOL loggedIN = [defaults boolForKey:@"userLoggedIn"]; */
+        NSLog(@"userLoggedIn from the keychain (kSecAttrLabel): %@", [keychain objectForKey:(__bridge id)(kSecAttrLabel)]);
         [self.delegate didDismissPresentedViewControllerRegister];
         //[self.delegate userDidRegistered];
         

@@ -100,20 +100,20 @@
     if ([[segue identifier] isEqualToString:@"show_pie_chart"]) {
         NSLog(@"Calling prepareForSegue - pie chart");
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDate *object = [self.objectsArray objectAtIndex:indexPath.row];
+        NSDate *object = (self.objectsArray)[indexPath.row];
         [(MDDetailViewController *)[[segue destinationViewController] topViewController] setDetailItem:object];
         NSLog(@"Calling prepareForSegue - object: %@", object);
         self.detailViewController = (MDDetailViewController *)[[segue destinationViewController] topViewController];
     }
     else if ([[segue identifier] isEqualToString:@"show_bar_graph"]){
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDate *object = [self.objectsArray objectAtIndex:indexPath.row];
+        NSDate *object = (self.objectsArray)[indexPath.row];
         [(MDDetailViewController *)[[segue destinationViewController] topViewController] setDetailItem:object];
         self.detailViewController = (MDDetailViewController *)[[segue destinationViewController] topViewController];
     }
     else if ([[segue identifier] isEqualToString:@"show_scatter_plot"]){
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDate *object = [self.objectsArray objectAtIndex:indexPath.row];
+        NSDate *object = (self.objectsArray)[indexPath.row];
         [(MDDetailViewController *)[[segue destinationViewController] topViewController] setDetailItem:object];
         self.detailViewController = (MDDetailViewController *)[[segue destinationViewController] topViewController];
     }

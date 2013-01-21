@@ -14,4 +14,5 @@
 @property (nonatomic, retain) UIBarButtonItem *navigationPaneBarButtonItem;
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
 
+
 @end
