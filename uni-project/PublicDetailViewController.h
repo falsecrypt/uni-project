@@ -8,11 +8,13 @@
 #import <UIKit/UIKit.h>
 #import "DetailViewManager.h"
 
-@interface SecondDetailViewController : UIViewController <SubstitutableDetailViewController>
+@interface PublicDetailViewController : UIViewController <SubstitutableDetailViewController>
 
 /// SubstitutableDetailViewController
-@property (nonatomic, retain) UIBarButtonItem *navigationPaneBarButtonItem;
+@property (nonatomic, strong) UIBarButtonItem *navigationPaneBarButtonItem;
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
+
+@property (nonatomic, assign) NSInteger selectedParticipant;
 
 
 @end

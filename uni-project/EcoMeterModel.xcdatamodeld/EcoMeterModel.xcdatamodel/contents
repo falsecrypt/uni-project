@@ -8,6 +8,12 @@
         <attribute name="year" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="user" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="monthData" inverseEntity="User" syncable="YES"/>
     </entity>
+    <entity name="Participant" representedClassName="Participant" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="profileimage" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="score" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="sensorid" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+    </entity>
     <entity name="User" representedClassName="User" syncable="YES">
         <attribute name="created" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="profileimage" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
@@ -24,5 +30,6 @@
         <element name="MonthData" positionX="-137" positionY="95" width="128" height="135"/>
         <element name="User" positionX="63" positionY="243" width="128" height="120"/>
         <element name="WeekData" positionX="243" positionY="90" width="128" height="88"/>
+        <element name="Participant" positionX="160" positionY="192" width="128" height="105"/>
     </elements>
 </model>

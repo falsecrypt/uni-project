@@ -6,14 +6,15 @@
 //
 
 
-#import "SecondTableViewController.h"
+#import "PublicTableViewController.h"
 #import "DetailViewManager.h"
-#import "SecondDetailViewController.h"
+#import "PublicDetailViewController.h"
 #import "FirstDetailViewController.h"
+#import "Participant.h"
 
-@implementation SecondTableViewController
+@implementation PublicTableViewController
 
-NSArray *rooms;
+NSDictionary *users;
 
 #pragma mark -
 #pragma mark Rotation support
@@ -45,7 +46,11 @@ NSArray *rooms;
     
     self.tableView.backgroundColor = [UIColor clearColor];
     self.parentViewController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"patternBg.png"]];
-    rooms = @[@"Büro 1", @"Büro 2", @"Büro 3"];
+    users = @{@"Büro 1":[NSNumber numberWithInt:FirstSensorID],
+              @"Büro 2":[NSNumber numberWithInt:SecondSensorID],
+              @"Büro 3":[NSNumber numberWithInt:ThirdSensorID]};
+    
+    
     
 }
 
@@ -67,14 +72,15 @@ NSArray *rooms;
     //NSLog(@"self.splitViewController: %@", self.splitViewController);
     
     // Create and configure a new detail view controller appropriate for the selection.
-    UIViewController <SubstitutableDetailViewController> *detailViewController = nil;
+    //UIViewController <SubstitutableDetailViewController> *detailViewController = nil;
     
     //SecondDetailViewController *newDetailViewController = [[SecondDetailViewController alloc] initWithNibName:@"SecondDetailView" bundle:nil];
-    SecondDetailViewController *newDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"SecondDetailView"];
+    PublicDetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"SecondDetailView"];
 
-    detailViewController = newDetailViewController;
+    //detailViewController = newDetailViewController;
     
     detailViewController.title = [tableView cellForRowAtIndexPath:indexPath].textLabel.text;
+    detailViewController.selectedParticipant = [[users objectForKey:[tableView cellForRowAtIndexPath:indexPath].textLabel.text]integerValue];
 
     //NSLog(@"didSelectRowAtIndexPath: %@", detailViewController);
     /*if (indexPath.row == 0) {
@@ -100,7 +106,7 @@ NSArray *rooms;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return rooms.count;
+    return users.count;
 }
 
 // Customize the appearance of table view cells.
@@ -111,9 +117,9 @@ NSArray *rooms;
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] ;
     }
-    
-    // Configure the cell.
-    cell.textLabel.text = rooms[indexPath.row];
+    NSArray *usersSorted = [[users allKeys]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+    // Configure the cell text
+    cell.textLabel.text = usersSorted[indexPath.row];
     return cell;
 }
 

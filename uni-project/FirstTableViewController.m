@@ -8,7 +8,7 @@
 #import "FirstTableViewController.h"
 #import "FirstDetailViewController.h"
 #import "DetailViewManager.h"
-#import "SecondTableViewController.h"
+#import "PublicTableViewController.h"
 #import "KeychainItemWrapper.h"
 
 @interface FirstTableViewController ()
@@ -251,7 +251,7 @@
     NSUInteger row = indexPath.row;
     
     if (row == 1) {
-        SecondTableViewController *newTableViewController = [[SecondTableViewController alloc] init];
+        PublicTableViewController *newTableViewController = [[PublicTableViewController alloc] init];
         [self.navigationController pushViewController:newTableViewController animated:YES];
         
     }
