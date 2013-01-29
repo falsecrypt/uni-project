@@ -2,7 +2,7 @@
 //  WeekData.m
 //  uni-project
 
-//  Copyright (c) 2012 test. All rights reserved.
+//  Copyright (c) 2013 test. All rights reserved.
 //
 
 #import "WeekData.h"
@@ -11,8 +11,8 @@
 
 @implementation WeekData
 
-@dynamic day;
 @dynamic consumption;
+@dynamic day;
 @dynamic user;
 
 @end

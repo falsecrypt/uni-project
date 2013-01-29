@@ -11,9 +11,10 @@
 
 @interface Participant : NSManagedObject
 
-@property (nonatomic, retain) NSNumber * sensorid;
+@property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSData * profileimage;
 @property (nonatomic, retain) NSNumber * score;
-@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSNumber * sensorid;
+@property (nonatomic, retain) NSNumber * rank;
 
 @end

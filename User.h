@@ -1,8 +1,9 @@
 //
 //  User.h
 //  uni-project
-
-//  Copyright (c) 2012 test. All rights reserved.
+//
+//  Created by Erna on 27.01.13.
+//  Copyright (c) 2013 test. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

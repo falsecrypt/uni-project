@@ -10,9 +10,10 @@
 
 @implementation Participant
 
-@dynamic sensorid;
+@dynamic name;
 @dynamic profileimage;
 @dynamic score;
-@dynamic name;
+@dynamic sensorid;
+@dynamic rank;
 
 @end

@@ -6,10 +6,23 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		CE323F7816B74C67004DE45C /* Documentation */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = CE323F7916B74C67004DE45C /* Build configuration list for PBXAggregateTarget "Documentation" */;
+			buildPhases = (
+				CE323F7C16B74DA7004DE45C /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = Documentation;
+			productName = Documentation;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		CE01C30316A4C90A00ECBB3C /* mainHistotyViewBG.png in Resources */ = {isa = PBXBuildFile; fileRef = CE01C30216A4C90A00ECBB3C /* mainHistotyViewBG.png */; };
 		CE0325F5166C20AF00BAB4C6 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0325F4166C20AF00BAB4C6 /* MBProgressHUD.m */; };
-		CE03516316ADD5A700752192 /* Participant.m in Sources */ = {isa = PBXBuildFile; fileRef = CE03516216ADD5A700752192 /* Participant.m */; };
 		CE03516D16AE347100752192 /* ParticipantDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE03516C16AE347100752192 /* ParticipantDataManager.m */; };
 		CE071EC01659ABF1007290B1 /* icon_user.png in Resources */ = {isa = PBXBuildFile; fileRef = CE071EBF1659ABF1007290B1 /* icon_user.png */; };
 		CE071EC31659C58B007290B1 /* ProfilePopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE071EC21659C58B007290B1 /* ProfilePopoverViewController.m */; };
@@ -24,6 +37,11 @@
 		CE1793D11683E8E60030723A /* MyOfficeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D01683E8E60030723A /* MyOfficeTableViewController.m */; };
 		CE1793D51683F3970030723A /* DataOverviewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D41683F3970030723A /* DataOverviewTableViewController.m */; };
 		CE1BAC4F169528A200E3A1EA /* MyAccountTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1BAC4E169528A200E3A1EA /* MyAccountTableViewController.m */; };
+		CE20E91E16B58FCF00AC2722 /* Participant.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E91D16B58FCF00AC2722 /* Participant.m */; };
+		CE20E92216B58FD000AC2722 /* MonthData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92116B58FD000AC2722 /* MonthData.m */; };
+		CE20E92516B58FD000AC2722 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92416B58FD000AC2722 /* User.m */; };
+		CE20E92816B58FD000AC2722 /* WeekData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92716B58FD000AC2722 /* WeekData.m */; };
+		CE323F7E16B75403004DE45C /* AppleDocSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE323F7D16B75403004DE45C /* AppleDocSettings.plist */; };
 		CE32C3681665890900C3ED81 /* speedometerArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = CE32C3661665890900C3ED81 /* speedometerArrow.png */; };
 		CE32C37016658A6000C3ED81 /* CurrentDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C36F16658A6000C3ED81 /* CurrentDataViewController.m */; };
 		CE32C37216659B4200C3ED81 /* speedometerBody.png in Resources */ = {isa = PBXBuildFile; fileRef = CE32C37116659B4200C3ED81 /* speedometerBody.png */; };
@@ -40,7 +58,6 @@
 		CE32C39D1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C39C1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m */; };
 		CE348C1A1647668100B14B55 /* RegisterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE348C191647668000B14B55 /* RegisterTableViewController.m */; };
 		CE3F51CD1659D4BD008EE7DF /* defaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3F51CC1659D4BD008EE7DF /* defaultAvatar.png */; };
-		CE54E7B7168230B300F91C5E /* WeekData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE54E7B6168230B300F91C5E /* WeekData.m */; };
 		CE54E7BF168292B600F91C5E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE54E7BE168292B500F91C5E /* SystemConfiguration.framework */; };
 		CE54E7C21682943400F91C5E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = CE54E7C11682943400F91C5E /* Reachability.m */; };
 		CE6A008B16AF7E1200F845EE /* DSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6A008416AF7E1200F845EE /* DSelected.png */; };
@@ -110,8 +127,6 @@
 		CEF5657B163F17270066F2A2 /* FirstDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */; };
 		CEF5657F163F1D600066F2A2 /* PublicTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657E163F1D600066F2A2 /* PublicTableViewController.m */; };
 		CEF56586163F2DCE0066F2A2 /* PublicDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF56584163F2DCD0066F2A2 /* PublicDetailViewController.m */; };
-		CEFAD6E416890EB200179017 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFAD6E316890EB200179017 /* User.m */; };
-		CEFAD6E81689115600179017 /* MonthData.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFAD6E71689115600179017 /* MonthData.m */; };
 		CEFDC23C163E15480011C3CF /* DetailViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFDC23B163E15480011C3CF /* DetailViewManager.m */; };
 /* End PBXBuildFile section */
 
@@ -119,8 +134,6 @@
 		CE01C30216A4C90A00ECBB3C /* mainHistotyViewBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mainHistotyViewBG.png; sourceTree = "<group>"; };
 		CE0325F3166C20AF00BAB4C6 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		CE0325F4166C20AF00BAB4C6 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
-		CE03516116ADD5A700752192 /* Participant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Participant.h; sourceTree = "<group>"; };
-		CE03516216ADD5A700752192 /* Participant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Participant.m; sourceTree = "<group>"; };
 		CE03516616ADDAF200752192 /* PublicDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicDetailViewController.h; sourceTree = "<group>"; };
 		CE03516916AE30C400752192 /* ParticipantDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticipantDataManager.h; sourceTree = "<group>"; };
 		CE03516C16AE347100752192 /* ParticipantDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParticipantDataManager.m; sourceTree = "<group>"; };
@@ -145,6 +158,15 @@
 		CE1793D41683F3970030723A /* DataOverviewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataOverviewTableViewController.m; sourceTree = "<group>"; };
 		CE1BAC4D169528A200E3A1EA /* MyAccountTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAccountTableViewController.h; sourceTree = "<group>"; };
 		CE1BAC4E169528A200E3A1EA /* MyAccountTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAccountTableViewController.m; sourceTree = "<group>"; };
+		CE20E91C16B58FCF00AC2722 /* Participant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Participant.h; sourceTree = "<group>"; };
+		CE20E91D16B58FCF00AC2722 /* Participant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Participant.m; sourceTree = "<group>"; };
+		CE20E92016B58FD000AC2722 /* MonthData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthData.h; sourceTree = "<group>"; };
+		CE20E92116B58FD000AC2722 /* MonthData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthData.m; sourceTree = "<group>"; };
+		CE20E92316B58FD000AC2722 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		CE20E92416B58FD000AC2722 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		CE20E92616B58FD000AC2722 /* WeekData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeekData.h; sourceTree = "<group>"; };
+		CE20E92716B58FD000AC2722 /* WeekData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeekData.m; sourceTree = "<group>"; };
+		CE323F7D16B75403004DE45C /* AppleDocSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AppleDocSettings.plist; sourceTree = "<group>"; };
 		CE32C3661665890900C3ED81 /* speedometerArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speedometerArrow.png; sourceTree = "<group>"; };
 		CE32C36E16658A6000C3ED81 /* CurrentDataViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurrentDataViewController.h; sourceTree = "<group>"; };
 		CE32C36F16658A6000C3ED81 /* CurrentDataViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CurrentDataViewController.m; sourceTree = "<group>"; };
@@ -174,8 +196,6 @@
 		CE348C181647668000B14B55 /* RegisterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterTableViewController.h; sourceTree = "<group>"; };
 		CE348C191647668000B14B55 /* RegisterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterTableViewController.m; sourceTree = "<group>"; };
 		CE3F51CC1659D4BD008EE7DF /* defaultAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultAvatar.png; sourceTree = "<group>"; };
-		CE54E7B5168230B300F91C5E /* WeekData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeekData.h; sourceTree = "<group>"; };
-		CE54E7B6168230B300F91C5E /* WeekData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeekData.m; sourceTree = "<group>"; };
 		CE54E7BE168292B500F91C5E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		CE54E7C01682943400F91C5E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		CE54E7C11682943400F91C5E /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
@@ -362,10 +382,6 @@
 		CEF5657D163F1D600066F2A2 /* PublicTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicTableViewController.h; sourceTree = "<group>"; };
 		CEF5657E163F1D600066F2A2 /* PublicTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicTableViewController.m; sourceTree = "<group>"; };
 		CEF56584163F2DCD0066F2A2 /* PublicDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicDetailViewController.m; sourceTree = "<group>"; };
-		CEFAD6E216890EB200179017 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		CEFAD6E316890EB200179017 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
-		CEFAD6E61689115600179017 /* MonthData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthData.h; sourceTree = "<group>"; };
-		CEFAD6E71689115600179017 /* MonthData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthData.m; sourceTree = "<group>"; };
 		CEFDC23A163E15480011C3CF /* DetailViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewManager.h; sourceTree = "<group>"; };
 		CEFDC23B163E15480011C3CF /* DetailViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -486,15 +502,15 @@
 		CE0D631E16611E8600381D05 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				CEFAD6E216890EB200179017 /* User.h */,
-				CEFAD6E316890EB200179017 /* User.m */,
+				CE20E91C16B58FCF00AC2722 /* Participant.h */,
+				CE20E91D16B58FCF00AC2722 /* Participant.m */,
+				CE20E92316B58FD000AC2722 /* User.h */,
+				CE20E92416B58FD000AC2722 /* User.m */,
+				CE20E92616B58FD000AC2722 /* WeekData.h */,
+				CE20E92716B58FD000AC2722 /* WeekData.m */,
+				CE20E92016B58FD000AC2722 /* MonthData.h */,
+				CE20E92116B58FD000AC2722 /* MonthData.m */,
 				CE0D631B16611E7500381D05 /* EcoMeterModel.xcdatamodeld */,
-				CE03516116ADD5A700752192 /* Participant.h */,
-				CE03516216ADD5A700752192 /* Participant.m */,
-				CEFAD6E61689115600179017 /* MonthData.h */,
-				CEFAD6E71689115600179017 /* MonthData.m */,
-				CE54E7B5168230B300F91C5E /* WeekData.h */,
-				CE54E7B6168230B300F91C5E /* WeekData.m */,
 			);
 			name = Models;
 			path = ..;
@@ -512,8 +528,8 @@
 		CE1458B6167C152F00F7D82F /* CustomSegues */ = {
 			isa = PBXGroup;
 			children = (
-				CE1458B2167C06F400F7D82F /* MCachedModalStoryboardSegue.m */,
 				CE1458B3167C06F400F7D82F /* MCachedModalStoryboardSegue.h */,
+				CE1458B2167C06F400F7D82F /* MCachedModalStoryboardSegue.m */,
 			);
 			name = CustomSegues;
 			sourceTree = "<group>";
@@ -626,6 +642,7 @@
 				CE8B7F5C15ED358B006CD57C /* uni-project-Info.plist */,
 				CE8B7F5D15ED358B006CD57C /* InfoPlist.strings */,
 				CE8B7F6215ED358B006CD57C /* uni-project-Prefix.pch */,
+				CE323F7D16B75403004DE45C /* AppleDocSettings.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -928,6 +945,7 @@
 			projectRoot = "";
 			targets = (
 				CE8B7F4F15ED358B006CD57C /* EcoMeter */,
+				CE323F7816B74C67004DE45C /* Documentation */,
 			);
 		};
 /* End PBXProject section */
@@ -965,10 +983,27 @@
 				CE6A008F16AF7E1200F845EE /* A+Selected.png in Resources */,
 				CE6A009016AF7E1200F845EE /* A++Selected.png in Resources */,
 				CE6A009116AF7E1200F845EE /* A+++Selected.png in Resources */,
+				CE323F7E16B75403004DE45C /* AppleDocSettings.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CE323F7C16B74DA7004DE45C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Build an Xcode documentation\n/usr/local/bin/appledoc \"$SOURCE_ROOT/$PROJECT_NAME\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		CE8B7F4C15ED358B006CD57C /* Sources */ = {
@@ -1034,17 +1069,17 @@
 				CE0325F5166C20AF00BAB4C6 /* MBProgressHUD.m in Sources */,
 				CE1458B4167C06F400F7D82F /* MCachedModalStoryboardSegue.m in Sources */,
 				CE8DCEB916815ABB0030FA4C /* LastWeekViewController.m in Sources */,
-				CE54E7B7168230B300F91C5E /* WeekData.m in Sources */,
 				CE54E7C21682943400F91C5E /* Reachability.m in Sources */,
 				CE1793D11683E8E60030723A /* MyOfficeTableViewController.m in Sources */,
 				CE1793D51683F3970030723A /* DataOverviewTableViewController.m in Sources */,
 				CE12C0271687D4C8001C4959 /* LastMonthsViewController.m in Sources */,
 				CE12C02B1687D8EA001C4959 /* CircleView.m in Sources */,
-				CEFAD6E416890EB200179017 /* User.m in Sources */,
-				CEFAD6E81689115600179017 /* MonthData.m in Sources */,
 				CE1BAC4F169528A200E3A1EA /* MyAccountTableViewController.m in Sources */,
-				CE03516316ADD5A700752192 /* Participant.m in Sources */,
 				CE03516D16AE347100752192 /* ParticipantDataManager.m in Sources */,
+				CE20E91E16B58FCF00AC2722 /* Participant.m in Sources */,
+				CE20E92216B58FD000AC2722 /* MonthData.m in Sources */,
+				CE20E92516B58FD000AC2722 /* User.m in Sources */,
+				CE20E92816B58FD000AC2722 /* WeekData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1062,6 +1097,20 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		CE323F7A16B74C67004DE45C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		CE323F7B16B74C67004DE45C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		CE8B7F6F15ED358B006CD57C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1170,6 +1219,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		CE323F7916B74C67004DE45C /* Build configuration list for PBXAggregateTarget "Documentation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE323F7A16B74C67004DE45C /* Debug */,
+				CE323F7B16B74C67004DE45C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		CE8B7F4A15ED358B006CD57C /* Build configuration list for PBXProject "uni-project" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

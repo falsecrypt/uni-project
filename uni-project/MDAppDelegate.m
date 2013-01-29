@@ -147,7 +147,7 @@
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
-
+    [MagicalRecord cleanUp];
 
 }
 

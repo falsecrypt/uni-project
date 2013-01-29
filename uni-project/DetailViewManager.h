@@ -13,6 +13,7 @@
  The protocol specifies aproperty for the bar button item controlling the navigation pane.
  */
 @protocol SubstitutableDetailViewController
+@optional
 @property (nonatomic, retain) UIBarButtonItem *navigationPaneBarButtonItem;
 @end
 

@@ -19,7 +19,7 @@
 const double kFrameRate         = 5.0;  // frames per second
 const double kAlpha             = 0.25; // smoothing constant
 const NSUInteger kMaxDataPoints = 10;
-NSString *kPlotIdentifier       = @"Data Source Plot";
+const NSString *kPlotIdentifier = @"Data Source Plot";
 NSUInteger currentIndex;
 NSTimer *dataTimer;
 BOOL deviceIsOnline;

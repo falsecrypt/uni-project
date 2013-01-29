@@ -13,12 +13,15 @@
 #import "MCachedModalStoryboardSegue.h"
 #import "DetailViewManager.h"
 #import "MDAppDelegate.h"
+#import "PublicDetailViewController.h"
+#import "PublicTableViewController.h"
 
 /////////////////////////////////////////////////////////////////////////
 #pragma mark - Statics
 /////////////////////////////////////////////////////////////////////////
 
 static NSMutableDictionary * _MCachedModalStoryboardSegueCache;
+static NSMutableDictionary * _Cached_PublicDetailViews;
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -84,6 +87,7 @@ static NSMutableDictionary * _MCachedModalStoryboardSegueCache;
 + (void)drainCache
 {
     _MCachedModalStoryboardSegueCache = nil;
+    _Cached_PublicDetailViews = nil;
 }
 
 
@@ -94,15 +98,33 @@ static NSMutableDictionary * _MCachedModalStoryboardSegueCache;
 
 - (id)initWithIdentifier:(NSString *)identifier source:(UIViewController *)source destination:(UIViewController *)destination
 {
+    NSLog(@"<MCachedModalStoryboardSegue> start identifier= %@, destination=%@, source=%@", identifier, destination, source);
+    UIViewController *newDest;
     // Alloc the static dict if required
     if (!_MCachedModalStoryboardSegueCache) {
         _MCachedModalStoryboardSegueCache = [NSMutableDictionary dictionary];
     }
-    
+    if (!_Cached_PublicDetailViews) {
+        _Cached_PublicDetailViews = [NSMutableDictionary dictionary];
+    }
+    _destinationWasCached = YES;
+    if ([destination isKindOfClass:[PublicDetailViewController class]]) {
+        PublicTableViewController *Newsource = (PublicTableViewController *)source;
+        if (![[_Cached_PublicDetailViews allKeys] containsObject:Newsource.selectedParticipantId]) {
+            NSLog(@"<MCachedModalStoryboardSegue> adding destination: %@", destination);
+            [_Cached_PublicDetailViews setObject:destination forKey:Newsource.selectedParticipantId];
+            _destinationWasCached = NO;
+        }
+        newDest = [_Cached_PublicDetailViews objectForKey:Newsource.selectedParticipantId];
+        NSLog(@"<MCachedModalStoryboardSegue> return newDest: %@", newDest);
+        NSLog(@"<MCachedModalStoryboardSegue> _Cached_PublicDetailViews: %@", _Cached_PublicDetailViews);
+    }
+    else {
+
     // Add it to the cache if doesn't exist...
     _MCachedSegueKey *key = [_MCachedSegueKey keyWithIdentifier:identifier viewController:destination];
     
-    //NSLog(@"Custom Segue - identifier= %@, destination=%@", identifier, destination);
+    
 
     _destinationWasCached = YES;
     if (!([_MCachedModalStoryboardSegueCache.allKeys containsObject:key])) {
@@ -111,7 +133,9 @@ static NSMutableDictionary * _MCachedModalStoryboardSegueCache;
     }
     
     // Swizzle for the cached destination
-    UIViewController *newDest = _MCachedModalStoryboardSegueCache[key];
+    newDest = _MCachedModalStoryboardSegueCache[key];
+        
+    }
     
     return [super initWithIdentifier:identifier source:source destination:newDest];
     
@@ -126,8 +150,10 @@ static NSMutableDictionary * _MCachedModalStoryboardSegueCache;
     DetailViewManager *detailViewManager = appDelegate.detailViewManager;
     // some kind of a custom replace segue with detail split as destination ;)
     //if (![detailViewManager.detailViewController isEqual:self.destinationViewController]) {
-        detailViewManager.detailViewController = self.destinationViewController;
-    NSLog(@"custom segue, self.destination: %@", self.destinationViewController);
+    detailViewManager.detailViewController = self.destinationViewController;
+    NSLog(@"<MCachedModalStoryboardSegue> custom segue, destinationViewController: %@", self.destinationViewController);
+    NSLog(@"<MCachedModalStoryboardSegue> detailViewManager.detailViewController.view.subviews: %@", detailViewManager.detailViewController.view.subviews);
+    NSLog(@"<MCachedModalStoryboardSegue> detailViewManager.detailViewController.view: %@", detailViewManager.detailViewController.view);
     //}
 
 }

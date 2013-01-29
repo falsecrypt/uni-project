@@ -41,7 +41,7 @@
 // -------------------------------------------------------------------------------
 - (void)setDetailViewController:(UIViewController<SubstitutableDetailViewController> *)detailViewController
 {
-    NSLog(@"calling setDetailViewController, with detailViewController: %@", detailViewController);
+    NSLog(@"<DetailViewManager> calling setDetailViewController, with detailViewController: %@", detailViewController);
     // Clear any bar button item from the detail view controller that is about to
     // no longer be displayed.
     self.detailViewController.navigationPaneBarButtonItem = nil;
@@ -58,7 +58,7 @@
     UIViewController *navigationViewController = (self.splitViewController.viewControllers)[0];
     NSArray *viewControllers = @[navigationViewController, _detailViewController];
     self.splitViewController.viewControllers = viewControllers;
-    
+    NSLog(@"<DetailViewManager> self.splitViewController.viewControllers: %@", self.splitViewController.viewControllers);
     // Dismiss the navigation popover if one was present.  This will
     // only occur if the device is in portrait.
     if (self.navigationPopoverController)

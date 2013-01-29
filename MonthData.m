@@ -1,9 +1,8 @@
 //
 //  MonthData.m
 //  uni-project
-//
-//  Created by Erna on 24.12.12.
-//  Copyright (c) 2012 test. All rights reserved.
+
+//  Copyright (c) 2013 test. All rights reserved.
 //
 
 #import "MonthData.h"
@@ -14,9 +13,9 @@
 
 @dynamic circleradius;
 @dynamic consumption;
+@dynamic date;
 @dynamic month;
 @dynamic year;
-@dynamic date;
 @dynamic user;
 
 @end
