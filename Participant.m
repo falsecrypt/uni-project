@@ -1,7 +1,8 @@
 //
 //  Participant.m
 //  uni-project
-
+//
+//  Created by Pavel Ermolin on 29.01.13.
 //  Copyright (c) 2013 test. All rights reserved.
 //
 
@@ -12,8 +13,9 @@
 
 @dynamic name;
 @dynamic profileimage;
+@dynamic rank;
 @dynamic score;
 @dynamic sensorid;
-@dynamic rank;
+@dynamic updated;
 
 @end

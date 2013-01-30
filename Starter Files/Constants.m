@@ -20,7 +20,7 @@ NSString *  const scatterPlot               = @"Scatter Plot";
 
 NSString *  const currentCostServerBaseURLString = @"http://www.hcm-lab.de/downloads/buehling/adaptiveart/CurrentCostTreeOnline/";
 NSString *  const currentCostServerBaseURLHome   = @"www.hcm-lab.de";
-float const OfficeArea = 20.0f;
+float     const OfficeArea = 20.0f;
 NSInteger const FirstSensorID  = 3;
 NSInteger const SecondSensorID = 4;
 NSInteger const ThirdSensorID  = 5;

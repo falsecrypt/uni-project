@@ -69,10 +69,10 @@ NSDictionary *users;
                 [self initParticipants];
             }
             // We have some data
-            else {
-                [Participant truncateAll];
-                [self initParticipants];
-            }
+            //else {
+                //[Participant truncateAll];
+                //[self initParticipants];
+           // }
         });
     };
     

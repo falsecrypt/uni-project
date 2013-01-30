@@ -20,6 +20,7 @@
 @implementation PublicDetailViewController
 
 NSInteger calculatedRank;
+float calculatedScore;
 BOOL deviceIsOnline;
 
 //redefine these for switch-case statement
@@ -67,53 +68,61 @@ typedef enum {
     
     if (!self.instanceWasCached) {
         
-        NSLog(@"<PublicDetailViewController> viewDidLoad first init..");
-    // -setNavigationPaneBarButtonItem may have been invoked when before the
-    // interface was loaded.  This will occur when setNavigationPaneBarButtonItem
-    // is called as part of DetailViewManager preparing this view controller
-    // for presentation as this is before the view is unarchived from the NIB.
-    // When viewidLoad is invoked, the interface is loaded and hooked up.
-    // Check if we are supposed to be displaying a navigationPaneBarButtonItem
-    // and if so, add it to the navigationBar.
-    if (self.navigationPaneBarButtonItem)
-        [self.navigationBar.topItem setLeftBarButtonItem:self.navigationPaneBarButtonItem
-                                                animated:NO];
-    
-    //DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
-    //detailViewManager.detailViewController = self;
-    
-    NSString *notificationName = @"RankWasCalculated";
-        notificationName = [notificationName stringByAppendingString:[NSString stringWithFormat:@"%d",self.selectedParticipant]];
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(addRankViewWithNotification:)
-     name:notificationName
-     object:nil];
-    
-    Reachability* reach = [Reachability reachabilityWithHostname:currentCostServerBaseURLHome];
-    reach.reachableBlock = ^(Reachability * reachability)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            //NSLog(@"Block Says Reachable");
-            deviceIsOnline = YES;
-            [ParticipantDataManager startCalculatingRankByParticipantId:self.selectedParticipant networkReachable:deviceIsOnline];
-            //[self addRankViewWithNotification:calculatedRank];
-            
-            //NSArray *results = [Participant findAllSortedBy:@"sensorid" ascending:YES];
-            //NSLog(@"PublicDetailViewController: results (all participants from DB): %@", results);
-        });
-    };
-    
-    reach.unreachableBlock = ^(Reachability * reachability)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            //NSLog(@"Block Says Unreachable");
-            deviceIsOnline = NO;
-            [ParticipantDataManager startCalculatingRankByParticipantId:self.selectedParticipant networkReachable:deviceIsOnline];
-        });
-    };
-    
-    [reach startNotifier];
+            NSLog(@"<PublicDetailViewController> viewDidLoad first init..");
+        // -setNavigationPaneBarButtonItem may have been invoked when before the
+        // interface was loaded.  This will occur when setNavigationPaneBarButtonItem
+        // is called as part of DetailViewManager preparing this view controller
+        // for presentation as this is before the view is unarchived from the NIB.
+        // When viewidLoad is invoked, the interface is loaded and hooked up.
+        // Check if we are supposed to be displaying a navigationPaneBarButtonItem
+        // and if so, add it to the navigationBar.
+        if (self.navigationPaneBarButtonItem)
+            [self.navigationBar.topItem setLeftBarButtonItem:self.navigationPaneBarButtonItem
+                                                    animated:NO];
+        
+        //DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
+        //detailViewManager.detailViewController = self;
+        
+        NSString *rankNotificationName = @"RankWasCalculated";
+            rankNotificationName = [rankNotificationName stringByAppendingString:[NSString stringWithFormat:@"%d",self.selectedParticipant]];
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(addRankViewWithNotification:)
+         name:rankNotificationName
+         object:nil];
+        
+        NSString *scoreNotificationName = @"ScoreWasCalculated";
+        scoreNotificationName = [scoreNotificationName stringByAppendingString:[NSString stringWithFormat:@"%d",self.selectedParticipant]];
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(addScoreViewWithNotification:)
+         name:scoreNotificationName
+         object:nil];
+        
+        Reachability* reach = [Reachability reachabilityWithHostname:currentCostServerBaseURLHome];
+        ParticipantDataManager *dataManager = [[ParticipantDataManager alloc] initWithParticipantId:self.selectedParticipant];
+        reach.reachableBlock = ^(Reachability * reachability)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //NSLog(@"Block Says Reachable");
+                deviceIsOnline = YES;
+                [dataManager startCalculatingRankAndScoreWithNetworkStatus:deviceIsOnline];
+                
+                //NSArray *results = [Participant findAllSortedBy:@"sensorid" ascending:YES];
+                //NSLog(@"<PublicDetailViewController> consumption from getParticipantScore: %@", consumption);
+            });
+        };
+        
+        reach.unreachableBlock = ^(Reachability * reachability)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //NSLog(@"Block Says Unreachable");
+                deviceIsOnline = NO;
+                [dataManager startCalculatingRankAndScoreWithNetworkStatus:deviceIsOnline];
+            });
+        };
+        
+        [reach startNotifier];
     }
     
 
@@ -126,6 +135,42 @@ typedef enum {
     [self.borderView.layer setBorderColor:[UIColor colorWithRed:1/255.0f green:174/255.0f blue:240/255.0f alpha:1.0f].CGColor];
     [self.borderView.layer setBorderWidth:6.0f];
     [self.view addSubview:self.borderView];
+}
+
+-(void)addScoreViewWithNotification:(NSNotification *)pNotification{
+    
+    
+    Participant *participant =
+    [Participant findFirstByAttribute:@"sensorid" withValue:[NSNumber numberWithInt:self.selectedParticipant] inContext:[NSManagedObjectContext defaultContext]];
+    
+    NSLog(@"<PublicDetailViewController> addScore participant: %@", participant);
+    
+    
+    calculatedScore = [[pNotification object] floatValue];
+    NSLog(@"<PublicDetailViewController> calculatedScore: %f", calculatedScore);
+    NSString *scoreAsText = [NSString stringWithFormat:@"%.2f",calculatedScore];
+    
+    // TEST add Score View
+    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(91, 530, 200, 120)];
+    [v.layer setCornerRadius:20.0f];
+    [v.layer setBorderColor:[UIColor colorWithRed:1/255.0f green:174/255.0f blue:240/255.0f alpha:1.0f].CGColor];
+    [v.layer setBorderWidth:3.0f];
+    
+    UITextView *scoreText = [[UITextView alloc] initWithFrame: CGRectMake(5, 10, 200, 80)]; //x,y,width,height
+    scoreText.text = scoreAsText;
+    scoreText.font =[UIFont boldSystemFontOfSize:40.0];
+    scoreText.textColor = [UIColor blackColor];
+    [v addSubview: scoreText];
+    
+    UITextView *scoreTextBottom = [[UITextView alloc] initWithFrame: CGRectMake(5, 70, 200, 40)]; //x,y,width,height
+    scoreTextBottom.text = @"Score";
+    scoreTextBottom.font =[UIFont systemFontOfSize:25.0];
+    scoreTextBottom.textColor = [UIColor blackColor];
+    [v addSubview: scoreTextBottom];
+    
+    [self.view addSubview:v];
+    
+    
 }
 
 -(void)addRankViewWithNotification:(NSNotification *)pNotification{
@@ -205,13 +250,7 @@ typedef enum {
         default:
             break;
     }
-    
-    // TEST add Score View
-    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(91, 530, 200, 120)];
-    [v.layer setCornerRadius:20.0f];
-    [v.layer setBorderColor:[UIColor colorWithRed:1/255.0f green:174/255.0f blue:240/255.0f alpha:1.0f].CGColor];
-    [v.layer setBorderWidth:3.0f];
-    [self.view addSubview:v];
+
     
     NSLog(@"<PublicDetailViewController> imageview: %@ added to view %@", imgView, self.view);
 }

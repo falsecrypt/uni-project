@@ -37,7 +37,6 @@
 		CE1793D11683E8E60030723A /* MyOfficeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D01683E8E60030723A /* MyOfficeTableViewController.m */; };
 		CE1793D51683F3970030723A /* DataOverviewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D41683F3970030723A /* DataOverviewTableViewController.m */; };
 		CE1BAC4F169528A200E3A1EA /* MyAccountTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1BAC4E169528A200E3A1EA /* MyAccountTableViewController.m */; };
-		CE20E91E16B58FCF00AC2722 /* Participant.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E91D16B58FCF00AC2722 /* Participant.m */; };
 		CE20E92216B58FD000AC2722 /* MonthData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92116B58FD000AC2722 /* MonthData.m */; };
 		CE20E92516B58FD000AC2722 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92416B58FD000AC2722 /* User.m */; };
 		CE20E92816B58FD000AC2722 /* WeekData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92716B58FD000AC2722 /* WeekData.m */; };
@@ -127,6 +126,7 @@
 		CEF5657B163F17270066F2A2 /* FirstDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */; };
 		CEF5657F163F1D600066F2A2 /* PublicTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657E163F1D600066F2A2 /* PublicTableViewController.m */; };
 		CEF56586163F2DCE0066F2A2 /* PublicDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF56584163F2DCD0066F2A2 /* PublicDetailViewController.m */; };
+		CEFAAFDA16B8209500D9E744 /* Participant.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFAAFD916B8209500D9E744 /* Participant.m */; };
 		CEFDC23C163E15480011C3CF /* DetailViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFDC23B163E15480011C3CF /* DetailViewManager.m */; };
 /* End PBXBuildFile section */
 
@@ -158,8 +158,6 @@
 		CE1793D41683F3970030723A /* DataOverviewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataOverviewTableViewController.m; sourceTree = "<group>"; };
 		CE1BAC4D169528A200E3A1EA /* MyAccountTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAccountTableViewController.h; sourceTree = "<group>"; };
 		CE1BAC4E169528A200E3A1EA /* MyAccountTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAccountTableViewController.m; sourceTree = "<group>"; };
-		CE20E91C16B58FCF00AC2722 /* Participant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Participant.h; sourceTree = "<group>"; };
-		CE20E91D16B58FCF00AC2722 /* Participant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Participant.m; sourceTree = "<group>"; };
 		CE20E92016B58FD000AC2722 /* MonthData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthData.h; sourceTree = "<group>"; };
 		CE20E92116B58FD000AC2722 /* MonthData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthData.m; sourceTree = "<group>"; };
 		CE20E92316B58FD000AC2722 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -382,6 +380,8 @@
 		CEF5657D163F1D600066F2A2 /* PublicTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicTableViewController.h; sourceTree = "<group>"; };
 		CEF5657E163F1D600066F2A2 /* PublicTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicTableViewController.m; sourceTree = "<group>"; };
 		CEF56584163F2DCD0066F2A2 /* PublicDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicDetailViewController.m; sourceTree = "<group>"; };
+		CEFAAFD816B8209500D9E744 /* Participant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Participant.h; sourceTree = "<group>"; };
+		CEFAAFD916B8209500D9E744 /* Participant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Participant.m; sourceTree = "<group>"; };
 		CEFDC23A163E15480011C3CF /* DetailViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewManager.h; sourceTree = "<group>"; };
 		CEFDC23B163E15480011C3CF /* DetailViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -502,8 +502,6 @@
 		CE0D631E16611E8600381D05 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				CE20E91C16B58FCF00AC2722 /* Participant.h */,
-				CE20E91D16B58FCF00AC2722 /* Participant.m */,
 				CE20E92316B58FD000AC2722 /* User.h */,
 				CE20E92416B58FD000AC2722 /* User.m */,
 				CE20E92616B58FD000AC2722 /* WeekData.h */,
@@ -511,6 +509,8 @@
 				CE20E92016B58FD000AC2722 /* MonthData.h */,
 				CE20E92116B58FD000AC2722 /* MonthData.m */,
 				CE0D631B16611E7500381D05 /* EcoMeterModel.xcdatamodeld */,
+				CEFAAFD816B8209500D9E744 /* Participant.h */,
+				CEFAAFD916B8209500D9E744 /* Participant.m */,
 			);
 			name = Models;
 			path = ..;
@@ -1076,10 +1076,10 @@
 				CE12C02B1687D8EA001C4959 /* CircleView.m in Sources */,
 				CE1BAC4F169528A200E3A1EA /* MyAccountTableViewController.m in Sources */,
 				CE03516D16AE347100752192 /* ParticipantDataManager.m in Sources */,
-				CE20E91E16B58FCF00AC2722 /* Participant.m in Sources */,
 				CE20E92216B58FD000AC2722 /* MonthData.m in Sources */,
 				CE20E92516B58FD000AC2722 /* User.m in Sources */,
 				CE20E92816B58FD000AC2722 /* WeekData.m in Sources */,
+				CEFAAFDA16B8209500D9E744 /* Participant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1226,6 +1226,7 @@
 				CE323F7B16B74C67004DE45C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CE8B7F4A15ED358B006CD57C /* Build configuration list for PBXProject "uni-project" */ = {
 			isa = XCConfigurationList;
