@@ -70,7 +70,7 @@
 		CE8B7F5715ED358B006CD57C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5615ED358B006CD57C /* Foundation.framework */; };
 		CE8B7F5915ED358B006CD57C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5815ED358B006CD57C /* CoreGraphics.framework */; };
 		CE8B7F5F15ED358B006CD57C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CE8B7F5D15ED358B006CD57C /* InfoPlist.strings */; };
-		CE8B7F7C15ED35D1006CD57C /* MDAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F7515ED35D1006CD57C /* MDAppDelegate.m */; };
+		CE8B7F7C15ED35D1006CD57C /* EcoMeterAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F7515ED35D1006CD57C /* EcoMeterAppDelegate.m */; };
 		CE8B7F7D15ED35D1006CD57C /* MDDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F7715ED35D1006CD57C /* MDDetailViewController.m */; };
 		CE8B7F7E15ED35D1006CD57C /* MDMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F7915ED35D1006CD57C /* MDMasterViewController.m */; };
 		CE8B7F7F15ED35D1006CD57C /* MDMultipleMasterDetailManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F7B15ED35D1006CD57C /* MDMultipleMasterDetailManager.m */; };
@@ -83,6 +83,16 @@
 		CE9BCF2616AB7FEF00A62630 /* A+.png in Resources */ = {isa = PBXBuildFile; fileRef = CE9BCF1F16AB7FEF00A62630 /* A+.png */; };
 		CE9BCF2716AB7FEF00A62630 /* A++.png in Resources */ = {isa = PBXBuildFile; fileRef = CE9BCF2016AB7FEF00A62630 /* A++.png */; };
 		CE9BCF2816AB7FEF00A62630 /* A+++.png in Resources */ = {isa = PBXBuildFile; fileRef = CE9BCF2116AB7FEF00A62630 /* A+++.png */; };
+		CEA0263816BEF3D4005CE31A /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEA0263716BEF3D4005CE31A /* SenTestingKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		CEA0263916BEF3D4005CE31A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5415ED358B006CD57C /* UIKit.framework */; };
+		CEA0263A16BEF3D4005CE31A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5615ED358B006CD57C /* Foundation.framework */; };
+		CEA0264016BEF3D4005CE31A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CEA0263E16BEF3D4005CE31A /* InfoPlist.strings */; };
+		CEA0265016BF3A7B005CE31A /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEA0263716BEF3D4005CE31A /* SenTestingKit.framework */; };
+		CEA0265116BF3A7B005CE31A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5415ED358B006CD57C /* UIKit.framework */; };
+		CEA0265216BF3A7B005CE31A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5615ED358B006CD57C /* Foundation.framework */; };
+		CEA0265816BF3A7B005CE31A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CEA0265616BF3A7B005CE31A /* InfoPlist.strings */; };
+		CEA0265B16BF3A7B005CE31A /* EcoMeterApplicationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0265A16BF3A7B005CE31A /* EcoMeterApplicationTests.m */; };
+		CEA0267016BF5C59005CE31A /* ParticipantDataManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0266F16BF5C59005CE31A /* ParticipantDataManagerTests.m */; };
 		CEA0BE9C163CD2D700ED0599 /* LoginScreenTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0BE9A163CD2D700ED0599 /* LoginScreenTableViewController.m */; };
 		CEA0BEA1163CD99B00ED0599 /* FirstTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0BEA0163CD99B00ED0599 /* FirstTableViewController.m */; };
 		CEA0CE431661A6F60086151D /* MagicalImportFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0CE0B1661A6F60086151D /* MagicalImportFunctions.m */; };
@@ -123,12 +133,32 @@
 		CEEAE27B15F275CA00A550FA /* CPDStockPriceStore.m in Sources */ = {isa = PBXBuildFile; fileRef = CEEAE27915F275CA00A550FA /* CPDStockPriceStore.m */; };
 		CEEAE27E15F2BEA100A550FA /* icon_piechart.png in Resources */ = {isa = PBXBuildFile; fileRef = CEEAE27D15F2BEA100A550FA /* icon_piechart.png */; };
 		CEEAE28015F2C06000A550FA /* icon_smile_face.png in Resources */ = {isa = PBXBuildFile; fileRef = CEEAE27F15F2C06000A550FA /* icon_smile_face.png */; };
+		CEF386E916C0245A0082C372 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF386E816C0245A0082C372 /* libOCMock.a */; };
+		CEF386EA16C0245A0082C372 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF386E816C0245A0082C372 /* libOCMock.a */; };
+		CEF386EB16C0245A0082C372 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF386E816C0245A0082C372 /* libOCMock.a */; };
 		CEF5657B163F17270066F2A2 /* FirstDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */; };
 		CEF5657F163F1D600066F2A2 /* PublicTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657E163F1D600066F2A2 /* PublicTableViewController.m */; };
 		CEF56586163F2DCE0066F2A2 /* PublicDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF56584163F2DCD0066F2A2 /* PublicDetailViewController.m */; };
 		CEFAAFDA16B8209500D9E744 /* Participant.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFAAFD916B8209500D9E744 /* Participant.m */; };
 		CEFDC23C163E15480011C3CF /* DetailViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFDC23B163E15480011C3CF /* DetailViewManager.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CEA0264816BEF44F005CE31A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CE8B7F4715ED358B006CD57C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CE8B7F4F15ED358B006CD57C;
+			remoteInfo = EcoMeter;
+		};
+		CEA0266016BF3AC9005CE31A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CE8B7F4715ED358B006CD57C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CE8B7F4F15ED358B006CD57C;
+			remoteInfo = EcoMeter;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		CE01C30216A4C90A00ECBB3C /* mainHistotyViewBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mainHistotyViewBG.png; sourceTree = "<group>"; };
@@ -211,8 +241,8 @@
 		CE8B7F5C15ED358B006CD57C /* uni-project-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "uni-project-Info.plist"; sourceTree = "<group>"; };
 		CE8B7F5E15ED358B006CD57C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		CE8B7F6215ED358B006CD57C /* uni-project-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "uni-project-Prefix.pch"; sourceTree = "<group>"; };
-		CE8B7F7415ED35D1006CD57C /* MDAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDAppDelegate.h; sourceTree = "<group>"; };
-		CE8B7F7515ED35D1006CD57C /* MDAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDAppDelegate.m; sourceTree = "<group>"; };
+		CE8B7F7415ED35D1006CD57C /* EcoMeterAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EcoMeterAppDelegate.h; sourceTree = "<group>"; };
+		CE8B7F7515ED35D1006CD57C /* EcoMeterAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EcoMeterAppDelegate.m; sourceTree = "<group>"; };
 		CE8B7F7615ED35D1006CD57C /* MDDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDDetailViewController.h; sourceTree = "<group>"; };
 		CE8B7F7715ED35D1006CD57C /* MDDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDDetailViewController.m; sourceTree = "<group>"; };
 		CE8B7F7815ED35D1006CD57C /* MDMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDMasterViewController.h; sourceTree = "<group>"; };
@@ -229,6 +259,20 @@
 		CE9BCF1F16AB7FEF00A62630 /* A+.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "A+.png"; sourceTree = "<group>"; };
 		CE9BCF2016AB7FEF00A62630 /* A++.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "A++.png"; sourceTree = "<group>"; };
 		CE9BCF2116AB7FEF00A62630 /* A+++.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "A+++.png"; sourceTree = "<group>"; };
+		CEA0263616BEF3D4005CE31A /* EcoMeterLogicTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EcoMeterLogicTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEA0263716BEF3D4005CE31A /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		CEA0263D16BEF3D4005CE31A /* EcoMeterLogicTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EcoMeterLogicTests-Info.plist"; sourceTree = "<group>"; };
+		CEA0263F16BEF3D4005CE31A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		CEA0264416BEF3D4005CE31A /* EcoMeterLogicTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EcoMeterLogicTests-Prefix.pch"; sourceTree = "<group>"; };
+		CEA0264F16BF3A7B005CE31A /* EcoMeterApplicationTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EcoMeterApplicationTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEA0265516BF3A7B005CE31A /* EcoMeterApplicationTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EcoMeterApplicationTests-Info.plist"; sourceTree = "<group>"; };
+		CEA0265716BF3A7B005CE31A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		CEA0265916BF3A7B005CE31A /* EcoMeterApplicationTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EcoMeterApplicationTests.h; sourceTree = "<group>"; };
+		CEA0265A16BF3A7B005CE31A /* EcoMeterApplicationTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EcoMeterApplicationTests.m; sourceTree = "<group>"; };
+		CEA0265C16BF3A7B005CE31A /* EcoMeterApplicationTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EcoMeterApplicationTests-Prefix.pch"; sourceTree = "<group>"; };
+		CEA0266E16BF5C59005CE31A /* ParticipantDataManagerTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticipantDataManagerTests.h; sourceTree = "<group>"; };
+		CEA0266F16BF5C59005CE31A /* ParticipantDataManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParticipantDataManagerTests.m; sourceTree = "<group>"; };
+		CEA0267116BF6A03005CE31A /* ParticipantDataManager-Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ParticipantDataManager-Private.h"; sourceTree = "<group>"; };
 		CEA0BE99163CD2D700ED0599 /* LoginScreenTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginScreenTableViewController.h; sourceTree = "<group>"; };
 		CEA0BE9A163CD2D700ED0599 /* LoginScreenTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginScreenTableViewController.m; sourceTree = "<group>"; };
 		CEA0BE9F163CD99B00ED0599 /* FirstTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstTableViewController.h; sourceTree = "<group>"; };
@@ -375,6 +419,13 @@
 		CEEAE27915F275CA00A550FA /* CPDStockPriceStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPDStockPriceStore.m; sourceTree = "<group>"; };
 		CEEAE27D15F2BEA100A550FA /* icon_piechart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_piechart.png; sourceTree = "<group>"; };
 		CEEAE27F15F2C06000A550FA /* icon_smile_face.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_smile_face.png; sourceTree = "<group>"; };
+		CEF386E816C0245A0082C372 /* libOCMock.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libOCMock.a; sourceTree = "<group>"; };
+		CEF386ED16C0246D0082C372 /* NSNotificationCenter+OCMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNotificationCenter+OCMAdditions.h"; sourceTree = "<group>"; };
+		CEF386EE16C0246D0082C372 /* OCMArg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMArg.h; sourceTree = "<group>"; };
+		CEF386EF16C0246D0082C372 /* OCMConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMConstraint.h; sourceTree = "<group>"; };
+		CEF386F016C0246D0082C372 /* OCMock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMock.h; sourceTree = "<group>"; };
+		CEF386F116C0246D0082C372 /* OCMockObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMockObject.h; sourceTree = "<group>"; };
+		CEF386F216C0246D0082C372 /* OCMockRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMockRecorder.h; sourceTree = "<group>"; };
 		CEF56579163F17270066F2A2 /* FirstDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstDetailViewController.h; sourceTree = "<group>"; };
 		CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstDetailViewController.m; sourceTree = "<group>"; };
 		CEF5657D163F1D600066F2A2 /* PublicTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicTableViewController.h; sourceTree = "<group>"; };
@@ -399,6 +450,29 @@
 				CE8B7F5715ED358B006CD57C /* Foundation.framework in Frameworks */,
 				CE8B7F5915ED358B006CD57C /* CoreGraphics.framework in Frameworks */,
 				CEBBD6471676D6DC008051D2 /* libCorePlot-CocoaTouch.a in Frameworks */,
+				CEF386E916C0245A0082C372 /* libOCMock.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEA0263216BEF3D4005CE31A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEA0263816BEF3D4005CE31A /* SenTestingKit.framework in Frameworks */,
+				CEA0263916BEF3D4005CE31A /* UIKit.framework in Frameworks */,
+				CEA0263A16BEF3D4005CE31A /* Foundation.framework in Frameworks */,
+				CEF386EA16C0245A0082C372 /* libOCMock.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEA0264B16BF3A7B005CE31A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEA0265016BF3A7B005CE31A /* SenTestingKit.framework in Frameworks */,
+				CEA0265116BF3A7B005CE31A /* UIKit.framework in Frameworks */,
+				CEA0265216BF3A7B005CE31A /* Foundation.framework in Frameworks */,
+				CEF386EB16C0245A0082C372 /* libOCMock.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -476,6 +550,7 @@
 				CEFDC23B163E15480011C3CF /* DetailViewManager.m */,
 				CE03516916AE30C400752192 /* ParticipantDataManager.h */,
 				CE03516C16AE347100752192 /* ParticipantDataManager.m */,
+				CEA0267116BF6A03005CE31A /* ParticipantDataManager-Private.h */,
 			);
 			name = "Manager-Classes";
 			sourceTree = "<group>";
@@ -582,7 +657,10 @@
 		CE8B7F4515ED358B006CD57C = {
 			isa = PBXGroup;
 			children = (
+				CEF386E716C023D80082C372 /* Libraries */,
 				CE8B7F5A15ED358B006CD57C /* uni-project */,
+				CEA0263B16BEF3D4005CE31A /* EcoMeterLogicTests */,
+				CEA0265316BF3A7B005CE31A /* EcoMeterApplicationTests */,
 				CE8B7F5315ED358B006CD57C /* Frameworks */,
 				CE8B7F5115ED358B006CD57C /* Products */,
 			);
@@ -592,6 +670,8 @@
 			isa = PBXGroup;
 			children = (
 				CE8B7F5015ED358B006CD57C /* EcoMeter.app */,
+				CEA0263616BEF3D4005CE31A /* EcoMeterLogicTests.octest */,
+				CEA0264F16BF3A7B005CE31A /* EcoMeterApplicationTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -606,6 +686,7 @@
 				CE8B7F5415ED358B006CD57C /* UIKit.framework */,
 				CE8B7F5615ED358B006CD57C /* Foundation.framework */,
 				CE8B7F5815ED358B006CD57C /* CoreGraphics.framework */,
+				CEA0263716BEF3D4005CE31A /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -626,8 +707,8 @@
 				CE0AE47C1645F54E00EC15B4 /* Controllers */,
 				CE0AE47A1645F53C00EC15B4 /* Manager-Classes */,
 				CEEAE27C15F2BE8F00A550FA /* Images */,
-				CE8B7F7415ED35D1006CD57C /* MDAppDelegate.h */,
-				CE8B7F7515ED35D1006CD57C /* MDAppDelegate.m */,
+				CE8B7F7415ED35D1006CD57C /* EcoMeterAppDelegate.h */,
+				CE8B7F7515ED35D1006CD57C /* EcoMeterAppDelegate.m */,
 				CEEAE27515F275CA00A550FA /* Starter Files */,
 				CE8B7F5B15ED358B006CD57C /* Supporting Files */,
 			);
@@ -666,6 +747,46 @@
 				CE9BCF2116AB7FEF00A62630 /* A+++.png */,
 			);
 			name = "Energy Label";
+			sourceTree = "<group>";
+		};
+		CEA0263B16BEF3D4005CE31A /* EcoMeterLogicTests */ = {
+			isa = PBXGroup;
+			children = (
+				CEA0263C16BEF3D4005CE31A /* Supporting Files */,
+				CEA0266E16BF5C59005CE31A /* ParticipantDataManagerTests.h */,
+				CEA0266F16BF5C59005CE31A /* ParticipantDataManagerTests.m */,
+			);
+			path = EcoMeterLogicTests;
+			sourceTree = "<group>";
+		};
+		CEA0263C16BEF3D4005CE31A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				CEA0263D16BEF3D4005CE31A /* EcoMeterLogicTests-Info.plist */,
+				CEA0263E16BEF3D4005CE31A /* InfoPlist.strings */,
+				CEA0264416BEF3D4005CE31A /* EcoMeterLogicTests-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CEA0265316BF3A7B005CE31A /* EcoMeterApplicationTests */ = {
+			isa = PBXGroup;
+			children = (
+				CEA0265916BF3A7B005CE31A /* EcoMeterApplicationTests.h */,
+				CEA0265A16BF3A7B005CE31A /* EcoMeterApplicationTests.m */,
+				CEA0265416BF3A7B005CE31A /* Supporting Files */,
+			);
+			path = EcoMeterApplicationTests;
+			sourceTree = "<group>";
+		};
+		CEA0265416BF3A7B005CE31A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				CEA0265516BF3A7B005CE31A /* EcoMeterApplicationTests-Info.plist */,
+				CEA0265616BF3A7B005CE31A /* InfoPlist.strings */,
+				CEA0265C16BF3A7B005CE31A /* EcoMeterApplicationTests-Prefix.pch */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		CEA0CE071661A6F60086151D /* MagicalRecord */ = {
@@ -891,6 +1012,28 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
+		CEF386E716C023D80082C372 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				CEF386EC16C0246D0082C372 /* OCMock */,
+				CEF386E816C0245A0082C372 /* libOCMock.a */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		CEF386EC16C0246D0082C372 /* OCMock */ = {
+			isa = PBXGroup;
+			children = (
+				CEF386ED16C0246D0082C372 /* NSNotificationCenter+OCMAdditions.h */,
+				CEF386EE16C0246D0082C372 /* OCMArg.h */,
+				CEF386EF16C0246D0082C372 /* OCMConstraint.h */,
+				CEF386F016C0246D0082C372 /* OCMock.h */,
+				CEF386F116C0246D0082C372 /* OCMockObject.h */,
+				CEF386F216C0246D0082C372 /* OCMockRecorder.h */,
+			);
+			path = OCMock;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -910,6 +1053,44 @@
 			productName = "uni-project";
 			productReference = CE8B7F5015ED358B006CD57C /* EcoMeter.app */;
 			productType = "com.apple.product-type.application";
+		};
+		CEA0263516BEF3D4005CE31A /* EcoMeterLogicTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEA0264716BEF3D4005CE31A /* Build configuration list for PBXNativeTarget "EcoMeterLogicTests" */;
+			buildPhases = (
+				CEA0263116BEF3D4005CE31A /* Sources */,
+				CEA0263216BEF3D4005CE31A /* Frameworks */,
+				CEA0263316BEF3D4005CE31A /* Resources */,
+				CEA0263416BEF3D4005CE31A /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CEA0264916BEF44F005CE31A /* PBXTargetDependency */,
+			);
+			name = EcoMeterLogicTests;
+			productName = EcoMeterLogicTests;
+			productReference = CEA0263616BEF3D4005CE31A /* EcoMeterLogicTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+		CEA0264E16BF3A7B005CE31A /* EcoMeterApplicationTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CEA0265D16BF3A7B005CE31A /* Build configuration list for PBXNativeTarget "EcoMeterApplicationTests" */;
+			buildPhases = (
+				CEA0264A16BF3A7B005CE31A /* Sources */,
+				CEA0264B16BF3A7B005CE31A /* Frameworks */,
+				CEA0264C16BF3A7B005CE31A /* Resources */,
+				CEA0264D16BF3A7B005CE31A /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CEA0266116BF3AC9005CE31A /* PBXTargetDependency */,
+			);
+			name = EcoMeterApplicationTests;
+			productName = EcoMeterApplicationTests;
+			productReference = CEA0264F16BF3A7B005CE31A /* EcoMeterApplicationTests.octest */;
+			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
 
@@ -946,6 +1127,8 @@
 			targets = (
 				CE8B7F4F15ED358B006CD57C /* EcoMeter */,
 				CE323F7816B74C67004DE45C /* Documentation */,
+				CEA0263516BEF3D4005CE31A /* EcoMeterLogicTests */,
+				CEA0264E16BF3A7B005CE31A /* EcoMeterApplicationTests */,
 			);
 		};
 /* End PBXProject section */
@@ -987,6 +1170,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CEA0263316BEF3D4005CE31A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEA0264016BEF3D4005CE31A /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEA0264C16BF3A7B005CE31A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEA0265816BF3A7B005CE31A /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -1003,6 +1202,32 @@
 			shellPath = /bin/sh;
 			shellScript = "# Build an Xcode documentation\n/usr/local/bin/appledoc \"$SOURCE_ROOT/$PROJECT_NAME\"";
 		};
+		CEA0263416BEF3D4005CE31A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		CEA0264D16BF3A7B005CE31A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1011,7 +1236,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CEBBD6481676D7D4008051D2 /* libCorePlot-CocoaTouch.a in Sources */,
-				CE8B7F7C15ED35D1006CD57C /* MDAppDelegate.m in Sources */,
+				CE8B7F7C15ED35D1006CD57C /* EcoMeterAppDelegate.m in Sources */,
 				CE8B7F7D15ED35D1006CD57C /* MDDetailViewController.m in Sources */,
 				CE8B7F7E15ED35D1006CD57C /* MDMasterViewController.m in Sources */,
 				CE8B7F7F15ED35D1006CD57C /* MDMultipleMasterDetailManager.m in Sources */,
@@ -1083,7 +1308,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CEA0263116BEF3D4005CE31A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEA0267016BF5C59005CE31A /* ParticipantDataManagerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CEA0264A16BF3A7B005CE31A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEA0265B16BF3A7B005CE31A /* EcoMeterApplicationTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CEA0264916BEF44F005CE31A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CE8B7F4F15ED358B006CD57C /* EcoMeter */;
+			targetProxy = CEA0264816BEF44F005CE31A /* PBXContainerItemProxy */;
+		};
+		CEA0266116BF3AC9005CE31A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CE8B7F4F15ED358B006CD57C /* EcoMeter */;
+			targetProxy = CEA0266016BF3AC9005CE31A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		CE8B7F5D15ED358B006CD57C /* InfoPlist.strings */ = {
@@ -1094,12 +1348,29 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
+		CEA0263E16BEF3D4005CE31A /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CEA0263F16BEF3D4005CE31A /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		CEA0265616BF3A7B005CE31A /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CEA0265716BF3A7B005CE31A /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		CE323F7A16B74C67004DE45C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1107,6 +1378,7 @@
 		CE323F7B16B74C67004DE45C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -1178,11 +1450,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "uni-project/uni-project-Prefix.pch";
 				INFOPLIST_FILE = "uni-project/uni-project-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/uni-project/CorePlotHeaders\"",
 					"\"$(SRCROOT)/uni-project\"",
+					"\"$(SRCROOT)/Libraries\"",
 				);
 				"OTHER_LDFLAGS[arch=*]" = (
 					"-ObjC",
@@ -1200,11 +1473,12 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "uni-project/uni-project-Prefix.pch";
 				INFOPLIST_FILE = "uni-project/uni-project-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/uni-project/CorePlotHeaders\"",
 					"\"$(SRCROOT)/uni-project\"",
+					"\"$(SRCROOT)/Libraries\"",
 				);
 				"OTHER_LDFLAGS[arch=*]" = (
 					"-ObjC",
@@ -1213,6 +1487,129 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		CEA0264516BEF3D4005CE31A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EcoMeter.app/EcoMeter";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EcoMeterLogicTests/EcoMeterLogicTests-Prefix.pch";
+				"HEADER_SEARCH_PATHS[arch=*]" = "\"$(SRCROOT)/Libraries\"";
+				INFOPLIST_FILE = "EcoMeterLogicTests/EcoMeterLogicTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Libraries\"",
+				);
+				"LIBRARY_SEARCH_PATHS[arch=*]" = "\"$(SRCROOT)/Libraries\"";
+				"OTHER_LDFLAGS[arch=*]" = (
+					"-force_load",
+					"$(SRCROOT)/Libraries/libOCMock.a",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "\"$(SRCROOT)/Libraries\"";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		CEA0264616BEF3D4005CE31A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/EcoMeter.app/EcoMeter";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EcoMeterLogicTests/EcoMeterLogicTests-Prefix.pch";
+				"HEADER_SEARCH_PATHS[arch=*]" = "\"$(SRCROOT)/Libraries\"";
+				INFOPLIST_FILE = "EcoMeterLogicTests/EcoMeterLogicTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/uni-project\"",
+					"\"$(SRCROOT)/Libraries\"",
+				);
+				"LIBRARY_SEARCH_PATHS[arch=*]" = "\"$(SRCROOT)/Libraries\"";
+				"OTHER_LDFLAGS[arch=*]" = (
+					"-force_load",
+					"$(SRCROOT)/Libraries/libOCMock.a",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "\"$(SRCROOT)/Libraries\"";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+		CEA0265E16BF3A7B005CE31A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EcoMeterApplicationTests/EcoMeterApplicationTests-Prefix.pch";
+				INFOPLIST_FILE = "EcoMeterApplicationTests/EcoMeterApplicationTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/uni-project\"",
+					"\"$(SRCROOT)/Libraries\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		CEA0265F16BF3A7B005CE31A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "EcoMeterApplicationTests/EcoMeterApplicationTests-Prefix.pch";
+				INFOPLIST_FILE = "EcoMeterApplicationTests/EcoMeterApplicationTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/uni-project\"",
+					"\"$(SRCROOT)/Libraries\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};
@@ -1242,6 +1639,24 @@
 			buildConfigurations = (
 				CE8B7F7215ED358B006CD57C /* Debug */,
 				CE8B7F7315ED358B006CD57C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CEA0264716BEF3D4005CE31A /* Build configuration list for PBXNativeTarget "EcoMeterLogicTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEA0264516BEF3D4005CE31A /* Debug */,
+				CEA0264616BEF3D4005CE31A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CEA0265D16BF3A7B005CE31A /* Build configuration list for PBXNativeTarget "EcoMeterApplicationTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CEA0265E16BF3A7B005CE31A /* Debug */,
+				CEA0265F16BF3A7B005CE31A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

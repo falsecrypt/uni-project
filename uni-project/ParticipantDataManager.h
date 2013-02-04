@@ -15,7 +15,12 @@
  */
 - (void)startCalculatingRankAndScoreWithNetworkStatus: (BOOL)isReachable;
 
-// Designated initializer.
+
+/** Designated initializer
+ 
+ @param _id Id of the selected participant
+ @return id ParticipantDataManager instance
+ */
 - (id)initWithParticipantId: (NSInteger)_id;
 
 

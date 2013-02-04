@@ -5,7 +5,7 @@
 #import <UIKit/UIKit.h>
 #import "DetailViewManager.h"
 
-@interface MDAppDelegate : UIResponder <UIApplicationDelegate>
+@interface EcoMeterAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (nonatomic, retain) UIWindow *window;
 

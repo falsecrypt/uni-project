@@ -5,17 +5,17 @@
 //  Copyright (c) 2012 test. All rights reserved.
 //
 
-#import "FirstTableViewController.h"
-#import "FirstDetailViewController.h"
 #import "DetailViewManager.h"
-#import "PublicTableViewController.h"
+#import "FirstDetailViewController.h"
+#import "FirstTableViewController.h"
 #import "KeychainItemWrapper.h"
+#import "PublicTableViewController.h"
 
 @interface FirstTableViewController ()
 
-@property (nonatomic) BOOL userLoggedInVar;
-@property (nonatomic) BOOL hideLoginSection;
 @property (nonatomic) BOOL hideAccountSection;
+@property (nonatomic) BOOL hideLoginSection;
+@property (nonatomic) BOOL userLoggedInVar;
 @end
 
 @implementation FirstTableViewController

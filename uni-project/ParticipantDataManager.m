@@ -10,31 +10,10 @@
 #import "AFAppDotNetAPIClient.h"
 #import "Participant.h"
 #import "AFHTTPRequestOperation.h"
+#import "ParticipantDataManager-Private.h"
 
 // class extension (anonymous category)
 @interface ParticipantDataManager()
-
-- (NSNumber *)getParticipantScore;
-
-- (void)startCalculatingConsumptionSumForParticipantId:(NSInteger)_id;
-
-- (void)syncConsumptionWithOperations:(NSMutableArray *)operations;
-
-- (void)readyToSubmitRank;
-
-- (void)calculateParticipantScore;
-
-@property float consumptionMonthsSum;
-@property float consumptionDaysSum;
-@property float totalDays;
-@property int   monthsCounter;
-@property int   daysCounter;
-@property float yearExtrapolation;
-@property int   currentParticipantId;
-@property float consumptionWithOfficeArea;
-@property(nonatomic, strong)NSString *currentPathForMonths;
-@property(nonatomic, strong)NSString *currentPathForDays;
-@property(nonatomic, strong)NSDate   *lastSyncDate;
 
 @end
 
@@ -43,18 +22,23 @@
 @implementation ParticipantDataManager
 
 
+
 - (id)initWithParticipantId: (NSInteger)_id {
     if (self = [super init]){
-        self.consumptionMonthsSum = 0.0f;
-        self.monthsCounter = 0;
-        self.consumptionDaysSum = 0.0f;
-        self.daysCounter = 0;
-        self.yearExtrapolation = 0.0f;
-        self.totalDays = 0.0f;
+        [self initScalarAttributes];
         self.currentParticipantId = _id;
     }
     
     return self;
+}
+
+- (void)initScalarAttributes {
+    self.consumptionMonthsSum = 0.0f;
+    self.monthsCounter = 0;
+    self.consumptionDaysSum = 0.0f;
+    self.daysCounter = 0;
+    self.yearExtrapolation = 0.0f;
+    self.totalDays = 0.0f;
 }
 
 

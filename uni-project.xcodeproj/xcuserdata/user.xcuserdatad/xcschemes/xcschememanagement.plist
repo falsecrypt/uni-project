@@ -9,6 +9,16 @@
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
+		<key>EcoMeterApplicationTests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>EcoMeterLogicTests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>uni-project.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -23,6 +33,16 @@
 			<true/>
 		</dict>
 		<key>CE8B7F4F15ED358B006CD57C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CEA0263516BEF3D4005CE31A</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CEA0264E16BF3A7B005CE31A</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -12,7 +12,7 @@
 
 #import "MCachedModalStoryboardSegue.h"
 #import "DetailViewManager.h"
-#import "MDAppDelegate.h"
+#import "EcoMeterAppDelegate.h"
 #import "PublicDetailViewController.h"
 #import "PublicTableViewController.h"
 
@@ -146,7 +146,7 @@ static NSMutableDictionary * _Cached_PublicDetailViews;
 - (void)perform
 {
 
-    MDAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    EcoMeterAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     DetailViewManager *detailViewManager = appDelegate.detailViewManager;
     // some kind of a custom replace segue with detail split as destination ;)
     //if (![detailViewManager.detailViewController isEqual:self.destinationViewController]) {
