@@ -29,9 +29,12 @@
 @end
 ///////////////////////////////////////////////////////////
 
-@implementation CircleView
 
-CircleObjectView *currentSelectedCircle;
+@interface CircleView ()
+@property (nonatomic, strong) CircleObjectView *currentSelectedCircle;
+@end
+
+@implementation CircleView
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -48,13 +51,13 @@ CircleObjectView *currentSelectedCircle;
     UITouch *touch = [touches anyObject];
     if ([touch.view isKindOfClass: CircleObjectView.class]) {
         // Get the CircleObjectView object from the dictionary
-        currentSelectedCircle = (self.circleObjectsDictionary)[[NSString stringWithFormat:@"%d",touch.view.tag]];
-        if ([(self.monthColors)[[NSString stringWithFormat:@"%i",currentSelectedCircle.tag]] isEqual:[UIColor clearColor]]) {
-            currentSelectedCircle.backgroundColor = (self.monthColors)[[NSString stringWithFormat:@"%i",currentSelectedCircle.tag]];
-            currentSelectedCircle.layer.borderColor = [[UIColor greenColor] colorWithAlphaComponent:1.0f].CGColor;
+        self.currentSelectedCircle = (self.circleObjectsDictionary)[[NSString stringWithFormat:@"%d",touch.view.tag]];
+        if ([(self.monthColors)[[NSString stringWithFormat:@"%i",self.currentSelectedCircle.tag]] isEqual:[UIColor clearColor]]) {
+            self.currentSelectedCircle.backgroundColor = (self.monthColors)[[NSString stringWithFormat:@"%i",self.currentSelectedCircle.tag]];
+            self.currentSelectedCircle.layer.borderColor = [[UIColor greenColor] colorWithAlphaComponent:1.0f].CGColor;
         }
         else {
-        currentSelectedCircle.backgroundColor = [(self.monthColors)[[NSString stringWithFormat:@"%i",currentSelectedCircle.tag]] colorWithAlphaComponent: 1.0f];
+        self.currentSelectedCircle.backgroundColor = [(self.monthColors)[[NSString stringWithFormat:@"%i",self.currentSelectedCircle.tag]] colorWithAlphaComponent: 1.0f];
         }
         
         //Is anyone listening?
@@ -79,12 +82,12 @@ CircleObjectView *currentSelectedCircle;
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    if (currentSelectedCircle!=nil) {
-        if ([(self.monthColors)[[NSString stringWithFormat:@"%i",currentSelectedCircle.tag]] isEqual:[UIColor clearColor]]) {
-            currentSelectedCircle.layer.borderColor = [[UIColor greenColor] colorWithAlphaComponent:0.7f].CGColor;
+    if (self.currentSelectedCircle!=nil) {
+        if ([(self.monthColors)[[NSString stringWithFormat:@"%i",self.currentSelectedCircle.tag]] isEqual:[UIColor clearColor]]) {
+            self.currentSelectedCircle.layer.borderColor = [[UIColor greenColor] colorWithAlphaComponent:0.7f].CGColor;
         }
         else {
-            currentSelectedCircle.backgroundColor = (self.monthColors)[[NSString stringWithFormat:@"%i",currentSelectedCircle.tag]];
+            self.currentSelectedCircle.backgroundColor = (self.monthColors)[[NSString stringWithFormat:@"%i",self.currentSelectedCircle.tag]];
         }
     }
 }

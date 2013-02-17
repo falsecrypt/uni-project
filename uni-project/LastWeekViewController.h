@@ -20,16 +20,16 @@
 @property (strong, nonatomic) IBOutlet UIView *mainView;
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *profileBarButtonItem;
-@property (nonatomic, retain) UIBarButtonItem *navigationPaneBarButtonItem;
-@property (nonatomic, retain) UIPopoverController *profilePopover;
-@property (nonatomic, retain) ProfilePopoverViewController *userProfile;
+@property (nonatomic, strong) UIBarButtonItem *navigationPaneBarButtonItem;
+@property (nonatomic, strong) UIPopoverController *profilePopover;
+@property (nonatomic, strong) ProfilePopoverViewController *userProfile;
 
 @property (strong, nonatomic) CPTGraphHostingView *pieChartView;
 @property (strong, nonatomic) CPTGraph *graph;
 
 @property (strong, nonatomic) IBOutlet UILabel *consumptionMonthLabel;
 @property (strong, nonatomic) IBOutlet UILabel *dayNameLabel;
-@property (nonatomic, assign) BOOL instanceWasCached; // for DataOverviewTableViewController
+@property (nonatomic) BOOL instanceWasCached; // for DataOverviewTableViewController
 
 @property (strong, nonatomic) NSMutableDictionary *daysColors;
 

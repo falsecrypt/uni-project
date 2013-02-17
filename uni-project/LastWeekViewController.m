@@ -16,19 +16,18 @@
 NSString *const pieChartName = @"7DaysPieChart";
 #define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
 
-CGPoint lastLocation;
-CPTPieChart *piePlot;
-BOOL selecting;
-BOOL repeatingTouch;
-BOOL firstTime;
-BOOL deviceIsOnline;
-NSUInteger currentSliceIndex;
-NSMutableDictionary *dayDataDictionary;
-MBProgressHUD *permanentHud;
-
 @interface LastWeekViewController ()
 
-@property MBProgressHUD *HUD;
+@property (nonatomic, strong) MBProgressHUD *HUD;
+@property (nonatomic) CGPoint lastLocation;
+@property (nonatomic, strong) CPTPieChart *piePlot;
+@property (nonatomic) BOOL selecting;
+@property (nonatomic) BOOL repeatingTouch;
+@property (nonatomic) BOOL firstTime;
+@property (nonatomic) BOOL deviceIsOnline;
+@property (nonatomic) NSUInteger currentSliceIndex;
+@property (nonatomic) NSMutableDictionary *dayDataDictionary;
+@property (nonatomic) MBProgressHUD *permanentHud;
 
 @end
 
@@ -76,7 +75,7 @@ NSMutableArray *navigationBarItems;
         self.HUD.yOffset = -125.f;
         [self.HUD show:YES];
         
-        firstTime = YES;
+        self.firstTime = YES;
         
         // allocate a reachability object
         Reachability* reach = [Reachability reachabilityWithHostname:currentCostServerBaseURLHome];
@@ -85,7 +84,7 @@ NSMutableArray *navigationBarItems;
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"Block Says Reachable");
-                deviceIsOnline = YES;
+                self.deviceIsOnline = YES;
                 [self initPieChartOnline];
             });
         };
@@ -94,7 +93,7 @@ NSMutableArray *navigationBarItems;
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"Block Says Unreachable");
-                deviceIsOnline = NO;
+                self.deviceIsOnline = NO;
                 [self initPieChartOffline];
             });
         };
@@ -134,13 +133,13 @@ NSMutableArray *navigationBarItems;
     NSLog(@"calling initPieChartOnline!");
     // Prepare Data for the 7-Days-Pie Chart TODO
     
-    if (permanentHud) {
+    if (self.permanentHud) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [permanentHud removeFromSuperview];
-        permanentHud = nil;
+        [self.permanentHud removeFromSuperview];
+        self.permanentHud = nil;
     }
     
-    if ( dayDataDictionary == nil ) {
+    if ( self.dayDataDictionary == nil ) {
         /*
          plotData = [[NSMutableArray alloc] initWithObjects:
          [NSNumber numberWithDouble:20.0],
@@ -152,7 +151,7 @@ NSMutableArray *navigationBarItems;
         NSNumber *numberofentities = [WeekData numberOfEntities];
         
         // We are online
-        NSLog(@"deviceIsOnline : %i", deviceIsOnline);
+        NSLog(@"deviceIsOnline : %i", self.deviceIsOnline);
         
         // No Data, our App has been started for the first time
         if ([numberofentities intValue]==0) {
@@ -177,7 +176,7 @@ NSMutableArray *navigationBarItems;
     NSLog(@"calling initPieChart!");
     // Prepare Data for the 7-Days-Pie Chart TODO
     
-    if ( dayDataDictionary == nil ) {
+    if ( self.dayDataDictionary == nil ) {
         /*
          plotData = [[NSMutableArray alloc] initWithObjects:
          [NSNumber numberWithDouble:20.0],
@@ -190,7 +189,7 @@ NSMutableArray *navigationBarItems;
         
         // We are offline
         // retrieve the data from the DB
-        NSLog(@"deviceIsOnline : %i", deviceIsOnline);
+        NSLog(@"deviceIsOnline : %i", self.deviceIsOnline);
         // ooops, No Data. Show error message
         if ([numberofentities intValue]==0) {
             if (self.HUD) {
@@ -199,14 +198,14 @@ NSMutableArray *navigationBarItems;
                 self.HUD = nil;
             }
             NSLog(@"No Data in the WeekData Table! and the Device is not connected to the internet..");
-            permanentHud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            self.permanentHud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             // Configure for text only and offset down
-            permanentHud.labelText = @"Keine Daten vorhanden";
-            permanentHud.detailsLabelText = @"Bitte überprüfen Sie Ihre Internetverbindung";
-            permanentHud.square = YES;
-            permanentHud.mode = MBProgressHUDModeText;
-            permanentHud.margin = 10.f;
-            permanentHud.yOffset = 20.f;
+            self.permanentHud.labelText = @"Keine Daten vorhanden";
+            self.permanentHud.detailsLabelText = @"Bitte überprüfen Sie Ihre Internetverbindung";
+            self.permanentHud.square = YES;
+            self.permanentHud.mode = MBProgressHUDModeText;
+            self.permanentHud.margin = 10.f;
+            self.permanentHud.yOffset = 20.f;
         }
         else {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -221,9 +220,9 @@ NSMutableArray *navigationBarItems;
          NSArray *result = [WeekData findAllSortedBy:@"day" ascending:YES];
          NSLog(@"TEST, result: %@", result);*/
         
-        [piePlot reloadData];
+        [self.piePlot reloadData];
         
-        NSLog(@"initPieChart END-> dayDataDictionary: %@", dayDataDictionary);
+        NSLog(@"initPieChart END-> dayDataDictionary: %@", self.dayDataDictionary);
     }
     else {
        [self readyToMakePieChart]; 
@@ -253,12 +252,12 @@ NSMutableArray *navigationBarItems;
     NSLog(@"readyToMakePieChart -> results: %@", results);
     WeekData *weekdata = results[0];
     NSLog(@"readyToMakePieChart -> first: %@", [weekdata day]);
-    dayDataDictionary = [[NSMutableDictionary alloc] init];
+    self.dayDataDictionary = [[NSMutableDictionary alloc] init];
     plotDataConsumption = [[NSMutableArray alloc] init];
     plotDataDates = [[NSMutableArray alloc] init];
     
     for (WeekData *weekdata in results){
-        dayDataDictionary[[weekdata consumption]] = [weekdata day]; //NSMutableDictionary is unordered
+        self.dayDataDictionary[[weekdata consumption]] = [weekdata day]; //NSMutableDictionary is unordered
         [plotDataConsumption addObject:[weekdata consumption]];
         [plotDataDates addObject:[weekdata day]];
         NSLog(@"adding [weekdata day]: %@", [weekdata day]);
@@ -269,7 +268,7 @@ NSMutableArray *navigationBarItems;
     [self calculateColorValuesForDays];
     [self createPieChart];
     
-    NSLog(@"readyToMakePieChart -> dayDataDictionary: %@", dayDataDictionary);
+    NSLog(@"readyToMakePieChart -> dayDataDictionary: %@", self.dayDataDictionary);
     NSLog(@"readyToMakePieChart -> plotDataConsumption: %@", plotDataConsumption);
     
 }
@@ -386,26 +385,26 @@ NSMutableArray *navigationBarItems;
     overlayGradient              = [overlayGradient addColorStop:[[CPTColor blackColor] colorWithAlphaComponent:0.5] atPosition:1.0];
     
     // Add pie chart
-    piePlot                 = [[CPTPieChart alloc] init];
-    piePlot.dataSource      = self;
-    piePlot.pieRadius  = MIN(0.7 * (self.graphHostingView.frame.size.height - 2 * self.graph.paddingLeft) / 2.0,
+    self.piePlot                 = [[CPTPieChart alloc] init];
+    self.piePlot.dataSource      = self;
+    self.piePlot.pieRadius  = MIN(0.7 * (self.graphHostingView.frame.size.height - 2 * self.graph.paddingLeft) / 2.0,
                              0.7 * (self.graphHostingView.frame.size.width - 2 * self.graph.paddingTop) / 2.0);
-    piePlot.identifier      = pieChartName;
-    piePlot.borderLineStyle = whiteLineStyle;
-    piePlot.startAngle      = M_PI_4;
-    piePlot.sliceDirection  = CPTPieDirectionClockwise;
-    piePlot.shadow          = greenShadow;
-    piePlot.delegate        = self;
-    piePlot.plotSpace.delegate = self;
-    piePlot.plotSpace.allowsUserInteraction = YES;
-    piePlot.overlayFill    = [CPTFill fillWithGradient:overlayGradient];
-    [self.graph addPlot:piePlot];
+    self.piePlot.identifier      = pieChartName;
+    self.piePlot.borderLineStyle = whiteLineStyle;
+    self.piePlot.startAngle      = M_PI_4;
+    self.piePlot.sliceDirection  = CPTPieDirectionClockwise;
+    self.piePlot.shadow          = greenShadow;
+    self.piePlot.delegate        = self;
+    self.piePlot.plotSpace.delegate = self;
+    self.piePlot.plotSpace.allowsUserInteraction = YES;
+    self.piePlot.overlayFill    = [CPTFill fillWithGradient:overlayGradient];
+    [self.graph addPlot:self.piePlot];
     
-    NSLog(@"createPieChart: graph: %@, piePlot: %@", self.graph, piePlot);
+    NSLog(@"createPieChart: graph: %@, piePlot: %@", self.graph, self.piePlot);
     
-    selecting = FALSE;
-    repeatingTouch = FALSE;
-    currentSliceIndex = 999;
+    self.selecting = FALSE;
+    self.repeatingTouch = FALSE;
+    self.currentSliceIndex = 999;
 }
 
 -(void)selectSliceOnFirstLaunch {
@@ -419,11 +418,11 @@ NSMutableArray *navigationBarItems;
     [piePlot reloadData];
     
     [piePlot setNeedsDisplay];*/
-    firstTime = NO;
+    self.firstTime = NO;
     int64_t delayInSeconds = 1.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self pieChart:piePlot sliceWasSelectedAtRecordIndex:[plotDataConsumption count]-1];
+        [self pieChart:self.piePlot sliceWasSelectedAtRecordIndex:[plotDataConsumption count]-1];
     });
     
 }
@@ -432,14 +431,14 @@ NSMutableArray *navigationBarItems;
 {
     NSLog(@"%@ slice was selected at index %lu. Value = %@", plot.identifier, (unsigned long)index, plotDataConsumption[index]);
     
-    selecting = TRUE;
-    if (currentSliceIndex==index && !repeatingTouch) {
-        repeatingTouch = YES;
+    self.selecting = TRUE;
+    if (self.currentSliceIndex==index && !self.repeatingTouch) {
+        self.repeatingTouch = YES;
     }
     else {
-        repeatingTouch = NO;
+        self.repeatingTouch = NO;
     }
-    currentSliceIndex = index;
+    self.currentSliceIndex = index;
     
     //NSDate *dayDate = [dayDataDictionary objectForKey:[plotDataConsumption objectAtIndex:index]];
     NSDate *dayDate = plotDataDates[index];
@@ -598,16 +597,16 @@ NSMutableArray *navigationBarItems;
 {
     CGFloat result = 0.0;
     
-    NSLog(@"radialOffsetForPieChart: recordIndex %i, currentSliceIndex %i, selecting %i, repeatingTouch %i", index, currentSliceIndex, selecting, repeatingTouch);
+    NSLog(@"radialOffsetForPieChart: recordIndex %i, currentSliceIndex %i, selecting %i, repeatingTouch %i", index, self.currentSliceIndex, self.selecting, self.repeatingTouch);
 
-    if ( [(NSString *)pieChart.identifier isEqualToString:pieChartName] && selecting && index==currentSliceIndex) {
+    if ( [(NSString *)pieChart.identifier isEqualToString:pieChartName] && self.selecting && index==self.currentSliceIndex) {
         result = 20.0;
-        if (repeatingTouch) {
+        if (self.repeatingTouch) {
             result = 0.0;
         }
     }
     
-    if (index == [plotDataConsumption count]-1 && !self.instanceWasCached && firstTime) {
+    if (index == [plotDataConsumption count]-1 && !self.instanceWasCached && self.firstTime) {
         [self selectSliceOnFirstLaunch];
     }
     return result;

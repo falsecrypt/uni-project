@@ -20,17 +20,17 @@ const double kFrameRate         = 5.0;  // frames per second
 const double kAlpha             = 0.25; // smoothing constant
 const NSUInteger kMaxDataPoints = 10;
 const NSString *kPlotIdentifier = @"Data Source Plot";
-NSUInteger currentIndex;
-NSTimer *dataTimer;
-BOOL deviceIsOnline;
 
 @interface CurrentDataViewController ()
 
-@property NSTimer *pendingTimer;
-@property NSTimer *continiousTimer;
-@property MBProgressHUD *HUD;
-@property UIImageView *meterImageViewDot;
-@property NSMutableArray *lastWattValues;
+@property (nonatomic, strong) NSTimer *pendingTimer;
+@property (nonatomic, strong) NSTimer *continiousTimer;
+@property (nonatomic, strong) MBProgressHUD *HUD;
+@property (nonatomic, strong) UIImageView *meterImageViewDot;
+@property (nonatomic, strong) NSMutableArray *lastWattValues;
+@property (nonatomic) NSUInteger currentIndex;
+@property (nonatomic) NSTimer *dataTimer;
+@property (nonatomic) BOOL deviceIsOnline;
 
 @end
 
@@ -87,7 +87,7 @@ NSMutableArray *navigationBarItems;
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             NSLog(@"Block Says Reachable");
-            deviceIsOnline = YES;
+            self.deviceIsOnline = YES;
             if (hud) {
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 [hud removeFromSuperview];
@@ -101,7 +101,7 @@ NSMutableArray *navigationBarItems;
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             NSLog(@"Block Says Unreachable");
-            deviceIsOnline = NO;
+            self.deviceIsOnline = NO;
             hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             // Configure for text only and offset down
             hud.labelText = @"Verbindung fehlgeschlagen";
@@ -171,7 +171,7 @@ NSMutableArray *navigationBarItems;
     self.hostingView.allowPinchScaling = YES;
     self.dataForPlot  = [[NSMutableArray alloc] initWithCapacity:kMaxDataPoints];
     [self createScatterPlot];
-    if (deviceIsOnline) {
+    if (self.deviceIsOnline) {
         [self generateData];
     }
 }
@@ -181,7 +181,7 @@ NSMutableArray *navigationBarItems;
     NSLog(@"Calling generateData");
     [self.dataForPlot removeAllObjects];
     [self.dataForPlot addObject:@0];
-    currentIndex = 1; //0
+    self.currentIndex = 1; //0
     /*NSTimer* firstTimer = [NSTimer timerWithTimeInterval:0.1
                                                   target:self
                                                 selector:@selector(newData:)
@@ -189,12 +189,12 @@ NSMutableArray *navigationBarItems;
                                                  repeats:NO];
     [[NSRunLoop mainRunLoop] addTimer:firstTimer forMode:NSDefaultRunLoopMode]; */
     
-    dataTimer = [NSTimer timerWithTimeInterval:60.0 //60.0
+    self.dataTimer = [NSTimer timerWithTimeInterval:60.0 //60.0
                                          target:self
                                        selector:@selector(newData:)
                                        userInfo:nil
                                         repeats:YES];
-    [[NSRunLoop mainRunLoop] addTimer:dataTimer forMode:NSDefaultRunLoopMode];
+    [[NSRunLoop mainRunLoop] addTimer:self.dataTimer forMode:NSDefaultRunLoopMode];
 }
 
 -(void)createScatterPlot {
@@ -307,7 +307,7 @@ NSMutableArray *navigationBarItems;
     NSLog(@"Calling numberForPlot");
     switch ( fieldEnum ) {
         case CPTScatterPlotFieldX:
-            num = @(index + currentIndex - self.dataForPlot.count);
+            num = @(index + self.currentIndex - self.dataForPlot.count);
             NSLog(@"X Value, num = %@, index = %i", num, index);
             break;
             
@@ -355,12 +355,12 @@ NSMutableArray *navigationBarItems;
         NSLog(@"---newData:theTimer---setting yRange");
         
         CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)theGraph.defaultPlotSpace;
-        NSUInteger location       = (currentIndex >= kMaxDataPoints ? currentIndex - kMaxDataPoints + 1 : 0);
+        NSUInteger location       = (self.currentIndex >= kMaxDataPoints ? self.currentIndex - kMaxDataPoints + 1 : 0);
         plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(location)
                                                         length:CPTDecimalFromUnsignedInteger(kMaxDataPoints - 1)];
         plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(0) length:CPTDecimalFromUnsignedInteger(self.userMaximumWatt)];
         
-        currentIndex++;
+        self.currentIndex++;
         //float kWhrData = (self.userCurrentWatt/1000.00)*(1.0/60.0);
         [self.dataForPlot addObject:@(self.userCurrentWatt)];
         //[self.dataForPlot addObject:[NSNumber numberWithDouble:(1.0 - kAlpha) * [[self.dataForPlot lastObject] doubleValue] + kAlpha * rand() / (double)RAND_MAX]];
