@@ -14,12 +14,20 @@
 #import "Reachability.h"
 
 
-NSMutableDictionary *monthsDataDictionary;
-BOOL deviceIsOnline;
-
 @interface LastMonthsViewController ()
 
-@property MBProgressHUD *HUD;
+@property (nonatomic, strong) MBProgressHUD *HUD;
+@property (nonatomic, strong) UIPopoverController *profilePopover;
+@property (nonatomic, weak) IBOutlet UILabel *consumptionMonthLabel;
+@property (nonatomic, weak) IBOutlet UILabel *monthNameLabel;
+
+@property (nonatomic, weak) IBOutlet CircleView *dataView;
+@property (nonatomic, weak) IBOutlet UINavigationBar *navigationBar;
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *profileBarButtonItem;
+@property (nonatomic, strong) ProfilePopoverViewController *userProfile;
+
+@property (nonatomic, strong) NSMutableDictionary *monthsDataDictionary;
+@property (nonatomic, assign) BOOL deviceIsOnline;
 
 @end
 
@@ -79,7 +87,7 @@ NSMutableArray *navigationBarItems;
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"Block Says Reachable");
-                deviceIsOnline = YES;
+                self.deviceIsOnline = YES;
                 [self initCirclesOnline];
             });
         };
@@ -88,7 +96,7 @@ NSMutableArray *navigationBarItems;
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"Block Says Unreachable");
-                deviceIsOnline = NO;
+                self.deviceIsOnline = NO;
                 [self initCirclesOffline];
             });
         };
@@ -103,16 +111,12 @@ NSMutableArray *navigationBarItems;
 
 - (void) initCirclesOnline {
     NSLog(@"calling initCirclesOnline!");
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-    });
 
         // Lets look for Week Data in our DB
         NSNumber *numberofentities = [MonthData numberOfEntities];
     
         // We are online
-        NSLog(@"deviceIsOnline : %i", deviceIsOnline);
+        NSLog(@"deviceIsOnline : %i", self.deviceIsOnline);
         
         // No Data, our App has been started for the first time
         if ([numberofentities intValue]==0) {
@@ -122,7 +126,7 @@ NSMutableArray *navigationBarItems;
         // We have some data, we are online so lets sync
         else {
             NSLog(@"number of entities before sync : %@", numberofentities);
-            [MonthData truncateAll];
+            //[MonthData truncateAll]; not here
             [self getMonthsData];
         }
 }
@@ -130,20 +134,36 @@ NSMutableArray *navigationBarItems;
 - (void) initCirclesOffline{
         NSLog(@"calling initCirclesOffline!");
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        //dispatch_async(dispatch_get_main_queue(), ^{
             [MBProgressHUD hideHUDForView:self.view animated:YES];
-        });
+        //});
     
         // Lets look for Week Data in our DB
         NSNumber *numberofentities = [MonthData numberOfEntities];
     
         // We are offline
         // retrieve the data from the DB
-        NSLog(@"deviceIsOnline : %i", deviceIsOnline);
+        NSLog(@"deviceIsOnline : %i", self.deviceIsOnline);
         // ooops, No Data. Show error TODO
         if ([numberofentities intValue]==0) {
             
-            NSLog(@"No Data in the WeekData Table! and the Device is not connected to the internet..");
+            // ooops, No Data. Show error message
+            if ([numberofentities intValue]==0) {
+                if (self.HUD) {
+                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                    [self.HUD removeFromSuperview];
+                    self.HUD = nil;
+                }
+                NSLog(@"No Data in the WeekData Table! and the Device is not connected to the internet..");
+                self.HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                // Configure for text only and offset down
+                self.HUD.labelText = @"Keine Daten vorhanden";
+                self.HUD.detailsLabelText = @"Bitte überprüfen Sie Ihre Internetverbindung";
+                self.HUD.square = YES;
+                self.HUD.mode = MBProgressHUDModeText;
+                self.HUD.margin = 10.f;
+                self.HUD.yOffset = 20.f;
+            }
             
         }
         else {
@@ -175,6 +195,7 @@ NSMutableArray *navigationBarItems;
     //Get user's aggregated kilowatt values per month (max 12 months, semicolon separated, latest first).
     [[AFAppDotNetAPIClient sharedClient] getPath:@"rpc.php?userID=3&action=get&what=aggregation_m" parameters:nil
                                          success:^(AFHTTPRequestOperation *operation, id data) {
+                                             [MonthData truncateAll];
                                              NSString *oneMonthData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                                              NSArray *components    = [oneMonthData componentsSeparatedByString:@";"];
                                              
@@ -209,12 +230,18 @@ NSMutableArray *navigationBarItems;
                                              
                                          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                              NSLog(@"Failed during getting 12-Months-Data: %@",[error localizedDescription]);
+                                             self.deviceIsOnline = NO;
+                                             [self initCirclesOffline];
                                          }];
     
     
 }
 
 -(void) calculateRadiusForCircles {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    });
     NSArray *results = [MonthData findAllSortedBy:@"consumption" ascending:NO];
     NSLog(@"calculateRadiusForCircle -> results: %@", results);
 

@@ -8,32 +8,43 @@
 
 #import <Foundation/Foundation.h>
 
-/*
- SubstitutableDetailViewController defines the protocol that detail view controllers must adopt.
- The protocol specifies aproperty for the bar button item controlling the navigation pane.
+/**  SubstitutableDetailViewController defines the protocol that detail view controllers must adopt.
+  *  The protocol specifies a property for the bar button item controlling the navigation pane.
  */
 @protocol SubstitutableDetailViewController
 @optional
-@property (nonatomic, retain) UIBarButtonItem *navigationPaneBarButtonItem;
+@property (nonatomic, strong) UIBarButtonItem *navigationPaneBarButtonItem;
 @end
 
+/** Custom controller object to manage the master and detail view controllers and mediate between them.
+ DetailViewManager is a split view controller’s delegate.
+ */
 @interface DetailViewManager : NSObject <UISplitViewControllerDelegate>
 
-/// Things for IB
-// The split view this class will be managing.
-//@property (nonatomic, retain) IBOutlet UISplitViewController *splitViewController;
 
+/** Reference to UISplitViewController container-object, assigned in EcoMeterAppDelegate
+  * DetailViewManager manages its viewControllers-array-property
+ */
 @property (strong, nonatomic) UISplitViewController *splitViewController;
 
-// The presently displayed detail view controller.  This is modified by the various
-// view controllers in the navigation pane of the split view controller.
-//@property (nonatomic, assign) IBOutlet UIViewController<SubstitutableDetailViewController> *detailViewController;
+
+/** This UIViewController is displayed on the right side of the interface.
+  * It can be accessed through viewControllers-property of UISplitViewController: viewControllers[1].
+  * Each UIViewController can set itselt as current detailViewController.
+ */
 @property (strong, nonatomic) UIViewController<SubstitutableDetailViewController> *detailViewController;
 
-// Holds a reference to the popover that will be displayed
-// when the navigation button is pressed.
+
+/** Holds a reference to the popover that will be displayed when the navigation button is pressed.
+ */
 @property (strong, nonatomic) UIPopoverController *navigationPopoverController;
 
+
+/** Designated initializer for the DetailViewManager Class
+ 
+ @param splitViewController Reference to a UISplitViewController Object
+ @return id DetailViewManager instance
+ */
 -(id)initWithSplitViewController:(UISplitViewController*)splitViewController;
 
 @end

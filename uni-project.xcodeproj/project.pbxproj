@@ -57,6 +57,8 @@
 		CE32C39D1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C39C1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m */; };
 		CE348C1A1647668100B14B55 /* RegisterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE348C191647668000B14B55 /* RegisterTableViewController.m */; };
 		CE3F51CD1659D4BD008EE7DF /* defaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3F51CC1659D4BD008EE7DF /* defaultAvatar.png */; };
+		CE48562116D4493C0078BD62 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = CE48562016D4493B0078BD62 /* Icon-72.png */; };
+		CE48562316D449420078BD62 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE48562216D449410078BD62 /* Icon@2x.png */; };
 		CE54E7BF168292B600F91C5E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE54E7BE168292B500F91C5E /* SystemConfiguration.framework */; };
 		CE54E7C21682943400F91C5E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = CE54E7C11682943400F91C5E /* Reachability.m */; };
 		CE6A008B16AF7E1200F845EE /* DSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6A008416AF7E1200F845EE /* DSelected.png */; };
@@ -224,6 +226,8 @@
 		CE348C181647668000B14B55 /* RegisterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterTableViewController.h; sourceTree = "<group>"; };
 		CE348C191647668000B14B55 /* RegisterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterTableViewController.m; sourceTree = "<group>"; };
 		CE3F51CC1659D4BD008EE7DF /* defaultAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultAvatar.png; sourceTree = "<group>"; };
+		CE48562016D4493B0078BD62 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "../Icon-72.png"; sourceTree = "<group>"; };
+		CE48562216D449410078BD62 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
 		CE54E7BE168292B500F91C5E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		CE54E7C01682943400F91C5E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		CE54E7C11682943400F91C5E /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
@@ -762,6 +766,8 @@
 		CEA0263C16BEF3D4005CE31A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CE48562216D449410078BD62 /* Icon@2x.png */,
+				CE48562016D4493B0078BD62 /* Icon-72.png */,
 				CEA0263D16BEF3D4005CE31A /* EcoMeterLogicTests-Info.plist */,
 				CEA0263E16BEF3D4005CE31A /* InfoPlist.strings */,
 				CEA0264416BEF3D4005CE31A /* EcoMeterLogicTests-Prefix.pch */,
@@ -1167,6 +1173,8 @@
 				CE6A009016AF7E1200F845EE /* A++Selected.png in Resources */,
 				CE6A009116AF7E1200F845EE /* A+++Selected.png in Resources */,
 				CE323F7E16B75403004DE45C /* AppleDocSettings.plist in Resources */,
+				CE48562116D4493C0078BD62 /* Icon-72.png in Resources */,
+				CE48562316D449420078BD62 /* Icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1406,7 +1414,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "D1D4511E-F8F5-421B-92EE-C15ED9701D1F";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D1D4511E-F8F5-421B-92EE-C15ED9701D1F";
@@ -1432,7 +1440,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "D1D4511E-F8F5-421B-92EE-C15ED9701D1F";

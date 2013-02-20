@@ -11,6 +11,16 @@
 
 @interface RegisterTableViewController ()
 
+@property (nonatomic, weak) IBOutlet UIBarButtonItem *cancelButton;
+@property (nonatomic, weak) IBOutlet UIButton *submitButton;
+
+- (IBAction)submitButtonPressed:(id)sender;
+- (IBAction)cancelBarButtonItemPressed:(id)sender;
+
+@property (nonatomic, weak) IBOutlet UITextField *usernameField;
+@property (nonatomic, weak) IBOutlet UITextField *emailField;
+@property (nonatomic, weak) IBOutlet UITextField *passwordField;
+
 @end
 
 @implementation RegisterTableViewController

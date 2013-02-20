@@ -12,9 +12,7 @@
 
 /// SubstitutableDetailViewController
 @property (nonatomic, strong) UIBarButtonItem *navigationPaneBarButtonItem;
-@property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property (nonatomic, assign) BOOL instanceWasCached; // for DataOverviewTableViewController
-@property (nonatomic, assign) NSInteger selectedParticipant;
-
+@property (nonatomic, assign) NSInteger selectedParticipant; // is set by PublicTableViewController
 
 @end

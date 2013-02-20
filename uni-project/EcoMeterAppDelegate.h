@@ -11,8 +11,9 @@
 
 //@property (nonatomic, retain) IBOutlet UISplitViewController *splitViewController;
 
-// DetailViewManager is assigned as the Split View Controller's delegate.
-// strong reference
-@property (strong,nonatomic)DetailViewManager* detailViewManager;
+/** This property is assigned as the Split View Controller's delegate, holds strong reference to the DetailViewManager instance
+ 
+ */
+@property (nonatomic, strong) DetailViewManager* detailViewManager;
 
 @end

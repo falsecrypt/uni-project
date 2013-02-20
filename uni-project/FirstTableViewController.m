@@ -13,9 +13,10 @@
 
 @interface FirstTableViewController ()
 
-@property (nonatomic) BOOL hideAccountSection;
-@property (nonatomic) BOOL hideLoginSection;
-@property (nonatomic) BOOL userLoggedInVar;
+@property (nonatomic, assign) BOOL hideAccountSection;
+@property (nonatomic, assign) BOOL hideLoginSection;
+@property (nonatomic, assign) BOOL userLoggedInVar;
+
 @end
 
 @implementation FirstTableViewController
@@ -427,7 +428,8 @@
     [self.tableView reloadData];
 }
 
--(void)userDidRegistered {
+-(void)userDidRegistered
+{
     self.userLoggedInVar = true;
     self.hideAccountSection = true;
     NSIndexPath *indexPathMeinBuero = [NSIndexPath indexPathForRow:0 inSection:2];
@@ -442,7 +444,8 @@
     
 }
 
--(void)hidePrivateDataAfterUserLoggedOff {
+-(void)hidePrivateDataAfterUserLoggedOff
+{
     self.userLoggedInVar = false;
     
     NSIndexPath *indexPathMeinBuero = [NSIndexPath indexPathForRow:0 inSection:2];

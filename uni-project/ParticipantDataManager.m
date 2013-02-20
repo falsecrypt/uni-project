@@ -291,7 +291,7 @@
     [Participant findFirstByAttribute:@"sensorid" withValue:[NSNumber numberWithInt:self.currentParticipantId]];
     NSLog(@"<ParticipantDataManager> calculateParticipantScore current score: %@, self.currentParticipantId: %i, participantObj: %@", participant.score, self.currentParticipantId, participant);
     // he has no score yet
-    if (participant.score==@0) {
+    if (participant.score.intValue == 0) {
         // 'Zaehler'
         float numerator = 75.0f/365.0f; //kwh per day per mˆ2 = max consumption per day
 

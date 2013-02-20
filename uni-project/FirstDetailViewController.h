@@ -11,17 +11,10 @@
 #import "LoginScreenTableViewController.h"
 //#import "RegisterTableViewController.h"
 
-@interface FirstDetailViewController : UIViewController <SubstitutableDetailViewController, LoginScreenViewControllerDelegate>
+@interface FirstDetailViewController : UIViewController <SubstitutableDetailViewController /*, LoginScreenViewControllerDelegate*/ >
 
 /// SubstitutableDetailViewController
-
-@property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
-@property (strong, nonatomic) IBOutlet UIBarButtonItem *profileBarButtonItem;
 @property (nonatomic, retain) UIBarButtonItem *navigationPaneBarButtonItem;
-
-@property (nonatomic, retain) ProfilePopoverViewController *userProfile;
-@property (nonatomic, retain) UIPopoverController *profilePopover;
-
-- (IBAction)profileButtonTapped:(id)sender;
+@property (nonatomic, weak)   IBOutlet UINavigationBar *navigationBar; // title is set directly by PublicTableViewController in viewWillDisappear method
 
 @end

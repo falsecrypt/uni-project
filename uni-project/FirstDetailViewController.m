@@ -10,7 +10,13 @@
 #import "KeychainItemWrapper.h"
 
 @interface FirstDetailViewController ()
-- (void)showProfileAfterUserLoggedIn;
+
+@property (nonatomic, strong) ProfilePopoverViewController *userProfile;
+@property (nonatomic, strong) UIPopoverController *profilePopover;
+@property (nonatomic, weak)   IBOutlet UIBarButtonItem *profileBarButtonItem;
+
+- (IBAction)profileButtonTapped:(id)sender;
+
 @end
 
 @implementation FirstDetailViewController

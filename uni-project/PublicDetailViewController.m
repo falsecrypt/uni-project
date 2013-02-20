@@ -14,6 +14,7 @@
 @interface PublicDetailViewController ()
 
 @property (nonatomic, strong) UIView *borderView;
+@property (nonatomic, weak)   IBOutlet UINavigationBar *navigationBar;
 
 @end
 

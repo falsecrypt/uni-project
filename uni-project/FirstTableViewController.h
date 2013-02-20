@@ -9,6 +9,6 @@
 #import "LoginScreenTableViewController.h"
 #import "RegisterTableViewController.h"
 
-@interface FirstTableViewController : UITableViewController <LoginScreenViewControllerDelegate, RegisterScreenViewControllerDelegate>
+@interface FirstTableViewController : UITableViewController <RegisterScreenViewControllerDelegate>
 
 @end

@@ -1,6 +1,7 @@
 
 @interface Constants : NSObject
 
+// Deprecated
 extern NSString * const CPDThemeNameDarkGradient;
 extern NSString * const CPDThemeNamePlainBlack;
 extern NSString * const CPDThemeNamePlainWhite;
@@ -11,7 +12,7 @@ extern NSString * const CPDTickerSymbolAAPL;
 extern NSString * const CPDTickerSymbolGOOG;
 extern NSString * const CPDTickerSymbolMSFT;
 
-// Other constants
+// Constants used 
 extern NSString * const pieChart;
 extern NSString * const barGraph;
 extern NSString * const scatterPlot;

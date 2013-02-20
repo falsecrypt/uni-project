@@ -16,10 +16,10 @@
 #import "KeychainItemWrapper.h"
 
 // Real Time Plot
-const double kFrameRate         = 5.0;  // frames per second
-const double kAlpha             = 0.25; // smoothing constant
-const NSUInteger kMaxDataPoints = 10;
-const NSString *kPlotIdentifier = @"Data Source Plot";
+static const double kFrameRate         = 5.0;  // frames per second
+static const double kAlpha             = 0.25; // smoothing constant
+static const NSUInteger kMaxDataPoints = 10;
+static const NSString *kPlotIdentifier = @"Data Source Plot";
 
 @interface CurrentDataViewController ()
 
@@ -28,9 +28,47 @@ const NSString *kPlotIdentifier = @"Data Source Plot";
 @property (nonatomic, strong) MBProgressHUD *HUD;
 @property (nonatomic, strong) UIImageView *meterImageViewDot;
 @property (nonatomic, strong) NSMutableArray *lastWattValues;
-@property (nonatomic) NSUInteger currentIndex;
-@property (nonatomic) NSTimer *dataTimer;
-@property (nonatomic) BOOL deviceIsOnline;
+@property (nonatomic, assign) NSUInteger currentIndex;
+@property (nonatomic, strong) NSTimer *dataTimer;
+@property (nonatomic, assign) BOOL deviceIsOnline;
+
+// Top Area, Speedometer
+@property (nonatomic, strong) UIImageView *needleImageView;
+@property (nonatomic, assign) int speedometerCurrentValue;
+@property (nonatomic, assign) float prevAngleFactor;
+@property (nonatomic, assign) float angle;
+@property (nonatomic, assign) int maxVal;
+@property (nonatomic, weak)   IBOutlet UIImageView *speedometerImageView;
+@property (nonatomic, assign) int userMaximumWatt;
+@property (nonatomic, assign) int userCurrentWatt;
+@property (nonatomic, weak)   IBOutlet UILabel *spReadingFirstNumber;
+@property (nonatomic, weak)   IBOutlet UILabel *spReadingSecondNumber;
+@property (nonatomic, weak)   IBOutlet UILabel *spReadingThirdNumber;
+@property (nonatomic, weak)   IBOutlet UILabel *spReadingFourthNumber;
+
+// must be strong! IBOutletCollection isn't retained by the view, because its not a subview 
+@property (nonatomic, strong) IBOutletCollection(UILabel) NSArray *labelsWithNumbersCollection;
+
+// Bottom Main View
+@property (nonatomic, weak)   IBOutlet UIView *bottomMainView;
+
+// Bottom Area, Scatter Plot on the left side
+@property (nonatomic, weak)   IBOutlet CPTGraphHostingView *hostingView;
+@property (nonatomic, strong) CPTGraphHostingView *scatterPlotView;
+@property (nonatomic, strong) CPTGraph *scatterGraph;
+@property (nonatomic, strong) NSMutableArray *dataForPlot;
+
+// Bottom Area, Current Day - total power consumption and Total Cost on the right side
+@property (nonatomic, weak)   IBOutlet UIView *dataDisplayView;
+@property (nonatomic, weak)   IBOutlet UILabel *kwhDataLabel;
+@property (nonatomic, weak)   IBOutlet UILabel *eurDataLabel;
+
+@property (nonatomic, strong) ProfilePopoverViewController *userProfile;
+@property (nonatomic, strong) UIPopoverController *profilePopover;
+@property (nonatomic, weak)   IBOutlet UIBarButtonItem *profileBarButtonItem;
+@property (nonatomic, weak)   IBOutlet UINavigationBar *navigationBar;
+
+@property (nonatomic, strong) Reachability* reachabilityObj;
 
 @end
 
@@ -45,6 +83,16 @@ NSMutableArray *navigationBarItems;
         // Custom initialization
     }
     return self;
+}
+
+// Lazy instantiation
+- (Reachability *) reachabilityObj
+{
+    if(!_reachabilityObj)
+    {
+        _reachabilityObj = [Reachability reachabilityWithHostname:currentCostServerBaseURLHome];
+    }
+    return _reachabilityObj;
 }
 
 - (void)viewDidLoad
@@ -68,9 +116,7 @@ NSMutableArray *navigationBarItems;
     
     self.bottomMainView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"currentDataBottomViewBackg.png"]];
     self.view.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"patternBg"]];
-    
-    // allocate a reachability object
-    Reachability* reach = [Reachability reachabilityWithHostname:currentCostServerBaseURLHome];
+
     __block MBProgressHUD *hud;
     
     NSString *secondNotificationName = @"UserLoggedOffNotification";
@@ -82,27 +128,28 @@ NSMutableArray *navigationBarItems;
     
     self.labelsWithNumbersCollection = [self sortCollection:self.labelsWithNumbersCollection];
     self.lastWattValues = [[NSMutableArray alloc] init];
-    
-    reach.reachableBlock = ^(Reachability * reachability)
+    // avoiding retain cycle
+    __weak CurrentDataViewController *weakSelf = self;
+    self.reachabilityObj.reachableBlock = ^(Reachability * reachability)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             NSLog(@"Block Says Reachable");
-            self.deviceIsOnline = YES;
+            weakSelf.deviceIsOnline = YES;
             if (hud) {
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
                 [hud removeFromSuperview];
                 hud = nil;
             }
-            [self startSynchronization];
+            [weakSelf startSynchronization];
         });
     };
     
-    reach.unreachableBlock = ^(Reachability * reachability)
+    self.reachabilityObj.unreachableBlock = ^(Reachability * reachability)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             NSLog(@"Block Says Unreachable");
-            self.deviceIsOnline = NO;
-            hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            weakSelf.deviceIsOnline = NO;
+            hud = [MBProgressHUD showHUDAddedTo:weakSelf.view animated:YES];
             // Configure for text only and offset down
             hud.labelText = @"Verbindung fehlgeschlagen";
             hud.detailsLabelText = @"Bitte überprüfen Sie Ihre Internetverbindung";
@@ -114,7 +161,7 @@ NSMutableArray *navigationBarItems;
         });
     };
     
-    [reach startNotifier];
+    [self.reachabilityObj startNotifier];
     
     [self initDataDisplayView];
 }
@@ -171,6 +218,7 @@ NSMutableArray *navigationBarItems;
     self.hostingView.allowPinchScaling = YES;
     self.dataForPlot  = [[NSMutableArray alloc] initWithCapacity:kMaxDataPoints];
     [self createScatterPlot];
+    NSLog(@"<initPlotForScatterPlot> self.deviceIsOnline: %i",self.deviceIsOnline);
     if (self.deviceIsOnline) {
         [self generateData];
     }
@@ -425,15 +473,16 @@ NSMutableArray *navigationBarItems;
     // Dispose of any resources that can be recreated.
 }
 
-- (void)startSynchronization {
+- (void)startSynchronization
+{
     NSLog(@"startSynchronization...");
-    
+    //self.HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     self.HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:self.HUD];
+    //[self.view addSubview:self.HUD];
 	//self.HUD.delegate = self;
 	self.HUD.labelText = @"Loading";
     self.HUD.yOffset = -125.f;
-    [self.HUD show:YES];
+    //[self.HUD show:YES];
     
     // Start this first timer immediately, without delay, getDataFromServer is called once
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -462,13 +511,33 @@ NSMutableArray *navigationBarItems;
     });
 }
 
-- (void)getDataFromServer:(NSTimer *)timer {
+- (void)getDataFromServer:(NSTimer *)timer
+{
+    
+    __block NSTimer *checkForTimeOutTimer;
     
     NSLog(@"getDataFromServer...");
     //max consumption is a value, beeing aggregated during a period of time, i.e. 14 days
     // we should store this value in our DB, using Core Data
     // TODO
     [[AFAppDotNetAPIClient sharedClient] getPath:@"rpc.php?userID=3&action=get&what=max" parameters:nil success:^(AFHTTPRequestOperation *operation, id data) {
+        if(checkForTimeOutTimer){
+            [checkForTimeOutTimer invalidate];
+            checkForTimeOutTimer = nil;
+            [self generateData];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                // This code is running in a different thread
+                // After 120 seconds have elapsed, the timer fires, sending the message to target.
+                self.continiousTimer = [NSTimer timerWithTimeInterval:60.0 // 1 minute
+                                                               target:self
+                                                             selector:@selector(getDataFromServer:)
+                                                             userInfo:nil
+                                                              repeats:YES];
+                
+                [[NSRunLoop currentRunLoop] addTimer:self.continiousTimer forMode:NSRunLoopCommonModes];
+                [[NSRunLoop currentRunLoop] run];
+            });
+        }
         NSString *userMaxWattString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         if (self.userMaximumWatt != [userMaxWattString intValue]) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -484,7 +553,47 @@ NSMutableArray *navigationBarItems;
         NSLog(@"Success! user's maximum watt consumption(userMaximumWatt): %i Watt, maxVal: %i Watt", self.userMaximumWatt, self.maxVal);
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Failed during getting maximum watt: %@",[error localizedDescription]);
+        
+        NSLog(@"Failed during getting maximum watt: %ld",(long)[error code]);
+        // =='The request timed out'
+        if ([error code]==-1001) {
+            if(self.dataTimer){
+                [self.dataTimer invalidate];
+                self.dataTimer = nil;
+            }
+            if(self.continiousTimer){
+                [self.continiousTimer invalidate];
+                self.continiousTimer = nil;
+            }
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            //[self.HUD show:NO];
+            //self.HUD = nil;
+            self.HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            // Configure for text only and offset down
+            self.HUD.labelText = @"Verbindung fehlgeschlagen";
+            NSString *_detailsLabelText = [NSString stringWithFormat:@"Bei der Verbindung zum Server  \n"
+                                           "ist eine Zeitüberschreitung aufgetreten.  \n"];
+            self.HUD.detailsLabelText = _detailsLabelText;
+            self.HUD.square = YES;
+            self.HUD.mode = MBProgressHUDModeText;
+            self.HUD.margin = 10.f;
+            self.HUD.yOffset = 20.f;
+            [self.HUD show:YES];
+            
+            // check every 10 min. if we can connect to the server
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            checkForTimeOutTimer = [NSTimer timerWithTimeInterval:60.0*10.0 // 10 minutes
+                                                           target:self
+                                                         selector:@selector(getDataFromServer:)
+                                                         userInfo:nil
+                                                          repeats:YES];
+            
+            [[NSRunLoop currentRunLoop] addTimer:checkForTimeOutTimer forMode:NSRunLoopCommonModes];
+            [[NSRunLoop currentRunLoop] run];
+            });
+        }
+
     }];
     
     
@@ -533,7 +642,8 @@ NSMutableArray *navigationBarItems;
      
 }
 
--(NSArray *)sortCollection:(NSArray *)toSort {
+-(NSArray *)sortCollection:(NSArray *)toSort
+{
     NSArray *sortedArray;
     sortedArray = [toSort sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
         NSNumber *tag1 = @([(UILabel*)a tag]);
@@ -543,19 +653,20 @@ NSMutableArray *navigationBarItems;
     return sortedArray;
 }
 
-- (void)changeSpeedometerNumbers {
-    
+- (void)changeSpeedometerNumbers
+{
+    NSLog(@"changeSpeedometerNumbers, self.labelsWithNumbersCollection: %@", self.labelsWithNumbersCollection);
     int step = (int)floorf(self.userMaximumWatt/12);
     step = ((step+2)/5)*5;
-    //NSLog(@"changeSpeedometerNumbers, step: %i", step);
+    NSLog(@"changeSpeedometerNumbers, step: %i", step);
     int temp = step;
-    //NSLog(@"changeSpeedometerNumbers, step: %i", step);
+    NSLog(@"changeSpeedometerNumbers, step: %i", step);
     for (UILabel *spLabel in self.labelsWithNumbersCollection) {
-        //NSLog(@"changeSpeedometerNumbers, temp: %i", temp);
+        NSLog(@"changeSpeedometerNumbers, temp: %i", temp);
         spLabel.text = [NSString stringWithFormat:@"%i", temp];
         temp += step;
     }
-//    NSLog(@"changeSpeedometerNumbers, setting new maxVal: %i", self.maxVal);
+    NSLog(@"changeSpeedometerNumbers, setting new maxVal: %i", self.maxVal);
     self.userMaximumWatt = temp - step;
     NSLog(@"changeSpeedometerNumbers, setting new userMaximumWatt: %i", self.userMaximumWatt);
 }
@@ -564,7 +675,8 @@ NSMutableArray *navigationBarItems;
 #pragma mark -
 #pragma mark Public Methods
 
-- (void)addMeterViewContents {
+- (void)addMeterViewContents
+{
 	//  Needle //
     // CGRectMake : x,  y,  width,  height
     UIImageView *imgNeedle = [[UIImageView alloc]initWithFrame:CGRectMake((self.speedometerImageView.frame.origin.x)+(175), 168, 19, 147)];
@@ -593,6 +705,11 @@ NSMutableArray *navigationBarItems;
         [self rotateIt:-120.5];
         self.prevAngleFactor = -120.5;
         [self setSpeedometerCurrentValue:0];
+    }
+    
+    if (self.HUD) {
+        [self.view addSubview:self.HUD];
+        [self.HUD show:YES];
     }
 }
 
@@ -675,7 +792,8 @@ NSMutableArray *navigationBarItems;
         self.pendingTimer = nil;
      }
 
-   // NSLog(@"rotateNeedle...");
+    NSLog(@"rotateNeedle...");
+    NSLog(@"self.needleImageView: %@", self.needleImageView);
     [UIView animateWithDuration: 2.5 delay: 1.0 options: UIViewAnimationOptionCurveLinear animations:^{
         [self.needleImageView setTransform: CGAffineTransformMakeRotation((M_PI / 180) * self.angle + 0.02)];
     }
@@ -696,6 +814,7 @@ NSMutableArray *navigationBarItems;
 
 -(void) setSpeedometerCurrentValue:(int)value
 {
+    NSLog(@"setSpeedometerCurrentValue...");
 	_speedometerCurrentValue = value;
 	NSString *currentValueAsString = [NSString stringWithFormat:@"%i", self.speedometerCurrentValue];
     NSMutableArray *characters = [[NSMutableArray alloc] initWithCapacity:[currentValueAsString length]];
@@ -729,6 +848,7 @@ NSMutableArray *navigationBarItems;
 
 -(void) rotateIt:(float)angl
 {
+    // NSLog(@"rotateIt...");
 	[UIView beginAnimations:nil context:nil];
 	[UIView setAnimationDuration:0.01f];
 	[self.needleImageView setTransform: CGAffineTransformMakeRotation((M_PI / 180) *angl)];

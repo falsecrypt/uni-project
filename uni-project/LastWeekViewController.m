@@ -13,21 +13,21 @@
 #import "WeekData.h"
 #import "Reachability.h"
 
-NSString *const pieChartName = @"7DaysPieChart";
+static NSString *const pieChartName = @"7DaysPieChart";
 #define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
 
 @interface LastWeekViewController ()
 
 @property (nonatomic, strong) MBProgressHUD *HUD;
-@property (nonatomic) CGPoint lastLocation;
+@property (nonatomic, assign) CGPoint lastLocation;
 @property (nonatomic, strong) CPTPieChart *piePlot;
-@property (nonatomic) BOOL selecting;
-@property (nonatomic) BOOL repeatingTouch;
-@property (nonatomic) BOOL firstTime;
-@property (nonatomic) BOOL deviceIsOnline;
-@property (nonatomic) NSUInteger currentSliceIndex;
-@property (nonatomic) NSMutableDictionary *dayDataDictionary;
-@property (nonatomic) MBProgressHUD *permanentHud;
+@property (nonatomic, assign) BOOL selecting;
+@property (nonatomic, assign) BOOL repeatingTouch;
+@property (nonatomic, assign) BOOL firstTime;
+@property (nonatomic, assign) BOOL deviceIsOnline;
+@property (nonatomic, assign) NSUInteger currentSliceIndex;
+@property (nonatomic, strong) NSMutableDictionary *dayDataDictionary;
+@property (nonatomic, strong) MBProgressHUD *permanentHud;
 
 @end
 
@@ -161,7 +161,7 @@ NSMutableArray *navigationBarItems;
         // We have some data, we are online so lets sync
         else {
             NSLog(@"number of entities before sync : %@", numberofentities);
-            [WeekData truncateAll];
+            //[WeekData truncateAll];
             [self getWeekData];
         }
 
@@ -279,6 +279,7 @@ NSMutableArray *navigationBarItems;
     //Get user's aggregated kilowatt values per day (max 14 days, semicolon separated, latest first).
     [[AFAppDotNetAPIClient sharedClient] getPath:@"rpc.php?userID=3&action=get&what=aggregation_d" parameters:nil
                                          success:^(AFHTTPRequestOperation *operation, id data) {
+                                             [WeekData truncateAll];
                                              NSString *oneWeekData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                                              NSArray *components   = [oneWeekData componentsSeparatedByString:@";"];
                                              
@@ -309,6 +310,8 @@ NSMutableArray *navigationBarItems;
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failed during getting 7-Weeks-Data: %@",[error localizedDescription]);
+        self.deviceIsOnline = NO;
+        [self initPieChartOffline];
     }];
     
 

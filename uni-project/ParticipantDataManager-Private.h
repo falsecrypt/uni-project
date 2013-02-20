@@ -23,14 +23,14 @@
 
 - (void)initScalarAttributes;
 
-@property (nonatomic) float consumptionMonthsSum;
-@property (nonatomic) float consumptionDaysSum;
-@property (nonatomic) float totalDays;
-@property (nonatomic) int   monthsCounter;
-@property (nonatomic) int   daysCounter;
-@property (nonatomic) float yearExtrapolation;
-@property (nonatomic) float consumptionWithOfficeArea;
-@property (nonatomic) int  currentParticipantId;
+@property (nonatomic, assign) float     consumptionMonthsSum;
+@property (nonatomic, assign) float     consumptionDaysSum;
+@property (nonatomic, assign) float     totalDays;
+@property (nonatomic, assign) int       monthsCounter;
+@property (nonatomic, assign) int       daysCounter;
+@property (nonatomic, assign) float     yearExtrapolation;
+@property (nonatomic, assign) float     consumptionWithOfficeArea;
+@property (nonatomic, assign) int       currentParticipantId;
 @property (nonatomic, strong) NSString *currentPathForMonths;
 @property (nonatomic, strong) NSString *currentPathForDays;
 @property (nonatomic, strong) NSDate   *lastSyncDate;
