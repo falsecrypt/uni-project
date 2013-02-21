@@ -8,7 +8,7 @@
 #import <UIKit/UIKit.h>
 #import "DetailViewManager.h"
 #import "ProfilePopoverViewController.h"
-#import "LoginScreenTableViewController.h"
+#import "LoginScreenTVC.h"
 //#import "RegisterTableViewController.h"
 
 @interface FirstDetailViewController : UIViewController <SubstitutableDetailViewController /*, LoginScreenViewControllerDelegate*/ >

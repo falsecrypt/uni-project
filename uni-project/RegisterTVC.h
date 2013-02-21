@@ -14,7 +14,7 @@
 @end
 
 
-@interface RegisterTableViewController : UITableViewController
+@interface RegisterTVC : UITableViewController
 
 @property (nonatomic, weak) id<RegisterScreenViewControllerDelegate> delegate;
 

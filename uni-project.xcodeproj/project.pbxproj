@@ -34,9 +34,9 @@
 		CE12C02B1687D8EA001C4959 /* CircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12C02A1687D8EA001C4959 /* CircleView.m */; };
 		CE1458B4167C06F400F7D82F /* MCachedModalStoryboardSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1458B2167C06F400F7D82F /* MCachedModalStoryboardSegue.m */; };
 		CE15BCF616A508C5007BBD0A /* currentDataBottomViewBackg.png in Resources */ = {isa = PBXBuildFile; fileRef = CE15BCF516A508C5007BBD0A /* currentDataBottomViewBackg.png */; };
-		CE1793D11683E8E60030723A /* MyOfficeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D01683E8E60030723A /* MyOfficeTableViewController.m */; };
-		CE1793D51683F3970030723A /* DataOverviewTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D41683F3970030723A /* DataOverviewTableViewController.m */; };
-		CE1BAC4F169528A200E3A1EA /* MyAccountTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1BAC4E169528A200E3A1EA /* MyAccountTableViewController.m */; };
+		CE1793D11683E8E60030723A /* MyOfficeTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D01683E8E60030723A /* MyOfficeTVC.m */; };
+		CE1793D51683F3970030723A /* DataOverviewTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D41683F3970030723A /* DataOverviewTVC.m */; };
+		CE1BAC4F169528A200E3A1EA /* MyAccountTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1BAC4E169528A200E3A1EA /* MyAccountTVC.m */; };
 		CE20E92216B58FD000AC2722 /* MonthData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92116B58FD000AC2722 /* MonthData.m */; };
 		CE20E92516B58FD000AC2722 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92416B58FD000AC2722 /* User.m */; };
 		CE20E92816B58FD000AC2722 /* WeekData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92716B58FD000AC2722 /* WeekData.m */; };
@@ -55,8 +55,14 @@
 		CE32C3981665AB8E00C3ED81 /* AFXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C38E1665AB8E00C3ED81 /* AFXMLRequestOperation.m */; };
 		CE32C3991665AB8E00C3ED81 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C3901665AB8E00C3ED81 /* UIImageView+AFNetworking.m */; };
 		CE32C39D1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C39C1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m */; };
-		CE348C1A1647668100B14B55 /* RegisterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE348C191647668000B14B55 /* RegisterTableViewController.m */; };
+		CE348C1A1647668100B14B55 /* RegisterTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE348C191647668000B14B55 /* RegisterTVC.m */; };
 		CE3F51CD1659D4BD008EE7DF /* defaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3F51CC1659D4BD008EE7DF /* defaultAvatar.png */; };
+		CE412CEC16D5270C0061484B /* pavel_avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = CE412CEB16D5270C0061484B /* pavel_avatar.png */; };
+		CE412CEF16D5412C0061484B /* ChangeUsernameTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE412CEE16D5412C0061484B /* ChangeUsernameTVC.m */; };
+		CE412CF216D5428D0061484B /* ChangeEmailTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE412CF116D5428D0061484B /* ChangeEmailTVC.m */; };
+		CE412CF516D5430D0061484B /* ResetPasswordTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE412CF416D5430C0061484B /* ResetPasswordTVC.m */; };
+		CE412CF816D543670061484B /* ChangePasswordTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE412CF716D543670061484B /* ChangePasswordTVC.m */; };
+		CE412CFB16D5628F0061484B /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = CE412CFA16D5628F0061484B /* SSKeychain.m */; };
 		CE48562116D4493C0078BD62 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = CE48562016D4493B0078BD62 /* Icon-72.png */; };
 		CE48562316D449420078BD62 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE48562216D449410078BD62 /* Icon@2x.png */; };
 		CE54E7BF168292B600F91C5E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE54E7BE168292B500F91C5E /* SystemConfiguration.framework */; };
@@ -95,7 +101,7 @@
 		CEA0265816BF3A7B005CE31A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CEA0265616BF3A7B005CE31A /* InfoPlist.strings */; };
 		CEA0265B16BF3A7B005CE31A /* EcoMeterApplicationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0265A16BF3A7B005CE31A /* EcoMeterApplicationTests.m */; };
 		CEA0267016BF5C59005CE31A /* ParticipantDataManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0266F16BF5C59005CE31A /* ParticipantDataManagerTests.m */; };
-		CEA0BE9C163CD2D700ED0599 /* LoginScreenTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0BE9A163CD2D700ED0599 /* LoginScreenTableViewController.m */; };
+		CEA0BE9C163CD2D700ED0599 /* LoginScreenTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0BE9A163CD2D700ED0599 /* LoginScreenTVC.m */; };
 		CEA0BEA1163CD99B00ED0599 /* FirstTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0BEA0163CD99B00ED0599 /* FirstTableViewController.m */; };
 		CEA0CE431661A6F60086151D /* MagicalImportFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0CE0B1661A6F60086151D /* MagicalImportFunctions.m */; };
 		CEA0CE441661A6F60086151D /* NSAttributeDescription+MagicalDataImport.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0CE0D1661A6F60086151D /* NSAttributeDescription+MagicalDataImport.m */; };
@@ -184,12 +190,12 @@
 		CE1458B2167C06F400F7D82F /* MCachedModalStoryboardSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCachedModalStoryboardSegue.m; sourceTree = "<group>"; };
 		CE1458B3167C06F400F7D82F /* MCachedModalStoryboardSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCachedModalStoryboardSegue.h; sourceTree = "<group>"; };
 		CE15BCF516A508C5007BBD0A /* currentDataBottomViewBackg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = currentDataBottomViewBackg.png; sourceTree = "<group>"; };
-		CE1793CF1683E8E60030723A /* MyOfficeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOfficeTableViewController.h; sourceTree = "<group>"; };
-		CE1793D01683E8E60030723A /* MyOfficeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOfficeTableViewController.m; sourceTree = "<group>"; };
-		CE1793D31683F3970030723A /* DataOverviewTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataOverviewTableViewController.h; sourceTree = "<group>"; };
-		CE1793D41683F3970030723A /* DataOverviewTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataOverviewTableViewController.m; sourceTree = "<group>"; };
-		CE1BAC4D169528A200E3A1EA /* MyAccountTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAccountTableViewController.h; sourceTree = "<group>"; };
-		CE1BAC4E169528A200E3A1EA /* MyAccountTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAccountTableViewController.m; sourceTree = "<group>"; };
+		CE1793CF1683E8E60030723A /* MyOfficeTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOfficeTVC.h; sourceTree = "<group>"; };
+		CE1793D01683E8E60030723A /* MyOfficeTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOfficeTVC.m; sourceTree = "<group>"; };
+		CE1793D31683F3970030723A /* DataOverviewTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataOverviewTVC.h; sourceTree = "<group>"; };
+		CE1793D41683F3970030723A /* DataOverviewTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataOverviewTVC.m; sourceTree = "<group>"; };
+		CE1BAC4D169528A200E3A1EA /* MyAccountTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAccountTVC.h; sourceTree = "<group>"; };
+		CE1BAC4E169528A200E3A1EA /* MyAccountTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAccountTVC.m; sourceTree = "<group>"; };
 		CE20E92016B58FD000AC2722 /* MonthData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthData.h; sourceTree = "<group>"; };
 		CE20E92116B58FD000AC2722 /* MonthData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthData.m; sourceTree = "<group>"; };
 		CE20E92316B58FD000AC2722 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -223,9 +229,20 @@
 		CE32C3901665AB8E00C3ED81 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
 		CE32C39B1665B7AD00C3ED81 /* AFAppDotNetAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFAppDotNetAPIClient.h; sourceTree = "<group>"; };
 		CE32C39C1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFAppDotNetAPIClient.m; sourceTree = "<group>"; };
-		CE348C181647668000B14B55 /* RegisterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterTableViewController.h; sourceTree = "<group>"; };
-		CE348C191647668000B14B55 /* RegisterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterTableViewController.m; sourceTree = "<group>"; };
+		CE348C181647668000B14B55 /* RegisterTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterTVC.h; sourceTree = "<group>"; };
+		CE348C191647668000B14B55 /* RegisterTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterTVC.m; sourceTree = "<group>"; };
 		CE3F51CC1659D4BD008EE7DF /* defaultAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultAvatar.png; sourceTree = "<group>"; };
+		CE412CEB16D5270C0061484B /* pavel_avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pavel_avatar.png; sourceTree = "<group>"; };
+		CE412CED16D5412B0061484B /* ChangeUsernameTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeUsernameTVC.h; sourceTree = "<group>"; };
+		CE412CEE16D5412C0061484B /* ChangeUsernameTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeUsernameTVC.m; sourceTree = "<group>"; };
+		CE412CF016D5428C0061484B /* ChangeEmailTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeEmailTVC.h; sourceTree = "<group>"; };
+		CE412CF116D5428D0061484B /* ChangeEmailTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeEmailTVC.m; sourceTree = "<group>"; };
+		CE412CF316D5430C0061484B /* ResetPasswordTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResetPasswordTVC.h; sourceTree = "<group>"; };
+		CE412CF416D5430C0061484B /* ResetPasswordTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResetPasswordTVC.m; sourceTree = "<group>"; };
+		CE412CF616D543660061484B /* ChangePasswordTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePasswordTVC.h; sourceTree = "<group>"; };
+		CE412CF716D543670061484B /* ChangePasswordTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordTVC.m; sourceTree = "<group>"; };
+		CE412CF916D5628F0061484B /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
+		CE412CFA16D5628F0061484B /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
 		CE48562016D4493B0078BD62 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "../Icon-72.png"; sourceTree = "<group>"; };
 		CE48562216D449410078BD62 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
 		CE54E7BE168292B500F91C5E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -277,8 +294,8 @@
 		CEA0266E16BF5C59005CE31A /* ParticipantDataManagerTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticipantDataManagerTests.h; sourceTree = "<group>"; };
 		CEA0266F16BF5C59005CE31A /* ParticipantDataManagerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParticipantDataManagerTests.m; sourceTree = "<group>"; };
 		CEA0267116BF6A03005CE31A /* ParticipantDataManager-Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ParticipantDataManager-Private.h"; sourceTree = "<group>"; };
-		CEA0BE99163CD2D700ED0599 /* LoginScreenTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginScreenTableViewController.h; sourceTree = "<group>"; };
-		CEA0BE9A163CD2D700ED0599 /* LoginScreenTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginScreenTableViewController.m; sourceTree = "<group>"; };
+		CEA0BE99163CD2D700ED0599 /* LoginScreenTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginScreenTVC.h; sourceTree = "<group>"; };
+		CEA0BE9A163CD2D700ED0599 /* LoginScreenTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginScreenTVC.m; sourceTree = "<group>"; };
 		CEA0BE9F163CD99B00ED0599 /* FirstTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstTableViewController.h; sourceTree = "<group>"; };
 		CEA0BEA0163CD99B00ED0599 /* FirstTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstTableViewController.m; sourceTree = "<group>"; };
 		CEA0CE0A1661A6F60086151D /* MagicalImportFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalImportFunctions.h; sourceTree = "<group>"; };
@@ -495,18 +512,26 @@
 		CE03516716AE155D00752192 /* Private */ = {
 			isa = PBXGroup;
 			children = (
-				CE1793CF1683E8E60030723A /* MyOfficeTableViewController.h */,
-				CE1793D01683E8E60030723A /* MyOfficeTableViewController.m */,
-				CE1793D31683F3970030723A /* DataOverviewTableViewController.h */,
-				CE1793D41683F3970030723A /* DataOverviewTableViewController.m */,
+				CE1793CF1683E8E60030723A /* MyOfficeTVC.h */,
+				CE1793D01683E8E60030723A /* MyOfficeTVC.m */,
+				CE1793D31683F3970030723A /* DataOverviewTVC.h */,
+				CE1793D41683F3970030723A /* DataOverviewTVC.m */,
 				CE32C36E16658A6000C3ED81 /* CurrentDataViewController.h */,
 				CE32C36F16658A6000C3ED81 /* CurrentDataViewController.m */,
 				CE8DCEB716815ABB0030FA4C /* LastWeekViewController.h */,
 				CE8DCEB816815ABB0030FA4C /* LastWeekViewController.m */,
 				CE12C0251687D4C8001C4959 /* LastMonthsViewController.h */,
 				CE12C0261687D4C8001C4959 /* LastMonthsViewController.m */,
-				CE1BAC4D169528A200E3A1EA /* MyAccountTableViewController.h */,
-				CE1BAC4E169528A200E3A1EA /* MyAccountTableViewController.m */,
+				CE1BAC4D169528A200E3A1EA /* MyAccountTVC.h */,
+				CE1BAC4E169528A200E3A1EA /* MyAccountTVC.m */,
+				CE412CED16D5412B0061484B /* ChangeUsernameTVC.h */,
+				CE412CEE16D5412C0061484B /* ChangeUsernameTVC.m */,
+				CE412CF016D5428C0061484B /* ChangeEmailTVC.h */,
+				CE412CF116D5428D0061484B /* ChangeEmailTVC.m */,
+				CE412CF316D5430C0061484B /* ResetPasswordTVC.h */,
+				CE412CF416D5430C0061484B /* ResetPasswordTVC.m */,
+				CE412CF616D543660061484B /* ChangePasswordTVC.h */,
+				CE412CF716D543670061484B /* ChangePasswordTVC.m */,
 			);
 			name = Private;
 			sourceTree = "<group>";
@@ -514,14 +539,14 @@
 		CE03516816AE156700752192 /* Public */ = {
 			isa = PBXGroup;
 			children = (
-				CE348C181647668000B14B55 /* RegisterTableViewController.h */,
-				CE348C191647668000B14B55 /* RegisterTableViewController.m */,
+				CE348C181647668000B14B55 /* RegisterTVC.h */,
+				CE348C191647668000B14B55 /* RegisterTVC.m */,
 				CEA0BE9F163CD99B00ED0599 /* FirstTableViewController.h */,
 				CEA0BEA0163CD99B00ED0599 /* FirstTableViewController.m */,
 				CEF56579163F17270066F2A2 /* FirstDetailViewController.h */,
 				CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */,
-				CEA0BE99163CD2D700ED0599 /* LoginScreenTableViewController.h */,
-				CEA0BE9A163CD2D700ED0599 /* LoginScreenTableViewController.m */,
+				CEA0BE99163CD2D700ED0599 /* LoginScreenTVC.h */,
+				CEA0BE9A163CD2D700ED0599 /* LoginScreenTVC.m */,
 				CEF5657D163F1D600066F2A2 /* PublicTableViewController.h */,
 				CEF5657E163F1D600066F2A2 /* PublicTableViewController.m */,
 				CE03516616ADDAF200752192 /* PublicDetailViewController.h */,
@@ -572,6 +597,8 @@
 		CE0AE483164604F700EC15B4 /* KeychainWrapper */ = {
 			isa = PBXGroup;
 			children = (
+				CE412CF916D5628F0061484B /* SSKeychain.h */,
+				CE412CFA16D5628F0061484B /* SSKeychain.m */,
 				CE0AE4841646051A00EC15B4 /* KeychainItemWrapper.h */,
 				CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */,
 			);
@@ -1004,6 +1031,7 @@
 				CE9BCF1916AB7FCE00A62630 /* Energy Label */,
 				CE15BCF516A508C5007BBD0A /* currentDataBottomViewBackg.png */,
 				CE01C30216A4C90A00ECBB3C /* mainHistotyViewBG.png */,
+				CE412CEB16D5270C0061484B /* pavel_avatar.png */,
 				CEB5A743169A7329009EB3F2 /* patternBg.png */,
 				CEB5A741169A705A009EB3F2 /* navBarBg.png */,
 				CE32C37316659B4C00C3ED81 /* speedometerCenterWheel.png */,
@@ -1175,6 +1203,7 @@
 				CE323F7E16B75403004DE45C /* AppleDocSettings.plist in Resources */,
 				CE48562116D4493C0078BD62 /* Icon-72.png in Resources */,
 				CE48562316D449420078BD62 /* Icon@2x.png in Resources */,
+				CE412CEC16D5270C0061484B /* pavel_avatar.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1251,7 +1280,7 @@
 				CE8B7F8315ED3630006CD57C /* main.m in Sources */,
 				CEEAE27A15F275CA00A550FA /* Constants.m in Sources */,
 				CEEAE27B15F275CA00A550FA /* CPDStockPriceStore.m in Sources */,
-				CEA0BE9C163CD2D700ED0599 /* LoginScreenTableViewController.m in Sources */,
+				CEA0BE9C163CD2D700ED0599 /* LoginScreenTVC.m in Sources */,
 				CEA0BEA1163CD99B00ED0599 /* FirstTableViewController.m in Sources */,
 				CEFDC23C163E15480011C3CF /* DetailViewManager.m in Sources */,
 				CEF5657B163F17270066F2A2 /* FirstDetailViewController.m in Sources */,
@@ -1259,7 +1288,7 @@
 				CEF56586163F2DCE0066F2A2 /* PublicDetailViewController.m in Sources */,
 				CEDDE0F61641611800BEFE0A /* StartDetailViewController.m in Sources */,
 				CE0AE4861646051A00EC15B4 /* KeychainItemWrapper.m in Sources */,
-				CE348C1A1647668100B14B55 /* RegisterTableViewController.m in Sources */,
+				CE348C1A1647668100B14B55 /* RegisterTVC.m in Sources */,
 				CE071EC31659C58B007290B1 /* ProfilePopoverViewController.m in Sources */,
 				CE0D631D16611E7500381D05 /* EcoMeterModel.xcdatamodeld in Sources */,
 				CEA0CE431661A6F60086151D /* MagicalImportFunctions.m in Sources */,
@@ -1303,16 +1332,21 @@
 				CE1458B4167C06F400F7D82F /* MCachedModalStoryboardSegue.m in Sources */,
 				CE8DCEB916815ABB0030FA4C /* LastWeekViewController.m in Sources */,
 				CE54E7C21682943400F91C5E /* Reachability.m in Sources */,
-				CE1793D11683E8E60030723A /* MyOfficeTableViewController.m in Sources */,
-				CE1793D51683F3970030723A /* DataOverviewTableViewController.m in Sources */,
+				CE1793D11683E8E60030723A /* MyOfficeTVC.m in Sources */,
+				CE1793D51683F3970030723A /* DataOverviewTVC.m in Sources */,
 				CE12C0271687D4C8001C4959 /* LastMonthsViewController.m in Sources */,
 				CE12C02B1687D8EA001C4959 /* CircleView.m in Sources */,
-				CE1BAC4F169528A200E3A1EA /* MyAccountTableViewController.m in Sources */,
+				CE1BAC4F169528A200E3A1EA /* MyAccountTVC.m in Sources */,
 				CE03516D16AE347100752192 /* ParticipantDataManager.m in Sources */,
 				CE20E92216B58FD000AC2722 /* MonthData.m in Sources */,
 				CE20E92516B58FD000AC2722 /* User.m in Sources */,
 				CE20E92816B58FD000AC2722 /* WeekData.m in Sources */,
 				CEFAAFDA16B8209500D9E744 /* Participant.m in Sources */,
+				CE412CEF16D5412C0061484B /* ChangeUsernameTVC.m in Sources */,
+				CE412CF216D5428D0061484B /* ChangeEmailTVC.m in Sources */,
+				CE412CF516D5430D0061484B /* ResetPasswordTVC.m in Sources */,
+				CE412CF816D543670061484B /* ChangePasswordTVC.m in Sources */,
+				CE412CFB16D5628F0061484B /* SSKeychain.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

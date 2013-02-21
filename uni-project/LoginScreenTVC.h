@@ -16,7 +16,7 @@
 - (void)showProfileAfterUserLoggedIn;
 @end*/
 
-@interface LoginScreenTableViewController : UITableViewController
+@interface LoginScreenTVC : UITableViewController
 
 @property (nonatomic, weak) id<LoginScreenViewControllerDelegate> delegate;
 //@property (nonatomic, weak) id<ProfilePopoverDelegate> profileDelegate;

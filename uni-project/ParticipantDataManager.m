@@ -22,7 +22,6 @@
 @implementation ParticipantDataManager
 
 
-
 - (id)initWithParticipantId: (NSInteger)_id {
     if (self = [super init]){
         [self initScalarAttributes];
@@ -42,31 +41,32 @@
 }
 
 
-- (void)startCalculatingRankAndScoreWithNetworkStatus: (BOOL)isReachable{
+- (void)startCalculatingRankAndScoreWithNetworkStatus: (BOOL)isReachable {
+    
     if (isReachable) {
         
         [self startCalculatingConsumptionSumForParticipantId:self.currentParticipantId];
+        
     }
     else {
+        
         NSNumber *numberofentities = [Participant numberOfEntities];
-        //NSLog(@"<ParticipantDataManager> OFFLINE numberofentities: %@", numberofentities);
+        
         if (numberofentities > 0) {
+            
             Participant *participant =
             [Participant findFirstByAttribute:@"sensorid" withValue:[NSNumber numberWithInt:self.currentParticipantId]];
-            //NSLog(@"<ParticipantDataManager> found participant: %@", participant);
             NSString *notificationName = @"RankWasCalculated";
             notificationName = [notificationName stringByAppendingString:[NSString stringWithFormat:@"%d", self.currentParticipantId]];
-            //NSLog(@"<ParticipantDataManager> notificationName: %@", notificationName);
-            //NSLog(@"<ParticipantDataManager> participant.rank: %@", participant.rank);
             [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:participant.rank userInfo:nil];
-            
             NSString *notificationNameScore = @"ScoreWasCalculated";
             notificationNameScore = [notificationNameScore stringByAppendingString:[NSString stringWithFormat:@"%d",self.currentParticipantId]];
             // notify the corresponding instance of PublicDetailViewController
             [[NSNotificationCenter defaultCenter] postNotificationName:notificationNameScore object:participant.score userInfo:nil];
         }
+        
     }
-
+    
 }
 
 - (void)startCalculatingConsumptionSumForParticipantId:(NSInteger)_id{

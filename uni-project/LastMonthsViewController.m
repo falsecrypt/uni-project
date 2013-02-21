@@ -230,8 +230,46 @@ NSMutableArray *navigationBarItems;
                                              
                                          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                              NSLog(@"Failed during getting 12-Months-Data: %@",[error localizedDescription]);
-                                             self.deviceIsOnline = NO;
-                                             [self initCirclesOffline];
+                                             if (USEDUMMYDATA)
+                                             {
+                                                 //[MonthData truncateAll]; // OK, Lets remove all old DB-Objects and generate new ones..
+                                                 // Dont generate if we have already some data
+                                                 if ([[MonthData numberOfEntities] intValue]  == 0) {
+                                                     
+                                                 // create 12 Dummy MonthData Objects and store them in DB
+                                                 NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+                                                 NSDateComponents *components = [calendar components:(NSMonthCalendarUnit) fromDate:[NSDate date]];
+                                                 for (int i=0; i<12; i++) {
+                                                     
+                                                     NSDateComponents *componentsToSubtract = [[NSDateComponents alloc] init];
+                                                     [componentsToSubtract setMonth:([components month]-i-1)];
+                                                     
+                                                     NSDate *month = [calendar dateByAddingComponents:componentsToSubtract toDate:[NSDate date] options:0];
+                                                     NSDateComponents *dateComponents = [calendar components: (NSMonthCalendarUnit|NSYearCalendarUnit) fromDate:month];
+                                                     MonthData *newData = [MonthData createEntity];
+                                                     [newData setMonth:(NSNumber *)@(dateComponents.month)];
+                                                     [newData setYear:(NSNumber *)@(dateComponents.year)];
+                                                     [newData setDate:month];
+                                                     [newData setConsumption:(NSDecimalNumber *)[NSDecimalNumber numberWithDouble:(double)(arc4random() % 1000 * 0.1)+100.0]];
+                                                     
+                                                 }
+                                                 
+                                                 [[NSManagedObjectContext defaultContext] saveNestedContexts];
+                                                 [self calculateRadiusForCircles];
+                                                     
+                                                 }
+                                                 else
+                                                 {
+                                                     self.deviceIsOnline = NO;
+                                                     [self initCirclesOffline];
+                                                 }
+                                             
+                                             }
+                                             else
+                                             {
+                                                 self.deviceIsOnline = NO;
+                                                 [self initCirclesOffline];
+                                             }
                                          }];
     
     

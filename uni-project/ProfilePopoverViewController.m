@@ -7,6 +7,7 @@
 
 #import "ProfilePopoverViewController.h"
 #import "KeychainItemWrapper.h"
+#import "SSKeychain.h"
 
 @interface ProfilePopoverViewController ()
 
@@ -52,7 +53,7 @@
     
     // width, height = 100
     UIImageView *profilePic = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 100, 100)];
-    UIImage *img = [UIImage imageNamed:@"defaultAvatar.png"];
+    UIImage *img = [UIImage imageNamed:@"pavel_avatar.png"];
     [profilePic setImage:img];
     
     self.userName = [[UILabel alloc] initWithFrame:CGRectMake(10,110,120,20)];

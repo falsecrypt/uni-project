@@ -6,8 +6,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LoginScreenTableViewController.h"
-#import "RegisterTableViewController.h"
+#import "LoginScreenTVC.h"
+#import "RegisterTVC.h"
 
 @interface FirstTableViewController : UITableViewController <RegisterScreenViewControllerDelegate>
 

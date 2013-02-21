@@ -5,6 +5,7 @@
 #import "EcoMeterAppDelegate.h"
 #import "DetailViewManager.h"
 #import "KeychainItemWrapper.h"
+#import "SSKeychain.h"
 
 @interface EcoMeterAppDelegate()
 @property (weak,nonatomic)UISplitViewController* splitViewController;
@@ -98,21 +99,16 @@ extern CFAbsoluteTime StartTime;
     // Create resizable images
     UIImage *gradientImage44 = [[UIImage imageNamed:@"navBarBg.png"]
                                 resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
-    //UIImage *gradientImage32 = [[UIImage imageNamed:@"surf_gradient_textured_32"]
-                                //resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0, 0)];
     
     // Set the background image for *all* UINavigationBars
     [[UINavigationBar appearance] setBackgroundImage:gradientImage44
                                        forBarMetrics:UIBarMetricsDefault];
-    //[[UINavigationBar appearance] setBackgroundImage:gradientImage32
-                                       //forBarMetrics:UIBarMetricsLandscapePhone];
     
     // Customize the title text for *all* UINavigationBars
-    [[UINavigationBar appearance] setTitleTextAttributes: [NSDictionary dictionaryWithObjectsAndKeys:
+    [[UINavigationBar appearance] setTitleTextAttributes:  [NSDictionary dictionaryWithObjectsAndKeys:
                                                            [UIColor colorWithRed:155/255.0f green:155/255.0f blue:155/255.0f alpha:1.0f], UITextAttributeTextColor,
                                                            [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.6],UITextAttributeTextShadowColor,
-                                                           [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],
-                                                           UITextAttributeTextShadowOffset,
+                                                           [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],UITextAttributeTextShadowOffset,
                                                            [UIFont fontWithName:@"QuicksandBold-Regular" size:21.0], UITextAttributeFont, nil]];
     
 }

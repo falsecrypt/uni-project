@@ -36,15 +36,6 @@
 
 @implementation CircleView
 
-- (id)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
-
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
@@ -52,12 +43,17 @@
     if ([touch.view isKindOfClass: CircleObjectView.class]) {
         // Get the CircleObjectView object from the dictionary
         self.currentSelectedCircle = (self.circleObjectsDictionary)[[NSString stringWithFormat:@"%d",touch.view.tag]];
-        if ([(self.monthColors)[[NSString stringWithFormat:@"%i",self.currentSelectedCircle.tag]] isEqual:[UIColor clearColor]]) {
-            self.currentSelectedCircle.backgroundColor = (self.monthColors)[[NSString stringWithFormat:@"%i",self.currentSelectedCircle.tag]];
+        // if consumption is 0
+        if ([(self.monthColors)[[NSString stringWithFormat:@"%i",self.currentSelectedCircle.tag]] isEqual:[UIColor clearColor]])
+        {
+            self.currentSelectedCircle.backgroundColor =
+            (self.monthColors)[[NSString stringWithFormat:@"%i",self.currentSelectedCircle.tag]];
             self.currentSelectedCircle.layer.borderColor = [[UIColor greenColor] colorWithAlphaComponent:1.0f].CGColor;
         }
+        // else make the color non-transparent
         else {
-        self.currentSelectedCircle.backgroundColor = [(self.monthColors)[[NSString stringWithFormat:@"%i",self.currentSelectedCircle.tag]] colorWithAlphaComponent: 1.0f];
+            self.currentSelectedCircle.backgroundColor =
+            [(self.monthColors)[[NSString stringWithFormat:@"%i",self.currentSelectedCircle.tag]] colorWithAlphaComponent: 1.0f];
         }
         
         //Is anyone listening?
@@ -72,13 +68,9 @@
             NSString *monthName = [formatter stringFromDate:monthObj.date];
             NSString *consumptionString = [monthObj.consumption stringValue];
             consumptionString = [consumptionString stringByAppendingString:@" kWh"];
-            [self.delegate setLabelsWithMonth:monthName andConsumption:consumptionString ];
+            [self.delegate setLabelsWithMonth:monthName andConsumption:consumptionString];
         }
-        
     }
-    //CGPoint currentTouchPosition = [touch locationInView:self];
-    //NSLog(@"touchesBegan touch x: %f, y: %f", currentTouchPosition.x, currentTouchPosition.y);
-    //NSLog(@"touchesBegan touch x: %@", touch);
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
@@ -87,9 +79,19 @@
             self.currentSelectedCircle.layer.borderColor = [[UIColor greenColor] colorWithAlphaComponent:0.7f].CGColor;
         }
         else {
-            self.currentSelectedCircle.backgroundColor = (self.monthColors)[[NSString stringWithFormat:@"%i",self.currentSelectedCircle.tag]];
+            self.currentSelectedCircle.backgroundColor =
+            (self.monthColors)[[NSString stringWithFormat:@"%i",self.currentSelectedCircle.tag]];
         }
     }
+}
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        // Initialization code
+    }
+    return self;
 }
 
 - (void)drawCircle:(CGPoint)p withRadius:(CGFloat)radius inContext:(CGContextRef)context

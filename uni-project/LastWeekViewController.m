@@ -25,6 +25,7 @@ static NSString *const pieChartName = @"7DaysPieChart";
 @property (nonatomic, assign) BOOL repeatingTouch;
 @property (nonatomic, assign) BOOL firstTime;
 @property (nonatomic, assign) BOOL deviceIsOnline;
+@property (nonatomic, assign) BOOL newDataSuccess;
 @property (nonatomic, assign) NSUInteger currentSliceIndex;
 @property (nonatomic, strong) NSMutableDictionary *dayDataDictionary;
 @property (nonatomic, strong) MBProgressHUD *permanentHud;
@@ -66,6 +67,7 @@ NSMutableArray *navigationBarItems;
         
         self.dayNameLabel.text = @" ";
         self.consumptionMonthLabel.text = @" ";
+        self.newDataSuccess = NO;
         //self.graphHostingView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"mainViewHistoryBackg.png"]];
         self.mainView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"mainHistotyViewBG.png"]];
         self.HUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -262,8 +264,10 @@ NSMutableArray *navigationBarItems;
         [plotDataDates addObject:[weekdata day]];
         NSLog(@"adding [weekdata day]: %@", [weekdata day]);
     }
-    [plotDataConsumption removeObjectsInRange:NSMakeRange(0, 7)]; // delete the first 7 days
-    [plotDataDates removeObjectsInRange:NSMakeRange(0, 7)]; // start at position 0, length = 7
+    if (USEDUMMYDATA == NO || self.newDataSuccess) {
+        [plotDataConsumption removeObjectsInRange:NSMakeRange(0, 7)]; // delete the first 7 days
+        [plotDataDates removeObjectsInRange:NSMakeRange(0, 7)]; // start at position 0, length = 7
+    }
     NSLog(@"readyToMakePieChart -> plotDataDates: %@", plotDataDates);
     [self calculateColorValuesForDays];
     [self createPieChart];
@@ -279,6 +283,7 @@ NSMutableArray *navigationBarItems;
     //Get user's aggregated kilowatt values per day (max 14 days, semicolon separated, latest first).
     [[AFAppDotNetAPIClient sharedClient] getPath:@"rpc.php?userID=3&action=get&what=aggregation_d" parameters:nil
                                          success:^(AFHTTPRequestOperation *operation, id data) {
+                                             self.newDataSuccess = YES;
                                              [WeekData truncateAll];
                                              NSString *oneWeekData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                                              NSArray *components   = [oneWeekData componentsSeparatedByString:@";"];
@@ -310,8 +315,32 @@ NSMutableArray *navigationBarItems;
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failed during getting 7-Weeks-Data: %@",[error localizedDescription]);
-        self.deviceIsOnline = NO;
-        [self initPieChartOffline];
+        if (USEDUMMYDATA)
+        {
+            [WeekData truncateAll]; // OK, Lets remove all old DB-Objects and generate new ones..
+            // create 7 Dummy WeekData Objects
+            for (int i=0; i<7; i++) {
+
+                NSDateComponents *componentsToSubtract = [[NSDateComponents alloc] init];
+                [componentsToSubtract setDay:(-i-1)];
+                
+                NSDate *day = [[NSCalendar currentCalendar] dateByAddingComponents:componentsToSubtract toDate:[NSDate date] options:0];
+                WeekData *newData = [WeekData createEntity];
+                [newData setDay:day];
+                [newData setConsumption:(NSDecimalNumber *)[NSDecimalNumber numberWithDouble:(double)(arc4random() % 51 * 0.1)+0.6]];
+                
+            }
+            [[NSManagedObjectContext defaultContext] saveNestedContexts];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self readyToMakePieChart];
+            });
+        }
+        else
+        {
+            self.deviceIsOnline = NO;
+            [self initPieChartOffline];
+        }
     }];
     
 

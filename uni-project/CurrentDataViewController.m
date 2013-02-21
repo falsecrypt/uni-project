@@ -14,6 +14,7 @@
 #import "FirstDetailViewController.h"
 #import "Reachability.h"
 #import "KeychainItemWrapper.h"
+#import "SSKeychain.h"
 
 // Real Time Plot
 static const double kFrameRate         = 5.0;  // frames per second
@@ -427,12 +428,14 @@ NSMutableArray *navigationBarItems;
 
 - (void) initDataDisplayView {
     NSLog(@"calling initDataDisplayView");
-    //NSLog(@"count: %i", [self.lastWattValues count]);
+    NSLog(@"lastWattValues count: %i", [self.lastWattValues count]);
     if ([self.lastWattValues count] > 0) {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        
         [dateFormatter setDateFormat:@"HH"];
-        int hours = [[dateFormatter stringFromDate:[NSDate date]] intValue];
+        int hours = [[dateFormatter stringFromDate:[NSDate date]] intValue]; // hours can be 0 !
+        if (hours==0) {
+            hours = 1;
+        }
         //NSLog(@"hours: %i", hours);
         //NSNumber *total = [self.lastWattValues valueForKeyPath:@"@sum.value"];
         float total = 0.00;
@@ -441,20 +444,19 @@ NSMutableArray *navigationBarItems;
         }
         total = total/[self.lastWattValues count]; // calculate average value
         float averageKwhTemp = (total/1000)*hours;
-         //NSLog(@"averageKwhTemp: %f", averageKwhTemp);
+         NSLog(@"averageKwhTemp: %f", averageKwhTemp);
         averageKwhTemp = (ceil(averageKwhTemp * 100.0)) / 100.0;
-        //NSLog(@"total: %f", total);
-        //NSLog(@"averageKwhTemp: %f", averageKwhTemp);
-        //NSString *averageKwh = [NSString stringWithFormat:@"%.2f", averageKwhTemp];
+        NSLog(@"total: %f", total);
+        NSLog(@"averageKwhTemp: %f", averageKwhTemp);
         NSString *averageKwh = [NSString stringWithFormat:@"%.2f", averageKwhTemp];
         
-        //NSLog(@"averageKwh: %@", averageKwh);
+        NSLog(@"averageKwh: %@", averageKwh);
         self.kwhDataLabel.text = averageKwh;
         
         // electricity tariff: Stadtwerke Strom Basis, over 10000 kWh
         float averageCostsTemp = averageKwhTemp * (28.77/100.0);
         NSString *averageCosts = [NSString stringWithFormat:@"%.2f", averageCostsTemp];
-        //NSLog(@"averageCosts: %@", averageCosts);
+        NSLog(@"averageCosts: %@", averageCosts);
         self.eurDataLabel.text = averageCosts;
     }
     else {
@@ -539,7 +541,8 @@ NSMutableArray *navigationBarItems;
             });
         }
         NSString *userMaxWattString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        if (self.userMaximumWatt != [userMaxWattString intValue]) {
+        //if (self.userMaximumWatt != [userMaxWattString intValue]) {
+         if (self.maxVal != [userMaxWattString intValue]) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
             });
@@ -555,6 +558,22 @@ NSMutableArray *navigationBarItems;
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
         NSLog(@"Failed during getting maximum watt: %ld",(long)[error code]);
+        if (USEDUMMYDATA) {
+            // stop the timer
+            if(self.continiousTimer){
+                [self.continiousTimer invalidate];
+                self.continiousTimer = nil;
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            });
+            self.userMaximumWatt = 600;
+            self.maxVal = 600;
+            NSLog(@"USING DUMMY DATA: Max Watt changed! setting maxVal: %i, setting userMaximumWatt: %i ", self.maxVal, self.userMaximumWatt);
+            [self changeSpeedometerNumbers];
+            [self calculateDeviationAngle];
+        }
+        else {
         // =='The request timed out'
         if ([error code]==-1001) {
             if(self.dataTimer){
@@ -592,6 +611,7 @@ NSMutableArray *navigationBarItems;
             [[NSRunLoop currentRunLoop] addTimer:checkForTimeOutTimer forMode:NSRunLoopCommonModes];
             [[NSRunLoop currentRunLoop] run];
             });
+        }
         }
 
     }];
@@ -638,6 +658,23 @@ NSMutableArray *navigationBarItems;
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failed during getting current watt: %@",[error localizedDescription]);
+        if (USEDUMMYDATA) {
+            // stop the timer
+            if(self.continiousTimer){
+                [self.continiousTimer invalidate];
+                self.continiousTimer = nil;
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+            });
+            
+            self.userCurrentWatt = 230;
+            [self setSpeedometerCurrentValue:self.userCurrentWatt];
+            [self.lastWattValues addObject:@(self.userCurrentWatt)];
+            
+            NSLog(@"USING DUMMY DATA: Max Watt changed! setting maxVal: %i, setting userMaximumWatt: %i ", self.maxVal, self.userMaximumWatt);
+            [self initDataDisplayView];
+        }
     }];
      
 }

@@ -7,6 +7,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MyAccountTableViewController : UITableViewController
+@interface MyAccountTVC : UITableViewController
 
 @end

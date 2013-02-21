@@ -1,21 +1,18 @@
 //
-//  DataOverviewTableViewController.m
+//  ChangePasswordTVC.m
 //  uni-project
-
-//  Copyright (c) 2012 test. All rights reserved.
+//
+//  Created by Pavel Ermolin on 20.02.13.
+//  Copyright (c) 2013 test. All rights reserved.
 //
 
-#import "DataOverviewTableViewController.h"
-#import "LastMonthsViewController.h"
-#import "LastWeekViewController.h"
-#import "MCachedModalStoryboardSegue.h"
+#import "ChangePasswordTVC.h"
 
-
-@interface DataOverviewTableViewController ()
+@interface ChangePasswordTVC ()
 
 @end
 
-@implementation DataOverviewTableViewController
+@implementation ChangePasswordTVC
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -29,15 +26,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.tableView.backgroundColor = [UIColor clearColor];
-    self.parentViewController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"patternBg.png"]];
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    UIView *tempImageView = [[UIImageView alloc] init];
+    [tempImageView setFrame:self.tableView.frame];
+    tempImageView.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"patternBg"]];
+    self.tableView.backgroundView = tempImageView;
 }
 
 - (void)didReceiveMemoryWarning
@@ -46,33 +45,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -123,24 +95,6 @@
      // Pass the selected object to the new view controller.
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"showLastWeekData"]) {
-        NSLog(@"segue : %@", segue);
-        //here is segue an instance of our MCachedModalStoryboardSegue
-        MCachedModalStoryboardSegue *customSegue = (MCachedModalStoryboardSegue *)segue;
-        LastWeekViewController *destViewController = customSegue.destinationViewController;
-        destViewController.instanceWasCached  = customSegue.destinationWasCached;
-    }
-    else if ([segue.identifier isEqualToString:@"showLastMonthsData"]) {
-        NSLog(@"segue : %@", segue);
-        //here is segue an instance of our MCachedModalStoryboardSegue
-        MCachedModalStoryboardSegue *customSegue = (MCachedModalStoryboardSegue *)segue;
-        LastMonthsViewController *destViewController = customSegue.destinationViewController;
-        destViewController.instanceWasCached  = customSegue.destinationWasCached;
-    }
-    
 }
 
 @end

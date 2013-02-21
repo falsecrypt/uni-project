@@ -30,6 +30,8 @@ extern NSInteger const B;
 extern NSInteger const C;
 extern NSInteger const D;
 
+// Defines whether test 'dummy' -data should be used
+extern BOOL USEDUMMYDATA;
 
 
 @end

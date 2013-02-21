@@ -8,6 +8,7 @@
 #import "FirstDetailViewController.h"
 #import "ProfilePopoverViewController.h"
 #import "KeychainItemWrapper.h"
+#import "SSKeychain.h"
 
 @interface FirstDetailViewController ()
 

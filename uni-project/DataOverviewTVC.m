@@ -1,19 +1,21 @@
 //
-//  MyOfficeTableViewController.m
+//  DataOverviewTableViewController.m
 //  uni-project
 
 //  Copyright (c) 2012 test. All rights reserved.
 //
 
-#import "MyOfficeTableViewController.h"
+#import "DataOverviewTVC.h"
+#import "LastMonthsViewController.h"
+#import "LastWeekViewController.h"
 #import "MCachedModalStoryboardSegue.h"
-#import "CurrentDataViewController.h"
 
-@interface MyOfficeTableViewController ()
+
+@interface DataOverviewTVC ()
 
 @end
 
-@implementation MyOfficeTableViewController
+@implementation DataOverviewTVC
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -27,9 +29,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     self.tableView.backgroundColor = [UIColor clearColor];
     self.parentViewController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"patternBg.png"]];
+
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -123,17 +126,21 @@
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([segue.identifier isEqualToString:@"showCurrentDataVC"]) {
+    if ([segue.identifier isEqualToString:@"showLastWeekData"]) {
         NSLog(@"segue : %@", segue);
         //here is segue an instance of our MCachedModalStoryboardSegue
         MCachedModalStoryboardSegue *customSegue = (MCachedModalStoryboardSegue *)segue;
-        CurrentDataViewController *destViewController = customSegue.destinationViewController;
+        LastWeekViewController *destViewController = customSegue.destinationViewController;
         destViewController.instanceWasCached  = customSegue.destinationWasCached;
     }
+    else if ([segue.identifier isEqualToString:@"showLastMonthsData"]) {
+        NSLog(@"segue : %@", segue);
+        //here is segue an instance of our MCachedModalStoryboardSegue
+        MCachedModalStoryboardSegue *customSegue = (MCachedModalStoryboardSegue *)segue;
+        LastMonthsViewController *destViewController = customSegue.destinationViewController;
+        destViewController.instanceWasCached  = customSegue.destinationWasCached;
+    }
+    
 }
-/*
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    cell.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"patternBg.png"]];
-}*/
 
 @end

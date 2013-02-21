@@ -4,26 +4,30 @@
 //  Copyright (c) 2012 test. All rights reserved.
 //
 
-#import "LoginScreenTableViewController.h"
+#import "LoginScreenTVC.h"
 #import "KeychainItemWrapper.h"
+#import "SSKeychain.h"
 #import <TargetConditionals.h>
 
 
 
-@interface LoginScreenTableViewController ()
+@interface LoginScreenTVC ()
 
 @end
 
-@implementation LoginScreenTableViewController
+@implementation LoginScreenTVC
 
-@synthesize cancelButton = _cancelButton;
-@synthesize usernameField = _usernameField;
-@synthesize passwordField = _passwordField;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    UIView *tempImageView = [[UIImageView alloc] init];
+    [tempImageView setFrame:self.tableView.frame];
+    tempImageView.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"patternBg"]];
+    self.tableView.backgroundView = tempImageView;
+    
     
 }
 
@@ -58,10 +62,12 @@
 
 - (IBAction)logInButtonPressed:(id)sender
 {
+    [self.usernameField resignFirstResponder];
 
     KeychainItemWrapper *keychain =
     [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
-    
+    [keychain setObject:(__bridge id)(kSecAttrAccessibleWhenUnlockedThisDeviceOnly)
+                 forKey:(__bridge id)(kSecAttrAccessible)];
     if( [self.usernameField.text length] < 1 || [self.passwordField.text length] < 1  ){
         [self showAlertAfterValidationFailed:@"Username and Password cannot be Blank"];
     }

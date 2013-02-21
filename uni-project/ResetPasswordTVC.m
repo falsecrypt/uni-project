@@ -1,17 +1,18 @@
 //
-//  MyAccountTableViewController.m
+//  ResetPasswordTVC.m
 //  uni-project
-
+//
+//  Created by Pavel Ermolin on 20.02.13.
 //  Copyright (c) 2013 test. All rights reserved.
 //
 
-#import "MyAccountTableViewController.h"
+#import "ResetPasswordTVC.h"
 
-@interface MyAccountTableViewController ()
+@interface ResetPasswordTVC ()
 
 @end
 
-@implementation MyAccountTableViewController
+@implementation ResetPasswordTVC
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -26,16 +27,16 @@
 {
     [super viewDidLoad];
 
-    UIView *tempImageView = [[UIImageView alloc] init];
-    [tempImageView setFrame:self.tableView.frame];
-    tempImageView.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"patternBg"]];
-    self.tableView.backgroundView = tempImageView;
-
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    UIView *tempImageView = [[UIImageView alloc] init];
+    [tempImageView setFrame:self.tableView.frame];
+    tempImageView.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"patternBg"]];
+    self.tableView.backgroundView = tempImageView;
 }
 
 - (void)didReceiveMemoryWarning

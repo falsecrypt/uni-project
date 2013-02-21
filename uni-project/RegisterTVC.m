@@ -6,10 +6,11 @@
 //  Copyright (c) 2012 test. All rights reserved.
 //
 
-#import "RegisterTableViewController.h"
+#import "RegisterTVC.h"
 #import "KeychainItemWrapper.h"
+#import "SSKeychain.h"
 
-@interface RegisterTableViewController ()
+@interface RegisterTVC ()
 
 @property (nonatomic, weak) IBOutlet UIBarButtonItem *cancelButton;
 @property (nonatomic, weak) IBOutlet UIButton *submitButton;
@@ -23,7 +24,7 @@
 
 @end
 
-@implementation RegisterTableViewController
+@implementation RegisterTVC
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -130,7 +131,7 @@
          */
         [keychain setObject:(__bridge id)(kSecAttrAccessibleWhenUnlockedThisDeviceOnly) forKey:(__bridge id)(kSecAttrAccessible)];
         // login-flag
-        [keychain setObject:@"1" forKey:(__bridge id)(kSecAttrLabel)];
+        [keychain setObject:@"LOGGEDIN" forKey:(__bridge id)(kSecAttrLabel)];
         /*
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         [defaults setBool:YES forKey:@"userLoggedIn"];

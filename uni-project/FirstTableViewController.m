@@ -9,6 +9,8 @@
 #import "FirstDetailViewController.h"
 #import "FirstTableViewController.h"
 #import "KeychainItemWrapper.h"
+#import "SSKeychain.h"
+
 #import "PublicTableViewController.h"
 
 @interface FirstTableViewController ()
@@ -280,7 +282,7 @@
     if ([[segue identifier] isEqualToString:@"LoginSegue"])
     {
         //LoginScreenTableViewController *viewController = segue.destinationViewController;
-        LoginScreenTableViewController *viewController = (LoginScreenTableViewController*)[segue.destinationViewController topViewController];
+        LoginScreenTVC *viewController = (LoginScreenTVC*)[segue.destinationViewController topViewController];
         viewController.delegate = self;
     }
     if ([[segue identifier] isEqualToString:@"RegisterSegue"])
@@ -288,7 +290,7 @@
         // There is a navigation controller in the middle, between firsttableVC and registertableVC
         //RegisterTableViewController *viewController = [[[segue destinationViewController] viewControllers] objectAtIndex:0];
         // OR JUST:
-        RegisterTableViewController *viewController = (RegisterTableViewController*)[segue.destinationViewController topViewController];
+        RegisterTVC *viewController = (RegisterTVC*)[segue.destinationViewController topViewController];
         
         /*NSLog(@"calling prepareForSegue segue.destinationViewController viewControllers: %@",
               [[[segue destinationViewController] viewControllers] objectAtIndex:0]); */

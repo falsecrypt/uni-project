@@ -23,17 +23,13 @@ static const int TESTID = 3;
 
 
 - (void)setUp{
-    
     [super setUp];
-    
     self.manager = [[ParticipantDataManager alloc] initWithParticipantId:TESTID];
-    
     // Set-up code here.
-    
 }
 
 -(void)testInitCallsHelpers {
-    id mock = [OCMockObject partialMockForObject:self.manager];
+    id mock = [OCMockObject partialMockForObject:self.manager]; //Create a mock based on the given object
     [[mock expect] initScalarAttributes];
     [mock init];
     [mock verify];
@@ -44,11 +40,8 @@ static const int TESTID = 3;
 }
 
 - (void)tearDown{
-    
     // Tear-down code here.
-    
     [super tearDown];
-    
 }
 
 @end
