@@ -14,7 +14,7 @@
 #import "DetailViewManager.h"
 #import "EcoMeterAppDelegate.h"
 #import "PublicDetailViewController.h"
-#import "PublicTableViewController.h"
+#import "PublicTVC.h"
 
 /////////////////////////////////////////////////////////////////////////
 #pragma mark - Statics
@@ -109,7 +109,7 @@ static NSMutableDictionary * _Cached_PublicDetailViews;
     }
     _destinationWasCached = YES;
     if ([destination isKindOfClass:[PublicDetailViewController class]]) {
-        PublicTableViewController *Newsource = (PublicTableViewController *)source;
+        PublicTVC *Newsource = (PublicTVC *)source;
         if (![[_Cached_PublicDetailViews allKeys] containsObject:Newsource.selectedParticipantId]) {
             NSLog(@"<MCachedModalStoryboardSegue> adding destination: %@", destination);
             [_Cached_PublicDetailViews setObject:destination forKey:Newsource.selectedParticipantId];

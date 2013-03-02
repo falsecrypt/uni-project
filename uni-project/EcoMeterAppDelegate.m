@@ -62,6 +62,13 @@ extern CFAbsoluteTime StartTime;
     });
 #endif
     
+    /*UIView *rootView = [[self.splitViewController.viewControllers
+                         objectAtIndex:0] view];
+    rootView.layer.borderWidth = 0.0f;
+    rootView.layer.cornerRadius = 5.0f;
+    rootView.layer.shadowOpacity = 0.8f;
+    rootView.layer.shadowOffset = CGSizeMake(-5, 0);
+    */
 
     // Log off user
     /*
@@ -110,6 +117,10 @@ extern CFAbsoluteTime StartTime;
                                                            [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.6],UITextAttributeTextShadowColor,
                                                            [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],UITextAttributeTextShadowOffset,
                                                            [UIFont fontWithName:@"QuicksandBold-Regular" size:21.0], UITextAttributeFont, nil]];
+    
+    // Set the background image for *all* UITabBars
+    [[UITabBar appearance] setBackgroundImage:[UIImage imageNamed:@"tabbarBG.png"]];
+    [[UITabBar appearance] setSelectionIndicatorImage:[UIImage imageNamed:@"selection-tab.png"]];
     
 }
 							

@@ -6,7 +6,7 @@
 //
 
 
-#import "PublicTableViewController.h"
+#import "PublicTVC.h"
 #import "DetailViewManager.h"
 #import "PublicDetailViewController.h"
 #import "FirstDetailViewController.h"
@@ -14,15 +14,20 @@
 #import "Reachability.h"
 #import "MCachedModalStoryboardSegue.h"
 
-@interface PublicTableViewController ()
+@interface PublicTVC ()
 
 @property BOOL deviceIsOnline;
 
 @end
 
-@implementation PublicTableViewController
+@implementation PublicTVC
 
 NSDictionary *users;
+
+enum SectionType : NSUInteger {
+    ParticipantSection = 0,
+    OverviewSection
+};
 
 #pragma mark -
 #pragma mark Rotation support
@@ -54,6 +59,8 @@ NSDictionary *users;
     
     self.tableView.backgroundColor = [UIColor clearColor];
     self.parentViewController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"patternBg.png"]];
+    
+    self.navigationItem.title = @"Teilnehmer-Büros";
     
     // allocate a reachability object
     Reachability* reach = [Reachability reachabilityWithHostname:currentCostServerBaseURLHome];
@@ -103,11 +110,12 @@ NSDictionary *users;
     
 }
 
-- (void)initParticipants {
-    //NSLog(@"startSynchronization...");
-    if (self.deviceIsOnline) {
-    [MagicalRecord saveInBackgroundWithBlock:^(NSManagedObjectContext *localContext){
-        
+- (void)initParticipants
+{
+    if (self.deviceIsOnline)
+    {
+    [MagicalRecord saveInBackgroundWithBlock:^(NSManagedObjectContext *localContext)
+        {
         Participant *participant1 = [Participant createInContext:localContext];
         [participant1 setSensorid: [NSNumber numberWithInteger:FirstSensorID]];
         Participant *participant2 = [Participant createInContext:localContext];
@@ -115,13 +123,12 @@ NSDictionary *users;
         Participant *participant3 = [Participant createInContext:localContext];
         [participant3 setSensorid: [NSNumber numberWithInteger:ThirdSensorID]];
         
-    } completion:^{
+        } completion:^{
         
         //NSArray *allObjects = [Participant findAll];
         //NSLog(@"all Participants: %@", allObjects);
-    }];
+        }];
     }
-
 }
 
 
@@ -132,7 +139,8 @@ NSDictionary *users;
 // -------------------------------------------------------------------------------
 //	tableView:didSelectRowAtIndexPath:
 // -------------------------------------------------------------------------------
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
 
     //NSLog(@"calling didSelectRowAtIndexPath from SecondTableViewController");
     //NSLog(@"didSelectRowAtIndexPath: detailViewManager: %@", self.splitViewController.delegate);
@@ -173,15 +181,28 @@ NSDictionary *users;
     //detailViewManager.detailViewController = detailViewController;
     NSLog(@"<PublicTableViewController> _____didSelectRowAtIndexPath_____");
     
-    self.selectedParticipantId = [users objectForKey:[tableView cellForRowAtIndexPath:indexPath].textLabel.text];
-    
-    [self performSegueWithIdentifier:@"publicDataDetails" sender:[users objectForKey:[tableView cellForRowAtIndexPath:indexPath].textLabel.text]];
+    if (indexPath.section == ParticipantSection)
+    {
+        self.selectedParticipantId = [users objectForKey:[tableView cellForRowAtIndexPath:indexPath].textLabel.text];
+        [self performSegueWithIdentifier:@"publicDataDetails"
+                                  sender:[users objectForKey:[tableView cellForRowAtIndexPath:indexPath].textLabel.text]];
+    }
+    /*else if(indexPath.section == OverviewSection)
+    {
+        // TODO
+        DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
+        UIViewController <SubstitutableDetailViewController> *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"OverviewViewController"];
+        detailViewManager.detailViewController = detailViewController;
+        
+    }*/
     
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
     
-    if ([segue.identifier isEqualToString:@"publicDataDetails"]) {
+    if ([segue.identifier isEqualToString:@"publicDataDetails"])
+    {
         NSLog(@"<PublicTableViewController> segue : %@", segue);
         NSLog(@"<PublicTableViewController> sender: %@", sender);
         //here is segue an instance of our MCachedModalStoryboardSegue
@@ -193,26 +214,64 @@ NSDictionary *users;
         //get username from DB TODO
         
         destViewController.title = [users allKeysForObject:[NSNumber numberWithInt:[sender integerValue]]][0];
-        }
+    }
 
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     //NSLog(@"users: %@", users);
-    return users.count;
+    //if (section == ParticipantSection)
+    //{
+        return users.count;
+    //}
+    /*else
+    {
+        return 1;
+    }*/
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    //if(section == ParticipantSection)
+        return @"Teilnehmer";
+    /*else
+        return @"Übersicht"; */
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
 }
 
 // Customize the appearance of table view cells.
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = nil;
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] ;
+    if (indexPath.section == ParticipantSection)
+    {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"participant"];
+        if (cell == nil)
+        {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"participant"] ;
+        }
+        NSArray *usersSorted = [[users allKeys]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+        // Configure the cell text
+        cell.textLabel.text = usersSorted[indexPath.row];
     }
-    NSArray *usersSorted = [[users allKeys]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-    // Configure the cell text
-    cell.textLabel.text = usersSorted[indexPath.row];
+    // Overview
+   /* else
+    {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"overview"];
+        if (cell == nil)
+        {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"overview"] ;
+        }
+        cell.textLabel.text = @"Stromverbrauch";
+    } */
+    NSLog(@"section: %i", indexPath.section);
+    NSAssert(cell!=nil, @"cell is nil!");
     return cell;
 }
 

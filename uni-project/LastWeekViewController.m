@@ -18,6 +18,13 @@ static NSString *const pieChartName = @"7DaysPieChart";
 
 @interface LastWeekViewController ()
 
+@property (strong, nonatomic) IBOutlet CPTGraphHostingView *graphHostingView;
+@property (strong, nonatomic) IBOutlet UIView *mainView;
+@property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *profileBarButtonItem;
+@property (strong, nonatomic) IBOutlet UILabel *consumptionMonthLabel;
+@property (strong, nonatomic) IBOutlet UILabel *dayNameLabel;
+
 @property (nonatomic, strong) MBProgressHUD *HUD;
 @property (nonatomic, assign) CGPoint lastLocation;
 @property (nonatomic, strong) CPTPieChart *piePlot;
@@ -349,11 +356,7 @@ NSMutableArray *navigationBarItems;
 
 -(void)createPieChart
 {
-#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
     CGRect bounds = self.graphHostingView.bounds;
-#else
-    CGRect bounds = NSRectToCGRect(self.graphHostingView.bounds);
-#endif
     
     NSLog(@"__calling createPieChart");
     

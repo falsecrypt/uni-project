@@ -7,13 +7,13 @@
 
 #import "DetailViewManager.h"
 #import "FirstDetailViewController.h"
-#import "FirstTableViewController.h"
+#import "FirstTVC.h"
 #import "KeychainItemWrapper.h"
 #import "SSKeychain.h"
 
-#import "PublicTableViewController.h"
+#import "PublicTVC.h"
 
-@interface FirstTableViewController ()
+@interface FirstTVC ()
 
 @property (nonatomic, assign) BOOL hideAccountSection;
 @property (nonatomic, assign) BOOL hideLoginSection;
@@ -21,7 +21,7 @@
 
 @end
 
-@implementation FirstTableViewController
+@implementation FirstTVC
 
 
 #pragma mark -
@@ -254,7 +254,7 @@
     NSUInteger row = indexPath.row;
     
     if (row == 1) {
-        PublicTableViewController *newTableViewController = [[PublicTableViewController alloc] init];
+        PublicTVC *newTableViewController = [[PublicTVC alloc] init];
         [self.navigationController pushViewController:newTableViewController animated:YES];
         
     }

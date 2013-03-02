@@ -56,6 +56,11 @@
 		CE32C3991665AB8E00C3ED81 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C3901665AB8E00C3ED81 /* UIImageView+AFNetworking.m */; };
 		CE32C39D1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C39C1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m */; };
 		CE348C1A1647668100B14B55 /* RegisterTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE348C191647668000B14B55 /* RegisterTVC.m */; };
+		CE3C80D616DFE6E200DB4E05 /* tabbarBG.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3C80D516DFE6E100DB4E05 /* tabbarBG.png */; };
+		CE3C80DA16DFE71700DB4E05 /* selection-tab@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3C80D816DFE71700DB4E05 /* selection-tab@2x.png */; };
+		CE3C80DE16DFE81200DB4E05 /* selection-tab.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3C80DD16DFE81100DB4E05 /* selection-tab.png */; };
+		CE3C80E116DFF0A100DB4E05 /* EnergyClockViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3C80E016DFF0A100DB4E05 /* EnergyClockViewController.m */; };
+		CE3C80E516E02F1100DB4E05 /* ScrollViewContentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3C80E416E02F1100DB4E05 /* ScrollViewContentVC.m */; };
 		CE3F51CD1659D4BD008EE7DF /* defaultAvatar.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3F51CC1659D4BD008EE7DF /* defaultAvatar.png */; };
 		CE412CEC16D5270C0061484B /* pavel_avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = CE412CEB16D5270C0061484B /* pavel_avatar.png */; };
 		CE412CEF16D5412C0061484B /* ChangeUsernameTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE412CEE16D5412C0061484B /* ChangeUsernameTVC.m */; };
@@ -102,7 +107,7 @@
 		CEA0265B16BF3A7B005CE31A /* EcoMeterApplicationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0265A16BF3A7B005CE31A /* EcoMeterApplicationTests.m */; };
 		CEA0267016BF5C59005CE31A /* ParticipantDataManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0266F16BF5C59005CE31A /* ParticipantDataManagerTests.m */; };
 		CEA0BE9C163CD2D700ED0599 /* LoginScreenTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0BE9A163CD2D700ED0599 /* LoginScreenTVC.m */; };
-		CEA0BEA1163CD99B00ED0599 /* FirstTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0BEA0163CD99B00ED0599 /* FirstTableViewController.m */; };
+		CEA0BEA1163CD99B00ED0599 /* FirstTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0BEA0163CD99B00ED0599 /* FirstTVC.m */; };
 		CEA0CE431661A6F60086151D /* MagicalImportFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0CE0B1661A6F60086151D /* MagicalImportFunctions.m */; };
 		CEA0CE441661A6F60086151D /* NSAttributeDescription+MagicalDataImport.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0CE0D1661A6F60086151D /* NSAttributeDescription+MagicalDataImport.m */; };
 		CEA0CE451661A6F60086151D /* NSEntityDescription+MagicalDataImport.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0CE0F1661A6F60086151D /* NSEntityDescription+MagicalDataImport.m */; };
@@ -145,7 +150,7 @@
 		CEF386EA16C0245A0082C372 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF386E816C0245A0082C372 /* libOCMock.a */; };
 		CEF386EB16C0245A0082C372 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF386E816C0245A0082C372 /* libOCMock.a */; };
 		CEF5657B163F17270066F2A2 /* FirstDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */; };
-		CEF5657F163F1D600066F2A2 /* PublicTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657E163F1D600066F2A2 /* PublicTableViewController.m */; };
+		CEF5657F163F1D600066F2A2 /* PublicTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657E163F1D600066F2A2 /* PublicTVC.m */; };
 		CEF56586163F2DCE0066F2A2 /* PublicDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF56584163F2DCD0066F2A2 /* PublicDetailViewController.m */; };
 		CEFAAFDA16B8209500D9E744 /* Participant.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFAAFD916B8209500D9E744 /* Participant.m */; };
 		CEFDC23C163E15480011C3CF /* DetailViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFDC23B163E15480011C3CF /* DetailViewManager.m */; };
@@ -231,6 +236,13 @@
 		CE32C39C1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFAppDotNetAPIClient.m; sourceTree = "<group>"; };
 		CE348C181647668000B14B55 /* RegisterTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterTVC.h; sourceTree = "<group>"; };
 		CE348C191647668000B14B55 /* RegisterTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterTVC.m; sourceTree = "<group>"; };
+		CE3C80D516DFE6E100DB4E05 /* tabbarBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tabbarBG.png; sourceTree = "<group>"; };
+		CE3C80D816DFE71700DB4E05 /* selection-tab@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selection-tab@2x.png"; sourceTree = "<group>"; };
+		CE3C80DD16DFE81100DB4E05 /* selection-tab.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selection-tab.png"; sourceTree = "<group>"; };
+		CE3C80DF16DFF0A100DB4E05 /* EnergyClockViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnergyClockViewController.h; sourceTree = "<group>"; };
+		CE3C80E016DFF0A100DB4E05 /* EnergyClockViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyClockViewController.m; sourceTree = "<group>"; };
+		CE3C80E316E02F1000DB4E05 /* ScrollViewContentVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollViewContentVC.h; sourceTree = "<group>"; };
+		CE3C80E416E02F1100DB4E05 /* ScrollViewContentVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollViewContentVC.m; sourceTree = "<group>"; };
 		CE3F51CC1659D4BD008EE7DF /* defaultAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultAvatar.png; sourceTree = "<group>"; };
 		CE412CEB16D5270C0061484B /* pavel_avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pavel_avatar.png; sourceTree = "<group>"; };
 		CE412CED16D5412B0061484B /* ChangeUsernameTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeUsernameTVC.h; sourceTree = "<group>"; };
@@ -296,8 +308,8 @@
 		CEA0267116BF6A03005CE31A /* ParticipantDataManager-Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ParticipantDataManager-Private.h"; sourceTree = "<group>"; };
 		CEA0BE99163CD2D700ED0599 /* LoginScreenTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginScreenTVC.h; sourceTree = "<group>"; };
 		CEA0BE9A163CD2D700ED0599 /* LoginScreenTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginScreenTVC.m; sourceTree = "<group>"; };
-		CEA0BE9F163CD99B00ED0599 /* FirstTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstTableViewController.h; sourceTree = "<group>"; };
-		CEA0BEA0163CD99B00ED0599 /* FirstTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstTableViewController.m; sourceTree = "<group>"; };
+		CEA0BE9F163CD99B00ED0599 /* FirstTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstTVC.h; sourceTree = "<group>"; };
+		CEA0BEA0163CD99B00ED0599 /* FirstTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstTVC.m; sourceTree = "<group>"; };
 		CEA0CE0A1661A6F60086151D /* MagicalImportFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalImportFunctions.h; sourceTree = "<group>"; };
 		CEA0CE0B1661A6F60086151D /* MagicalImportFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicalImportFunctions.m; sourceTree = "<group>"; };
 		CEA0CE0C1661A6F60086151D /* NSAttributeDescription+MagicalDataImport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributeDescription+MagicalDataImport.h"; sourceTree = "<group>"; };
@@ -449,8 +461,8 @@
 		CEF386F216C0246D0082C372 /* OCMockRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMockRecorder.h; sourceTree = "<group>"; };
 		CEF56579163F17270066F2A2 /* FirstDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstDetailViewController.h; sourceTree = "<group>"; };
 		CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstDetailViewController.m; sourceTree = "<group>"; };
-		CEF5657D163F1D600066F2A2 /* PublicTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicTableViewController.h; sourceTree = "<group>"; };
-		CEF5657E163F1D600066F2A2 /* PublicTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicTableViewController.m; sourceTree = "<group>"; };
+		CEF5657D163F1D600066F2A2 /* PublicTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicTVC.h; sourceTree = "<group>"; };
+		CEF5657E163F1D600066F2A2 /* PublicTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicTVC.m; sourceTree = "<group>"; };
 		CEF56584163F2DCD0066F2A2 /* PublicDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicDetailViewController.m; sourceTree = "<group>"; };
 		CEFAAFD816B8209500D9E744 /* Participant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Participant.h; sourceTree = "<group>"; };
 		CEFAAFD916B8209500D9E744 /* Participant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Participant.m; sourceTree = "<group>"; };
@@ -541,16 +553,20 @@
 			children = (
 				CE348C181647668000B14B55 /* RegisterTVC.h */,
 				CE348C191647668000B14B55 /* RegisterTVC.m */,
-				CEA0BE9F163CD99B00ED0599 /* FirstTableViewController.h */,
-				CEA0BEA0163CD99B00ED0599 /* FirstTableViewController.m */,
+				CEA0BE9F163CD99B00ED0599 /* FirstTVC.h */,
+				CEA0BEA0163CD99B00ED0599 /* FirstTVC.m */,
 				CEF56579163F17270066F2A2 /* FirstDetailViewController.h */,
 				CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */,
 				CEA0BE99163CD2D700ED0599 /* LoginScreenTVC.h */,
 				CEA0BE9A163CD2D700ED0599 /* LoginScreenTVC.m */,
-				CEF5657D163F1D600066F2A2 /* PublicTableViewController.h */,
-				CEF5657E163F1D600066F2A2 /* PublicTableViewController.m */,
+				CEF5657D163F1D600066F2A2 /* PublicTVC.h */,
+				CEF5657E163F1D600066F2A2 /* PublicTVC.m */,
 				CE03516616ADDAF200752192 /* PublicDetailViewController.h */,
 				CEF56584163F2DCD0066F2A2 /* PublicDetailViewController.m */,
+				CE3C80DF16DFF0A100DB4E05 /* EnergyClockViewController.h */,
+				CE3C80E016DFF0A100DB4E05 /* EnergyClockViewController.m */,
+				CE3C80E316E02F1000DB4E05 /* ScrollViewContentVC.h */,
+				CE3C80E416E02F1100DB4E05 /* ScrollViewContentVC.m */,
 			);
 			name = Public;
 			sourceTree = "<group>";
@@ -1033,9 +1049,12 @@
 				CE01C30216A4C90A00ECBB3C /* mainHistotyViewBG.png */,
 				CE412CEB16D5270C0061484B /* pavel_avatar.png */,
 				CEB5A743169A7329009EB3F2 /* patternBg.png */,
+				CE3C80D816DFE71700DB4E05 /* selection-tab@2x.png */,
 				CEB5A741169A705A009EB3F2 /* navBarBg.png */,
+				CE3C80D516DFE6E100DB4E05 /* tabbarBG.png */,
 				CE32C37316659B4C00C3ED81 /* speedometerCenterWheel.png */,
 				CE32C37116659B4200C3ED81 /* speedometerBody.png */,
+				CE3C80DD16DFE81100DB4E05 /* selection-tab.png */,
 				CE32C3661665890900C3ED81 /* speedometerArrow.png */,
 				CE3F51CC1659D4BD008EE7DF /* defaultAvatar.png */,
 				CE071EBF1659ABF1007290B1 /* icon_user.png */,
@@ -1204,6 +1223,9 @@
 				CE48562116D4493C0078BD62 /* Icon-72.png in Resources */,
 				CE48562316D449420078BD62 /* Icon@2x.png in Resources */,
 				CE412CEC16D5270C0061484B /* pavel_avatar.png in Resources */,
+				CE3C80D616DFE6E200DB4E05 /* tabbarBG.png in Resources */,
+				CE3C80DA16DFE71700DB4E05 /* selection-tab@2x.png in Resources */,
+				CE3C80DE16DFE81200DB4E05 /* selection-tab.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1281,10 +1303,10 @@
 				CEEAE27A15F275CA00A550FA /* Constants.m in Sources */,
 				CEEAE27B15F275CA00A550FA /* CPDStockPriceStore.m in Sources */,
 				CEA0BE9C163CD2D700ED0599 /* LoginScreenTVC.m in Sources */,
-				CEA0BEA1163CD99B00ED0599 /* FirstTableViewController.m in Sources */,
+				CEA0BEA1163CD99B00ED0599 /* FirstTVC.m in Sources */,
 				CEFDC23C163E15480011C3CF /* DetailViewManager.m in Sources */,
 				CEF5657B163F17270066F2A2 /* FirstDetailViewController.m in Sources */,
-				CEF5657F163F1D600066F2A2 /* PublicTableViewController.m in Sources */,
+				CEF5657F163F1D600066F2A2 /* PublicTVC.m in Sources */,
 				CEF56586163F2DCE0066F2A2 /* PublicDetailViewController.m in Sources */,
 				CEDDE0F61641611800BEFE0A /* StartDetailViewController.m in Sources */,
 				CE0AE4861646051A00EC15B4 /* KeychainItemWrapper.m in Sources */,
@@ -1347,6 +1369,8 @@
 				CE412CF516D5430D0061484B /* ResetPasswordTVC.m in Sources */,
 				CE412CF816D543670061484B /* ChangePasswordTVC.m in Sources */,
 				CE412CFB16D5628F0061484B /* SSKeychain.m in Sources */,
+				CE3C80E116DFF0A100DB4E05 /* EnergyClockViewController.m in Sources */,
+				CE3C80E516E02F1100DB4E05 /* ScrollViewContentVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
