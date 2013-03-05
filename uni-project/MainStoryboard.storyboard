@@ -764,7 +764,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZDI-tn-T2G">
-                                <color key="backgroundColor" red="0.098843159710000003" green="0.80000000000000004" blue="0.31693933949999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="delegate" destination="8K9-oU-IcE" id="iw1-vE-imd"/>
                                 </connections>
@@ -777,6 +777,9 @@
                                     <navigationItem title="Energieuhr" id="Ec0-zv-Wzg"/>
                                 </items>
                             </navigationBar>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AGo-9u-OXp" customClass="BTSPieView">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="iCU-fv-64G">
                                 <constraints>
                                     <constraint firstAttribute="width" constant="38" id="1Wf-xE-gAq"/>
@@ -788,21 +791,26 @@
                                 </connections>
                             </pageControl>
                         </subviews>
-                        <color key="backgroundColor" red="0.4866520153072747" green="0.80000000000000004" blue="0.77892393684940142" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="iCU-fv-64G" firstAttribute="centerX" secondItem="ZDI-tn-T2G" secondAttribute="centerX" type="default" id="213-dh-qYE"/>
                             <constraint firstItem="ZDI-tn-T2G" firstAttribute="top" secondItem="8GQ-3D-bOP" secondAttribute="bottom" type="default" id="E4v-aV-nuN"/>
-                            <constraint firstItem="iCU-fv-64G" firstAttribute="top" secondItem="ZDI-tn-T2G" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="EHT-Z8-ybv"/>
                             <constraint firstItem="8GQ-3D-bOP" firstAttribute="leading" secondItem="S3Y-ee-Fbw" secondAttribute="leading" type="default" id="GIG-03-aXE"/>
+                            <constraint firstItem="iCU-fv-64G" firstAttribute="centerX" secondItem="ZDI-tn-T2G" secondAttribute="centerX" type="default" id="MkZ-hp-buj"/>
                             <constraint firstItem="8GQ-3D-bOP" firstAttribute="top" secondItem="S3Y-ee-Fbw" secondAttribute="top" type="default" id="Wqa-xh-uCw"/>
                             <constraint firstItem="ZDI-tn-T2G" firstAttribute="trailing" secondItem="8GQ-3D-bOP" secondAttribute="trailing" type="default" id="XVl-Hy-5NI"/>
-                            <constraint firstItem="iCU-fv-64G" firstAttribute="top" secondItem="S3Y-ee-Fbw" secondAttribute="top" constant="241" id="Z4m-dP-hX7"/>
+                            <constraint firstItem="AGo-9u-OXp" firstAttribute="leading" secondItem="S3Y-ee-Fbw" secondAttribute="leading" type="default" id="ZgL-Om-aEl"/>
                             <constraint firstItem="ZDI-tn-T2G" firstAttribute="leading" secondItem="S3Y-ee-Fbw" secondAttribute="leading" type="default" id="a0N-Pu-H10"/>
+                            <constraint firstItem="iCU-fv-64G" firstAttribute="top" secondItem="S3Y-ee-Fbw" secondAttribute="top" constant="220" id="ccn-aD-0CX"/>
+                            <constraint firstAttribute="bottom" secondItem="ZDI-tn-T2G" secondAttribute="bottom" constant="515" id="fGm-pe-3no"/>
+                            <constraint firstItem="AGo-9u-OXp" firstAttribute="top" secondItem="S3Y-ee-Fbw" secondAttribute="top" constant="249" id="gUG-iY-JRJ"/>
+                            <constraint firstItem="AGo-9u-OXp" firstAttribute="bottom" secondItem="S3Y-ee-Fbw" secondAttribute="bottom" type="default" id="uEy-Si-SX8"/>
+                            <constraint firstItem="AGo-9u-OXp" firstAttribute="trailing" secondItem="S3Y-ee-Fbw" secondAttribute="trailing" type="default" id="ugP-f3-4aW"/>
                         </constraints>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
                     <splitViewDetailSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="energyClockView" destination="AGo-9u-OXp" id="AmC-gE-Hg6"/>
                         <outlet property="navigationBar" destination="8GQ-3D-bOP" id="nK8-on-5hc"/>
                         <outlet property="pageControl" destination="iCU-fv-64G" id="aap-tD-sOM"/>
                         <outlet property="scrollView" destination="ZDI-tn-T2G" id="8od-UN-X2b"/>
@@ -2283,6 +2291,9 @@
         <image name="speedometerBody.png" width="366" height="364"/>
     </resources>
     <classes>
+        <class className="BTSPieView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/BTSPieView.h"/>
+        </class>
         <class className="CPTGraphHostingView" superclassName="UIView">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CPTGraphHostingView.h"/>
         </class>
@@ -2322,6 +2333,7 @@
         <class className="EnergyClockViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/EnergyClockViewController.h"/>
             <relationships>
+                <relationship kind="outlet" name="energyClockView" candidateClass="BTSPieView"/>
                 <relationship kind="outlet" name="navigationBar" candidateClass="UINavigationBar"/>
                 <relationship kind="outlet" name="pageControl" candidateClass="UIPageControl"/>
                 <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>

@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BTSPieView.h"
 
-@interface EnergyClockViewController : UIViewController <UIScrollViewDelegate>
+@interface EnergyClockViewController : UIViewController 
 
 @property (weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (nonatomic, strong) NSMutableArray *radiusValuesForSlice;
 
 @end

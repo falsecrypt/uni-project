@@ -68,7 +68,7 @@ static const int secondPageNumber   = 1;
 {
     if (self = [super initWithNibName:nil bundle:nil])
     {
-        NSLog(@"initWithPageNumber: %i", page);
+        //NSLog(@"initWithPageNumber: %i", page);
         self.pageNumber = page;
         self.targetViewController = viewController;
         
@@ -86,7 +86,7 @@ static const int secondPageNumber   = 1;
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    NSLog(@"viewDidAppear...");
+    //NSLog(@"viewDidAppear...");
     
     /*  IMPORTANT: CALL THE INITIALIZATION METHOD HERE 
         The plots are initialized here, since the view bounds have not transformed for landscape until now
@@ -181,13 +181,13 @@ static const int secondPageNumber   = 1;
 // how many slices should be displayed
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
-    NSLog(@"numberOfRecordsForPlot...");
+    //NSLog(@"numberOfRecordsForPlot...");
     return 2;
 }
 
 -(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
 {
-    NSLog(@"numberForPlot...");
+    //NSLog(@"numberForPlot...");
     NSNumber *num;
     
     if ( fieldEnum == CPTPieChartFieldSliceWidth ) {
@@ -197,13 +197,13 @@ static const int secondPageNumber   = 1;
         return [NSNumber numberWithInt:index];
     }
     
-    NSLog(@"numberForPlot returning num = %@", num);
+    //NSLog(@"numberForPlot returning num = %@", num);
     return num;
 }
 
 -(CPTLayer *)dataLabelForPlot:(CPTPlot *)plot recordIndex:(NSUInteger)index
 {
-    NSLog(@"dataLabelForPlot...");
+    //NSLog(@"dataLabelForPlot...");
     // Define label text style
     static CPTMutableTextStyle *labelText = nil;
     if (!labelText) {
@@ -221,11 +221,64 @@ static const int secondPageNumber   = 1;
     return @"";
 }
 
+-(CPTFill *)sliceFillForPieChart:(CPTPieChart *)pieChart recordIndex:(NSUInteger)index{
+    
+    NSLog(@"calling sliceFillForPieChart: %@", pieChart);
+    
+    CPTFill *sector = [[CPTFill alloc] init];
+    
+    /*
+     UIColor *color1;
+     UIColor *color2;
+     
+     if (index==currentSliceIndex) {
+     color1 = [UIColor colorWithRed:35/255.0f green:82/255.0f blue:0/255.0f alpha:1.0f];
+     color2 = [UIColor colorWithRed:35/255.0f green:205/255.0f blue:0/255.0f alpha:1.0f];
+     
+     }
+     else {
+     color1=[UIColor colorWithRed:0.0 green:0.7 blue:1.0 alpha:1.0];
+     color2=[UIColor colorWithRed:0.0 green:0.1 blue:0.2 alpha:1.0];
+     }
+     
+     //filling with gradient color with CPTColor
+     CPTGradient *areaGradientUI = [CPTGradient gradientWithBeginningColor:(CPTColor *)color1 endingColor:(CPTColor *)color2];
+     
+     areaGradientUI.gradientType = CPTGradientTypeAxial;
+     
+     //sector=[CPTFill fillWithGradient:areaGradientUI];
+     
+     CPTGradient *overlayGradient = [[CPTGradient alloc] init];
+     overlayGradient.gradientType = CPTGradientTypeRadial;
+     overlayGradient              = [overlayGradient addColorStop:[[CPTColor redColor] colorWithAlphaComponent:0.5] atPosition:0.0];
+     overlayGradient              = [overlayGradient addColorStop:[[CPTColor greenColor] colorWithAlphaComponent:0.9] atPosition:0.3];
+     overlayGradient              = [overlayGradient addColorStop:[[CPTColor greenColor] colorWithAlphaComponent:0.9] atPosition:0.5];
+     overlayGradient              = [overlayGradient addColorStop:[[CPTColor blueColor] colorWithAlphaComponent:0.6] atPosition:0.8];
+     
+     */
+    //CPTColor *startColor = [CPTColor colorWithComponentRed:1/255.0f green:56/255.0f blue:1/255.0f alpha:1.0f];
+    //CPTColor *endColor = [CPTColor colorWithComponentRed:2/255.0f green:96/255.0f blue:2/255.0f alpha:1.0f];
+    //CPTGradient *areaGradientUI = [CPTGradient gradientWithBeginningColor:startColor
+    //                                                         endingColor:endColor];
+    //sector=[CPTFill fillWithGradient:areaGradientUI];
+    CPTColor *fillColor = [[CPTColor alloc] init];
+    if (index==0) {
+        fillColor = [CPTColor colorWithComponentRed:107/255.0f green:107/255.0f blue:107/255.0f alpha:1.0f];
+    }
+    else {
+        fillColor = [CPTColor colorWithComponentRed:229/255.0f green:229/255.0f blue:229/255.0f alpha:1.0f];
+    }
+    
+    
+    sector=[CPTFill fillWithColor:(CPTColor *)fillColor];
+    return sector;
+}
+
 
 #pragma mark - Chart behavior
 -(void)initPlots
 {
-    NSLog(@"initPlots...");
+    //NSLog(@"initPlots...");
     [self configureHostViews];
     [self configureGraphs];
     [self configureCharts];
@@ -234,7 +287,7 @@ static const int secondPageNumber   = 1;
 
 -(void)configureHostViews
 {
-    NSLog(@"configureHostViews...");
+    //NSLog(@"configureHostViews...");
     
     EnergyClockViewController *ecViewController = (EnergyClockViewController *)self.targetViewController;
     
@@ -268,7 +321,8 @@ static const int secondPageNumber   = 1;
         parentRect.origin.x += 170.0f;
         hostingView.allowPinchScaling = NO;
         hostingView.backgroundColor =
-        [UIColor colorWithRed:(arc4random()%11*0.1) green:(arc4random()%11*0.1) blue:(arc4random()%11*0.1) alpha:0.8]; // TEST
+        //[UIColor colorWithRed:(arc4random()%11*0.1) green:(arc4random()%11*0.1) blue:(arc4random()%11*0.1) alpha:0.8]; // TEST
+        [UIColor clearColor];
         pageHostingViewsMutable[i] = hostingView;
     }
     
@@ -293,7 +347,7 @@ static const int secondPageNumber   = 1;
 
 -(void)configureGraphs
 {
-    NSLog(@"configureGraphs...");
+    //NSLog(@"configureGraphs...");
     
     NSMutableArray *pageHostingViewsMutable = [[NSMutableArray alloc] init];
     NSMutableArray *pageGraphsMutable       = [[NSMutableArray alloc] init];
@@ -348,7 +402,7 @@ static const int secondPageNumber   = 1;
 -(void)configureCharts
 {
     
-    NSLog(@"configureCharts...");
+    //NSLog(@"configureCharts...");
     
     NSMutableArray *pageHostingViewsMutable = [[NSMutableArray alloc] init];
     NSMutableArray *pageGraphsMutable       = [[NSMutableArray alloc] init];

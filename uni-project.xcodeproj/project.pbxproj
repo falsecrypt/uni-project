@@ -70,6 +70,9 @@
 		CE412CFB16D5628F0061484B /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = CE412CFA16D5628F0061484B /* SSKeychain.m */; };
 		CE48562116D4493C0078BD62 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = CE48562016D4493B0078BD62 /* Icon-72.png */; };
 		CE48562316D449420078BD62 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE48562216D449410078BD62 /* Icon@2x.png */; };
+		CE4EDE4E16E42A2B0047479A /* BTSPieLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4EDE4816E42A2B0047479A /* BTSPieLayer.m */; };
+		CE4EDE4F16E42A2B0047479A /* BTSPieView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE4EDE4A16E42A2B0047479A /* BTSPieView.mm */; };
+		CE4EDE5016E42A2B0047479A /* BTSSliceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4EDE4D16E42A2B0047479A /* BTSSliceLayer.m */; };
 		CE54E7BF168292B600F91C5E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE54E7BE168292B500F91C5E /* SystemConfiguration.framework */; };
 		CE54E7C21682943400F91C5E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = CE54E7C11682943400F91C5E /* Reachability.m */; };
 		CE6A008B16AF7E1200F845EE /* DSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6A008416AF7E1200F845EE /* DSelected.png */; };
@@ -257,6 +260,13 @@
 		CE412CFA16D5628F0061484B /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
 		CE48562016D4493B0078BD62 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "../Icon-72.png"; sourceTree = "<group>"; };
 		CE48562216D449410078BD62 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
+		CE4EDE4716E42A2B0047479A /* BTSPieLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTSPieLayer.h; sourceTree = "<group>"; };
+		CE4EDE4816E42A2B0047479A /* BTSPieLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTSPieLayer.m; sourceTree = "<group>"; };
+		CE4EDE4916E42A2B0047479A /* BTSPieView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTSPieView.h; sourceTree = "<group>"; };
+		CE4EDE4A16E42A2B0047479A /* BTSPieView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BTSPieView.mm; sourceTree = "<group>"; };
+		CE4EDE4B16E42A2B0047479A /* BTSPieViewValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTSPieViewValues.h; sourceTree = "<group>"; };
+		CE4EDE4C16E42A2B0047479A /* BTSSliceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTSSliceLayer.h; sourceTree = "<group>"; };
+		CE4EDE4D16E42A2B0047479A /* BTSSliceLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTSSliceLayer.m; sourceTree = "<group>"; };
 		CE54E7BE168292B500F91C5E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		CE54E7C01682943400F91C5E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		CE54E7C11682943400F91C5E /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
@@ -551,6 +561,7 @@
 		CE03516816AE156700752192 /* Public */ = {
 			isa = PBXGroup;
 			children = (
+				CE4EDE4616E429680047479A /* MultiLevelPieChart */,
 				CE348C181647668000B14B55 /* RegisterTVC.h */,
 				CE348C191647668000B14B55 /* RegisterTVC.m */,
 				CEA0BE9F163CD99B00ED0599 /* FirstTVC.h */,
@@ -690,6 +701,20 @@
 				CE32C39C1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m */,
 			);
 			name = CustomNetworking;
+			sourceTree = "<group>";
+		};
+		CE4EDE4616E429680047479A /* MultiLevelPieChart */ = {
+			isa = PBXGroup;
+			children = (
+				CE4EDE4716E42A2B0047479A /* BTSPieLayer.h */,
+				CE4EDE4816E42A2B0047479A /* BTSPieLayer.m */,
+				CE4EDE4916E42A2B0047479A /* BTSPieView.h */,
+				CE4EDE4A16E42A2B0047479A /* BTSPieView.mm */,
+				CE4EDE4B16E42A2B0047479A /* BTSPieViewValues.h */,
+				CE4EDE4C16E42A2B0047479A /* BTSSliceLayer.h */,
+				CE4EDE4D16E42A2B0047479A /* BTSSliceLayer.m */,
+			);
+			name = MultiLevelPieChart;
 			sourceTree = "<group>";
 		};
 		CE54E7C31682944D00F91C5E /* Reachability */ = {
@@ -1371,6 +1396,9 @@
 				CE412CFB16D5628F0061484B /* SSKeychain.m in Sources */,
 				CE3C80E116DFF0A100DB4E05 /* EnergyClockViewController.m in Sources */,
 				CE3C80E516E02F1100DB4E05 /* ScrollViewContentVC.m in Sources */,
+				CE4EDE4E16E42A2B0047479A /* BTSPieLayer.m in Sources */,
+				CE4EDE4F16E42A2B0047479A /* BTSPieView.mm in Sources */,
+				CE4EDE5016E42A2B0047479A /* BTSSliceLayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
