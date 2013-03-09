@@ -5,7 +5,7 @@
 //  Copyright (c) 2012 test. All rights reserved.
 //
 
-#import "AFAppDotNetAPIClient.h"
+#import "EMNetworkManager.h"
 #import "DetailViewManager.h"
 #import "FirstDetailViewController.h"
 #import "LastMonthsViewController.h"
@@ -193,7 +193,7 @@ NSMutableArray *navigationBarItems;
     
     NSLog(@"getDataFromServer...");
     //Get user's aggregated kilowatt values per month (max 12 months, semicolon separated, latest first).
-    [[AFAppDotNetAPIClient sharedClient] getPath:@"rpc.php?userID=3&action=get&what=aggregation_m" parameters:nil
+    [[EMNetworkManager sharedClient] getPath:@"rpc.php?userID=3&action=get&what=aggregation_m" parameters:nil
                                          success:^(AFHTTPRequestOperation *operation, id data) {
                                              [MonthData truncateAll];
                                              NSString *oneMonthData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];

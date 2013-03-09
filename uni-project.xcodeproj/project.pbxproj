@@ -37,6 +37,8 @@
 		CE1793D11683E8E60030723A /* MyOfficeTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D01683E8E60030723A /* MyOfficeTVC.m */; };
 		CE1793D51683F3970030723A /* DataOverviewTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D41683F3970030723A /* DataOverviewTVC.m */; };
 		CE1BAC4F169528A200E3A1EA /* MyAccountTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1BAC4E169528A200E3A1EA /* MyAccountTVC.m */; };
+		CE1DAA6F16EAC8530034AEBF /* AggregatedDay.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1DAA6E16EAC8530034AEBF /* AggregatedDay.m */; };
+		CE1DAA7516EAC8C50034AEBF /* EnergyClockSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1DAA7416EAC8C50034AEBF /* EnergyClockSlice.m */; };
 		CE20E92216B58FD000AC2722 /* MonthData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92116B58FD000AC2722 /* MonthData.m */; };
 		CE20E92516B58FD000AC2722 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92416B58FD000AC2722 /* User.m */; };
 		CE20E92816B58FD000AC2722 /* WeekData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92716B58FD000AC2722 /* WeekData.m */; };
@@ -54,7 +56,7 @@
 		CE32C3971665AB8E00C3ED81 /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C38C1665AB8E00C3ED81 /* AFURLConnectionOperation.m */; };
 		CE32C3981665AB8E00C3ED81 /* AFXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C38E1665AB8E00C3ED81 /* AFXMLRequestOperation.m */; };
 		CE32C3991665AB8E00C3ED81 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C3901665AB8E00C3ED81 /* UIImageView+AFNetworking.m */; };
-		CE32C39D1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C39C1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m */; };
+		CE32C39D1665B7AD00C3ED81 /* EMNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C39C1665B7AD00C3ED81 /* EMNetworkManager.m */; };
 		CE348C1A1647668100B14B55 /* RegisterTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE348C191647668000B14B55 /* RegisterTVC.m */; };
 		CE3C80D616DFE6E200DB4E05 /* tabbarBG.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3C80D516DFE6E100DB4E05 /* tabbarBG.png */; };
 		CE3C80DA16DFE71700DB4E05 /* selection-tab@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3C80D816DFE71700DB4E05 /* selection-tab@2x.png */; };
@@ -75,6 +77,7 @@
 		CE4EDE5016E42A2B0047479A /* BTSSliceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4EDE4D16E42A2B0047479A /* BTSSliceLayer.m */; };
 		CE54E7BF168292B600F91C5E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE54E7BE168292B500F91C5E /* SystemConfiguration.framework */; };
 		CE54E7C21682943400F91C5E /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = CE54E7C11682943400F91C5E /* Reachability.m */; };
+		CE56031916E976CF0062FB70 /* EnergyClockDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE56031816E976CF0062FB70 /* EnergyClockDataManager.m */; };
 		CE6A008B16AF7E1200F845EE /* DSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6A008416AF7E1200F845EE /* DSelected.png */; };
 		CE6A008C16AF7E1200F845EE /* CSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6A008516AF7E1200F845EE /* CSelected.png */; };
 		CE6A008D16AF7E1200F845EE /* BSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6A008616AF7E1200F845EE /* BSelected.png */; };
@@ -204,6 +207,10 @@
 		CE1793D41683F3970030723A /* DataOverviewTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataOverviewTVC.m; sourceTree = "<group>"; };
 		CE1BAC4D169528A200E3A1EA /* MyAccountTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAccountTVC.h; sourceTree = "<group>"; };
 		CE1BAC4E169528A200E3A1EA /* MyAccountTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAccountTVC.m; sourceTree = "<group>"; };
+		CE1DAA6D16EAC8530034AEBF /* AggregatedDay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AggregatedDay.h; sourceTree = "<group>"; };
+		CE1DAA6E16EAC8530034AEBF /* AggregatedDay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AggregatedDay.m; sourceTree = "<group>"; };
+		CE1DAA7316EAC8C40034AEBF /* EnergyClockSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnergyClockSlice.h; sourceTree = "<group>"; };
+		CE1DAA7416EAC8C50034AEBF /* EnergyClockSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyClockSlice.m; sourceTree = "<group>"; };
 		CE20E92016B58FD000AC2722 /* MonthData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthData.h; sourceTree = "<group>"; };
 		CE20E92116B58FD000AC2722 /* MonthData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthData.m; sourceTree = "<group>"; };
 		CE20E92316B58FD000AC2722 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -235,8 +242,8 @@
 		CE32C38E1665AB8E00C3ED81 /* AFXMLRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFXMLRequestOperation.m; sourceTree = "<group>"; };
 		CE32C38F1665AB8E00C3ED81 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		CE32C3901665AB8E00C3ED81 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
-		CE32C39B1665B7AD00C3ED81 /* AFAppDotNetAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFAppDotNetAPIClient.h; sourceTree = "<group>"; };
-		CE32C39C1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFAppDotNetAPIClient.m; sourceTree = "<group>"; };
+		CE32C39B1665B7AD00C3ED81 /* EMNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMNetworkManager.h; sourceTree = "<group>"; };
+		CE32C39C1665B7AD00C3ED81 /* EMNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMNetworkManager.m; sourceTree = "<group>"; };
 		CE348C181647668000B14B55 /* RegisterTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterTVC.h; sourceTree = "<group>"; };
 		CE348C191647668000B14B55 /* RegisterTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterTVC.m; sourceTree = "<group>"; };
 		CE3C80D516DFE6E100DB4E05 /* tabbarBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tabbarBG.png; sourceTree = "<group>"; };
@@ -270,6 +277,8 @@
 		CE54E7BE168292B500F91C5E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		CE54E7C01682943400F91C5E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		CE54E7C11682943400F91C5E /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		CE56031716E976CF0062FB70 /* EnergyClockDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnergyClockDataManager.h; sourceTree = "<group>"; };
+		CE56031816E976CF0062FB70 /* EnergyClockDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyClockDataManager.m; sourceTree = "<group>"; };
 		CE6A008416AF7E1200F845EE /* DSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DSelected.png; sourceTree = "<group>"; };
 		CE6A008516AF7E1200F845EE /* CSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CSelected.png; sourceTree = "<group>"; };
 		CE6A008616AF7E1200F845EE /* BSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BSelected.png; sourceTree = "<group>"; };
@@ -561,7 +570,6 @@
 		CE03516816AE156700752192 /* Public */ = {
 			isa = PBXGroup;
 			children = (
-				CE4EDE4616E429680047479A /* MultiLevelPieChart */,
 				CE348C181647668000B14B55 /* RegisterTVC.h */,
 				CE348C191647668000B14B55 /* RegisterTVC.m */,
 				CEA0BE9F163CD99B00ED0599 /* FirstTVC.h */,
@@ -607,6 +615,8 @@
 				CE03516916AE30C400752192 /* ParticipantDataManager.h */,
 				CE03516C16AE347100752192 /* ParticipantDataManager.m */,
 				CEA0267116BF6A03005CE31A /* ParticipantDataManager-Private.h */,
+				CE56031716E976CF0062FB70 /* EnergyClockDataManager.h */,
+				CE56031816E976CF0062FB70 /* EnergyClockDataManager.m */,
 			);
 			name = "Manager-Classes";
 			sourceTree = "<group>";
@@ -642,6 +652,10 @@
 				CE20E92016B58FD000AC2722 /* MonthData.h */,
 				CE20E92116B58FD000AC2722 /* MonthData.m */,
 				CE0D631B16611E7500381D05 /* EcoMeterModel.xcdatamodeld */,
+				CE1DAA6D16EAC8530034AEBF /* AggregatedDay.h */,
+				CE1DAA6E16EAC8530034AEBF /* AggregatedDay.m */,
+				CE1DAA7316EAC8C40034AEBF /* EnergyClockSlice.h */,
+				CE1DAA7416EAC8C50034AEBF /* EnergyClockSlice.m */,
 				CEFAAFD816B8209500D9E744 /* Participant.h */,
 				CEFAAFD916B8209500D9E744 /* Participant.m */,
 			);
@@ -652,6 +666,7 @@
 		CE12C02C1687D917001C4959 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				CE4EDE4616E429680047479A /* MultiLevelPieChart */,
 				CE12C0291687D8EA001C4959 /* CircleView.h */,
 				CE12C02A1687D8EA001C4959 /* CircleView.m */,
 			);
@@ -697,8 +712,8 @@
 		CE32C39A1665B77200C3ED81 /* CustomNetworking */ = {
 			isa = PBXGroup;
 			children = (
-				CE32C39B1665B7AD00C3ED81 /* AFAppDotNetAPIClient.h */,
-				CE32C39C1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m */,
+				CE32C39B1665B7AD00C3ED81 /* EMNetworkManager.h */,
+				CE32C39C1665B7AD00C3ED81 /* EMNetworkManager.m */,
 			);
 			name = CustomNetworking;
 			sourceTree = "<group>";
@@ -1374,7 +1389,7 @@
 				CE32C3971665AB8E00C3ED81 /* AFURLConnectionOperation.m in Sources */,
 				CE32C3981665AB8E00C3ED81 /* AFXMLRequestOperation.m in Sources */,
 				CE32C3991665AB8E00C3ED81 /* UIImageView+AFNetworking.m in Sources */,
-				CE32C39D1665B7AD00C3ED81 /* AFAppDotNetAPIClient.m in Sources */,
+				CE32C39D1665B7AD00C3ED81 /* EMNetworkManager.m in Sources */,
 				CE0325F5166C20AF00BAB4C6 /* MBProgressHUD.m in Sources */,
 				CE1458B4167C06F400F7D82F /* MCachedModalStoryboardSegue.m in Sources */,
 				CE8DCEB916815ABB0030FA4C /* LastWeekViewController.m in Sources */,
@@ -1399,6 +1414,9 @@
 				CE4EDE4E16E42A2B0047479A /* BTSPieLayer.m in Sources */,
 				CE4EDE4F16E42A2B0047479A /* BTSPieView.mm in Sources */,
 				CE4EDE5016E42A2B0047479A /* BTSSliceLayer.m in Sources */,
+				CE56031916E976CF0062FB70 /* EnergyClockDataManager.m in Sources */,
+				CE1DAA6F16EAC8530034AEBF /* AggregatedDay.m in Sources */,
+				CE1DAA7516EAC8C50034AEBF /* EnergyClockSlice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

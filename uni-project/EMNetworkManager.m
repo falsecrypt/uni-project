@@ -1,19 +1,19 @@
 // AFAppDotNetAPIClient.h
 
-#import "AFAppDotNetAPIClient.h"
+#import "EMNetworkManager.h"
 #import "AFJSONRequestOperation.h"
 
-@interface AFAppDotNetAPIClient()
+@interface EMNetworkManager()
 @property (readwrite, nonatomic) NSMutableDictionary *defaultHeaders;
 @end
 
-@implementation AFAppDotNetAPIClient
+@implementation EMNetworkManager
 
-+ (AFAppDotNetAPIClient *)sharedClient {
-    static AFAppDotNetAPIClient *_sharedClient = nil;
++ (EMNetworkManager *)sharedClient {
+    static EMNetworkManager *_sharedClient = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sharedClient = [[AFAppDotNetAPIClient alloc] initWithBaseURL:[NSURL URLWithString:currentCostServerBaseURLString]];
+        _sharedClient = [[EMNetworkManager alloc] initWithBaseURL:[NSURL URLWithString:currentCostServerBaseURLString]];
     });
     
     return _sharedClient;

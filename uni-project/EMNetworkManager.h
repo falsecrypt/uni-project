@@ -4,8 +4,8 @@
 #import <Foundation/Foundation.h>
 #import "AFHTTPClient.h"
 
-@interface AFAppDotNetAPIClient : AFHTTPClient
+@interface EMNetworkManager : AFHTTPClient
 
-+ (AFAppDotNetAPIClient *)sharedClient;
++ (EMNetworkManager *)sharedClient;
 
 @end

@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1811" systemVersion="12C60" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2057" systemVersion="12C60" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="AggregatedDay" representedClassName="AggregatedDay" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" indexed="YES" syncable="YES"/>
+        <attribute name="dayconsumption" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="nightconsumtion" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="EnergyClockSlice" representedClassName="EnergyClockSlice" syncable="YES">
+        <attribute name="consumption" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="hour" optional="YES" attributeType="Integer 16" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="slotValues" optional="YES" attributeType="Binary" syncable="YES"/>
+    </entity>
     <entity name="MonthData" representedClassName="MonthData" syncable="YES">
         <attribute name="circleradius" optional="YES" attributeType="Integer 16" defaultValueString="0.0" syncable="YES"/>
         <attribute name="consumption" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
@@ -33,5 +44,7 @@
         <element name="Participant" positionX="160" positionY="192" width="128" height="135"/>
         <element name="User" positionX="63" positionY="243" width="128" height="120"/>
         <element name="WeekData" positionX="243" positionY="90" width="128" height="88"/>
+        <element name="AggregatedDay" positionX="160" positionY="192" width="128" height="90"/>
+        <element name="EnergyClockSlice" positionX="160" positionY="192" width="128" height="105"/>
     </elements>
 </model>

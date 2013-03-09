@@ -15,29 +15,29 @@ static const int secondPageNumber   = 1;
 @interface ScrollViewContentVC ()
 
 // container views for a CPTGraph instances
-@property (strong, nonatomic) CPTGraphHostingView *mondayPieChartView;
-@property (strong, nonatomic) CPTGraphHostingView *tuesdayPieChartView;
-@property (strong, nonatomic) CPTGraphHostingView *wednesdayPieChartView;
-@property (strong, nonatomic) CPTGraphHostingView *thursdayPieChartView;
-@property (strong, nonatomic) CPTGraphHostingView *fridayPieChartView;
-@property (strong, nonatomic) CPTGraphHostingView *saturdayPieChartView;
-@property (strong, nonatomic) CPTGraphHostingView *sundayPieChartView;
+@property (strong, nonatomic) CPTGraphHostingView *firstPieChartView;
+@property (strong, nonatomic) CPTGraphHostingView *secondPieChartView;
+@property (strong, nonatomic) CPTGraphHostingView *thirdPieChartView;
+@property (strong, nonatomic) CPTGraphHostingView *fourthPieChartView;
+@property (strong, nonatomic) CPTGraphHostingView *fifthPieChartView;
+@property (strong, nonatomic) CPTGraphHostingView *sixthPieChartView;
+@property (strong, nonatomic) CPTGraphHostingView *seventhPieChartView;
 
-@property (strong, nonatomic) CPTXYGraph *mondayPieChartGraph;
-@property (strong, nonatomic) CPTXYGraph *tuesdayPieChartGraph;
-@property (strong, nonatomic) CPTXYGraph *wednesdayPieChartGraph;
-@property (strong, nonatomic) CPTXYGraph *thursdayPieChartGraph;
-@property (strong, nonatomic) CPTXYGraph *fridayPieChartGraph;
-@property (strong, nonatomic) CPTXYGraph *saturdayPieChartGraph;
-@property (strong, nonatomic) CPTXYGraph *sundayPieChartGraph;
+@property (strong, nonatomic) CPTXYGraph *firstPieChartGraph;
+@property (strong, nonatomic) CPTXYGraph *secondPieChartGraph;
+@property (strong, nonatomic) CPTXYGraph *thirdPieChartGraph;
+@property (strong, nonatomic) CPTXYGraph *fourthPieChartGraph;
+@property (strong, nonatomic) CPTXYGraph *fifthPieChartGraph;
+@property (strong, nonatomic) CPTXYGraph *sixthPieChartGraph;
+@property (strong, nonatomic) CPTXYGraph *seventhPieChartGraph;
 
-@property (strong, nonatomic) CPTPieChart *mondayPieChart;
-@property (strong, nonatomic) CPTPieChart *tuesdayPieChart;
-@property (strong, nonatomic) CPTPieChart *wednesdayPieChart;
-@property (strong, nonatomic) CPTPieChart *thursdayPieChart;
-@property (strong, nonatomic) CPTPieChart *fridayPieChart;
-@property (strong, nonatomic) CPTPieChart *saturdayPieChart;
-@property (strong, nonatomic) CPTPieChart *sundayPieChart;
+@property (strong, nonatomic) CPTPieChart *firstPieChart;
+@property (strong, nonatomic) CPTPieChart *secondPieChart;
+@property (strong, nonatomic) CPTPieChart *thirdPieChart;
+@property (strong, nonatomic) CPTPieChart *fourthPieChart;
+@property (strong, nonatomic) CPTPieChart *fifthPieChart;
+@property (strong, nonatomic) CPTPieChart *sixthPieChart;
+@property (strong, nonatomic) CPTPieChart *seventhPieChart;
 
 @property (assign, nonatomic) int pageNumber;
 @property (weak, nonatomic) UIViewController *targetViewController; //EnergyClockViewController
@@ -49,6 +49,7 @@ static const int secondPageNumber   = 1;
 @property (strong, nonatomic) NSArray *secondPageHostingViews;
 @property (strong, nonatomic) NSArray *secondPageGraphs;
 @property (strong, nonatomic) NSArray *secondPagePieCharts;
+@property (strong, nonatomic) NSArray *weekdays;
 
 
 @end
@@ -80,6 +81,16 @@ static const int secondPageNumber   = 1;
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    NSDateFormatter * df = [[NSDateFormatter alloc] init];
+    [df setLocale: [[NSLocale alloc] initWithLocaleIdentifier:@"de"]]; // [NSLocale currentLocale] would be better ;)
+    NSArray *weekdays_temp = [df weekdaySymbols];
+    NSDateComponents *componentsToday = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:[NSDate date]];
+    NSInteger today = componentsToday.weekday;
+    NSInteger yesterday = today-1;
+    // last 7 days from today
+    self.weekdays = [[weekdays_temp subarrayWithRange:NSMakeRange(yesterday, 7-yesterday)]
+                     arrayByAddingObjectsFromArray:[weekdays_temp subarrayWithRange:NSMakeRange(0, yesterday)]];
 
 }
 
@@ -106,10 +117,10 @@ static const int secondPageNumber   = 1;
     if(!_firstPageHostingViews)
     {
         _firstPageHostingViews = [[NSArray alloc] initWithObjects:
-                                  self.mondayPieChartView=[(CPTGraphHostingView *) [CPTGraphHostingView alloc] init],
-                                  self.tuesdayPieChartView=[(CPTGraphHostingView *) [CPTGraphHostingView alloc] init],
-                                  self.wednesdayPieChartView=[(CPTGraphHostingView *) [CPTGraphHostingView alloc] init],
-                                  self.thursdayPieChartView=[(CPTGraphHostingView *) [CPTGraphHostingView alloc] init], nil];
+                                  self.firstPieChartView=[(CPTGraphHostingView *) [CPTGraphHostingView alloc] init],
+                                  self.secondPieChartView=[(CPTGraphHostingView *) [CPTGraphHostingView alloc] init],
+                                  self.thirdPieChartView=[(CPTGraphHostingView *) [CPTGraphHostingView alloc] init],
+                                  self.fourthPieChartView=[(CPTGraphHostingView *) [CPTGraphHostingView alloc] init], nil];
     }
     return _firstPageHostingViews;
 }
@@ -119,9 +130,9 @@ static const int secondPageNumber   = 1;
     if(!_secondPageHostingViews)
     {
         _secondPageHostingViews = [[NSArray alloc] initWithObjects:
-                                   self.fridayPieChartView=[(CPTGraphHostingView *) [CPTGraphHostingView alloc] init],
-                                   self.saturdayPieChartView=[(CPTGraphHostingView *) [CPTGraphHostingView alloc] init],
-                                   self.sundayPieChartView=[(CPTGraphHostingView *) [CPTGraphHostingView alloc] init], nil];
+                                   self.fifthPieChartView=[(CPTGraphHostingView *) [CPTGraphHostingView alloc] init],
+                                   self.sixthPieChartView=[(CPTGraphHostingView *) [CPTGraphHostingView alloc] init],
+                                   self.seventhPieChartView=[(CPTGraphHostingView *) [CPTGraphHostingView alloc] init], nil];
     }
     return _secondPageHostingViews;
 }
@@ -131,10 +142,10 @@ static const int secondPageNumber   = 1;
     if(!_firstPageGraphs)
     {
         _firstPageGraphs = [[NSArray alloc] initWithObjects:
-                            self.mondayPieChartGraph = [[CPTXYGraph alloc] init],
-                            self.tuesdayPieChartGraph = [[CPTXYGraph alloc] init],
-                            self.wednesdayPieChartGraph = [[CPTXYGraph alloc] init],
-                            self.thursdayPieChartGraph = [[CPTXYGraph alloc] init], nil];
+                            self.firstPieChartGraph = [[CPTXYGraph alloc] init],
+                            self.secondPieChartGraph = [[CPTXYGraph alloc] init],
+                            self.thirdPieChartGraph = [[CPTXYGraph alloc] init],
+                            self.fourthPieChartGraph = [[CPTXYGraph alloc] init], nil];
     }
     return _firstPageGraphs;
 }
@@ -144,9 +155,9 @@ static const int secondPageNumber   = 1;
     if(!_secondPageGraphs)
     {
         _secondPageGraphs = [[NSArray alloc] initWithObjects:
-                             self.fridayPieChartGraph = [[CPTXYGraph alloc] init],
-                             self.saturdayPieChartGraph = [[CPTXYGraph alloc] init],
-                             self.sundayPieChartGraph = [[CPTXYGraph alloc] init], nil];
+                             self.fifthPieChartGraph = [[CPTXYGraph alloc] init],
+                             self.sixthPieChartGraph = [[CPTXYGraph alloc] init],
+                             self.seventhPieChartGraph = [[CPTXYGraph alloc] init], nil];
     }
     return _secondPageGraphs;
 }
@@ -156,10 +167,10 @@ static const int secondPageNumber   = 1;
     if(!_firstPagePieCharts)
     {
         _firstPagePieCharts = [[NSArray alloc] initWithObjects:
-                            self.mondayPieChart = [[CPTPieChart alloc] init],
-                            self.tuesdayPieChart = [[CPTPieChart alloc] init],
-                            self.wednesdayPieChart = [[CPTPieChart alloc] init],
-                            self.thursdayPieChart = [[CPTPieChart alloc] init], nil];
+                            self.firstPieChart = [[CPTPieChart alloc] init],
+                            self.secondPieChart = [[CPTPieChart alloc] init],
+                            self.thirdPieChart = [[CPTPieChart alloc] init],
+                            self.fourthPieChart = [[CPTPieChart alloc] init], nil];
     }
     return _firstPagePieCharts;
 }
@@ -169,9 +180,9 @@ static const int secondPageNumber   = 1;
     if(!_secondPagePieCharts)
     {
         _secondPagePieCharts = [[NSArray alloc] initWithObjects:
-                             self.fridayPieChart = [[CPTPieChart alloc] init],
-                             self.saturdayPieChart = [[CPTPieChart alloc] init],
-                             self.sundayPieChart = [[CPTPieChart alloc] init], nil];
+                             self.fifthPieChart = [[CPTPieChart alloc] init],
+                             self.sixthPieChart = [[CPTPieChart alloc] init],
+                             self.seventhPieChart = [[CPTPieChart alloc] init], nil];
     }
     return _secondPagePieCharts;
 }
@@ -185,17 +196,20 @@ static const int secondPageNumber   = 1;
     return 2;
 }
 
+
+// Gets a plot data value for the given plot and field.
 -(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
 {
-    //NSLog(@"numberForPlot...");
-    NSNumber *num;
+    //NSLog(@"numberForPlot, field: %i, recordIndex: %i", fieldEnum, index);
+    NSNumber *num = nil;
     
-    if ( fieldEnum == CPTPieChartFieldSliceWidth ) {
+    if ( fieldEnum == CPTPieChartFieldSliceWidth ) { // The field index
         num = [NSNumber numberWithFloat:(arc4random()%8)+1.0];
     }
     else {
         return [NSNumber numberWithInt:index];
     }
+    
     
     //NSLog(@"numberForPlot returning num = %@", num);
     return num;
@@ -278,7 +292,7 @@ static const int secondPageNumber   = 1;
 #pragma mark - Chart behavior
 -(void)initPlots
 {
-    //NSLog(@"initPlots...");
+    NSLog(@"initPlots...");
     [self configureHostViews];
     [self configureGraphs];
     [self configureCharts];
@@ -347,7 +361,7 @@ static const int secondPageNumber   = 1;
 
 -(void)configureGraphs
 {
-    //NSLog(@"configureGraphs...");
+    NSLog(@"configureGraphs...");
     
     NSMutableArray *pageHostingViewsMutable = [[NSMutableArray alloc] init];
     NSMutableArray *pageGraphsMutable       = [[NSMutableArray alloc] init];
@@ -373,7 +387,13 @@ static const int secondPageNumber   = 1;
         graph.paddingRight = 0.0f;
         graph.paddingBottom = 0.0f;
         graph.axisSet = nil;
-        graph.title = @"Day";
+        if (self.pageNumber == 1) {
+            graph.title = self.weekdays[i+4];
+        }
+        else {
+            graph.title = self.weekdays[i];
+        }
+        NSLog(@"configureGraphs, setting title: %@", graph.title);
         CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
         textStyle.color                = [CPTColor grayColor];
         textStyle.fontName             = @"Helvetica-Bold";

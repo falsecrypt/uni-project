@@ -9,7 +9,7 @@
 #import "DetailViewManager.h"
 #import "FirstDetailViewController.h"
 #import "MBProgressHUD.h"
-#import "AFAppDotNetAPIClient.h"
+#import "EMNetworkManager.h"
 #import "WeekData.h"
 #import "Reachability.h"
 
@@ -288,7 +288,7 @@ NSMutableArray *navigationBarItems;
     
     NSLog(@"getDataFromServer...");
     //Get user's aggregated kilowatt values per day (max 14 days, semicolon separated, latest first).
-    [[AFAppDotNetAPIClient sharedClient] getPath:@"rpc.php?userID=3&action=get&what=aggregation_d" parameters:nil
+    [[EMNetworkManager sharedClient] getPath:@"rpc.php?userID=3&action=get&what=aggregation_d" parameters:nil
                                          success:^(AFHTTPRequestOperation *operation, id data) {
                                              self.newDataSuccess = YES;
                                              [WeekData truncateAll];

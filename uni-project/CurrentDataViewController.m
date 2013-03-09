@@ -9,7 +9,7 @@
 #import "CurrentDataViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "MBProgressHUD.h"
-#import "AFAppDotNetAPIClient.h"
+#import "EMNetworkManager.h"
 #import "DetailViewManager.h"
 #import "FirstDetailViewController.h"
 #import "Reachability.h"
@@ -522,7 +522,7 @@ NSMutableArray *navigationBarItems;
     //max consumption is a value, beeing aggregated during a period of time, i.e. 14 days
     // we should store this value in our DB, using Core Data
     // TODO
-    [[AFAppDotNetAPIClient sharedClient] getPath:@"rpc.php?userID=3&action=get&what=max" parameters:nil success:^(AFHTTPRequestOperation *operation, id data) {
+    [[EMNetworkManager sharedClient] getPath:@"rpc.php?userID=3&action=get&what=max" parameters:nil success:^(AFHTTPRequestOperation *operation, id data) {
         if(checkForTimeOutTimer){
             [checkForTimeOutTimer invalidate];
             checkForTimeOutTimer = nil;
@@ -542,7 +542,7 @@ NSMutableArray *navigationBarItems;
         }
         NSString *userMaxWattString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         //if (self.userMaximumWatt != [userMaxWattString intValue]) {
-         if (self.maxVal != [userMaxWattString intValue]) {
+        if (self.maxVal != [userMaxWattString intValue]) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [MBProgressHUD hideHUDForView:self.view animated:YES];
             });
@@ -574,50 +574,50 @@ NSMutableArray *navigationBarItems;
             [self calculateDeviationAngle];
         }
         else {
-        // =='The request timed out'
-        if ([error code]==-1001) {
-            if(self.dataTimer){
-                [self.dataTimer invalidate];
-                self.dataTimer = nil;
+            // =='The request timed out'
+            if ([error code]==-1001) {
+                if(self.dataTimer){
+                    [self.dataTimer invalidate];
+                    self.dataTimer = nil;
+                }
+                if(self.continiousTimer){
+                    [self.continiousTimer invalidate];
+                    self.continiousTimer = nil;
+                }
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                //[self.HUD show:NO];
+                //self.HUD = nil;
+                self.HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                // Configure for text only and offset down
+                self.HUD.labelText = @"Verbindung fehlgeschlagen";
+                NSString *_detailsLabelText = [NSString stringWithFormat:@"Bei der Verbindung zum Server  \n"
+                                               "ist eine Zeitüberschreitung aufgetreten.  \n"];
+                self.HUD.detailsLabelText = _detailsLabelText;
+                self.HUD.square = YES;
+                self.HUD.mode = MBProgressHUDModeText;
+                self.HUD.margin = 10.f;
+                self.HUD.yOffset = 20.f;
+                [self.HUD show:YES];
+                
+                // check every 10 min. if we can connect to the server
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    checkForTimeOutTimer = [NSTimer timerWithTimeInterval:60.0*10.0 // 10 minutes
+                                                                   target:self
+                                                                 selector:@selector(getDataFromServer:)
+                                                                 userInfo:nil
+                                                                  repeats:YES];
+                    
+                    [[NSRunLoop currentRunLoop] addTimer:checkForTimeOutTimer forMode:NSRunLoopCommonModes];
+                    [[NSRunLoop currentRunLoop] run];
+                });
             }
-            if(self.continiousTimer){
-                [self.continiousTimer invalidate];
-                self.continiousTimer = nil;
-            }
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            //[self.HUD show:NO];
-            //self.HUD = nil;
-            self.HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            // Configure for text only and offset down
-            self.HUD.labelText = @"Verbindung fehlgeschlagen";
-            NSString *_detailsLabelText = [NSString stringWithFormat:@"Bei der Verbindung zum Server  \n"
-                                           "ist eine Zeitüberschreitung aufgetreten.  \n"];
-            self.HUD.detailsLabelText = _detailsLabelText;
-            self.HUD.square = YES;
-            self.HUD.mode = MBProgressHUDModeText;
-            self.HUD.margin = 10.f;
-            self.HUD.yOffset = 20.f;
-            [self.HUD show:YES];
-            
-            // check every 10 min. if we can connect to the server
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            checkForTimeOutTimer = [NSTimer timerWithTimeInterval:60.0*10.0 // 10 minutes
-                                                           target:self
-                                                         selector:@selector(getDataFromServer:)
-                                                         userInfo:nil
-                                                          repeats:YES];
-            
-            [[NSRunLoop currentRunLoop] addTimer:checkForTimeOutTimer forMode:NSRunLoopCommonModes];
-            [[NSRunLoop currentRunLoop] run];
-            });
         }
-        }
-
+        
     }];
     
     
-    [[AFAppDotNetAPIClient sharedClient] getPath:@"rpc.php?userID=3&action=get&what=watt" parameters:nil success:^(AFHTTPRequestOperation *operation, id data) {
+    [[EMNetworkManager sharedClient] getPath:@"rpc.php?userID=3&action=get&what=watt" parameters:nil success:^(AFHTTPRequestOperation *operation, id data) {
         NSString *userCurrentWattString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         
         

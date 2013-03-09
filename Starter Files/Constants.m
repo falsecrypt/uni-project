@@ -20,21 +20,27 @@ NSString *  const scatterPlot               = @"Scatter Plot";
 
 NSString *  const currentCostServerBaseURLString = @"http://www.hcm-lab.de/downloads/buehling/adaptiveart/CurrentCostTreeOnline/";
 NSString *  const currentCostServerBaseURLHome   = @"www.hcm-lab.de";
-float     const OfficeArea     = 20.0f;
-NSInteger const FirstSensorID  = 3;
-NSInteger const SecondSensorID = 4;
-NSInteger const ThirdSensorID  = 5;
+float       const OfficeArea     = 20.0f;
+NSInteger   const FirstSensorID  = 3;
+NSInteger   const SecondSensorID = 4;
+NSInteger   const ThirdSensorID  = 5;
 
 // Energy-Label: levels/ranks
-NSInteger const APlusPlusPlus  = 1;
-NSInteger const APlusPlus      = 2;
-NSInteger const APlus          = 3;
-NSInteger const A              = 4;
-NSInteger const B              = 5;
-NSInteger const C              = 6;
-NSInteger const D              = 7;
+NSInteger   const APlusPlusPlus  = 1;
+NSInteger   const APlusPlus      = 2;
+NSInteger   const APlus          = 3;
+NSInteger   const A              = 4;
+NSInteger   const B              = 5;
+NSInteger   const C              = 6;
+NSInteger   const D              = 7;
+
+NSString * const ScoreWasCalculated      = @"ScoreWasCalculated";
+NSString * const RankWasCalculated       = @"RankWasCalculated";
+
+NSString * const DayChartsMode           = @"DayChartsMode";
+NSString * const MultiLevelPieChartMode  = @"MultiLevelPieChartMode";
 
 // test data flag, set to NO when not in dev mode
-BOOL USEDUMMYDATA              = YES;
+BOOL const USEDUMMYDATA        = YES;
 
 @end

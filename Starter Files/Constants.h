@@ -30,8 +30,14 @@ extern NSInteger const B;
 extern NSInteger const C;
 extern NSInteger const D;
 
+extern NSString * const ScoreWasCalculated;
+extern NSString * const RankWasCalculated;
+
+extern NSString * const DayChartsMode;
+extern NSString * const MultiLevelPieChartMode;
+
 // Defines whether test 'dummy' -data should be used
-extern BOOL USEDUMMYDATA;
+extern BOOL const USEDUMMYDATA;
 
 
 @end
