@@ -9,6 +9,6 @@
 #import "LoginScreenTVC.h"
 #import "RegisterTVC.h"
 
-@interface FirstTVC : UITableViewController <RegisterScreenViewControllerDelegate>
+@interface FirstTVC : UITableViewController <RegisterScreenViewControllerDelegate, LoginScreenViewControllerDelegate>
 
 @end

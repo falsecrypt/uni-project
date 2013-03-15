@@ -2,8 +2,42 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>--project-company</key>
+	<string>Pavel Ermolin, B.Sc.</string>
+	<key>--print-settings</key>
+	<true/>
+	<key>--warn-missing-arg</key>
+	<true/>
+	<key>--verbose</key>
+	<integer>3</integer>
+	<key>--keep-undocumented-members</key>
+	<true/>
+	<key>--project-version</key>
+	<string>1.0</string>
+	<key>--project-name</key>
+	<string>EcoMeter (Master Thesis Project)</string>
+	<key>--warn-undocumented-object</key>
+	<false/>
+	<key>--keep-undocumented-objects</key>
+	<true/>
+	<key>--create-docset</key>
+	<true/>
+	<key>--create-html</key>
+	<true/>
+	<key>--logformat</key>
+	<string>xcode</string>
+	<key>--output</key>
+	<string>/Users/user/Library/Developer/Shared/Documentation/DocSets</string>
+	<key>--warn-unknown-directive</key>
+	<true/>
+	<key>--warn-undocumented-member</key>
+	<false/>
+	<key>--repeat-first-par</key>
+	<false/>
 	<key>--company-id</key>
 	<string>ecoMeter</string>
+	<key>--warn-empty-description</key>
+	<true/>
 	<key>--ignore</key>
 	<array>
 		<string>ThirdParty</string>
@@ -17,60 +51,7 @@
 		<string>MagicalRecord</string>
 		<string>KeychainWrapper</string>
 	</array>
-	<key>--logformat</key>
-	<integer>1</integer>
-	<key>--print-settings</key>
-	<true/>
-	<key>--project-company</key>
-	<string>Pavel Ermolin, B.Sc.</string>
-	<key>--project-name</key>
-	<string>EcoMeter (Master Thesis Project)</string>
-	<key>--repeat-first-par</key>
-	<false/>
-	<key>--create-html</key>
-	<true/>
-	<key>--create-docset</key>
-	<true/>
-	<!--<key>--templates</key> -->
-	<!--<string>./Templates</string> -->
-	<key>--verbose</key>
-	<integer>3</integer>
-	<key>--project-version</key>
-	<string>1.0</string>
-	<key>--output</key>
-    <string>/Users/user/Developer/Documentation</string>
-	<key>--keep-undocumented-objects</key>
-	<true/>
-	<key>--keep-undocumented-members</key>
-	<true/>
-	
-	<key>--warn-undocumented-object</key>
-	
-	<false/>
-	
-	<key>--warn-undocumented-member</key>
-	
-	<false/>
-	
-	<key>--warn-empty-description</key>
-	
-	<true/>
-	
-	<key>--warn-missing-arg</key>
-	
-	<true/>
-	
-	<key>--warn-unknown-directive</key>
-	
-	<true/>
-	
-	<key>--logformat</key>
-	
-	<string>xcode</string>
-	
 	<key>--exit-threshold</key>
-	
 	<integer>2</integer>
 </dict>
 </plist>
-

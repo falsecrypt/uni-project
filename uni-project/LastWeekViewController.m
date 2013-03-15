@@ -157,19 +157,18 @@ NSMutableArray *navigationBarItems;
          nil];
          */
         // Lets look for Week Data in our DB
-        NSNumber *numberofentities = [WeekData numberOfEntities];
         
         // We are online
         NSLog(@"deviceIsOnline : %i", self.deviceIsOnline);
         
         // No Data, our App has been started for the first time
-        if ([numberofentities intValue]==0) {
+        if ([WeekData countOfEntities]==0) {
             NSLog(@"No Data in the WeekData Table!");
             [self getWeekData];
         }
         // We have some data, we are online so lets sync
         else {
-            NSLog(@"number of entities before sync : %@", numberofentities);
+            NSLog(@"number of entities before sync : %i", [WeekData countOfEntities]);
             //[WeekData truncateAll];
             [self getWeekData];
         }
@@ -194,13 +193,11 @@ NSMutableArray *navigationBarItems;
          nil];
          */
         // Lets look for Week Data in our DB
-        NSNumber *numberofentities = [WeekData numberOfEntities];
-        
         // We are offline
         // retrieve the data from the DB
         NSLog(@"deviceIsOnline : %i", self.deviceIsOnline);
         // ooops, No Data. Show error message
-        if ([numberofentities intValue]==0) {
+        if ([WeekData countOfEntities]==0) {
             if (self.HUD) {
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 [self.HUD removeFromSuperview];
@@ -288,6 +285,7 @@ NSMutableArray *navigationBarItems;
     
     NSLog(@"getDataFromServer...");
     //Get user's aggregated kilowatt values per day (max 14 days, semicolon separated, latest first).
+    // userID should be set by the user! TODO
     [[EMNetworkManager sharedClient] getPath:@"rpc.php?userID=3&action=get&what=aggregation_d" parameters:nil
                                          success:^(AFHTTPRequestOperation *operation, id data) {
                                              self.newDataSuccess = YES;
@@ -478,7 +476,7 @@ NSMutableArray *navigationBarItems;
     //NSDate *dayDate = [dayDataDictionary objectForKey:[plotDataConsumption objectAtIndex:index]];
     NSDate *dayDate = plotDataDates[index];
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateStyle:kCFDateFormatterLongStyle];
+    [formatter setDateStyle:NSDateFormatterLongStyle];
     [formatter setDateFormat:@"EEEE, dd.MM.yy"];
     NSLocale *deLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"];
     formatter.locale = deLocale;
@@ -601,7 +599,7 @@ NSMutableArray *navigationBarItems;
         NSDate *dayDate = plotDataDates[index];
         NSLog(@"dayDate: %@", dayDate);
         NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-        [formatter setDateStyle:kCFDateFormatterLongStyle];
+        [formatter setDateStyle:NSDateFormatterLongStyle];
         [formatter setDateFormat:@"EE"];
         NSLocale *deLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"];
         formatter.locale = deLocale;

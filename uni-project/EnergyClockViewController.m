@@ -120,6 +120,8 @@ static const int numberOfParticipants = 5; // ask the server for this number
     
     [self.energyClockView reloadData];
     
+    [[EnergyClockDataManager sharedClient] calculateValuesWithMode:DayChartsMode];
+    
 }
 
 -(NSMutableArray*)sliceValues
@@ -180,7 +182,7 @@ static const int numberOfParticipants = 5; // ask the server for this number
 
 - (void)loadScrollViewWithPage:(NSUInteger)page
 {
-    
+    NSLog(@"loadScrollViewWithPage...");
     // replace the placeholder if necessary
     ScrollViewContentVC *controller = [self.viewControllers objectAtIndex:page];
     if ((NSNull *)controller == [NSNull null])

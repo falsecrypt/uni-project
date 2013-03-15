@@ -43,4 +43,11 @@ NSString * const MultiLevelPieChartMode  = @"MultiLevelPieChartMode";
 // test data flag, set to NO when not in dev mode
 BOOL const USEDUMMYDATA        = YES;
 
+// wunderground Weather API, projectname: ecometerapp
+NSString * const wundergroundAPIKey = @"7a5424a084a5ba90";
+NSString * const wundergroundRequestURL = @"http://api.wunderground.com/api/7a5424a084a5ba90/astronomy/q/Germany/Augsburg.json";
+
+NSString * const AggregatedDaysSaved = @"AggregatedDaysSaved";
+BOOL const FORCEDAYCHARTSUPDATE = NO;
+
 @end

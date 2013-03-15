@@ -50,9 +50,7 @@
     }
     else {
         
-        NSNumber *numberofentities = [Participant numberOfEntities];
-        
-        if (numberofentities > 0) {
+        if ([Participant hasAtLeastOneEntity]) {
             
             Participant *participant =
             [Participant findFirstByAttribute:@"sensorid" withValue:[NSNumber numberWithInt:self.currentParticipantId]];

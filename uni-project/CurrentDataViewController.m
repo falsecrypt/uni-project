@@ -177,7 +177,29 @@ NSMutableArray *navigationBarItems;
         [self addMeterViewContents];
         [self initPlotForScatterPlot];
     }
-
+    /* LOGGING START
+     ****************/
+    System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
+    [MagicalRecord saveInBackgroundWithBlock:^(NSManagedObjectContext *localContext){
+        
+        System *localSystem = [systemObj inContext:localContext];
+        NSNumber *currentdatalogNumber = @(1);
+        if (localSystem.currentdatalog < 0) { // something went wrong
+        }
+        else {
+            NSNumber *currentdatalogNumberTemp = localSystem.currentdatalog;
+            currentdatalogNumber = [NSNumber numberWithInt:[currentdatalogNumberTemp integerValue] +1 ];
+        }
+        localSystem.currentdatalog = currentdatalogNumber;
+    } completion:^{
+        
+        System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
+        NSLog(@"saved System Object :%@", systemObj);
+        NSLog(@"saved System Object, currentdatalog :%@", systemObj.currentdatalog);
+        
+    }];
+    /* LOGGING END
+     ****************/
 }
 
 // -------------------------------------------------------------------------------

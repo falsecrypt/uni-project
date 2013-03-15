@@ -8,6 +8,11 @@
 
 #import "ScrollViewContentVC.h"
 #import "EnergyClockViewController.h"
+#import "EnergyClockDataManager.h"
+#import "Reachability.h"
+#import "EcoMeterAppDelegate.h"
+#import "AggregatedDay.h"
+#import "CPTAnimationPeriod.h"
 
 static const int firstPageNumber    = 0;
 static const int secondPageNumber   = 1;
@@ -51,6 +56,10 @@ static const int secondPageNumber   = 1;
 @property (strong, nonatomic) NSArray *secondPagePieCharts;
 @property (strong, nonatomic) NSArray *weekdays;
 
+@property (nonatomic, strong) Reachability *reachabilityObj;
+@property (nonatomic, strong) EnergyClockDataManager *ecDataManager;
+@property (nonatomic, strong) NSArray *aggrDayObjects; //will be filled with objects from DB
+@property (nonatomic, strong) NSMutableDictionary *weekdaysDates; //will be filled with objects from DB
 
 @end
 
@@ -72,9 +81,21 @@ static const int secondPageNumber   = 1;
         //NSLog(@"initWithPageNumber: %i", page);
         self.pageNumber = page;
         self.targetViewController = viewController;
+        EcoMeterAppDelegate *appDelegate = (EcoMeterAppDelegate *)[[UIApplication sharedApplication] delegate];
+        self.deviceIsOnline = appDelegate.deviceIsOnline;
         
     }
     return self;
+}
+
+// Lazy instantiation
+- (Reachability *) reachabilityObj
+{
+    if(!_reachabilityObj)
+    {
+        _reachabilityObj = [Reachability reachabilityWithHostname:currentCostServerBaseURLHome];
+    }
+    return _reachabilityObj;
 }
 
 - (void)viewDidLoad
@@ -82,16 +103,27 @@ static const int secondPageNumber   = 1;
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    [self.reachabilityObj startNotifier];
+    
     NSDateFormatter * df = [[NSDateFormatter alloc] init];
     [df setLocale: [[NSLocale alloc] initWithLocaleIdentifier:@"de"]]; // [NSLocale currentLocale] would be better ;)
     NSArray *weekdays_temp = [df weekdaySymbols];
     NSDateComponents *componentsToday = [[NSCalendar currentCalendar] components:NSWeekdayCalendarUnit fromDate:[NSDate date]];
-    NSInteger today = componentsToday.weekday;
-    NSInteger yesterday = today-1;
+    //NSInteger today = componentsToday.weekday;
+    NSInteger yesterday = (componentsToday.weekday)-1;
     // last 7 days from today
     self.weekdays = [[weekdays_temp subarrayWithRange:NSMakeRange(yesterday, 7-yesterday)]
                      arrayByAddingObjectsFromArray:[weekdays_temp subarrayWithRange:NSMakeRange(0, yesterday)]];
-
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(initPlotsAfterSavingData) // when the data has been saved we will be notified
+     name:AggregatedDaysSaved
+     object:nil];
+    self.weekdaysDates = [[NSMutableDictionary alloc] init];
+    //self.aggrDayObjects = [AggregatedDay findAllSortedBy:@"date" ascending:NO];
+    
+    NSLog(@"viewDidLoad ScrollViewContent self: %@", self);
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -102,13 +134,65 @@ static const int secondPageNumber   = 1;
     /*  IMPORTANT: CALL THE INITIALIZATION METHOD HERE 
         The plots are initialized here, since the view bounds have not transformed for landscape until now
      */
-    [self initPlots];
+    // Get last sync date, =today? -> then do nothing!
+    NSDateComponents *todayComponents =
+    [[NSCalendar currentCalendar] components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[NSDate date]];
+    System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
+    NSAssert(systemObj!=nil, @"System Object with id=primary doesnt exist");
+    NSLog(@"viewDidAppear systemObj: %@", systemObj);
+    NSDate *lastSyncDate = systemObj.daysupdated;
+    NSLog(@"viewDidAppear lastSyncDate: %@", lastSyncDate);
+    NSLog(@"viewDidAppear todayComponents: %@", todayComponents);
+    if (lastSyncDate) { // we have synced today already
+        NSDateComponents *lastSyncComponents =
+        [[NSCalendar currentCalendar] components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:lastSyncDate];
+        
+        if(([todayComponents year]  == [lastSyncComponents year])  &&
+           ([todayComponents month] == [lastSyncComponents month]) &&
+           ([todayComponents day]   == [lastSyncComponents day]))
+        {
+            NSLog(@"viewDidAppear, we synced already");
+            // init the AggregatedDay-Objects Array
+            self.aggrDayObjects = [AggregatedDay findAllSortedBy:@"date" ascending:NO];
+            
+            NSDateFormatter * df = [[NSDateFormatter alloc] init];
+            [df setLocale: [[NSLocale alloc] initWithLocaleIdentifier:@"de"]]; // [NSLocale currentLocale] would be better ;)
+            [df setDateFormat:@"EEEE"];
+            NSLog(@"viewDidLoad aggrDayObjects retrieved in ScrollViewContent : %@", self.aggrDayObjects);
+            // init the aggrDayObjects-Array
+            for (AggregatedDay *obj in self.aggrDayObjects)
+            {
+                [self.weekdaysDates setObject:obj.date forKey:[df stringFromDate:obj.date]];
+            }
+            NSLog(@"viewDidLoad weekdaysDates retrieved in ScrollViewContent : %@", self.weekdaysDates);
+            /////////////////
+            [self initPlots];
+            ////////////////
+        }
+    } 
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)initPlotsAfterSavingData
+{
+    NSLog(@"initPlotsAfterSavingData");
+    self.aggrDayObjects = [AggregatedDay findAllSortedBy:@"date" ascending:NO]; // the DB is up to date now!
+    NSDateFormatter * df = [[NSDateFormatter alloc] init];
+    [df setLocale: [[NSLocale alloc] initWithLocaleIdentifier:@"de"]]; // [NSLocale currentLocale] would be better ;)
+    [df setDateFormat:@"EEEE"];
+    
+    NSLog(@"initPlotsAfterSavingData aggrDayObjects retrieved in ScrollViewContent : %@", self.aggrDayObjects);
+    
+    for (AggregatedDay *obj in self.aggrDayObjects)
+    {
+        [self.weekdaysDates setObject:obj.date forKey:[df stringFromDate:obj.date]];
+    }
+    [self initPlots];
 }
 
 #pragma mark - Lazy instantiation getters
@@ -202,16 +286,41 @@ static const int secondPageNumber   = 1;
 {
     //NSLog(@"numberForPlot, field: %i, recordIndex: %i", fieldEnum, index);
     NSNumber *num = nil;
-    
+    NSLog(@"START: numberForPlot... plot: %@, field: %i, recordIndex: %i, pieChart.identifier: %@", plot, fieldEnum, index, plot.identifier);
+    NSLog(@"weekdaysDates = %@", self.weekdaysDates);
+    // last day comes first
     if ( fieldEnum == CPTPieChartFieldSliceWidth ) { // The field index
-        num = [NSNumber numberWithFloat:(arc4random()%8)+1.0];
+        //num = [NSNumber numberWithFloat:(arc4random()%8)+1.0];
+        NSLog(@"[self.weekdaysDates objectForKey:plot.identifier] = %@", [self.weekdaysDates objectForKey:plot.identifier]);
+        for (NSUInteger i=0; i<[self.aggrDayObjects count]; i++) {
+            AggregatedDay *aggday = self.aggrDayObjects[i];
+            NSLog(@"aggday.date = %@", aggday.date);
+            NSLog(@"[self.weekdaysDates objectForKey:plot.identifier] = %@", [self.weekdaysDates objectForKey:plot.identifier]);
+            
+            if ([aggday.date compare:[self.weekdaysDates objectForKey:plot.identifier]] == NSOrderedSame) {
+                if (index == 0) { // sure? TODO
+                    num = [NSNumber numberWithFloat:[aggday.nightconsumption floatValue]];
+                    NSLog(@"num 1 = %@", num);
+                }
+                else if (index == 1) {
+                    num = [NSNumber numberWithFloat:[aggday.dayconsumption floatValue]];
+                    NSLog(@"num 2 = %@", num);
+                }
+                
+            }
+            else if ([self.weekdaysDates objectForKey:plot.identifier] == NULL){
+                num = [NSNumber numberWithFloat:(arc4random()%8)+1.0];
+                NSLog(@"num 3 = %@", num);
+            }
+        }
+        
     }
     else {
         return [NSNumber numberWithInt:index];
     }
     
     
-    //NSLog(@"numberForPlot returning num = %@", num);
+    NSLog(@"numberForPlot returning num = %@", num);
     return num;
 }
 
@@ -220,14 +329,26 @@ static const int secondPageNumber   = 1;
     //NSLog(@"dataLabelForPlot...");
     // Define label text style
     static CPTMutableTextStyle *labelText = nil;
+    static NSString *labelValue = nil;
     if (!labelText) {
         labelText= [[CPTMutableTextStyle alloc] init];
-        labelText.color = [CPTColor grayColor];
+        labelText.color = [CPTColor blackColor];
+    }
+    AggregatedDay *ADay = [self.aggrDayObjects objectAtIndex:0];
+    if (index == 0) {
+        labelValue = ADay.sunrise;
+    }
+    else if (index == 1){
+        labelValue = ADay.sunset;
     }
     // Set up display label
-    NSString *labelValue = @"00:00 h";
+    //NSString *labelValue = @"00:00 h";
     // Create and return layer with label text
-    return [[CPTTextLayer alloc] initWithText:labelValue style:labelText];
+    CPTTextLayer *layer =[[CPTTextLayer alloc] initWithText:labelValue style:labelText];
+    //layer.paddingRight = 20;
+    //layer.position
+    //layer.position = CGPointMake(100, 150);
+    return layer;
 }
 
 -(NSString *)legendTitleForPieChart:(CPTPieChart *)pieChart recordIndex:(NSUInteger)index
@@ -293,6 +414,11 @@ static const int secondPageNumber   = 1;
 -(void)initPlots
 {
     NSLog(@"initPlots...");
+    NSArray *days = [AggregatedDay findAllSortedBy:@"date" ascending:YES];
+    NSLog(@"number of days from DB: %i", [days count]);
+    for (AggregatedDay *day in days) {
+        NSLog(@"date: %@, dayconsumption: %@, nightconsumption: %@", day.date, day.dayconsumption, day.nightconsumption);
+    }
     [self configureHostViews];
     [self configureGraphs];
     [self configureCharts];
@@ -423,6 +549,7 @@ static const int secondPageNumber   = 1;
 {
     
     //NSLog(@"configureCharts...");
+    bool animated = YES;
     
     NSMutableArray *pageHostingViewsMutable = [[NSMutableArray alloc] init];
     NSMutableArray *pageGraphsMutable       = [[NSMutableArray alloc] init];
@@ -449,10 +576,20 @@ static const int secondPageNumber   = 1;
         pieChart.delegate = self;
         pieChart.plotSpace.delegate = self;
         pieChart.plotSpace.allowsUserInteraction = YES;
-        pieChart.pieRadius = (hostingView.bounds.size.height * 0.7) / 2;
+        //pieChart.pieRadius = (hostingView.bounds.size.height * 0.7) / 2;
+        pieChart.pieRadius = animated ? 0.0 : ((hostingView.bounds.size.height * 0.7) / 2);
         pieChart.identifier = graph.title;
-        pieChart.startAngle = M_PI_4;
+        pieChart.startAngle = -M_PI_4;
+        //pieChart.startAngle = animated ? -M_PI_2 : M_PI_4;
+        //pieChart.endAngle = animated ? M_PI_2 : 3.0 * M_PI_4;
         pieChart.sliceDirection = CPTPieDirectionClockwise;
+        
+        //pieChart.labelRotationRelativeToRadius = YES;
+        //pieChart.labelRotation                 = -M_PI_2;
+        pieChart.labelOffset                   = -5.0;
+        //pieChart.labelRotation = M_PI_4;
+        
+        
         // Create gradient
         CPTGradient *overlayGradient = [[CPTGradient alloc] init];
         overlayGradient.gradientType = CPTGradientTypeRadial;
@@ -462,6 +599,31 @@ static const int secondPageNumber   = 1;
         pieChartsMutable[i] = pieChart;
         // Add chart to graph
         [graph addPlot:pieChart];
+        
+        if ( animated ) {
+            /*[CPTAnimation animate:pieChart
+                         property:@"startAngle"
+                             from:-M_PI_2
+                               to:M_PI_2
+                         duration:0.25];
+            [CPTAnimation animate:pieChart
+                         property:@"endAngle"
+                             from:M_PI_2
+                               to:[pieChart medianAngleForPieSliceIndex: 1]
+                         duration:0.25]; */
+        }
+        
+        if ( animated ) {
+            [CPTAnimation animate:pieChart
+                         property:@"pieRadius"
+                             from:0.0
+                               to:((hostingView.bounds.size.height * 0.7) / 2)
+                         duration:0.5
+                        withDelay:0.1
+                   animationCurve:CPTAnimationCurveBounceOut
+                         delegate:nil];
+        }
+        
     }
     
     if(self.pageNumber == firstPageNumber)

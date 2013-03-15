@@ -61,7 +61,7 @@
         {
             MonthData *monthObj = [MonthData findFirstByAttribute:@"month" withValue:@(touch.view.tag)];
             NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateStyle:kCFDateFormatterLongStyle];
+            [formatter setDateStyle:NSDateFormatterLongStyle];
             [formatter setDateFormat:@"MMMM yy"];
             NSLocale *deLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"];
             formatter.locale = deLocale;
@@ -209,7 +209,7 @@
         if([self.delegate respondsToSelector:@selector(setLabelsWithMonth:andConsumption:)]){
             MonthData *monthObj = (self.monthDataObjects)[[self.monthDataObjects count]-1];
             NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateStyle:kCFDateFormatterLongStyle];
+            [formatter setDateStyle:NSDateFormatterLongStyle];
             [formatter setDateFormat:@"MMMM yy"];
             NSLocale *deLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"];
             formatter.locale = deLocale;

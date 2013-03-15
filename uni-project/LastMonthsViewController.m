@@ -113,63 +113,57 @@ NSMutableArray *navigationBarItems;
     NSLog(@"calling initCirclesOnline!");
 
         // Lets look for Week Data in our DB
-        NSNumber *numberofentities = [MonthData numberOfEntities];
     
         // We are online
         NSLog(@"deviceIsOnline : %i", self.deviceIsOnline);
         
         // No Data, our App has been started for the first time
-        if ([numberofentities intValue]==0) {
+        if ([MonthData countOfEntities]==0) {
             NSLog(@"No Data in the WeekData Table!");
             [self getMonthsData];
         }
         // We have some data, we are online so lets sync
         else {
-            NSLog(@"number of entities before sync : %@", numberofentities);
+            NSLog(@"number of entities before sync : %i", [MonthData countOfEntities]);
             //[MonthData truncateAll]; not here
             [self getMonthsData];
         }
 }
 
 - (void) initCirclesOffline{
-        NSLog(@"calling initCirclesOffline!");
-        
-        //dispatch_async(dispatch_get_main_queue(), ^{
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-        //});
+    NSLog(@"calling initCirclesOffline!");
     
-        // Lets look for Week Data in our DB
-        NSNumber *numberofentities = [MonthData numberOfEntities];
+    //dispatch_async(dispatch_get_main_queue(), ^{
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
+    //});
     
-        // We are offline
-        // retrieve the data from the DB
-        NSLog(@"deviceIsOnline : %i", self.deviceIsOnline);
-        // ooops, No Data. Show error TODO
-        if ([numberofentities intValue]==0) {
-            
-            // ooops, No Data. Show error message
-            if ([numberofentities intValue]==0) {
-                if (self.HUD) {
-                    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                    [self.HUD removeFromSuperview];
-                    self.HUD = nil;
-                }
-                NSLog(@"No Data in the WeekData Table! and the Device is not connected to the internet..");
-                self.HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-                // Configure for text only and offset down
-                self.HUD.labelText = @"Keine Daten vorhanden";
-                self.HUD.detailsLabelText = @"Bitte überprüfen Sie Ihre Internetverbindung";
-                self.HUD.square = YES;
-                self.HUD.mode = MBProgressHUDModeText;
-                self.HUD.margin = 10.f;
-                self.HUD.yOffset = 20.f;
-            }
-            
+    // Lets look for Week Data in our DB
+    
+    // We are offline
+    // retrieve the data from the DB
+    NSLog(@"deviceIsOnline : %i", self.deviceIsOnline);
+    // ooops, No Data. Show error TODO
+    if ([MonthData countOfEntities]==0) {
+        if (self.HUD) {
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            [self.HUD removeFromSuperview];
+            self.HUD = nil;
         }
-        else {
-            self.dataView.monthDataObjects = [MonthData findAllSortedBy:@"date" ascending:YES]; // pass monthData to the view
-            [self.dataView setNeedsDisplay]; 
-        }
+        NSLog(@"No Data in the WeekData Table! and the Device is not connected to the internet..");
+        self.HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        // Configure for text only and offset down
+        self.HUD.labelText = @"Keine Daten vorhanden";
+        self.HUD.detailsLabelText = @"Bitte überprüfen Sie Ihre Internetverbindung";
+        self.HUD.square = YES;
+        self.HUD.mode = MBProgressHUDModeText;
+        self.HUD.margin = 10.f;
+        self.HUD.yOffset = 20.f;
+    }
+    
+    else {
+        self.dataView.monthDataObjects = [MonthData findAllSortedBy:@"date" ascending:YES]; // pass monthData to the view
+        [self.dataView setNeedsDisplay];
+    }
     
 }
 

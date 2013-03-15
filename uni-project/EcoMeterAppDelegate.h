@@ -16,4 +16,6 @@
  */
 @property (nonatomic, strong) DetailViewManager* detailViewManager;
 
+@property (nonatomic, assign) BOOL deviceIsOnline;
+
 @end

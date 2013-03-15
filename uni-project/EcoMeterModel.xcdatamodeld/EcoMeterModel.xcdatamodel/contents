@@ -3,7 +3,9 @@
     <entity name="AggregatedDay" representedClassName="AggregatedDay" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" indexed="YES" syncable="YES"/>
         <attribute name="dayconsumption" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="nightconsumtion" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="nightconsumption" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="sunrise" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="sunset" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="EnergyClockSlice" representedClassName="EnergyClockSlice" syncable="YES">
         <attribute name="consumption" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
@@ -27,6 +29,17 @@
         <attribute name="sensorid" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="updated" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
+    <entity name="System" representedClassName="System" syncable="YES">
+        <attribute name="appstartlog" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="currentdatalog" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="daysupdated" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="energyclocklog" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="energyclockupdated" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="energylabellog" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="identifier" optional="YES" attributeType="String" defaultValueString="primary" syncable="YES"/>
+        <attribute name="lastmonthslog" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="lastweeklog" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+    </entity>
     <entity name="User" representedClassName="User" syncable="YES">
         <attribute name="created" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="profileimage" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
@@ -40,11 +53,12 @@
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="weekData" inverseEntity="User" syncable="YES"/>
     </entity>
     <elements>
+        <element name="AggregatedDay" positionX="160" positionY="192" width="128" height="120"/>
+        <element name="EnergyClockSlice" positionX="160" positionY="192" width="128" height="105"/>
         <element name="MonthData" positionX="-137" positionY="95" width="128" height="135"/>
         <element name="Participant" positionX="160" positionY="192" width="128" height="135"/>
         <element name="User" positionX="63" positionY="243" width="128" height="120"/>
         <element name="WeekData" positionX="243" positionY="90" width="128" height="88"/>
-        <element name="AggregatedDay" positionX="160" positionY="192" width="128" height="90"/>
-        <element name="EnergyClockSlice" positionX="160" positionY="192" width="128" height="105"/>
+        <element name="System" positionX="160" positionY="192" width="128" height="180"/>
     </elements>
 </model>

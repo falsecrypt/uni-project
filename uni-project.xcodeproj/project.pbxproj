@@ -37,7 +37,6 @@
 		CE1793D11683E8E60030723A /* MyOfficeTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D01683E8E60030723A /* MyOfficeTVC.m */; };
 		CE1793D51683F3970030723A /* DataOverviewTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D41683F3970030723A /* DataOverviewTVC.m */; };
 		CE1BAC4F169528A200E3A1EA /* MyAccountTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1BAC4E169528A200E3A1EA /* MyAccountTVC.m */; };
-		CE1DAA6F16EAC8530034AEBF /* AggregatedDay.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1DAA6E16EAC8530034AEBF /* AggregatedDay.m */; };
 		CE1DAA7516EAC8C50034AEBF /* EnergyClockSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1DAA7416EAC8C50034AEBF /* EnergyClockSlice.m */; };
 		CE20E92216B58FD000AC2722 /* MonthData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92116B58FD000AC2722 /* MonthData.m */; };
 		CE20E92516B58FD000AC2722 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92416B58FD000AC2722 /* User.m */; };
@@ -85,6 +84,8 @@
 		CE6A008F16AF7E1200F845EE /* A+Selected.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6A008816AF7E1200F845EE /* A+Selected.png */; };
 		CE6A009016AF7E1200F845EE /* A++Selected.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6A008916AF7E1200F845EE /* A++Selected.png */; };
 		CE6A009116AF7E1200F845EE /* A+++Selected.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6A008A16AF7E1200F845EE /* A+++Selected.png */; };
+		CE6CA86416ED63EC0086EF45 /* AggregatedDay.m in Sources */ = {isa = PBXBuildFile; fileRef = CE6CA86316ED63EC0086EF45 /* AggregatedDay.m */; };
+		CE8363D416EE7CC100AFB5E2 /* System.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8363D316EE7CC100AFB5E2 /* System.m */; };
 		CE8B7F5515ED358B006CD57C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5415ED358B006CD57C /* UIKit.framework */; };
 		CE8B7F5715ED358B006CD57C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5615ED358B006CD57C /* Foundation.framework */; };
 		CE8B7F5915ED358B006CD57C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5815ED358B006CD57C /* CoreGraphics.framework */; };
@@ -95,6 +96,17 @@
 		CE8B7F7F15ED35D1006CD57C /* MDMultipleMasterDetailManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F7B15ED35D1006CD57C /* MDMultipleMasterDetailManager.m */; };
 		CE8B7F8315ED3630006CD57C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F8215ED3630006CD57C /* main.m */; };
 		CE8DCEB916815ABB0030FA4C /* LastWeekViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8DCEB816815ABB0030FA4C /* LastWeekViewController.m */; };
+		CE92D4A616F297CF0038D408 /* CPTAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = CE92D49316F297CF0038D408 /* CPTAnimation.m */; };
+		CE92D4A716F297CF0038D408 /* CPTAnimationOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CE92D49516F297CF0038D408 /* CPTAnimationOperation.m */; };
+		CE92D4A816F297CF0038D408 /* CPTAnimationPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = CE92D49716F297CF0038D408 /* CPTAnimationPeriod.m */; };
+		CE92D4A916F297CF0038D408 /* _CPTAnimationCGFloatPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = CE92D49916F297CF0038D408 /* _CPTAnimationCGFloatPeriod.m */; };
+		CE92D4AA16F297CF0038D408 /* _CPTAnimationCGPointPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = CE92D49B16F297CF0038D408 /* _CPTAnimationCGPointPeriod.m */; };
+		CE92D4AB16F297CF0038D408 /* _CPTAnimationCGRectPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = CE92D49D16F297CF0038D408 /* _CPTAnimationCGRectPeriod.m */; };
+		CE92D4AC16F297CF0038D408 /* _CPTAnimationCGSizePeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = CE92D49F16F297CF0038D408 /* _CPTAnimationCGSizePeriod.m */; };
+		CE92D4AD16F297CF0038D408 /* _CPTAnimationNSDecimalPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = CE92D4A116F297CF0038D408 /* _CPTAnimationNSDecimalPeriod.m */; };
+		CE92D4AE16F297CF0038D408 /* _CPTAnimationPlotRangePeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = CE92D4A316F297CF0038D408 /* _CPTAnimationPlotRangePeriod.m */; };
+		CE92D4AF16F297CF0038D408 /* _CPTAnimationTimingFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = CE92D4A516F297CF0038D408 /* _CPTAnimationTimingFunctions.m */; };
+		CE92D4B216F2B6380038D408 /* CPTPieChart+CustomPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = CE92D4B116F2B6380038D408 /* CPTPieChart+CustomPieChart.m */; };
 		CE9BCF2216AB7FEF00A62630 /* D.png in Resources */ = {isa = PBXBuildFile; fileRef = CE9BCF1B16AB7FEF00A62630 /* D.png */; };
 		CE9BCF2316AB7FEF00A62630 /* C.png in Resources */ = {isa = PBXBuildFile; fileRef = CE9BCF1C16AB7FEF00A62630 /* C.png */; };
 		CE9BCF2416AB7FEF00A62630 /* B.png in Resources */ = {isa = PBXBuildFile; fileRef = CE9BCF1D16AB7FEF00A62630 /* B.png */; };
@@ -207,8 +219,6 @@
 		CE1793D41683F3970030723A /* DataOverviewTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataOverviewTVC.m; sourceTree = "<group>"; };
 		CE1BAC4D169528A200E3A1EA /* MyAccountTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAccountTVC.h; sourceTree = "<group>"; };
 		CE1BAC4E169528A200E3A1EA /* MyAccountTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAccountTVC.m; sourceTree = "<group>"; };
-		CE1DAA6D16EAC8530034AEBF /* AggregatedDay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AggregatedDay.h; sourceTree = "<group>"; };
-		CE1DAA6E16EAC8530034AEBF /* AggregatedDay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AggregatedDay.m; sourceTree = "<group>"; };
 		CE1DAA7316EAC8C40034AEBF /* EnergyClockSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnergyClockSlice.h; sourceTree = "<group>"; };
 		CE1DAA7416EAC8C50034AEBF /* EnergyClockSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyClockSlice.m; sourceTree = "<group>"; };
 		CE20E92016B58FD000AC2722 /* MonthData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthData.h; sourceTree = "<group>"; };
@@ -252,7 +262,7 @@
 		CE3C80DF16DFF0A100DB4E05 /* EnergyClockViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnergyClockViewController.h; sourceTree = "<group>"; };
 		CE3C80E016DFF0A100DB4E05 /* EnergyClockViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyClockViewController.m; sourceTree = "<group>"; };
 		CE3C80E316E02F1000DB4E05 /* ScrollViewContentVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollViewContentVC.h; sourceTree = "<group>"; };
-		CE3C80E416E02F1100DB4E05 /* ScrollViewContentVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScrollViewContentVC.m; sourceTree = "<group>"; };
+		CE3C80E416E02F1100DB4E05 /* ScrollViewContentVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ScrollViewContentVC.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CE3F51CC1659D4BD008EE7DF /* defaultAvatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = defaultAvatar.png; sourceTree = "<group>"; };
 		CE412CEB16D5270C0061484B /* pavel_avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pavel_avatar.png; sourceTree = "<group>"; };
 		CE412CED16D5412B0061484B /* ChangeUsernameTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeUsernameTVC.h; sourceTree = "<group>"; };
@@ -286,6 +296,10 @@
 		CE6A008816AF7E1200F845EE /* A+Selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "A+Selected.png"; sourceTree = "<group>"; };
 		CE6A008916AF7E1200F845EE /* A++Selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "A++Selected.png"; sourceTree = "<group>"; };
 		CE6A008A16AF7E1200F845EE /* A+++Selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "A+++Selected.png"; sourceTree = "<group>"; };
+		CE6CA86216ED63EC0086EF45 /* AggregatedDay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AggregatedDay.h; sourceTree = "<group>"; };
+		CE6CA86316ED63EC0086EF45 /* AggregatedDay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AggregatedDay.m; sourceTree = "<group>"; };
+		CE8363D216EE7CC100AFB5E2 /* System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = System.h; sourceTree = "<group>"; };
+		CE8363D316EE7CC100AFB5E2 /* System.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = System.m; sourceTree = "<group>"; };
 		CE8B7F5015ED358B006CD57C /* EcoMeter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EcoMeter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE8B7F5415ED358B006CD57C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		CE8B7F5615ED358B006CD57C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -304,6 +318,28 @@
 		CE8B7F8215ED3630006CD57C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CE8DCEB716815ABB0030FA4C /* LastWeekViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LastWeekViewController.h; sourceTree = "<group>"; };
 		CE8DCEB816815ABB0030FA4C /* LastWeekViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LastWeekViewController.m; sourceTree = "<group>"; };
+		CE92D49216F297CF0038D408 /* CPTAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPTAnimation.h; sourceTree = "<group>"; };
+		CE92D49316F297CF0038D408 /* CPTAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPTAnimation.m; sourceTree = "<group>"; };
+		CE92D49416F297CF0038D408 /* CPTAnimationOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPTAnimationOperation.h; sourceTree = "<group>"; };
+		CE92D49516F297CF0038D408 /* CPTAnimationOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPTAnimationOperation.m; sourceTree = "<group>"; };
+		CE92D49616F297CF0038D408 /* CPTAnimationPeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPTAnimationPeriod.h; sourceTree = "<group>"; };
+		CE92D49716F297CF0038D408 /* CPTAnimationPeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPTAnimationPeriod.m; sourceTree = "<group>"; };
+		CE92D49816F297CF0038D408 /* _CPTAnimationCGFloatPeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _CPTAnimationCGFloatPeriod.h; sourceTree = "<group>"; };
+		CE92D49916F297CF0038D408 /* _CPTAnimationCGFloatPeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _CPTAnimationCGFloatPeriod.m; sourceTree = "<group>"; };
+		CE92D49A16F297CF0038D408 /* _CPTAnimationCGPointPeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _CPTAnimationCGPointPeriod.h; sourceTree = "<group>"; };
+		CE92D49B16F297CF0038D408 /* _CPTAnimationCGPointPeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _CPTAnimationCGPointPeriod.m; sourceTree = "<group>"; };
+		CE92D49C16F297CF0038D408 /* _CPTAnimationCGRectPeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _CPTAnimationCGRectPeriod.h; sourceTree = "<group>"; };
+		CE92D49D16F297CF0038D408 /* _CPTAnimationCGRectPeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _CPTAnimationCGRectPeriod.m; sourceTree = "<group>"; };
+		CE92D49E16F297CF0038D408 /* _CPTAnimationCGSizePeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _CPTAnimationCGSizePeriod.h; sourceTree = "<group>"; };
+		CE92D49F16F297CF0038D408 /* _CPTAnimationCGSizePeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _CPTAnimationCGSizePeriod.m; sourceTree = "<group>"; };
+		CE92D4A016F297CF0038D408 /* _CPTAnimationNSDecimalPeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _CPTAnimationNSDecimalPeriod.h; sourceTree = "<group>"; };
+		CE92D4A116F297CF0038D408 /* _CPTAnimationNSDecimalPeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _CPTAnimationNSDecimalPeriod.m; sourceTree = "<group>"; };
+		CE92D4A216F297CF0038D408 /* _CPTAnimationPlotRangePeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _CPTAnimationPlotRangePeriod.h; sourceTree = "<group>"; };
+		CE92D4A316F297CF0038D408 /* _CPTAnimationPlotRangePeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _CPTAnimationPlotRangePeriod.m; sourceTree = "<group>"; };
+		CE92D4A416F297CF0038D408 /* _CPTAnimationTimingFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _CPTAnimationTimingFunctions.h; sourceTree = "<group>"; };
+		CE92D4A516F297CF0038D408 /* _CPTAnimationTimingFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _CPTAnimationTimingFunctions.m; sourceTree = "<group>"; };
+		CE92D4B016F2B6370038D408 /* CPTPieChart+CustomPieChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CPTPieChart+CustomPieChart.h"; sourceTree = "<group>"; };
+		CE92D4B116F2B6380038D408 /* CPTPieChart+CustomPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CPTPieChart+CustomPieChart.m"; sourceTree = "<group>"; };
 		CE9BCF1B16AB7FEF00A62630 /* D.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = D.png; sourceTree = "<group>"; };
 		CE9BCF1C16AB7FEF00A62630 /* C.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = C.png; sourceTree = "<group>"; };
 		CE9BCF1D16AB7FEF00A62630 /* B.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = B.png; sourceTree = "<group>"; };
@@ -652,8 +688,10 @@
 				CE20E92016B58FD000AC2722 /* MonthData.h */,
 				CE20E92116B58FD000AC2722 /* MonthData.m */,
 				CE0D631B16611E7500381D05 /* EcoMeterModel.xcdatamodeld */,
-				CE1DAA6D16EAC8530034AEBF /* AggregatedDay.h */,
-				CE1DAA6E16EAC8530034AEBF /* AggregatedDay.m */,
+				CE8363D216EE7CC100AFB5E2 /* System.h */,
+				CE8363D316EE7CC100AFB5E2 /* System.m */,
+				CE6CA86216ED63EC0086EF45 /* AggregatedDay.h */,
+				CE6CA86316ED63EC0086EF45 /* AggregatedDay.m */,
 				CE1DAA7316EAC8C40034AEBF /* EnergyClockSlice.h */,
 				CE1DAA7416EAC8C50034AEBF /* EnergyClockSlice.m */,
 				CEFAAFD816B8209500D9E744 /* Participant.h */,
@@ -813,6 +851,33 @@
 				CE323F7D16B75403004DE45C /* AppleDocSettings.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CE92D49116F297A70038D408 /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				CE92D49216F297CF0038D408 /* CPTAnimation.h */,
+				CE92D49316F297CF0038D408 /* CPTAnimation.m */,
+				CE92D49416F297CF0038D408 /* CPTAnimationOperation.h */,
+				CE92D49516F297CF0038D408 /* CPTAnimationOperation.m */,
+				CE92D49616F297CF0038D408 /* CPTAnimationPeriod.h */,
+				CE92D49716F297CF0038D408 /* CPTAnimationPeriod.m */,
+				CE92D49816F297CF0038D408 /* _CPTAnimationCGFloatPeriod.h */,
+				CE92D49916F297CF0038D408 /* _CPTAnimationCGFloatPeriod.m */,
+				CE92D49A16F297CF0038D408 /* _CPTAnimationCGPointPeriod.h */,
+				CE92D49B16F297CF0038D408 /* _CPTAnimationCGPointPeriod.m */,
+				CE92D49C16F297CF0038D408 /* _CPTAnimationCGRectPeriod.h */,
+				CE92D49D16F297CF0038D408 /* _CPTAnimationCGRectPeriod.m */,
+				CE92D49E16F297CF0038D408 /* _CPTAnimationCGSizePeriod.h */,
+				CE92D49F16F297CF0038D408 /* _CPTAnimationCGSizePeriod.m */,
+				CE92D4A016F297CF0038D408 /* _CPTAnimationNSDecimalPeriod.h */,
+				CE92D4A116F297CF0038D408 /* _CPTAnimationNSDecimalPeriod.m */,
+				CE92D4A216F297CF0038D408 /* _CPTAnimationPlotRangePeriod.h */,
+				CE92D4A316F297CF0038D408 /* _CPTAnimationPlotRangePeriod.m */,
+				CE92D4A416F297CF0038D408 /* _CPTAnimationTimingFunctions.h */,
+				CE92D4A516F297CF0038D408 /* _CPTAnimationTimingFunctions.m */,
+			);
+			name = Animation;
 			sourceTree = "<group>";
 		};
 		CE9BCF1916AB7FCE00A62630 /* Energy Label */ = {
@@ -982,8 +1047,11 @@
 		CEBBD5FA1676D6AE008051D2 /* Core Plot */ = {
 			isa = PBXGroup;
 			children = (
+				CE92D49116F297A70038D408 /* Animation */,
 				CEBBD5FB1676D6DC008051D2 /* libCorePlot-CocoaTouch.a */,
 				CEBBD5FC1676D6DC008051D2 /* CorePlotHeaders */,
+				CE92D4B016F2B6370038D408 /* CPTPieChart+CustomPieChart.h */,
+				CE92D4B116F2B6380038D408 /* CPTPieChart+CustomPieChart.m */,
 			);
 			name = "Core Plot";
 			sourceTree = "<group>";
@@ -1191,7 +1259,7 @@
 		CE8B7F4715ED358B006CD57C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = test;
 			};
 			buildConfigurationList = CE8B7F4A15ED358B006CD57C /* Build configuration list for PBXProject "uni-project" */;
@@ -1415,8 +1483,20 @@
 				CE4EDE4F16E42A2B0047479A /* BTSPieView.mm in Sources */,
 				CE4EDE5016E42A2B0047479A /* BTSSliceLayer.m in Sources */,
 				CE56031916E976CF0062FB70 /* EnergyClockDataManager.m in Sources */,
-				CE1DAA6F16EAC8530034AEBF /* AggregatedDay.m in Sources */,
 				CE1DAA7516EAC8C50034AEBF /* EnergyClockSlice.m in Sources */,
+				CE6CA86416ED63EC0086EF45 /* AggregatedDay.m in Sources */,
+				CE8363D416EE7CC100AFB5E2 /* System.m in Sources */,
+				CE92D4A616F297CF0038D408 /* CPTAnimation.m in Sources */,
+				CE92D4A716F297CF0038D408 /* CPTAnimationOperation.m in Sources */,
+				CE92D4A816F297CF0038D408 /* CPTAnimationPeriod.m in Sources */,
+				CE92D4A916F297CF0038D408 /* _CPTAnimationCGFloatPeriod.m in Sources */,
+				CE92D4AA16F297CF0038D408 /* _CPTAnimationCGPointPeriod.m in Sources */,
+				CE92D4AB16F297CF0038D408 /* _CPTAnimationCGRectPeriod.m in Sources */,
+				CE92D4AC16F297CF0038D408 /* _CPTAnimationCGSizePeriod.m in Sources */,
+				CE92D4AD16F297CF0038D408 /* _CPTAnimationNSDecimalPeriod.m in Sources */,
+				CE92D4AE16F297CF0038D408 /* _CPTAnimationPlotRangePeriod.m in Sources */,
+				CE92D4AF16F297CF0038D408 /* _CPTAnimationTimingFunctions.m in Sources */,
+				CE92D4B216F2B6380038D408 /* CPTPieChart+CustomPieChart.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1502,6 +1582,9 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Pavel Ermolin (38Z8P7525U)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pavel Ermolin (38Z8P7525U)";
@@ -1535,6 +1618,9 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Pavel Ermolin (38Z8P7525U)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Pavel Ermolin (38Z8P7525U)";

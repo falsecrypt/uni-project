@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-
+/*
 @protocol DayChartsDelegate <NSObject>
 
+@property (nonatomic, assign) BOOL deviceIsOnline;
 - (void)dayValuesCalculated:(NSArray *)dayValues;
 
 @end
@@ -20,6 +21,7 @@
 - (void)energyClockValuesCalculated:(NSArray *)sliceValues slotValues:(NSArray *)slotValues;
 
 @end
+ */
 
 /** Provides Pie Chart data for the EnergyClockDataViewController and for the ScrollViewContentViewController.
  After calculating EnergyClockDataManager informs its delegates using DayChartsDelegate and MultiLevelPieChartDelegate protocols.
@@ -27,7 +29,11 @@
  */
 @interface EnergyClockDataManager : NSObject
 
-@property (nonatomic, weak) id<DayChartsDelegate> dayChartsDelegate;
-@property (nonatomic, weak) id<MultiLevelPieChartDelegate> multiLevelPieChartDelegate;
+//@property (nonatomic, weak) id<DayChartsDelegate> dayChartsDelegate;
+//@property (nonatomic, weak) id<MultiLevelPieChartDelegate> multiLevelPieChartDelegate;
+
+-(void)calculateValuesWithMode:(NSString *)mode;
+
++ (EnergyClockDataManager *)sharedClient;
 
 @end

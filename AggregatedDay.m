@@ -2,7 +2,7 @@
 //  AggregatedDay.m
 //  uni-project
 //
-//  Created by Pavel Ermolin on 09.03.13.
+//  Created by Pavel Ermolin on 11.03.13.
 //  Copyright (c) 2013 test. All rights reserved.
 //
 
@@ -13,6 +13,8 @@
 
 @dynamic date;
 @dynamic dayconsumption;
-@dynamic nightconsumtion;
+@dynamic nightconsumption;
+@dynamic sunrise;
+@dynamic sunset;
 
 @end

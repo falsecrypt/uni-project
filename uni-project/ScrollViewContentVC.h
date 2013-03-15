@@ -7,11 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "EnergyClockDataManager.h"
+
 
 @interface ScrollViewContentVC : UIViewController <CPTPlotSpaceDelegate,
                                                    CPTPlotDataSource,
-                                                   CPTPieChartDelegate>
+                                                   CPTPieChartDelegate
+                                                   /*DayChartsDelegate*/>
 
 - (id)initWithPageNumber:(NSUInteger)page andUIViewController:(UIViewController*)viewController;
+
+@property (nonatomic, assign) BOOL deviceIsOnline;
 
 @end

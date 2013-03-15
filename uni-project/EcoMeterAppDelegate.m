@@ -5,7 +5,8 @@
 #import "EcoMeterAppDelegate.h"
 #import "DetailViewManager.h"
 #import "KeychainItemWrapper.h"
-#import "SSKeychain.h"
+#import "Reachability.h"
+#import "System.h"
 
 @interface EcoMeterAppDelegate()
 @property (weak,nonatomic)UISplitViewController* splitViewController;
@@ -36,6 +37,8 @@ extern CFAbsoluteTime StartTime;
     
     [self customizeAppearance];
     
+    [self setupReachability];
+    
     //--------------------------------------------------------------------
     // MagicalRecord Setup - creating the NSPersistentStoreCoordinator,
     // the NSManagedObjectModel and the NSManagedObjectContext. We are using
@@ -62,39 +65,41 @@ extern CFAbsoluteTime StartTime;
     });
 #endif
     
-    /*UIView *rootView = [[self.splitViewController.viewControllers
-                         objectAtIndex:0] view];
-    rootView.layer.borderWidth = 0.0f;
-    rootView.layer.cornerRadius = 5.0f;
-    rootView.layer.shadowOpacity = 0.8f;
-    rootView.layer.shadowOffset = CGSizeMake(-5, 0);
-    */
-
+    /* LOGGING START
+     ****************/
+    if ([System countOfEntities]>1) {
+        [System truncateAll];
+    };
+    System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
+    if (!systemObj) {
+        systemObj = [System createEntity];
+        systemObj.identifier = @"primary";
+    }
+    [MagicalRecord saveInBackgroundWithBlock:^(NSManagedObjectContext *localContext){
+        System *localSystem = [systemObj inContext:localContext];
+        NSNumber *appstartNumber = @(1);
+            if (localSystem.appstartlog < 0) { // something went wrong
+            }
+            else {
+                NSNumber *appstartNumberTemp = localSystem.appstartlog;
+                appstartNumber = [NSNumber numberWithInt:[appstartNumberTemp integerValue] +1 ];
+                NSLog(@"Starting: appstartNumber: %@", appstartNumber);
+            }
+        localSystem.appstartlog = appstartNumber;
+    } completion:^{
+        System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
+        NSLog(@"saved System Object :%@", systemObj);
+        NSLog(@"saved System Object, appstartlog :%@", systemObj.appstartlog);
+    }];
+    /* LOGGING END
+     ****************/
+    
     // Log off user
     /*
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setBool:NO forKey:@"userLoggedIn"];
     NSLog(@"calling didFinishLaunchingWithOptions, userLoggedIn: %i", [defaults boolForKey:@"userLoggedIn"]);
      */
-
-    
-    
-    // -------------------------------------------------------------------------------
-    //	old code
-    // -------------------------------------------------------------------------------
-    //UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
-    //UIViewController* detail1 = [splitViewController.viewControllers objectAtIndex:1];
-    //UIViewController* default1 = [splitViewController.storyboard instantiateViewControllerWithIdentifier:@"Detail_1"];
-    //UIViewController* pieChartRootController = [splitViewController.storyboard instantiateViewControllerWithIdentifier:@"pieChartRootController"];
-    //UIViewController* barGraphRootController = [splitViewController.storyboard instantiateViewControllerWithIdentifier:@"barGraphRootController"];
-    //UIViewController* scatterPlotRootController = [splitViewController.storyboard instantiateViewControllerWithIdentifier:@"scatterPlotRootController"];
-    //UITabBarController* tabBarController = [splitViewController.viewControllers objectAtIndex:0];
-    //UITabBar* tabBar = tabBarController.tabBar;
-    //UIImage* tabBarBackground = [UIImage imageNamed:@"tabbar_back_opt.jpg"];
-    //tabBar.backgroundImage = tabBarBackground;
-    //self.masterDetailManager = [[MDMultipleMasterDetailManager alloc] initWithSplitViewController:splitViewController
-                               // withDetailRootControllers:[NSArray arrayWithObjects:detail1,default1,
-                                                       //    pieChartRootController,barGraphRootController,scatterPlotRootController,nil]];
     
      
     return YES;
@@ -122,6 +127,31 @@ extern CFAbsoluteTime StartTime;
     [[UITabBar appearance] setBackgroundImage:[UIImage imageNamed:@"tabbarBG.png"]];
     [[UITabBar appearance] setSelectionIndicatorImage:[UIImage imageNamed:@"selection-tab.png"]];
     
+}
+
+
+-(void)setupReachability
+{
+    __weak EcoMeterAppDelegate *weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // allocate a reachability object
+        Reachability* reach = [Reachability reachabilityWithHostname:currentCostServerBaseURLHome];
+        
+        weakSelf.deviceIsOnline = reach.isReachable;
+        
+        // set the blocks
+        reach.reachableBlock = ^(Reachability*reach)
+        {
+            weakSelf.deviceIsOnline = YES;
+        };
+        
+        reach.unreachableBlock = ^(Reachability*reach)
+        {
+            weakSelf.deviceIsOnline = NO;
+        };
+        // start the notifier which will cause the reachability object to retain itself!
+        [reach startNotifier];
+    });
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application

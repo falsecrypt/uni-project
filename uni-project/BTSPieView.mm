@@ -169,12 +169,12 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
     [[pieLayer sliceLayers] insertSublayer:sliceLayer atIndex:index];
     
     // Changed by Pavel Ermolin //
-    NSLog(@"insertSliceLayerAtIndex");
+    //NSLog(@"insertSliceLayerAtIndex");
     
     if (_dataSource) {
         NSUInteger slotCount = [_dataSource numberOfSlotsInPieView:self];
         NSUInteger sliceCount = [_dataSource numberOfSlicesInPieView:self];
-        NSLog(@"number of Slots: %i", slotCount);
+        //NSLog(@"number of Slots: %i", slotCount);
         for (int i=0; i<slotCount; i++) {
             UIColor *slotColor = [_delegate pieView:self
                                            colorForSlotAtIndex:i
@@ -186,7 +186,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
         }
     }
     
-    NSLog(@"[sliceLayer sublayers]: %@", [sliceLayer sublayers]);
+    //NSLog(@"[sliceLayer sublayers]: %@", [sliceLayer sublayers]);
     //*************************//
     
     return sliceLayer;
@@ -216,7 +216,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
 
 - (void)reloadData
 {
-    NSLog(@"reloadData");
+    //NSLog(@"reloadData");
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
 
@@ -234,12 +234,12 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
         
         CGFloat startAngle = (CGFloat) -M_PI_2;
         CGFloat endAngle = startAngle;
-        NSLog(@"sliceCount: %i", sliceCount);
+        //NSLog(@"sliceCount: %i", sliceCount);
         for (NSUInteger sliceIndex = 0; sliceIndex < sliceCount; sliceIndex++) {
 
             
             endAngle += values.angles()[sliceIndex];
-            NSLog(@"reloadData: endAngle: %f", endAngle);
+            //NSLog(@"reloadData: endAngle: %f", endAngle);
             //UIColor *color = [_delegate pieView:self colorForSlotAtIndex:sliceIndex sliceAtIndex:sliceIndex sliceCount:sliceCount];
             [self insertSliceLayerAtIndex:sliceIndex];
             [self insertLabelLayerAtIndex:sliceIndex value:values.percentages()[sliceIndex]];
@@ -258,7 +258,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
 
 - (void)insertSliceAtIndex:(NSUInteger)indexToInsert animate:(BOOL)animate
 {
-    NSLog(@"insertSliceAtIndex: animate: %i", animate);
+    //NSLog(@"insertSliceAtIndex: animate: %i", animate);
     if (!animate) {
         [self reloadData];
         return;
@@ -305,9 +305,9 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
 
 - (BTSSliceLayer *)insertSliceAtIndex:(NSUInteger)index values:(BTSPieViewValues*)values startAngle:(CGFloat)startAngle endAngle:(CGFloat)endAngle
 {
-    NSLog(@"insertSliceAtIndex: values: startAngle: endAngle:");
+    //NSLog(@"insertSliceAtIndex: values: startAngle: endAngle:");
     NSUInteger sliceCount = values->count();
-    NSLog(@"sliceCount: %i", sliceCount);
+    //NSLog(@"sliceCount: %i", sliceCount);
     //UIColor *color = [_delegate pieView:self colorForSliceAtIndex:index sliceCount:sliceCount];
     
     BTSSliceLayer *sliceLayer = [self insertSliceLayerAtIndex:index];
@@ -331,7 +331,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
 
 - (BTSSliceLayer *)updateSliceAtIndex:(NSUInteger)currentIndex values:(BTSPieViewValues*)values
 {
-    NSLog(@"updateSliceAtIndex:values:");
+    //NSLog(@"updateSliceAtIndex:values:");
     BTSPieLayer *pieLayer = (BTSPieLayer *)[self layer];
     
     NSArray *sliceLayers = [[pieLayer sliceLayers] sublayers];
@@ -460,7 +460,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
 
 - (void)reloadSliceAtIndex:(NSUInteger)index animate:(BOOL)animate
 {
-    NSLog(@"reloadSliceAtIndex:animate:");
+    //NSLog(@"reloadSliceAtIndex:animate:");
     if (!animate) {
         [self reloadData];
         return;
@@ -730,9 +730,9 @@ void BTSUpdateLayers(NSArray *sliceLayers, NSArray *labelLayers, NSArray *lineLa
             CGPathRef pathInside = CGPathCreateArc(center, radius-i, startAngle, endAngle);
             [sliceLayerInside setPath:pathInside];
             CFRelease(pathInside);
-            NSLog(@"radiusArray: %@", radiusArray);
+            //NSLog(@"radiusArray: %@", radiusArray);
             int step = [[[radiusArray objectAtIndex:layerIndex] objectAtIndex:j]integerValue];
-            NSLog(@"step: %i", step);
+            //NSLog(@"step: %i", step);
             i+=step;
             j++;
         }

@@ -2,7 +2,7 @@
 //  AggregatedDay.h
 //  uni-project
 //
-//  Created by Pavel Ermolin on 09.03.13.
+//  Created by Pavel Ermolin on 11.03.13.
 //  Copyright (c) 2013 test. All rights reserved.
 //
 
@@ -14,6 +14,8 @@
 
 @property (nonatomic, retain) NSDate * date;
 @property (nonatomic, retain) NSDecimalNumber * dayconsumption;
-@property (nonatomic, retain) NSDecimalNumber * nightconsumtion;
+@property (nonatomic, retain) NSDecimalNumber * nightconsumption;
+@property (nonatomic, retain) NSString * sunrise;
+@property (nonatomic, retain) NSString * sunset;
 
 @end
