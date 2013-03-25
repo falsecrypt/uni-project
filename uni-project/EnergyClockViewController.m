@@ -8,10 +8,11 @@
 
 #import "EnergyClockViewController.h"
 #import "ScrollViewContentVC.h"
+#import "EnergyClockSlice.h"
 
 static const int numberPages    = 2;
 static const int numberSlices   = 12; // 12 time intervalls, 00:00-02:00-...
-static const int numberOfParticipants = 5; // ask the server for this number
+static const int numberOfParticipants = 3; // ask the server for this number
 
 
 @interface EnergyClockViewController ()<UIScrollViewDelegate, BTSPieViewDataSource, BTSPieViewDelegate>
@@ -24,6 +25,7 @@ static const int numberOfParticipants = 5; // ask the server for this number
 @property (nonatomic, strong) NSArray *availableSliceColors;
 @property (nonatomic, assign) NSInteger selectedSliceIndex;
 @property (nonatomic, assign) CGFloat energyClockViewRadius;
+@property (nonatomic, strong) NSDate *currentDate;
 
 @end
 
@@ -34,12 +36,17 @@ static const int numberOfParticipants = 5; // ask the server for this number
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        NSLog(@"EnergyClockViewController-initWithNibName");
     }
     return self;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated]; 
+    [super viewWillAppear:animated];
+    
+    
+    // OK we're done, lets reload the energyclock
+    //[self.energyClockView reloadData];
 
 }
 
@@ -67,7 +74,7 @@ static const int numberOfParticipants = 5; // ask the server for this number
     // Create and display Pie Chart slices, animated
     // we use dummy values for testing purposes
     
-        for (int insertIndex=0; insertIndex<numberSlices; insertIndex++) {
+        /*for (int insertIndex=0; insertIndex<numberSlices; insertIndex++) {
             
             NSMutableArray *innerArray = [[NSMutableArray alloc]initWithCapacity:numberOfParticipants];
             
@@ -77,8 +84,9 @@ static const int numberOfParticipants = 5; // ask the server for this number
             [self.slotValuesForSlice insertObject:innerArray atIndex:insertIndex];
 
             [self.sliceValues insertObject:[NSNumber numberWithFloat:insertIndex+0.53] atIndex:insertIndex];
-            [self.energyClockView insertSliceAtIndex:insertIndex animate:YES];
-        }
+            //[self.energyClockView insertSliceAtIndex:insertIndex animate:YES];
+        }*/
+    [self.energyClockView reloadData];
 
 }
 
@@ -87,6 +95,14 @@ static const int numberOfParticipants = 5; // ask the server for this number
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(initEnergyClockAfterSavingData) // when the data has been saved we will be notified
+     name:AggregatedDaysSaved
+     object:nil];
+    
+    [[EnergyClockDataManager sharedClient] calculateValuesWithMode:DayChartsMode];
+
     // view controllers are created lazily
     // in the meantime, load the array with placeholders which will be replaced on demand
     NSMutableArray *controllers = [[NSMutableArray alloc] init];
@@ -115,13 +131,54 @@ static const int numberOfParticipants = 5; // ask the server for this number
     [self.energyClockView setDataSource:self];
     [self.energyClockView setDelegate:self];
     self.selectedSliceIndex = -1;
-    float animationDuration = 1.0f;
-    [self.energyClockView setAnimationDuration:animationDuration];
+    //float animationDuration = 1.0f;
+    //[self.energyClockView setAnimationDuration:animationDuration];
     
+    //[self.energyClockView reloadData];
+    [self checkSyncStatus];
+    
+    NSLog(@"viewDidLoad-after checkSyncStatus, self.sliceValues: %@", self.sliceValues);
+    NSLog(@"viewDidLoad-after checkSyncStatus, self.slotValuesForSlice: %@", self.slotValuesForSlice);
+
+}
+
+// should we display the energyclock of the last date immediately
+// or should we wait to the 'AggregatedDaysSaved'-Notification?
+-(void)checkSyncStatus
+{
+    /* Get last sync date, ==today? -> then do nothing! */
+    NSDateComponents *todayComponents =
+    [[NSCalendar currentCalendar] components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[NSDate date]];
+    System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
+    NSAssert(systemObj!=nil, @"System Object with id=primary doesnt exist");
+    NSLog(@"checkSyncStatus systemObj: %@", systemObj);
+    NSDate *lastSyncDate = systemObj.daysupdated;
+    NSLog(@"checkSyncStatus lastSyncDate: %@", lastSyncDate);
+    NSLog(@"checkSyncStatus todayComponents: %@", todayComponents);
+    
+    if (lastSyncDate && !FORCEDAYCHARTSUPDATE)
+    { // we have synced today already
+        NSDateComponents *lastSyncComponents =
+        [[NSCalendar currentCalendar] components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:lastSyncDate];
+        
+        if(([todayComponents year]  == [lastSyncComponents year])  &&
+           ([todayComponents month] == [lastSyncComponents month]) &&
+           ([todayComponents day]   == [lastSyncComponents day]))
+        {
+            NSLog(@"checkSyncStatus, we synced already");
+            EnergyClockSlice *slice = [EnergyClockSlice findFirstOrderedByAttribute:@"date" ascending:NO];
+            [self initValuesForNewDate:slice.date];
+            self.currentDate = slice.date;
+        }
+    }
+}
+
+-(void)initEnergyClockAfterSavingData
+{
+    EnergyClockSlice *slice = [EnergyClockSlice findFirstOrderedByAttribute:@"date" ascending:NO];
+    [self initValuesForNewDate:slice.date];
+    // OK we're done, lets reload the energyclock
     [self.energyClockView reloadData];
-    
-    [[EnergyClockDataManager sharedClient] calculateValuesWithMode:DayChartsMode];
-    
 }
 
 -(NSMutableArray*)sliceValues
@@ -161,6 +218,7 @@ static const int numberOfParticipants = 5; // ask the server for this number
     return _slotValuesForSlice;
 }
 
+// random values
 -(NSMutableArray*)radiusValuesForSlice
 {
     if(!_radiusValuesForSlice)
@@ -170,7 +228,7 @@ static const int numberOfParticipants = 5; // ask the server for this number
         NSSortDescriptor* sortOrder = [NSSortDescriptor sortDescriptorWithKey: @"self" ascending: YES];
         for (int i=0; i<numberSlices; i++) {
             NSMutableArray *radiusStepArray = [[NSMutableArray alloc] init];
-            for (int j=0; j<5; j++) {
+            for (int j=0; j<numberOfParticipants; j++) {
                 [radiusStepArray insertObject:[NSNumber numberWithInt:arc4random()%80+20] atIndex:j];
             }
             NSArray *sortedArray = [radiusStepArray sortedArrayUsingDescriptors: [NSArray arrayWithObject: sortOrder]];
@@ -216,6 +274,7 @@ static const int numberOfParticipants = 5; // ask the server for this number
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
 {
     NSLog(@"<EnergyClockViewController> scrollViewWillBeginDecelerating...");
+
 }
 
 // at the end of scroll animation, reset the boolean used when scrolls originate from the UIPageControl
@@ -252,6 +311,55 @@ static const int numberOfParticipants = 5; // ask the server for this number
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+// this method is called after the user touched one of the day charts
+-(void)loadEnergyClockForDate:(NSDate *)date
+{
+    if ([self.currentDate isEqualToDate:date]) {
+        NSLog(@"<EnergyClockViewController> -loadEnergyClockForWeekDay, plot with date: %@ touched, same date as the current -> returning..", date);
+        return;
+    }
+    NSLog(@"<EnergyClockViewController> -loadEnergyClockForWeekDay, plot with date: %@ touched", date);
+
+    [self initValuesForNewDate:date];
+    self.currentDate = date;
+    [self.energyClockView reloadData];
+}
+
+-(void)initValuesForNewDate:(NSDate *)date
+{
+    // check if data exists @todo
+    NSArray *slicesData = [EnergyClockSlice findByAttribute:@"date" withValue:date andOrderBy:@"hour" ascending:YES];
+    NSMutableArray *slotValuesForSliceTemp = [[NSMutableArray alloc] init];
+    NSMutableArray *sliceValuesTemp = [[NSMutableArray alloc] init];
+    // DEBUGGING
+    for (int i=0; i<[slicesData count]; i++) {
+        EnergyClockSlice *slice = slicesData[i];
+        NSLog(@"date: %@, hour: %@, consumption: %@", slice.date, slice.hour, slice.consumption);
+    }
+    if ([slicesData count] > 0) {
+        
+        // there must be exactly 12 objects in the slicesData-Array
+        for (int insertIndex=0; insertIndex<[slicesData count]; insertIndex++) {
+            NSMutableArray *innerArray = [[NSMutableArray alloc]initWithCapacity:numberOfParticipants];
+            EnergyClockSlice *slice = slicesData[insertIndex];
+            NSMutableDictionary *slotValuesDict = [NSKeyedUnarchiver unarchiveObjectWithData:slice.slotValues];
+            NSArray *sortedkeys = [[slotValuesDict allKeys]sortedArrayUsingSelector:@selector(compare:)];
+            NSLog(@"slotValuesDict: %@", slotValuesDict);
+            NSLog(@"sortedkeys: %@", sortedkeys);
+            for (int i=0; i<numberOfParticipants; i++) {
+                [innerArray insertObject:[slotValuesDict objectForKey:sortedkeys[i]] atIndex:i];
+            }
+            [slotValuesForSliceTemp insertObject:innerArray atIndex:insertIndex];
+            // fill with 12 slice values for that selected date
+            [sliceValuesTemp insertObject:((EnergyClockSlice *)slicesData[insertIndex]).consumption atIndex:insertIndex];
+        }
+        self.sliceValues = sliceValuesTemp;
+        self.slotValuesForSlice = slotValuesForSliceTemp;
+        
+        
+    }
 }
 
 
@@ -302,11 +410,28 @@ static const int numberOfParticipants = 5; // ask the server for this number
 
 - (CGFloat)pieView:(BTSPieView *)pieView valueForSliceAtIndex:(NSUInteger)index
 {
-    //NSLog(@"pieView:valueForSliceAtIndex: - return: %f", (CGFloat)[[self.sliceValues objectAtIndex:index]floatValue]);
+    NSLog(@"valueForSliceAtIndex, returning: %f", (CGFloat)[[self.sliceValues objectAtIndex:index]floatValue]);
     
-    //return (CGFloat)[[self.sliceValues objectAtIndex:index]floatValue];
+    return (CGFloat)[[self.sliceValues objectAtIndex:index]floatValue];
     
-    return 10;
+    //return 10;
+    
+    //return (arc4random()%80)+ 10;
+    
+    /*int result = 0;
+    
+    // night values
+    if (index >= 9 || index <= 3) {
+        result = (arc4random() % (10))+5;
+        NSLog(@"pieView:valueForSliceAtIndex: 'night' - index: %i, result: %i", index, result);
+    }
+    // day values
+    else {
+        result = (arc4random() % (40))+40;
+        NSLog(@"pieView:valueForSliceAtIndex: 'day'- index: %i, result: %i", index, result);
+    }
+    //return index * 10 + 10;
+    return result; */
 }
 
 // TODO : new
@@ -324,6 +449,11 @@ static const int numberOfParticipants = 5; // ask the server for this number
 - (NSArray *)getRadiusArray
 {
     return self.radiusValuesForSlice;
+}
+
+- (NSArray *)getSlotValuesForSliceArray
+{
+    return self.slotValuesForSlice;
 }
 /* DEPRECATED
 - (UIColor *)pieView:(BTSPieView *)pieView colorForSliceAtIndex:(NSUInteger)index sliceCount:(NSUInteger)sliceCount

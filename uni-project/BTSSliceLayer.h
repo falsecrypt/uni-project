@@ -15,6 +15,9 @@ extern NSString * const kBTSSliceLayerAngle;
 @interface BTSSliceLayer : CAShapeLayer 
 @property (nonatomic, readwrite) CGFloat sliceAngle;
 
+// NEW
+@property (nonatomic, readwrite) NSArray *slotValues;
+
 + (id)layerWithColor:(CGColorRef)fillColor;
 + (id)layerWithoutColor;
 @end

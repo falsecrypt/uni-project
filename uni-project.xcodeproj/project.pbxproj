@@ -57,6 +57,7 @@
 		CE32C3991665AB8E00C3ED81 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C3901665AB8E00C3ED81 /* UIImageView+AFNetworking.m */; };
 		CE32C39D1665B7AD00C3ED81 /* EMNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE32C39C1665B7AD00C3ED81 /* EMNetworkManager.m */; };
 		CE348C1A1647668100B14B55 /* RegisterTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE348C191647668000B14B55 /* RegisterTVC.m */; };
+		CE3543B216FCAFAF00D779C2 /* AggregatedDay.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3543B116FCAFAF00D779C2 /* AggregatedDay.m */; };
 		CE3C80D616DFE6E200DB4E05 /* tabbarBG.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3C80D516DFE6E100DB4E05 /* tabbarBG.png */; };
 		CE3C80DA16DFE71700DB4E05 /* selection-tab@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3C80D816DFE71700DB4E05 /* selection-tab@2x.png */; };
 		CE3C80DE16DFE81200DB4E05 /* selection-tab.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3C80DD16DFE81100DB4E05 /* selection-tab.png */; };
@@ -84,7 +85,6 @@
 		CE6A008F16AF7E1200F845EE /* A+Selected.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6A008816AF7E1200F845EE /* A+Selected.png */; };
 		CE6A009016AF7E1200F845EE /* A++Selected.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6A008916AF7E1200F845EE /* A++Selected.png */; };
 		CE6A009116AF7E1200F845EE /* A+++Selected.png in Resources */ = {isa = PBXBuildFile; fileRef = CE6A008A16AF7E1200F845EE /* A+++Selected.png */; };
-		CE6CA86416ED63EC0086EF45 /* AggregatedDay.m in Sources */ = {isa = PBXBuildFile; fileRef = CE6CA86316ED63EC0086EF45 /* AggregatedDay.m */; };
 		CE8363D416EE7CC100AFB5E2 /* System.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8363D316EE7CC100AFB5E2 /* System.m */; };
 		CE8B7F5515ED358B006CD57C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5415ED358B006CD57C /* UIKit.framework */; };
 		CE8B7F5715ED358B006CD57C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5615ED358B006CD57C /* Foundation.framework */; };
@@ -256,6 +256,8 @@
 		CE32C39C1665B7AD00C3ED81 /* EMNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMNetworkManager.m; sourceTree = "<group>"; };
 		CE348C181647668000B14B55 /* RegisterTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterTVC.h; sourceTree = "<group>"; };
 		CE348C191647668000B14B55 /* RegisterTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterTVC.m; sourceTree = "<group>"; };
+		CE3543B016FCAFAF00D779C2 /* AggregatedDay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AggregatedDay.h; sourceTree = "<group>"; };
+		CE3543B116FCAFAF00D779C2 /* AggregatedDay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AggregatedDay.m; sourceTree = "<group>"; };
 		CE3C80D516DFE6E100DB4E05 /* tabbarBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tabbarBG.png; sourceTree = "<group>"; };
 		CE3C80D816DFE71700DB4E05 /* selection-tab@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selection-tab@2x.png"; sourceTree = "<group>"; };
 		CE3C80DD16DFE81100DB4E05 /* selection-tab.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selection-tab.png"; sourceTree = "<group>"; };
@@ -296,8 +298,6 @@
 		CE6A008816AF7E1200F845EE /* A+Selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "A+Selected.png"; sourceTree = "<group>"; };
 		CE6A008916AF7E1200F845EE /* A++Selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "A++Selected.png"; sourceTree = "<group>"; };
 		CE6A008A16AF7E1200F845EE /* A+++Selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "A+++Selected.png"; sourceTree = "<group>"; };
-		CE6CA86216ED63EC0086EF45 /* AggregatedDay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AggregatedDay.h; sourceTree = "<group>"; };
-		CE6CA86316ED63EC0086EF45 /* AggregatedDay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AggregatedDay.m; sourceTree = "<group>"; };
 		CE8363D216EE7CC100AFB5E2 /* System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = System.h; sourceTree = "<group>"; };
 		CE8363D316EE7CC100AFB5E2 /* System.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = System.m; sourceTree = "<group>"; };
 		CE8B7F5015ED358B006CD57C /* EcoMeter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EcoMeter.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -688,10 +688,10 @@
 				CE20E92016B58FD000AC2722 /* MonthData.h */,
 				CE20E92116B58FD000AC2722 /* MonthData.m */,
 				CE0D631B16611E7500381D05 /* EcoMeterModel.xcdatamodeld */,
+				CE3543B016FCAFAF00D779C2 /* AggregatedDay.h */,
+				CE3543B116FCAFAF00D779C2 /* AggregatedDay.m */,
 				CE8363D216EE7CC100AFB5E2 /* System.h */,
 				CE8363D316EE7CC100AFB5E2 /* System.m */,
-				CE6CA86216ED63EC0086EF45 /* AggregatedDay.h */,
-				CE6CA86316ED63EC0086EF45 /* AggregatedDay.m */,
 				CE1DAA7316EAC8C40034AEBF /* EnergyClockSlice.h */,
 				CE1DAA7416EAC8C50034AEBF /* EnergyClockSlice.m */,
 				CEFAAFD816B8209500D9E744 /* Participant.h */,
@@ -1484,7 +1484,6 @@
 				CE4EDE5016E42A2B0047479A /* BTSSliceLayer.m in Sources */,
 				CE56031916E976CF0062FB70 /* EnergyClockDataManager.m in Sources */,
 				CE1DAA7516EAC8C50034AEBF /* EnergyClockSlice.m in Sources */,
-				CE6CA86416ED63EC0086EF45 /* AggregatedDay.m in Sources */,
 				CE8363D416EE7CC100AFB5E2 /* System.m in Sources */,
 				CE92D4A616F297CF0038D408 /* CPTAnimation.m in Sources */,
 				CE92D4A716F297CF0038D408 /* CPTAnimationOperation.m in Sources */,
@@ -1497,6 +1496,7 @@
 				CE92D4AE16F297CF0038D408 /* _CPTAnimationPlotRangePeriod.m in Sources */,
 				CE92D4AF16F297CF0038D408 /* _CPTAnimationTimingFunctions.m in Sources */,
 				CE92D4B216F2B6380038D408 /* CPTPieChart+CustomPieChart.m in Sources */,
+				CE3543B216FCAFAF00D779C2 /* AggregatedDay.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

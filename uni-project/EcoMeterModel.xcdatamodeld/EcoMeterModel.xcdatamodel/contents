@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2057" systemVersion="12C60" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="12D78" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="AggregatedDay" representedClassName="AggregatedDay" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" indexed="YES" syncable="YES"/>
         <attribute name="dayconsumption" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="nightconsumption" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="sunrise" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sunset" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="totalconsumption" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
     </entity>
     <entity name="EnergyClockSlice" representedClassName="EnergyClockSlice" syncable="YES">
         <attribute name="consumption" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
@@ -53,12 +54,12 @@
         <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="weekData" inverseEntity="User" syncable="YES"/>
     </entity>
     <elements>
-        <element name="AggregatedDay" positionX="160" positionY="192" width="128" height="120"/>
+        <element name="AggregatedDay" positionX="160" positionY="192" width="128" height="135"/>
         <element name="EnergyClockSlice" positionX="160" positionY="192" width="128" height="105"/>
         <element name="MonthData" positionX="-137" positionY="95" width="128" height="135"/>
         <element name="Participant" positionX="160" positionY="192" width="128" height="135"/>
+        <element name="System" positionX="160" positionY="192" width="128" height="180"/>
         <element name="User" positionX="63" positionY="243" width="128" height="120"/>
         <element name="WeekData" positionX="243" positionY="90" width="128" height="88"/>
-        <element name="System" positionX="160" positionY="192" width="128" height="180"/>
     </elements>
 </model>

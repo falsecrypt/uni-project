@@ -11,6 +11,7 @@
 #import "Reachability.h"
 #import "EcoMeterAppDelegate.h"
 #import "AggregatedDay.h"
+#import "EnergyClockSlice.h"
 #import "AFJSONRequestOperation.h"
 
 @interface EnergyClockDataManager ()
@@ -68,14 +69,16 @@ static const NSArray *serverHours;
     {
         if ([mode isEqualToString:DayChartsMode])
         {
+            NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+            [calendar setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
             NSDateComponents *todayComponents =
-            [[NSCalendar currentCalendar] components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[NSDate date]];
+            [calendar components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[NSDate date]];
             System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
             NSAssert(systemObj!=nil, @"System Object with id=primary doesnt exist");
             NSDate *lastSyncDate = systemObj.daysupdated;
             if (lastSyncDate) { // we have synced already
                 NSDateComponents *lastSyncComponents =
-                [[NSCalendar currentCalendar] components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:lastSyncDate];
+                [calendar components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:lastSyncDate];
                 
                 if(([todayComponents year]  != [lastSyncComponents year])  ||
                    ([todayComponents month] != [lastSyncComponents month]) ||
@@ -126,16 +129,20 @@ static const NSArray *serverHours;
     NSLog(@"getDataFromServerWithMode...");
     if ([mode isEqualToString:DayChartsMode])
     {
-        
-        for (NSNumber *userId in self.participants) {
+        for (NSNumber *userId in self.participants)
+        {
             [self getKwPerHourForLastWeekWithUserId:userId];
         }
-        
     }
     else if ([mode isEqualToString:MultiLevelPieChartMode])
     {
-        
+        [self getDataForEnergyClocks];
     }
+}
+
+-(void)getDataForEnergyClocks
+{
+    
 }
 
 -(void)getKwPerHourForLastWeekWithUserId:(NSNumber *)userId
@@ -147,20 +154,21 @@ static const NSArray *serverHours;
     [[EMNetworkManager sharedClient] getPath:getPath
                                   parameters:nil
                                      success:^(AFHTTPRequestOperation *operation, id data) {
+                                         // Delete all existing objects
                                          [AggregatedDay truncateAll];
+                                         [EnergyClockSlice truncateAll];
                                          NSString *result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                                         // sync sunrise and sunset values first
-                                         [self syncSunriseSunsetDataWithResult:result forMode:DayChartsMode];
+                                         // sync sunrise and sunset values first, then get new values and store new objects
+                                         [self syncSunriseSunsetDataWithResult:result forUserId:(NSNumber *)userId];
                                      }
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                          
                                      }];
 }
 
--(void)proccessWithOperationResult:(NSString *)result forMode:(NSString *)mode sunriseSunsetData:(NSDictionary*)sunriseSunset
+-(void)proccessWithOperationResult:(NSString *)result forUserId:(NSNumber *)userId sunriseSunsetData:(NSDictionary *)sunriseSunset
 {
     NSLog(@"proccessWithOperationResult...");
-    if ([mode isEqualToString:DayChartsMode]) {
         // calculate the actual sunset/sunrise time we want to display
         //NSLog(@"sunriseSunset: %@", sunriseSunset);
         //NSLog(@"serverHours: %@", serverHours);
@@ -177,70 +185,118 @@ static const NSArray *serverHours;
         // calculate day and night consumption for this user
         NSArray *resultComponents   = [result componentsSeparatedByString:@";"];
         NSLog(@"resultComponents: %@", resultComponents);
+        NSString *lastDateString = @""; // we will make sure, that we store only 7 AggregatedDay-Objects
+        NSUInteger objectsCounter = 0;
         for (NSString *obj in resultComponents)
         {
             NSArray *data = [obj componentsSeparatedByString:@"="];
+            NSLog(@"data: %@", data);
             NSString *dateString = [data[0] substringWithRange:(NSMakeRange(0, 8))];
-            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
-            [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
-            [dateFormatter setDateFormat:@"yy-MM-dd"];
-            NSDate *date = [dateFormatter dateFromString:dateString];
-            NSString *hour = [data[0] substringWithRange:(NSMakeRange(9, 2))];
-            NSString *withoutComma = [data[1] stringByReplacingOccurrencesOfString:@"," withString:@"."];
-            double temp = [withoutComma doubleValue];
-            NSDecimalNumber *consumption = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:temp];
-            //NSLog(@"date: %@", date);
-            //NSLog(@"hour: %@", hour);
-            //NSLog(@"consumption: %@", consumption);
-            
-            AggregatedDay *day = [AggregatedDay findFirstByAttribute:@"date" withValue:date];
-            if (day) { // day already exists -> update
-                NSLog(@"UPDATING DAY");
-                NSLog(@"updating... date: %@", day.date);
-                NSLog(@"updating... nightconsumption: %@", day.nightconsumption);
-                NSLog(@"updating... dayconsumption: %@", day.dayconsumption);
-                NSLog(@"updating... current hour: %i, sunriseHour: %i, sunsetHour: %i", [hour integerValue], sunriseHour, sunsetHour);
-                // Night Period
-                if (([hour integerValue] >= sunsetHour) || ([hour integerValue] <= sunriseHour )) {
-                    day.nightconsumption = [day.nightconsumption decimalNumberByAdding:consumption];
-                }
-                // Day Period
-                else {
-                    day.dayconsumption = [day.dayconsumption decimalNumberByAdding:consumption];
-                } 
+            NSLog(@"dateString: %@", dateString);
+            if (![lastDateString isEqualToString:dateString])
+            {
+                objectsCounter++;
+                lastDateString = [dateString copy];
             }
-            // New Day
-            else {
-                NSLog(@"CREATING NEW DAY");
-                AggregatedDay *newDay = [AggregatedDay createEntity];
-                newDay.date = date;
-                NSLog(@"newDay.date: %@", newDay.date);
-                if (sunriseHour<10) {
-                    newDay.sunrise = [NSString stringWithFormat:@"0%i:00",sunriseHour];
-                    NSLog(@"newDay.sunrise: %@", newDay.sunrise);
+            if (objectsCounter <= 7)
+            {    
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+                [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
+                [dateFormatter setDateFormat:@"yy-MM-dd"];
+                //IMPORTANT! Actual NSDate-Object generated with this NSDateFormatter depends on the Timezone
+                [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+                NSDate *date = [dateFormatter dateFromString:dateString];
+                NSString *hour = [data[0] substringWithRange:(NSMakeRange(9, 2))];
+                NSString *withoutComma = [data[1] stringByReplacingOccurrencesOfString:@"," withString:@"."];
+                double temp = [withoutComma doubleValue];
+                NSDecimalNumber *consumption = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:temp];
+                //NSLog(@"date: %@", date);
+                //NSLog(@"hour: %@", hour);
+                //NSLog(@"consumption: %@", consumption);
+                //NSLog(@"obj: %@", obj);
+                
+                // 'date'-'hour' combination is unique
+                NSPredicate *energyClockFilter = [NSPredicate predicateWithFormat:@"date == %@ && hour == %@", date, [NSNumber numberWithInt:[hour intValue]] ];
+                EnergyClockSlice *slice = [EnergyClockSlice findFirstWithPredicate:energyClockFilter];
+                if (slice) { // slice already exists -> update
+                    NSLog(@"UPDATING SLICE");
+                    NSLog(@"updating slice... slice: %@", slice);
+                    NSMutableDictionary *slotValuesDict = [NSKeyedUnarchiver unarchiveObjectWithData:slice.slotValues];
+                    [slotValuesDict setValue:consumption forKey: [NSString stringWithFormat:@"%@",userId]];
+                    NSLog(@"updating slice... slotValuesDict: %@", slotValuesDict);
+                    NSData *slotValues = [NSKeyedArchiver archivedDataWithRootObject:slotValuesDict];
+                    slice.slotValues = slotValues;
+                    slice.consumption = [slice.consumption decimalNumberByAdding:consumption];
+                    NSLog(@"updating slice... consumption is now: %@", slice.consumption);
                 }
+                // New Slice
                 else {
-                    newDay.sunrise = [NSString stringWithFormat:@"%i:00",sunriseHour];
-                    NSLog(@"newDay.sunrise: %@", newDay.sunrise);
+                    EnergyClockSlice *slice = [EnergyClockSlice createEntity];
+                    slice.date = date;
+                    slice.hour = [NSNumber numberWithInt:[hour intValue]];
+                    slice.consumption = consumption;
+                    NSMutableDictionary *slotValuesDict = [[NSMutableDictionary alloc] init];
+                    [slotValuesDict setValue:consumption forKey: [NSString stringWithFormat:@"%@",userId]];
+                    NSData *slotValues = [NSKeyedArchiver archivedDataWithRootObject:slotValuesDict];
+                    slice.slotValues = slotValues;
+                    NSLog(@"CREATING NEW SLICE: %@", slice);
+                    NSLog(@"creating slice... slice.date: %@", slice.date);
+                    NSLog(@"creating slice... slice.hour: %@", slice.hour);
+                    NSLog(@"creating slice... slice.consumption: %@", slice.consumption);
+                    NSLog(@"creating slice... slotValuesDict: %@", slotValuesDict);
                 }
-                if (sunsetHour<10) {
-                    newDay.sunset = [NSString stringWithFormat:@"0%i:00",sunsetHour];
-                    NSLog(@"newDay.sunset: %@", newDay.sunset);
+                
+                // 'date' is a unique field
+                AggregatedDay *day = [AggregatedDay findFirstByAttribute:@"date" withValue:date];
+                if (day) { // day already exists -> update
+                    NSLog(@"UPDATING DAY");
+                    NSLog(@"updating day... date: %@", day.date);
+                    NSLog(@"updating day... nightconsumption: %@", day.nightconsumption);
+                    NSLog(@"updating day... dayconsumption: %@", day.dayconsumption);
+                    NSLog(@"updating day... current hour: %i, sunriseHour: %i, sunsetHour: %i", [hour integerValue], sunriseHour, sunsetHour);
+                    // Night Period
+                    if (([hour integerValue] >= sunsetHour) || ([hour integerValue] <= sunriseHour )) {
+                        day.nightconsumption = [day.nightconsumption decimalNumberByAdding:consumption];
+                    }
+                    // Day Period
+                    else {
+                        day.dayconsumption = [day.dayconsumption decimalNumberByAdding:consumption];
+                    }
                 }
+                // New Day
                 else {
-                    newDay.sunset = [NSString stringWithFormat:@"%i:00",sunsetHour];
-                    NSLog(@"newDay.sunset: %@", newDay.sunset);
-                }
-                NSLog(@"current hour: %@, sunriseHour: %i, sunsetHour: %i", hour, sunriseHour, sunsetHour);
-                // Night Period
-                if (([hour integerValue] >= sunsetHour) || ([hour integerValue] <= sunriseHour) ) {
-                    newDay.nightconsumption = [newDay.nightconsumption decimalNumberByAdding:consumption];
-                    NSLog(@"newDay.nightconsumption: %@", newDay.nightconsumption);
-                }
-                // Day Period
-                else {
-                    newDay.dayconsumption = [newDay.dayconsumption decimalNumberByAdding:consumption];
-                    NSLog(@"newDay.dayconsumption: %@", newDay.dayconsumption);
+                    NSLog(@"CREATING NEW DAY");
+                    AggregatedDay *newDay = [AggregatedDay createEntity];
+                    newDay.date = date;
+                    NSLog(@"newDay.date: %@", newDay.date);
+                    if (sunriseHour<10) {
+                        newDay.sunrise = [NSString stringWithFormat:@"0%i:00",sunriseHour];
+                        NSLog(@"newDay.sunrise: %@", newDay.sunrise);
+                    }
+                    else {
+                        newDay.sunrise = [NSString stringWithFormat:@"%i:00",sunriseHour];
+                        NSLog(@"newDay.sunrise: %@", newDay.sunrise);
+                    }
+                    if (sunsetHour<10) {
+                        newDay.sunset = [NSString stringWithFormat:@"0%i:00",sunsetHour];
+                        NSLog(@"newDay.sunset: %@", newDay.sunset);
+                    }
+                    else {
+                        newDay.sunset = [NSString stringWithFormat:@"%i:00",sunsetHour];
+                        NSLog(@"newDay.sunset: %@", newDay.sunset);
+                    }
+                    NSLog(@"current hour: %@, sunriseHour: %i, sunsetHour: %i", hour, sunriseHour, sunsetHour);
+                    // Night Period
+                    if (([hour integerValue] >= sunsetHour) || ([hour integerValue] <= sunriseHour) ) {
+                        newDay.nightconsumption = [newDay.nightconsumption decimalNumberByAdding:consumption];
+                        NSLog(@"newDay.nightconsumption: %@", newDay.nightconsumption);
+                    }
+                    // Day Period
+                    else {
+                        newDay.dayconsumption = [newDay.dayconsumption decimalNumberByAdding:consumption];
+                        NSLog(@"newDay.dayconsumption: %@", newDay.dayconsumption);
+                    }
+                    
                 }
             }
             
@@ -248,22 +304,34 @@ static const NSArray *serverHours;
         // LOGGING
         System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
         systemObj.daysupdated = [NSDate date];
+        for (AggregatedDay *day in [AggregatedDay findAll]) {
+            day.totalconsumption = [day.nightconsumption decimalNumberByAdding:day.dayconsumption];
+        }
         
         //[[NSManagedObjectContext defaultContext] saveNestedContexts];
         [[NSManagedObjectContext defaultContext]  saveInBackgroundCompletion:^{
+            
+            // DEBUGGING
             NSArray *days = [AggregatedDay findAllSortedBy:@"date" ascending:YES];
+            NSArray *slices = [EnergyClockSlice findAllSortedBy:@"date" ascending:YES];
             NSLog(@"number of days: %i", [days count]);
             for (AggregatedDay *day in days) {
                 NSLog(@"date: %@, dayconsumption: %@, nightconsumption: %@", day.date, day.dayconsumption, day.nightconsumption);
+                
+            }
+            NSLog(@"number of slices: %i", [slices count]);
+            for (EnergyClockSlice *slice in slices) {
+                NSMutableDictionary *slotValuesDict = [NSKeyedUnarchiver unarchiveObjectWithData:slice.slotValues];
+                NSLog(@"date: %@, consumption: %@, hour: %@, slotValues: %@", slice.date, slice.consumption, slice.hour, slotValuesDict);
+                
             }
             //notify observers (instances of ScrollViewContentVC)
             [[NSNotificationCenter defaultCenter] postNotificationName:AggregatedDaysSaved object:nil userInfo:nil];
         }];
-    }
 }
 
 // get sunset/sunrise time from wunderground.com Weather API
-- (void)syncSunriseSunsetDataWithResult:(NSString *)result forMode:(NSString *)mode
+- (void)syncSunriseSunsetDataWithResult:(NSString *)result forUserId:(NSNumber *)userId
 {
     __block NSDictionary *sunriseSunset; //result
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:wundergroundRequestURL]];
@@ -299,7 +367,7 @@ static const NSArray *serverHours;
         }];
         // construct result dictionary
         sunriseSunset = [[NSMutableDictionary alloc] initWithObjectsAndKeys:sunsetData, @"sunset", sunriseData, @"sunrise", nil];
-        [self proccessWithOperationResult:result forMode:DayChartsMode sunriseSunsetData:(NSDictionary*)sunriseSunset];
+        [self proccessWithOperationResult:result forUserId:(NSNumber *)userId sunriseSunsetData:(NSDictionary*)sunriseSunset];
         
     } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
         NSLog(@"wunderground.com Weather API: Request Failure Because %@",[error userInfo]);

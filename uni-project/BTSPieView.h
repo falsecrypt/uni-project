@@ -34,6 +34,7 @@
 - (CGFloat)pieView:(BTSPieView *)pieView valueForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex;
 - (CGFloat)pieView:(BTSPieView *)pieView radiusForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex;
 - (NSArray *)getRadiusArray;
+- (NSArray *)getSlotValuesForSliceArray;
 //*************************//
 - (CGFloat)pieView:(BTSPieView *)pieView valueForSliceAtIndex:(NSUInteger)index;
 @end 

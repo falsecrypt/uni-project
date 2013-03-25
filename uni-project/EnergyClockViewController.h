@@ -15,4 +15,6 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) NSMutableArray *radiusValuesForSlice;
 
+-(void)loadEnergyClockForDate:(NSDate *)date;
+
 @end

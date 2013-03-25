@@ -80,7 +80,6 @@ CGFloat const addedAngleValueEcoMeter  = 16.0;
     CGFloat angle       = self.startAngle;
     CGFloat endingAngle = self.endAngle;
     CGFloat pieRange;
-    
     switch ( self.sliceDirection ) {
         case CPTPieDirectionClockwise:
             pieRange = isnan(endingAngle) ? CPTFloat(2.0 * M_PI) : CPTFloat(2.0 * M_PI) - ABS(endingAngle - angle);
@@ -94,6 +93,38 @@ CGFloat const addedAngleValueEcoMeter  = 16.0;
     }
     return angle;
 }
+
+
+-(CGFloat)medianAngleForPieSliceIndex:(NSUInteger)index
+{
+    NSUInteger sampleCount = self.cachedDataCount;
+    
+    if ( sampleCount == 0 ) {
+        return 0;
+    }
+    
+    CGFloat startingWidth = 0;
+    
+    // Iterate through the pie slices until the slice with the given index is found
+    for ( NSUInteger currentIndex = 0; currentIndex < sampleCount; currentIndex++ ) {
+        CGFloat currentWidth = CPTFloat([self cachedDoubleForField:CPTPieChartFieldSliceWidthNormalized recordIndex:currentIndex]);
+        
+        // If the slice index is a match...
+        if ( !isnan(currentWidth) && (index == currentIndex) ) {
+            // Compute and return the angle that is halfway between the slice's starting and ending angles
+            CGFloat startingAngle  = [self radiansForPieSliceValue:startingWidth];
+            CGFloat finishingAngle = [self radiansForPieSliceValue:startingWidth + currentWidth];
+            //NSLog(@"medianAngleForPieSliceIndex startingAngle: %f, finishingAngle: %f, return: %f", startingAngle, finishingAngle, (startingAngle + finishingAngle) / 2);
+            return (startingAngle + finishingAngle) / 2;
+        }
+        
+        startingWidth += currentWidth;
+    }
+    
+    // Searched every pie slice but couldn't find one that corresponds to the given index
+    return 0;
+}
+
 
 
 -(CGFloat)normalizedPosition:(CGFloat)rawPosition
