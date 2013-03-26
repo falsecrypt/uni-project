@@ -253,11 +253,11 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
             [self insertSliceLayerAtIndex:sliceIndex];
             [self insertLabelLayerAtIndex:sliceIndex value:values.percentages()[sliceIndex]];
             [self insertLineLayerAtIndex:sliceIndex color:[UIColor blackColor]];
-            BTSPieLayer *pieLayer = (BTSPieLayer *)[self layer];
-            NSArray *sliceLayers = [[pieLayer sliceLayers] sublayers];
-            BTSSliceLayer *sliceLayer = (BTSSliceLayer *) [sliceLayers objectAtIndex:sliceIndex];
-            NSArray *slotValues = sliceLayer.slotValues;
-            BTSUpdateAllLayers(parentLayer, sliceIndex, _center, _radius, radiusArray, startAngle, endAngle);
+            //BTSPieLayer *pieLayer = (BTSPieLayer *)[self layer];
+            //NSArray *sliceLayers = [[pieLayer sliceLayers] sublayers];
+            //BTSSliceLayer *sliceLayer = (BTSSliceLayer *) [sliceLayers objectAtIndex:sliceIndex];
+            //NSArray *slotValues = sliceLayer.slotValues;
+            BTSUpdateAllLayers(parentLayer, sliceIndex, _center, _radius, radiusArray, slotValuesForSlice, startAngle, endAngle);
 
             startAngle = endAngle;
         }
@@ -527,7 +527,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
     [sliceLayers enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
         CGFloat startAngle = BTSLookupPreviousLayerAngle(sliceLayers, index, (CGFloat) -M_PI_2);
         CGFloat endAngle = (CGFloat) [[obj valueForKey:kBTSSliceLayerAngle] doubleValue];
-        BTSUpdateLayers(sliceLayers, labelLayers, lineLayers, index, _center, _radius, radiusArray, startAngle, endAngle);
+        BTSUpdateLayers(sliceLayers, labelLayers, lineLayers, index, _center, _radius, radiusArray, slotValuesForSlice, startAngle, endAngle);
     }];
 }
 
@@ -552,7 +552,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
         BTSSliceLayer *presentationLayer = (BTSSliceLayer *) [currentPieLayer presentationLayer];
         CGFloat interpolatedEndAngle = [presentationLayer sliceAngle];
 
-        BTSUpdateLayers(pieLayers, labelLayers, lineLayers, index, center, radius, radiusArray, interpolatedStartAngle, interpolatedEndAngle);
+        BTSUpdateLayers(pieLayers, labelLayers, lineLayers, index, center, radius, radiusArray, slotValuesForSlice, interpolatedStartAngle, interpolatedEndAngle);
         ++index;
     }
     [CATransaction setDisableActions:NO];
@@ -712,7 +712,7 @@ void BTSUpdateLabelPosition(CALayer *labelLayer, CGPoint center, CGFloat radius,
     [labelLayer setPosition:CGPointMake((CGFloat) (center.x + (halfRadius * cos(midAngle))), (CGFloat) (center.y + (halfRadius * sin(midAngle))))];
 }
 
-void BTSUpdateLayers(NSArray *sliceLayers, NSArray *labelLayers, NSArray *lineLayers, NSUInteger layerIndex, CGPoint center, CGFloat radius, NSArray *radiusArray, CGFloat startAngle, CGFloat endAngle) {
+void BTSUpdateLayers(NSArray *sliceLayers, NSArray *labelLayers, NSArray *lineLayers, NSUInteger layerIndex, CGPoint center, CGFloat radius, NSArray *radiusArray, NSArray *slotValuesForSlice, CGFloat startAngle, CGFloat endAngle) {
     
     {
         CAShapeLayer *lineLayer = [lineLayers objectAtIndex:layerIndex];
@@ -758,24 +758,30 @@ void BTSUpdateLayers(NSArray *sliceLayers, NSArray *labelLayers, NSArray *lineLa
         //NSLog(@"sliceLayer: %@", sliceLayer);
         //NSLog(@"sliceLayer sublayers: %@", [sliceLayer sublayers]);
 
-        int i = 0;
-        int j = 0;
+        //int i = 0;
+        
+        CGFloat angleBetween = ABS(ABS(startAngle) - ABS(endAngle));
+        NSArray *slotValues = slotValuesForSlice[layerIndex];
+        int slotsCount = [slotValues count];
+        int j = slotsCount-1; // slot number
+        NSArray *radiusValuesForSlice = calculateRadiusValues(slotValues, radius, angleBetween);
+        
+        NSLog(@"BTSUpdateLayers: startAngle: %f", startAngle);
+        NSLog(@"BTSUpdateLayers: endAngle: %f", endAngle);
         for (CAShapeLayer *sliceLayerInside in [sliceLayer sublayers]) {
             //NSLog(@"radius: %f", radius);
             //NSLog(@"new radius: %f", radius-[sortedArray[i]integerValue]);
             //NSLog(@"sortedArray[i]: %@", sortedArray[i]);
-              /*  CGPathRef pathInside = CGPathCreateArc(center, radius-[sortedArray[i]integerValue], startAngle, endAngle);
-                [sliceLayerInside setPath:pathInside];
-                CFRelease(pathInside);
-                i++; */
-            CGPathRef pathInside = CGPathCreateArc(center, radius-i, startAngle, endAngle);
+            
+            //CGPathRef pathInside = CGPathCreateArc(center, radius-i, startAngle, endAngle);
+            CGPathRef pathInside = CGPathCreateArc(center, [radiusValuesForSlice[j] floatValue], startAngle, endAngle);
             [sliceLayerInside setPath:pathInside];
             CFRelease(pathInside);
-            NSLog(@"layerIndex: %i, j: %i", layerIndex, j);
-            int step = [[[radiusArray objectAtIndex:layerIndex] objectAtIndex:j] integerValue];
-            NSLog(@"step: %i", step);
-            i+=step;
-            j++;
+            //NSLog(@"layerIndex: %i, j: %i", layerIndex, j);
+            //int step = [[[radiusArray objectAtIndex:layerIndex] objectAtIndex:j] integerValue];
+            //NSLog(@"step: %i", step);
+            //i+=step;
+            j--;
         }
         
         //*************************//
@@ -791,8 +797,35 @@ void BTSUpdateLayers(NSArray *sliceLayers, NSArray *labelLayers, NSArray *lineLa
     }
 }
 
-void BTSUpdateAllLayers(BTSPieLayer *pieLayer, NSUInteger layerIndex, CGPoint center, CGFloat radius, NSArray *radiusArray, CGFloat startAngle, CGFloat endAngle) {
-    BTSUpdateLayers([[pieLayer sliceLayers] sublayers], [[pieLayer labelLayers] sublayers], [[pieLayer lineLayers] sublayers], layerIndex, center, radius, radiusArray, startAngle, endAngle);
+NSArray *calculateRadiusValues(NSArray *slotValues, CGFloat radius, CGFloat angleBetween)
+{
+    NSLog(@"calculateRadiusValues - slotValues: %@, radius: %f", slotValues, radius);
+    // Calculate total area of the circle segment
+    CGFloat totalArea = 0.5 * (radius * radius) * angleBetween;
+    NSMutableArray *resultRadiusValues = [[NSMutableArray alloc] init];
+    // Area pieces
+    CGFloat sum = 0.0;
+    //NSMutableArray *areaPieces = [[NSMutableArray alloc] init];
+    CGFloat areaPieces[[slotValues count]];
+    for (int i=0; i<[slotValues count]; i++) {
+        sum+= [slotValues[i] floatValue];
+    }
+    NSLog(@"calculateRadiusValues - sum: %f", sum);
+    for (int i=0; i<[slotValues count]; i++) {
+        areaPieces[i] = ([slotValues[i] floatValue]/sum) * totalArea;
+    }
+    NSLog(@"calculateRadiusValues - areaPieces values: %f, %f, %f", areaPieces[0], areaPieces[1], areaPieces[2]);
+    CGFloat currentArea = 0.0;
+    for (int i=0; i<[slotValues count]; i++) {
+        currentArea += areaPieces[i];
+        resultRadiusValues[i] = [NSNumber numberWithFloat:sqrtf( (2.0 * currentArea) / angleBetween )];
+    }
+    NSLog(@"calculateRadiusValues - resultRadiusValues: %@", resultRadiusValues);
+    return resultRadiusValues;
+}
+
+void BTSUpdateAllLayers(BTSPieLayer *pieLayer, NSUInteger layerIndex, CGPoint center, CGFloat radius, NSArray *radiusArray, NSArray *slotValuesForSlice, CGFloat startAngle, CGFloat endAngle) {
+    BTSUpdateLayers([[pieLayer sliceLayers] sublayers], [[pieLayer labelLayers] sublayers], [[pieLayer lineLayers] sublayers], layerIndex, center, radius, radiusArray, slotValuesForSlice, startAngle, endAngle);
 }
 
 CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLayerIndex, CGFloat defaultAngle) {
