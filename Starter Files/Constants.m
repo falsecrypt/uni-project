@@ -50,4 +50,6 @@ NSString * const wundergroundRequestURL = @"http://api.wunderground.com/api/7a54
 NSString * const AggregatedDaysSaved = @"AggregatedDaysSaved";
 BOOL const FORCEDAYCHARTSUPDATE = NO;
 
+NSInteger const numberOfParticipants = 3;
+
 @end

@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "BTSPieView.h"
+#import "SliceDetailsView.h"
 
-@interface EnergyClockViewController : UIViewController 
+@interface EnergyClockViewController : UIViewController <slicePieChartDatasource>
 
 @property (weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;

@@ -17,6 +17,7 @@ extern NSString * const kBTSSliceLayerAngle;
 
 // NEW
 @property (nonatomic, readwrite) NSArray *slotValues;
+@property (nonatomic, readwrite) CGFloat radius;
 
 + (id)layerWithColor:(CGColorRef)fillColor;
 + (id)layerWithoutColor;

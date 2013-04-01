@@ -343,6 +343,9 @@ static float maxConsumption = 0.0f;
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
     //NSLog(@"numberOfRecordsForPlot...");
+    if([(NSString *)plot.identifier isEqualToString:@"participantPieChart"]){
+        NSLog(@"numberOfRecordsForPlot - participantPieChart is here!!!");
+    }
     return 2;
 }
 

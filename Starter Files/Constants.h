@@ -45,5 +45,7 @@ extern NSString * const wundergroundRequestURL;
 extern NSString * const AggregatedDaysSaved;
 extern BOOL const FORCEDAYCHARTSUPDATE;
 
+extern NSInteger const numberOfParticipants;
+
 @end
 

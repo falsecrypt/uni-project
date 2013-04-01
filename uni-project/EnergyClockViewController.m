@@ -9,10 +9,13 @@
 #import "EnergyClockViewController.h"
 #import "ScrollViewContentVC.h"
 #import "EnergyClockSlice.h"
+#import "AKSegmentedControl.h"
+#import "SliceDetailsView.h"
 
 static const int numberPages    = 2;
 static const int numberSlices   = 12; // 12 time intervalls, 00:00-02:00-...
-static const int numberOfParticipants = 3; // ask the server for this number
+static const int topScrollView = 9; // ScrollView identifiers
+static const int mainScrollView = 10;
 
 
 @interface EnergyClockViewController ()<UIScrollViewDelegate, BTSPieViewDataSource, BTSPieViewDelegate>
@@ -24,8 +27,15 @@ static const int numberOfParticipants = 3; // ask the server for this number
 @property (nonatomic, strong) NSMutableArray *slotValuesForSlice;
 @property (nonatomic, strong) NSArray *availableSliceColors;
 @property (nonatomic, assign) NSInteger selectedSliceIndex;
-@property (nonatomic, assign) CGFloat energyClockViewRadius;
+//@property (nonatomic, assign) CGFloat energyClockViewRadius;
 @property (nonatomic, strong) NSDate *currentDate;
+
+//@property (weak, nonatomic) IBOutlet AKSegmentedControl *participantSelector;
+@property (strong, nonatomic) AKSegmentedControl *participantSelector;
+
+@property (weak, nonatomic) IBOutlet SliceDetailsView *sliceDetailsView;
+@property (weak, nonatomic) IBOutlet UIScrollView *mainScrollView;
+@property (assign, nonatomic) NSUInteger selectedEnergyClockSlice;
 
 @end
 
@@ -56,6 +66,9 @@ static const int numberOfParticipants = 3; // ask the server for this number
     // a page is the width of the scroll view
     self.scrollView.contentSize =
     CGSizeMake(CGRectGetWidth(self.scrollView.frame) * numberPages, CGRectGetHeight(self.scrollView.frame));
+    
+    self.mainScrollView.contentSize =
+    CGSizeMake(CGRectGetWidth(self.mainScrollView.frame), CGRectGetHeight(self.energyClockView.frame) + CGRectGetHeight(self.sliceDetailsView.frame));
 
     // pages are created on demand
     // load the visible page
@@ -64,12 +77,12 @@ static const int numberOfParticipants = 3; // ask the server for this number
     [self loadScrollViewWithPage:0];
     [self loadScrollViewWithPage:1];
     
-    CGRect parentLayerBounds = [self.energyClockView bounds];
-    CGFloat centerX = parentLayerBounds.size.width / 2.0f;
-    CGFloat centerY = parentLayerBounds.size.height / 2.0f;
+//    CGRect parentLayerBounds = [self.energyClockView bounds];
+//    CGFloat centerX = parentLayerBounds.size.width / 2.0f;
+//    CGFloat centerY = parentLayerBounds.size.height / 2.0f;
     
     // Reduce the radius just a bit so the the pie chart layers do not hug the edge of the view.
-    self.energyClockViewRadius = MIN(centerX, centerY) - 10;
+    // self.energyClockViewRadius = MIN(centerX, centerY) - 20.0;
     
     // Create and display Pie Chart slices, animated
     // we use dummy values for testing purposes
@@ -87,6 +100,9 @@ static const int numberOfParticipants = 3; // ask the server for this number
             //[self.energyClockView insertSliceAtIndex:insertIndex animate:YES];
         }*/
     [self.energyClockView reloadData];
+    
+    self.sliceDetailsView.slotValuesForSlice = self.slotValuesForSlice;
+    [self.sliceDetailsView initPlots];
 
 }
 
@@ -101,6 +117,39 @@ static const int numberOfParticipants = 3; // ask the server for this number
      name:AggregatedDaysSaved
      object:nil];
     
+    self.sliceDetailsView.datasource = self;
+    
+    // TEST
+    // Must divide by 255.0F... RBG values are between 0.0 and 1.0
+    self.availableSliceColors = [NSArray arrayWithObjects:
+                                 [UIColor colorWithRed:93.0f/255.0f green:150.0f/255.0f blue:72.0f/255.0f alpha:1.0f],
+                                 [UIColor colorWithRed:46.0f/255.0f green:87.0f/255.0f blue:140.0f/255.0f alpha:1.0f],
+                                 [UIColor colorWithRed:231.0f/255.0f green:161.0f/255.0f blue:61.0f/255.0f alpha:1.0f],
+                                 [UIColor colorWithRed:188.0f/255.0f green:45.0f/255.0f blue:48.0f/255.0f alpha:1.0f],
+                                 [UIColor colorWithRed:111.0f/255.0f green:61.0f/255.0f blue:121.0f/255.0f alpha:1.0f],
+                                 [UIColor colorWithRed:125.0f/255.0f green:128.0f/255.0f blue:127.0f/255.0f alpha:1.0f],
+                                 nil];
+    
+    // Segmented Control #1
+    UILabel *segmentedControl1Label = [[UILabel alloc] initWithFrame:CGRectMake((self.mainScrollView.frame.size.width - 300.0) / 2, 400.0, 300.0, 20.0)]; // x,y,width,height
+    [segmentedControl1Label setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin];
+    [segmentedControl1Label setText:@"Users"];
+    [segmentedControl1Label setTextAlignment:NSTextAlignmentCenter];
+    [segmentedControl1Label setBackgroundColor:[UIColor clearColor]];
+    [segmentedControl1Label setTextColor:[UIColor colorWithRed:82.0/255.0 green:113.0/255.0 blue:131.0/255.0 alpha:1.0]];
+    [segmentedControl1Label setShadowColor:[UIColor whiteColor]];
+    [segmentedControl1Label setShadowOffset:CGSizeMake(0.0, 1.0)];
+    [segmentedControl1Label setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:15.0]];
+    
+    [self.mainScrollView addSubview:segmentedControl1Label];
+    self.participantSelector = [[AKSegmentedControl alloc] initWithFrame:CGRectMake((self.view.frame.size.width - 300.0) / 2,
+                                                                                    CGRectGetMaxY(segmentedControl1Label.frame) + 10.0, 300.0, 37.0)];
+    [self.participantSelector addTarget:self action:@selector(segmentedViewController:) forControlEvents:UIControlEventValueChanged];
+    [self.participantSelector setSegmentedControlMode:AKSegmentedControlModeSticky];
+    [self.participantSelector setSelectedIndex:0];
+    
+    [self setupSegmentedControl];
+    
     [[EnergyClockDataManager sharedClient] calculateValuesWithMode:DayChartsMode];
 
     // view controllers are created lazily
@@ -113,20 +162,12 @@ static const int numberOfParticipants = 3; // ask the server for this number
     self.viewControllers = controllers;
     
     self.scrollView.delegate = self;
+    self.scrollView.tag = topScrollView;
+    self.mainScrollView.delegate = self;
+    self.mainScrollView.tag = mainScrollView;
     self.pageControl.numberOfPages = numberPages;
     self.pageControl.currentPage = 0;
-    
-    // TEST
-    // Must divide by 255.0F... RBG values are between 0.0 and 1.0
-    self.availableSliceColors = [NSArray arrayWithObjects:
-                             [UIColor colorWithRed:93.0f/255.0f green:150.0f/255.0f blue:72.0f/255.0f alpha:1.0f],
-                             [UIColor colorWithRed:46.0f/255.0f green:87.0f/255.0f blue:140.0f/255.0f alpha:1.0f],
-                             [UIColor colorWithRed:231.0f/255.0f green:161.0f/255.0f blue:61.0f/255.0f alpha:1.0f],
-                             [UIColor colorWithRed:188.0f/255.0f green:45.0f/255.0f blue:48.0f/255.0f alpha:1.0f],
-                             [UIColor colorWithRed:111.0f/255.0f green:61.0f/255.0f blue:121.0f/255.0f alpha:1.0f],
-                             [UIColor colorWithRed:125.0f/255.0f green:128.0f/255.0f blue:127.0f/255.0f alpha:1.0f],
-                             nil];
-    
+
     // set up the data source and delegate
     [self.energyClockView setDataSource:self];
     [self.energyClockView setDelegate:self];
@@ -177,6 +218,7 @@ static const int numberOfParticipants = 3; // ask the server for this number
 {
     EnergyClockSlice *slice = [EnergyClockSlice findFirstOrderedByAttribute:@"date" ascending:NO];
     [self initValuesForNewDate:slice.date];
+    self.currentDate = slice.date;
     // OK we're done, lets reload the energyclock
     [self.energyClockView reloadData];
 }
@@ -274,28 +316,36 @@ static const int numberOfParticipants = 3; // ask the server for this number
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
 {
     NSLog(@"<EnergyClockViewController> scrollViewWillBeginDecelerating...");
-
+    
 }
 
 // at the end of scroll animation, reset the boolean used when scrolls originate from the UIPageControl
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     NSLog(@"<EnergyClockViewController> scrollViewDidEndDecelerating...");
-    // switch the indicator when more than 50% of the previous/next page is visible
-    CGFloat pageWidth = CGRectGetWidth(self.scrollView.frame);
-    NSUInteger page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
-    self.pageControl.currentPage = page;
-    
-    // load the visible page and the page on either side of it (to avoid flashes when the user starts scrolling)
-    if (page == 0)
-    {
-        [self loadScrollViewWithPage:page];
-        [self loadScrollViewWithPage:page + 1];
+    // Top ScrollView with day-Pie-Charts
+    if (scrollView.tag == topScrollView) {
+        // switch the indicator when more than 50% of the previous/next page is visible
+        CGFloat pageWidth = CGRectGetWidth(self.scrollView.frame);
+        NSUInteger page = floor((self.scrollView.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+        self.pageControl.currentPage = page;
+        
+        // load the visible page and the page on either side of it (to avoid flashes when the user starts scrolling)
+        if (page == 0)
+        {
+            [self loadScrollViewWithPage:page];
+            [self loadScrollViewWithPage:page + 1];
+        }
+        else if (page == 1)
+        {
+            [self loadScrollViewWithPage:page - 1];
+            [self loadScrollViewWithPage:page];
+        }
+        
     }
-    else if (page == 1)
-    {
-        [self loadScrollViewWithPage:page - 1];
-        [self loadScrollViewWithPage:page];
+    // Main ScrollView with Slice-Details-Pie-Charts
+    else if (scrollView.tag == mainScrollView){
+        
     }
     
     // a possible optimization would be to unload the views+controllers which are no longer visible
@@ -304,7 +354,7 @@ static const int numberOfParticipants = 3; // ask the server for this number
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     // Load the pages which are now on screen
-    NSLog(@"<EnergyClockViewController> scrollViewDidScroll...");
+    //NSLog(@"<EnergyClockViewController> scrollViewDidScroll...");
 }
 
 - (void)didReceiveMemoryWarning
@@ -342,6 +392,7 @@ static const int numberOfParticipants = 3; // ask the server for this number
         
         // there must be exactly 12 objects in the slicesData-Array
         for (int insertIndex=0; insertIndex<[slicesData count]; insertIndex++) {
+            // energy consumption of every user/partcipant
             NSMutableArray *innerArray = [[NSMutableArray alloc]initWithCapacity:numberOfParticipants];
             EnergyClockSlice *slice = slicesData[insertIndex];
             NSMutableDictionary *slotValuesDict = [NSKeyedUnarchiver unarchiveObjectWithData:slice.slotValues];
@@ -440,6 +491,12 @@ static const int numberOfParticipants = 3; // ask the server for this number
     return (CGFloat)[[[self.slotValuesForSlice objectAtIndex:sliceIndex] objectAtIndex:slotIndex] floatValue];
 
 }
+// for SliceDetailsView
+- (NSNumber *)valueForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex
+{
+    return [[self.slotValuesForSlice objectAtIndex:sliceIndex] objectAtIndex:slotIndex];
+}
+
 // do i need this method?
 - (CGFloat)pieView:(BTSPieView *)pieView radiusForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex
 {
@@ -490,6 +547,10 @@ static const int numberOfParticipants = 3; // ask the server for this number
     [_selectedSliceValueSlider setMinimumTrackTintColor:[sliceData color]];
     [_selectedSliceValueSlider setMaximumTrackTintColor:[sliceData color]];
      */
+    
+    NSLog(@"slice %i ws selected!", index);
+    self.selectedEnergyClockSlice = index;
+    [self.sliceDetailsView reloadPieChartForNewSlice:index];
 }
 
 - (void)pieView:(BTSPieView *)pieView willDeselectSliceAtIndex:(NSInteger)index
@@ -510,6 +571,127 @@ static const int numberOfParticipants = 3; // ask the server for this number
     
     [self updateSelectedSliceValue:_selectedSliceValueSlider];
      */
+}
+
+
+- (void)setupSegmentedControl
+{
+    UIImage *backgroundImage = [[UIImage imageNamed:@"segmented-bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)];
+    [self.participantSelector setBackgroundImage:backgroundImage];
+    [self.participantSelector setContentEdgeInsets:UIEdgeInsetsMake(2.0, 2.0, 3.0, 2.0)];
+    //[self.participantSelector setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    
+    [self.participantSelector setSeparatorImage:[UIImage imageNamed:@"segmented-separator.png"]];
+    
+    UIImage *buttonBackgroundImagePressedLeft = [[UIImage imageNamed:@"segmented-bg-pressed-left.png"]
+                                                 resizableImageWithCapInsets:UIEdgeInsetsMake(0.0, 4.0, 0.0, 1.0)];
+    UIImage *buttonBackgroundImagePressedCenter = [[UIImage imageNamed:@"segmented-bg-pressed-center.png"]
+                                                   resizableImageWithCapInsets:UIEdgeInsetsMake(0.0, 4.0, 0.0, 1.0)];
+    UIImage *buttonBackgroundImagePressedRight = [[UIImage imageNamed:@"segmented-bg-pressed-right.png"]
+                                                  resizableImageWithCapInsets:UIEdgeInsetsMake(0.0, 1.0, 0.0, 4.0)];
+//
+//    // Button 1
+//    UIButton *buttonSocial = [[UIButton alloc] init];
+//    UIImage *buttonSocialImageNormal = [UIImage imageNamed:@"social-icon.png"];
+//    
+//    [buttonSocial setImageEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 5.0)];
+//    [buttonSocial setBackgroundImage:buttonBackgroundImagePressedLeft forState:UIControlStateHighlighted];
+//    [buttonSocial setBackgroundImage:buttonBackgroundImagePressedLeft forState:UIControlStateSelected];
+//    [buttonSocial setBackgroundImage:buttonBackgroundImagePressedLeft forState:(UIControlStateHighlighted|UIControlStateSelected)];
+//    [buttonSocial setImage:buttonSocialImageNormal forState:UIControlStateNormal];
+//    [buttonSocial setImage:buttonSocialImageNormal forState:UIControlStateSelected];
+//    [buttonSocial setImage:buttonSocialImageNormal forState:UIControlStateHighlighted];
+//    [buttonSocial setImage:buttonSocialImageNormal forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    
+    NSMutableArray *buttonsArray = [[NSMutableArray alloc] initWithCapacity:numberOfParticipants];
+    // Dynamically create buttons for segemented control
+    for (NSUInteger i=0; i < numberOfParticipants; i++) {
+        UIButton *userButton = [[UIButton alloc] init];
+        NSString *buttonName = [NSString stringWithFormat:@"Raum %i", i+1];
+//        UIColor *colorWithApha = [[self.availableSliceColors objectAtIndex:i] colorWithAlphaComponent:0.6];
+//        UIColor *color = [self.availableSliceColors objectAtIndex:i];
+//        [userButton setBackgroundImage:[self imageFromColor:colorWithApha] forState:UIControlStateNormal];
+//        [userButton setBackgroundImage:[self imageFromColor:color] forState:UIControlStateHighlighted];
+//        [userButton setBackgroundImage:[self imageFromColor:color] forState:UIControlStateSelected];
+//        [userButton setBackgroundImage:[self imageFromColor:color] forState:(UIControlStateHighlighted|UIControlStateSelected)];
+//        [userButton setTitleColor:[self.availableSliceColors objectAtIndex:i] forState:UIControlStateHighlighted];
+//        [userButton setTitleColor:[self.availableSliceColors objectAtIndex:i] forState:UIControlStateNormal];
+//        [userButton setTitleColor:[self.availableSliceColors objectAtIndex:i] forState:UIControlStateSelected];
+        
+        if (i==0) {
+            [userButton setImageEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 5.0)];
+            [userButton setBackgroundImage:buttonBackgroundImagePressedLeft forState:UIControlStateHighlighted];
+            [userButton setBackgroundImage:buttonBackgroundImagePressedLeft forState:UIControlStateSelected];
+            [userButton setBackgroundImage:buttonBackgroundImagePressedLeft forState:(UIControlStateHighlighted|UIControlStateSelected)];
+        }
+        else if (i==numberOfParticipants-1) {
+            [userButton setBackgroundImage:buttonBackgroundImagePressedRight forState:UIControlStateHighlighted];
+            [userButton setBackgroundImage:buttonBackgroundImagePressedRight forState:UIControlStateSelected];
+            [userButton setBackgroundImage:buttonBackgroundImagePressedRight forState:(UIControlStateHighlighted|UIControlStateSelected)];
+        }
+        else {
+            [userButton setBackgroundImage:buttonBackgroundImagePressedCenter forState:UIControlStateHighlighted];
+            [userButton setBackgroundImage:buttonBackgroundImagePressedCenter forState:UIControlStateSelected];
+            [userButton setBackgroundImage:buttonBackgroundImagePressedCenter forState:(UIControlStateHighlighted|UIControlStateSelected)];
+        }
+        
+        NSLog(@"[self.availableSliceColors objectAtIndex:i]: %@", [self.availableSliceColors objectAtIndex:i]);
+        [userButton setImageEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 5.0)];
+        [userButton setTitle:buttonName forState:UIControlStateNormal];
+        [userButton setTitleColor:[self.availableSliceColors objectAtIndex:i] forState:UIControlStateNormal];
+        [userButton setTitleShadowColor:[UIColor grayColor] forState:UIControlStateNormal];
+        [userButton.titleLabel setShadowOffset:CGSizeMake(0.0, 1.0)];
+        [userButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:15.0]];
+        [userButton setTitleEdgeInsets:UIEdgeInsetsMake(0.0, 5.0, 0.0, 0.0)];
+        userButton.layer.cornerRadius = 4; // this value vary as per your desire
+        userButton.clipsToBounds = YES;
+        buttonsArray[i] = userButton;
+    }
+    
+    
+    [self.participantSelector setButtonsArray:buttonsArray];
+    [self.mainScrollView addSubview:self.participantSelector];
+    
+    NSLog(@"self.participantSelector: %@", self.participantSelector);
+    NSLog(@"self.participantSelector: %@", self.mainScrollView.subviews);
+}
+
+#pragma mark - AKSegmentedControl callbacks
+
+- (void)segmentedViewController:(id)sender
+{
+    AKSegmentedControl *segmentedControl = (AKSegmentedControl *)sender;
+    NSIndexSet *indexSet = [segmentedControl selectedIndexes];
+    if (segmentedControl == self.participantSelector) {
+        NSUInteger selectedIndex = indexSet.firstIndex;
+    
+        NSLog(@"SegmentedControl #1 : Selected Index %@, selectedIndex: %i", [segmentedControl selectedIndexes], selectedIndex  );
+    }
+}
+
+- (UIImage *) imageFromColor:(UIColor *)color {
+    CGRect rect = CGRectMake(0, 0, 1, 1);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    //  [[UIColor colorWithRed:222./255 green:227./255 blue: 229./255 alpha:1] CGColor]) ;
+    CGContextFillRect(context, rect);
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+//    CALayer *imageLayer = [CALayer layer];
+//    imageLayer.frame = CGRectMake(0, 0, img.size.width, img.size.height);
+//    imageLayer.contents = (id) img.CGImage;
+//    
+//    imageLayer.masksToBounds = YES;
+//    imageLayer.cornerRadius = 5.0;
+//    
+//    UIGraphicsBeginImageContext(img.size);
+//    [imageLayer renderInContext:UIGraphicsGetCurrentContext()];
+//    UIImage *roundedImage = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+    
+    return img;
 }
 
 
