@@ -8,22 +8,40 @@
 
 #import "CPTPieChart+CustomPieChart.h"
 #import "NSNumberExtensions.h"
+#import <objc/runtime.h>
 
 
 /* We override some methods to rotate pie-chart text labels (clockwise rotation relative to center)
  * we need to display the text-labels according to our EnergyClock-Design
  */
 
-CGFloat const addedAngleValueEcoMeter  = 16.0;
+
+@interface CPTPieChart (Internal)
+// we cannot synthesize properties declared in categories
+@end
 
 @implementation CPTPieChart (CustomPieChart)
 
+static char shouldCenterLabelKey; // we store the address of the shouldCenterLabel-property
 
+-(NSString *)shouldCenterLabel
+{
+    return (NSString *)objc_getAssociatedObject(self, &shouldCenterLabelKey) ;
+}
+
+-(void)setShouldCenterLabel:(NSString *)value
+{
+    objc_setAssociatedObject(self, &shouldCenterLabelKey, value, OBJC_ASSOCIATION_RETAIN_NONATOMIC) ;
+}
 
 
 -(void)positionLabelAnnotation:(CPTPlotSpaceAnnotation *)label forIndex:(NSUInteger)idx
 {
     CPTLayer *contentLayer   = label.contentLayer;
+    CGFloat addedAngleValueEcoMeter  = 0.0;
+    if ([self.shouldCenterLabel isEqualToString:@"YES"]) {
+        addedAngleValueEcoMeter  = 16.0;
+    }
     
     //NSLog(@"positionLabelAnnotation: %@", contentLayer);
     CPTPlotArea *thePlotArea = self.plotArea;
@@ -52,7 +70,10 @@ CGFloat const addedAngleValueEcoMeter  = 16.0;
             if ( idx > 0 ) {
                 startingWidth = (CGFloat)[self cachedDoubleForField : CPTPieChartFieldSliceWidthSum recordIndex : idx - 1];
             }
-            CGFloat labelAngle = [self radiansForPieSliceValue:startingWidth + currentWidth + addedAngleValueEcoMeter / CPTFloat(2.0)];
+            CGFloat labelAngle = [self radiansForPieSliceValue:startingWidth + currentWidth / CPTFloat(2.0)];
+            if ([self.shouldCenterLabel isEqualToString:@"YES"]) {
+                labelAngle = [self radiansForPieSliceValue:startingWidth + currentWidth + addedAngleValueEcoMeter/ CPTFloat(2.0)];
+            }
             
             label.displacement = CPTPointMake( labelRadius * cos(labelAngle), labelRadius * sin(labelAngle) );
             

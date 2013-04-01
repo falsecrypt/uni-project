@@ -18,6 +18,7 @@
 
 -(void)initPlots;
 -(void)reloadPieChartForNewSlice:(NSUInteger)selectedSliceNumber;
+-(void)reloadPieChartForNewParticipant:(NSUInteger)selectedParticipant;
 
 @property (nonatomic, strong) NSMutableArray *slotValuesForSlice;
 @property (nonatomic,weak) id <slicePieChartDatasource> datasource;

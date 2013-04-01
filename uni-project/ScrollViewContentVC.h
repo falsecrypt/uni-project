@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EnergyClockDataManager.h"
 
 
 @interface ScrollViewContentVC : UIViewController <CPTPlotSpaceDelegate,

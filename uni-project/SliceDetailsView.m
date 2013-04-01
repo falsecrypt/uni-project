@@ -10,6 +10,7 @@
 #import "ScrollViewContentVC.h"
 #import "CPTAnimationPeriod.h"
 
+
 @interface SliceDetailsView ()
 @property (strong, nonatomic) CPTGraphHostingView *participantHostingView;
 @property (strong, nonatomic) CPTGraphHostingView *totalSliceHostingView;
@@ -22,10 +23,14 @@
 
 @property (weak, nonatomic) ScrollViewContentVC *scrollViewContentVC; // check if i need this
 @property (assign, nonatomic) NSUInteger selectedEnergyClockSlice;
+@property (assign, nonatomic) NSUInteger selectedParticipant;
+@property (strong, nonatomic) NSArray *availableCPTColors;
 
 @end
 
 @implementation SliceDetailsView
+
+
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -33,7 +38,7 @@
     if (self) {
         // Initialization code
         NSLog(@"<SliceDetailsView> initWithFrame...");
-        //[self initPlots];
+
         
     }
     return self;
@@ -54,6 +59,16 @@
 {
     NSLog(@"<SliceDetailsView> initPlots...");
     self.selectedEnergyClockSlice = 0;
+    self.availableCPTColors =
+    [NSArray arrayWithObjects:
+     [CPTColor colorWithComponentRed:93.0f/255.0f green:150.0f/255.0f blue:72.0f/255.0f alpha:1.0f],
+     [CPTColor colorWithComponentRed:46.0f/255.0f green:87.0f/255.0f blue:140.0f/255.0f alpha:1.0f],
+     [CPTColor colorWithComponentRed:231.0f/255.0f green:161.0f/255.0f blue:61.0f/255.0f alpha:1.0f],
+     [CPTColor colorWithComponentRed:188.0f/255.0f green:45.0f/255.0f blue:48.0f/255.0f alpha:1.0f],
+     [CPTColor colorWithComponentRed:111.0f/255.0f green:61.0f/255.0f blue:121.0f/255.0f alpha:1.0f],
+     [CPTColor colorWithComponentRed:125.0f/255.0f green:128.0f/255.0f blue:127.0f/255.0f alpha:1.0f],
+     nil];
+    
     [self configureHostViews];
     [self configureGraphs];
     [self configureCharts];
@@ -68,9 +83,9 @@
     
     // 1 - Set up view frames
     CGRect rectParticipant = self.bounds;
-    rectParticipant = CGRectMake(rectParticipant.origin.x, rectParticipant.origin.y, (rectParticipant.size.width/2)-30.0, (rectParticipant.size.height));
+    rectParticipant = CGRectMake(rectParticipant.origin.x, rectParticipant.origin.y, self.bounds.size.width/2, (rectParticipant.size.height));
     
-    CGRect rectTotalSlice = CGRectMake(rectParticipant.size.width+30.0, rectParticipant.origin.y, (rectParticipant.size.width), (rectParticipant.size.height));
+    CGRect rectTotalSlice = CGRectMake(self.bounds.size.width/2, rectParticipant.origin.y, self.bounds.size.width/2, (rectParticipant.size.height));
     
     // create instances
     self.participantHostingView =[(CPTGraphHostingView *) [CPTGraphHostingView alloc] init];
@@ -151,6 +166,7 @@
     self.participantPieChart.identifier = @"participantPieChart";
     self.participantPieChart.startAngle = M_PI_2;
     self.participantPieChart.sliceDirection = CPTPieDirectionCounterClockwise;
+    self.participantPieChart.labelOffset = -1.0;
     // 2.
     self.totalSlicePieChart.dataSource = self;
     self.totalSlicePieChart.delegate = self;
@@ -163,7 +179,7 @@
     self.totalSlicePieChart.sliceDirection = CPTPieDirectionCounterClockwise;
     //pieChart.labelRotationRelativeToRadius = YES;
     //pieChart.labelRotation                 = -M_PI_2;
-    //pieChart.labelOffset                   = -5.0;
+    self.totalSlicePieChart.labelOffset = -1.0;
     //pieChart.labelRotation = M_PI_4;
     
     // Create gradient
@@ -186,7 +202,7 @@
         [CPTAnimation animate:self.participantPieChart
                      property:@"pieRadius"
                          from:0.0
-                           to:(self.participantHostingView.bounds.size.height * 0.7) / 2
+                           to:(self.participantHostingView.bounds.size.height * 0.65) / 2
                      duration:0.5
                     withDelay:0.1
                animationCurve:CPTAnimationCurveBounceOut
@@ -195,7 +211,7 @@
         [CPTAnimation animate:self.totalSlicePieChart
                      property:@"pieRadius"
                          from:0.0
-                           to:(self.totalSliceHostingView.bounds.size.height * 0.7) / 2
+                           to:(self.totalSliceHostingView.bounds.size.height * 0.65) / 2
                      duration:0.5
                     withDelay:0.1
                animationCurve:CPTAnimationCurveBounceOut
@@ -233,7 +249,7 @@
         }
         else if ([(NSString *)plot.identifier isEqualToString:@"totalSlicePieChart"]){
 
-            result = [self.datasource valueForSlotAtIndex:index sliceAtIndex:self.selectedEnergyClockSlice];
+            result = [self.datasource valueForSlotAtIndex:(numberOfParticipants-index)-1 sliceAtIndex:self.selectedEnergyClockSlice];
         }
 
     }
@@ -249,30 +265,61 @@
 -(CPTLayer *)dataLabelForPlot:(CPTPlot *)plot recordIndex:(NSUInteger)index
 {
     NSLog(@"dataLabelForPlot - new");
+    
+    // 1 - Define label text style
     static CPTMutableTextStyle *labelText = nil;
-    static NSString *labelValue = nil;
+    static NSString *labelValue = @"";
     if (!labelText) {
         labelText= [[CPTMutableTextStyle alloc] init];
-        labelText.color = [CPTColor blackColor];
+        labelText.color = [CPTColor grayColor];
     }
-    
-    labelValue = @"test";
-    
-    // Create and return layer with label text
-    CPTTextLayer *layer =[[CPTTextLayer alloc] initWithText:labelValue style:labelText];
-    return layer;
+    if ([(NSString *)plot.identifier isEqualToString:@"totalSlicePieChart"]){
+        // 2 - Calculate total value
+        float slotValuesSum = 0.0;
+        for (NSUInteger i = 0; i < numberOfParticipants; i++) {
+            slotValuesSum +=[[self.datasource valueForSlotAtIndex:i sliceAtIndex:self.selectedEnergyClockSlice] floatValue];
+        }
+        // 3 - Calculate percentage value
+        float slotValue = [[self.datasource valueForSlotAtIndex:(numberOfParticipants-index)-1 sliceAtIndex:self.selectedEnergyClockSlice] floatValue];
+        float percent = slotValue/slotValuesSum;
+        // 4 - Set up display label
+        labelValue = [NSString stringWithFormat:@"%0.1f %%", (percent * 100.0f)];
+        
+    }
+    // 5 - Create and return layer with label text
+    return [[CPTTextLayer alloc] initWithText:labelValue style:labelText];
+
 }
 
-/*-(CPTFill *)sliceFillForPieChart:(CPTPieChart *)pieChart recordIndex:(NSUInteger)index
+-(CPTFill *)sliceFillForPieChart:(CPTPieChart *)pieChart recordIndex:(NSUInteger)index
 {
     NSLog(@"sliceFillForPieChart - new");
-}*/
+    CPTFill *sector = [[CPTFill alloc] init];
+    CPTColor *fillColor = [[CPTColor alloc] init];
+    if([(NSString *)pieChart.identifier isEqualToString:@"participantPieChart"]){
+        fillColor = [self.availableCPTColors objectAtIndex:0]; // @todo
+    }
+    else if ([(NSString *)pieChart.identifier isEqualToString:@"totalSlicePieChart"]){
+        NSLog(@"CPTColor for index %i !", index);
+        fillColor = [self.availableCPTColors objectAtIndex:index];
+    }
+    
+    sector=[CPTFill fillWithColor:(CPTColor *)fillColor];
+    return sector;
+}
 
 
 -(void) reloadPieChartForNewSlice:(NSUInteger)selectedSliceNumber
 {
     self.selectedEnergyClockSlice = selectedSliceNumber;
     [self.totalSliceGraph reloadData];
+}
+
+-(void) reloadPieChartForNewParticipant:(NSUInteger)selectedParticipant
+{
+    // @todo
+    self.selectedParticipant = selectedParticipant;
+    [self.participantGraph reloadData];
 }
 
 

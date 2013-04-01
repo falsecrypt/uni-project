@@ -799,9 +799,9 @@
                                     <constraint firstItem="AGo-9u-OXp" firstAttribute="trailing" secondItem="mCr-T7-Uy3" secondAttribute="trailing" type="default" id="1R9-d7-U2C"/>
                                     <constraint firstItem="akc-Bk-Vmh" firstAttribute="leading" secondItem="mCr-T7-Uy3" secondAttribute="leading" type="default" id="EG1-4C-b8h"/>
                                     <constraint firstItem="AGo-9u-OXp" firstAttribute="centerX" secondItem="mCr-T7-Uy3" secondAttribute="centerX" type="default" id="KsT-Fk-d5f"/>
-                                    <constraint firstItem="AGo-9u-OXp" firstAttribute="top" secondItem="mCr-T7-Uy3" secondAttribute="top" constant="-6" id="NNH-ji-iCm"/>
                                     <constraint firstItem="akc-Bk-Vmh" firstAttribute="top" secondItem="mCr-T7-Uy3" secondAttribute="top" constant="423" id="S8D-oE-pJi"/>
-                                    <constraint firstAttribute="bottom" secondItem="AGo-9u-OXp" secondAttribute="bottom" constant="137" id="mby-bA-hmv"/>
+                                    <constraint firstAttribute="bottom" secondItem="AGo-9u-OXp" secondAttribute="bottom" constant="124" id="d0P-uf-MWz"/>
+                                    <constraint firstItem="AGo-9u-OXp" firstAttribute="top" secondItem="mCr-T7-Uy3" secondAttribute="top" constant="7" id="mvi-pK-JwO"/>
                                 </constraints>
                             </scrollView>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="iCU-fv-64G">

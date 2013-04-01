@@ -10,4 +10,6 @@
 
 @interface CPTPieChart (CustomPieChart)
 
+@property (strong, nonatomic) NSString *shouldCenterLabel;
+
 @end

@@ -13,9 +13,12 @@
 #import "EcoMeterAppDelegate.h"
 #import "AggregatedDay.h"
 #import "CPTAnimationPeriod.h"
+#import "CPTPieChart+CustomPieChart.h"
 
 static const int firstPageNumber    = 0;
 static const int secondPageNumber   = 1;
+
+
 
 @interface ScrollViewContentVC ()
 
@@ -321,6 +324,9 @@ static float maxConsumption = 0.0f;
                             self.secondPieChart = [[CPTPieChart alloc] init],
                             self.thirdPieChart = [[CPTPieChart alloc] init],
                             self.fourthPieChart = [[CPTPieChart alloc] init], nil];
+        for (CPTPieChart *pieChart in _firstPagePieCharts) {
+            pieChart.shouldCenterLabel = @"YES";
+        }
     }
     return _firstPagePieCharts;
 }

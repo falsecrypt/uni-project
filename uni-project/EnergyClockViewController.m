@@ -11,6 +11,7 @@
 #import "EnergyClockSlice.h"
 #import "AKSegmentedControl.h"
 #import "SliceDetailsView.h"
+#import "EnergyClockDataManager.h"
 
 static const int numberPages    = 2;
 static const int numberSlices   = 12; // 12 time intervalls, 00:00-02:00-...
@@ -131,8 +132,8 @@ static const int mainScrollView = 10;
                                  nil];
     
     // Segmented Control #1
-    UILabel *segmentedControl1Label = [[UILabel alloc] initWithFrame:CGRectMake((self.mainScrollView.frame.size.width - 300.0) / 2, 400.0, 300.0, 20.0)]; // x,y,width,height
-    [segmentedControl1Label setAutoresizingMask:UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin];
+    UILabel *segmentedControl1Label = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + 20.0, 400.0, 300.0, 20.0)]; // x,y,width,height
+    //[segmentedControl1Label setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     [segmentedControl1Label setText:@"Users"];
     [segmentedControl1Label setTextAlignment:NSTextAlignmentCenter];
     [segmentedControl1Label setBackgroundColor:[UIColor clearColor]];
@@ -142,7 +143,7 @@ static const int mainScrollView = 10;
     [segmentedControl1Label setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:15.0]];
     
     [self.mainScrollView addSubview:segmentedControl1Label];
-    self.participantSelector = [[AKSegmentedControl alloc] initWithFrame:CGRectMake((self.view.frame.size.width - 300.0) / 2,
+    self.participantSelector = [[AKSegmentedControl alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + 20.0,
                                                                                     CGRectGetMaxY(segmentedControl1Label.frame) + 10.0, 300.0, 37.0)];
     [self.participantSelector addTarget:self action:@selector(segmentedViewController:) forControlEvents:UIControlEventValueChanged];
     [self.participantSelector setSegmentedControlMode:AKSegmentedControlModeSticky];
@@ -522,6 +523,7 @@ static const int mainScrollView = 10;
 // TODO : new
 - (UIColor *)pieView:(BTSPieView *)pieView colorForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex sliceCount:(NSUInteger)sliceCount
 {
+    NSLog(@"color for slotIndex %i !", slotIndex);
     return [self.availableSliceColors objectAtIndex:slotIndex];
 }
 
@@ -663,8 +665,8 @@ static const int mainScrollView = 10;
     AKSegmentedControl *segmentedControl = (AKSegmentedControl *)sender;
     NSIndexSet *indexSet = [segmentedControl selectedIndexes];
     if (segmentedControl == self.participantSelector) {
-        NSUInteger selectedIndex = indexSet.firstIndex;
-    
+        NSUInteger selectedIndex = indexSet.firstIndex; // ?
+        [self.sliceDetailsView reloadPieChartForNewParticipant:indexSet.firstIndex];
         NSLog(@"SegmentedControl #1 : Selected Index %@, selectedIndex: %i", [segmentedControl selectedIndexes], selectedIndex  );
     }
 }
