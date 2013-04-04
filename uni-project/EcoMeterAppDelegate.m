@@ -44,7 +44,7 @@ extern CFAbsoluteTime StartTime;
     // the NSManagedObjectModel and the NSManagedObjectContext. We are using
     // the active record pattern.
     //--------------------------------------------------------------------
-    [MagicalRecord setupCoreDataStackWithStoreNamed:@"ecoMeterDB.sqlite"];
+    [MagicalRecord setupCoreDataStackWithStoreNamed:CoreDataDBName];
     
     UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
     self.splitViewController = splitViewController;

@@ -339,6 +339,9 @@ static float maxConsumption = 0.0f;
                              self.fifthPieChart = [[CPTPieChart alloc] init],
                              self.sixthPieChart = [[CPTPieChart alloc] init],
                              self.seventhPieChart = [[CPTPieChart alloc] init], nil];
+        for (CPTPieChart *pieChart in _secondPagePieCharts) {
+            pieChart.shouldCenterLabel = @"YES";
+        }
     }
     return _secondPagePieCharts;
 }
@@ -349,9 +352,9 @@ static float maxConsumption = 0.0f;
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
     //NSLog(@"numberOfRecordsForPlot...");
-    if([(NSString *)plot.identifier isEqualToString:@"participantPieChart"]){
-        NSLog(@"numberOfRecordsForPlot - participantPieChart is here!!!");
-    }
+//    if([(NSString *)plot.identifier isEqualToString:@"participantPieChart"]){
+//        NSLog(@"numberOfRecordsForPlot - participantPieChart is here!!!");
+//    }
     return 2;
 }
 
@@ -360,7 +363,34 @@ static float maxConsumption = 0.0f;
 {
     //[(EnergyClockViewController *)self.targetViewController loadEnergyClockForWeekDay:plot.identifier];
     if ([self.targetViewController respondsToSelector:@selector(loadEnergyClockForDate:)]) { // in our case its the EnergyClockVC
+        
         [self.targetViewController loadEnergyClockForDate:[self.weekdaysDates objectForKey:plot.identifier]];
+        plot.graph.hostingView.backgroundColor = [UIColor purpleColor];
+        // omg, sorry for that: (but it works)
+        EnergyClockViewController *ecVC = (EnergyClockViewController *)self.parentViewController;
+        NSArray *vcs = ecVC.viewControllers;
+        for (ScrollViewContentVC *obj in vcs) {
+            [obj selectNewPieChart:(NSString *)plot.identifier];
+        }
+        
+    }
+}
+
+-(void)selectNewPieChart:(NSString *)identifier
+{
+    if(self.pageNumber == 0){
+        NSArray *filteredItems = [self.firstPagePieCharts filteredArrayUsingPredicate:
+                                  [NSPredicate predicateWithFormat:@"identifier != %@", identifier]];
+        for (int i=0; i<[filteredItems count]; i++) {
+            ((CPTPieChart *)filteredItems[i]).graph.hostingView.backgroundColor = [UIColor clearColor];
+        }
+    }
+    else {
+        NSArray *filteredItems = [self.secondPagePieCharts filteredArrayUsingPredicate:
+                                  [NSPredicate predicateWithFormat:@"identifier != %@", identifier]];
+        for (int i=0; i<[filteredItems count]; i++) {
+            ((CPTPieChart *)filteredItems[i]).graph.hostingView.backgroundColor = [UIColor clearColor];
+        }
     }
 }
 
@@ -716,7 +746,7 @@ static float maxConsumption = 0.0f;
         
         //pieChart.labelRotationRelativeToRadius = YES;
         //pieChart.labelRotation                 = -M_PI_2;
-        pieChart.labelOffset                   = -5.0;
+        pieChart.labelOffset                   = -3.0;
         //pieChart.labelRotation = M_PI_4;
         
         // Create gradient

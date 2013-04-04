@@ -18,6 +18,9 @@ NSString *  const pieChart                  = @"Pie Chart";
 NSString *  const barGraph                  = @"Bar Graph";
 NSString *  const scatterPlot               = @"Scatter Plot";
 
+// IMPORTANT! Get Requests must look like: ..hcm-lab.de/downloads/buehling/adaptiveart/CurrentCostTreeOnline/rpctest.php?userID=3&action=get&...
+// If the server-path changed/doesnt exist anymore, the System-Parts that rely on this would break/not function as expected.
+// See EnergyClockDataManager-Class and ParticipantDataManager-Class for more Info.
 NSString *  const currentCostServerBaseURLString = @"http://www.hcm-lab.de/downloads/buehling/adaptiveart/CurrentCostTreeOnline/";
 NSString *  const currentCostServerBaseURLHome   = @"www.hcm-lab.de";
 float       const OfficeArea     = 20.0f;
@@ -41,15 +44,20 @@ NSString * const DayChartsMode           = @"DayChartsMode";
 NSString * const MultiLevelPieChartMode  = @"MultiLevelPieChartMode";
 
 // test data flag, set to NO when not in dev mode
-BOOL const USEDUMMYDATA        = YES;
+BOOL const USEDUMMYDATA                 = NO;
 
 // wunderground Weather API, projectname: ecometerapp
-NSString * const wundergroundAPIKey = @"7a5424a084a5ba90";
+NSString * const wundergroundAPIKey     = @"7a5424a084a5ba90";
 NSString * const wundergroundRequestURL = @"http://api.wunderground.com/api/7a5424a084a5ba90/astronomy/q/Germany/Augsburg.json";
 
-NSString * const AggregatedDaysSaved = @"AggregatedDaysSaved";
-BOOL const FORCEDAYCHARTSUPDATE = NO;
+NSString * const AggregatedDaysSaved    = @"AggregatedDaysSaved";
+BOOL const FORCEDAYCHARTSUPDATE         = NO;
 
-NSInteger const numberOfParticipants = 3;
+NSInteger const numberOfParticipants    = 3;
+
+// Used in 'EcoMeterAppDelegate.m'
+NSString * const CoreDataDBName         = @"ecoMeterDB.sqlite";
+NSString * const SegmentedControlLabelText = @"Users";
+
 
 @end

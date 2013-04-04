@@ -47,5 +47,8 @@ extern BOOL const FORCEDAYCHARTSUPDATE;
 
 extern NSInteger const numberOfParticipants;
 
+extern NSString * const CoreDataDBName;
+extern NSString * const SegmentedControlLabelText;
+
 @end
 

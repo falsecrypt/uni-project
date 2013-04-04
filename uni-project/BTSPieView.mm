@@ -817,14 +817,14 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
 {
     CATextLayer *textLayer = [CATextLayer layer];
     [textLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    CGFontRef font = CGFontCreateWithFontName((__bridge CFStringRef) [[UIFont boldSystemFontOfSize:17.0] fontName]);
+    CGFontRef font = CGFontCreateWithFontName((__bridge CFStringRef) [[UIFont systemFontOfSize:17.0] fontName]);
     [textLayer setFont:font];
     CFRelease(font);
     [textLayer setFontSize:17.0];
     [textLayer setAnchorPoint:CGPointMake(0.5, 0.5)];
     [textLayer setAlignmentMode:kCAAlignmentCenter];
 
-    CGSize size = [@"100.00%" sizeWithFont:[UIFont boldSystemFontOfSize:17.0]];
+    CGSize size = [@"100.00%" sizeWithFont:[UIFont systemFontOfSize:17.0]];
     [textLayer setBounds:CGRectMake(0.0, 0.0, size.width, size.height)];
     return textLayer;
 }

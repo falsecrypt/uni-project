@@ -15,6 +15,7 @@
 @property (weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) NSMutableArray *radiusValuesForSlice;
+@property (nonatomic, strong, readonly) NSMutableArray *viewControllers;
 
 -(void)loadEnergyClockForDate:(NSDate *)date;
 

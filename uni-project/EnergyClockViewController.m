@@ -14,7 +14,7 @@
 #import "EnergyClockDataManager.h"
 
 static const int numberPages    = 2;
-static const int numberSlices   = 12; // 12 time intervalls, 00:00-02:00-...
+static const int numberSlices   = 12; // 12 time intervalls, 00:00-02:00-..., sometimes == 11 !
 static const int topScrollView = 9; // ScrollView identifiers
 static const int mainScrollView = 10;
 
@@ -22,25 +22,35 @@ static const int mainScrollView = 10;
 @interface EnergyClockViewController ()<UIScrollViewDelegate, BTSPieViewDataSource, BTSPieViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
-@property (nonatomic, strong) NSMutableArray *viewControllers;
+@property (nonatomic, strong, readwrite) NSMutableArray *viewControllers;
 @property (weak, nonatomic) IBOutlet BTSPieView *energyClockView;
+// Used to display so called 'EnergyClock-Multilevel-Pie Chart', center of the screen -> Slice Values
 @property (nonatomic, strong) NSMutableArray *sliceValues;
+// Used to display so called 'EnergyClock-Multilevel-Pie Chart', center of the screen -> Slot Values
 @property (nonatomic, strong) NSMutableArray *slotValuesForSlice;
+// Data for a Detail Pie Chart, when user selects a participant using our 'participantSelector'
+// Holds the values of all participants for the current date, Form: [Slice] => [[userId]=>[consumption]]
+@property (nonatomic, strong) NSArray *dayUserConsumption;
 @property (nonatomic, strong) NSArray *availableSliceColors;
+@property (nonatomic, strong) NSArray *availableCPTColors;
+@property (nonatomic, strong) NSDictionary *CPTColorsForParticipants;
 @property (nonatomic, assign) NSInteger selectedSliceIndex;
 //@property (nonatomic, assign) CGFloat energyClockViewRadius;
 @property (nonatomic, strong) NSDate *currentDate;
 
-//@property (weak, nonatomic) IBOutlet AKSegmentedControl *participantSelector;
 @property (strong, nonatomic) AKSegmentedControl *participantSelector;
 
 @property (weak, nonatomic) IBOutlet SliceDetailsView *sliceDetailsView;
 @property (weak, nonatomic) IBOutlet UIScrollView *mainScrollView;
-@property (assign, nonatomic) NSUInteger selectedEnergyClockSlice;
+@property (assign, nonatomic) NSInteger selectedEnergyClockSlice;
+@property (assign, nonatomic) BOOL waitingForNewData;
+@property (assign, nonatomic) NSInteger selectedParticipantId;
 
 @end
 
 @implementation EnergyClockViewController
+
+static const NSArray *participants;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -50,6 +60,108 @@ static const int mainScrollView = 10;
         NSLog(@"EnergyClockViewController-initWithNibName");
     }
     return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	// Do any additional setup after loading the view.
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(initEnergyClockAfterSavingData) // when the data has been saved we will be notified
+     name:AggregatedDaysSaved
+     object:nil];
+    
+    participants = [[NSArray alloc] initWithObjects:
+                         [NSNumber numberWithInteger:FirstSensorID],
+                         [NSNumber numberWithInteger:SecondSensorID],
+                         [NSNumber numberWithInteger:ThirdSensorID], nil];
+
+    
+    self.sliceDetailsView.datasource = self;
+    
+    self.selectedEnergyClockSlice = -1;
+    self.selectedParticipantId = FirstSensorID;
+    
+    // TEST
+    // Must divide by 255.0F... RBG values are between 0.0 and 1.0
+    self.availableSliceColors = [NSArray arrayWithObjects:
+                                 [UIColor colorWithRed:93.0f/255.0f green:150.0f/255.0f blue:72.0f/255.0f alpha:1.0f],
+                                 [UIColor colorWithRed:46.0f/255.0f green:87.0f/255.0f blue:140.0f/255.0f alpha:1.0f],
+                                 [UIColor colorWithRed:231.0f/255.0f green:161.0f/255.0f blue:61.0f/255.0f alpha:1.0f],
+                                 [UIColor colorWithRed:188.0f/255.0f green:45.0f/255.0f blue:48.0f/255.0f alpha:1.0f],
+                                 [UIColor colorWithRed:111.0f/255.0f green:61.0f/255.0f blue:121.0f/255.0f alpha:1.0f],
+                                 [UIColor colorWithRed:125.0f/255.0f green:128.0f/255.0f blue:127.0f/255.0f alpha:1.0f],
+                                 nil];
+    self.availableCPTColors =
+    [NSArray arrayWithObjects:
+     [CPTColor colorWithComponentRed:93.0f/255.0f green:150.0f/255.0f blue:72.0f/255.0f alpha:1.0f],
+     [CPTColor colorWithComponentRed:46.0f/255.0f green:87.0f/255.0f blue:140.0f/255.0f alpha:1.0f],
+     [CPTColor colorWithComponentRed:231.0f/255.0f green:161.0f/255.0f blue:61.0f/255.0f alpha:1.0f],
+     [CPTColor colorWithComponentRed:188.0f/255.0f green:45.0f/255.0f blue:48.0f/255.0f alpha:1.0f],
+     [CPTColor colorWithComponentRed:111.0f/255.0f green:61.0f/255.0f blue:121.0f/255.0f alpha:1.0f],
+     [CPTColor colorWithComponentRed:125.0f/255.0f green:128.0f/255.0f blue:127.0f/255.0f alpha:1.0f],
+     nil];
+    
+    self.CPTColorsForParticipants = [[NSDictionary alloc] init];
+    NSMutableDictionary *CPTColorsForParticipantsMutable = [self.CPTColorsForParticipants mutableCopy];
+    for (int i=0; i<[participants count]; i++) {
+        [CPTColorsForParticipantsMutable setObject:self.availableCPTColors[i] forKey:participants[i]];
+    }
+    self.CPTColorsForParticipants = CPTColorsForParticipantsMutable;
+    
+    // Segmented Control #1
+    UILabel *segmentedControl1Label = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + 10.0, 400.0, 300.0, 20.0)]; // x,y,width,height
+    //[segmentedControl1Label setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    [segmentedControl1Label setText:SegmentedControlLabelText];
+    [segmentedControl1Label setTextAlignment:NSTextAlignmentCenter];
+    [segmentedControl1Label setBackgroundColor:[UIColor clearColor]];
+    [segmentedControl1Label setTextColor:[UIColor colorWithRed:82.0/255.0 green:113.0/255.0 blue:131.0/255.0 alpha:1.0]];
+    [segmentedControl1Label setShadowColor:[UIColor whiteColor]];
+    [segmentedControl1Label setShadowOffset:CGSizeMake(0.0, 1.0)];
+    [segmentedControl1Label setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:15.0]];
+    
+    [self.mainScrollView addSubview:segmentedControl1Label];
+    self.participantSelector = [[AKSegmentedControl alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + 10.0,
+                                                                                    CGRectGetMaxY(segmentedControl1Label.frame) + 10.0, 300.0, 37.0)];
+    [self.participantSelector addTarget:self action:@selector(segmentedViewController:) forControlEvents:UIControlEventValueChanged];
+    [self.participantSelector setSegmentedControlMode:AKSegmentedControlModeSticky];
+    [self.participantSelector setSelectedIndex:0];
+    
+    [self setupSegmentedControl];
+    
+    [[EnergyClockDataManager sharedClient] calculateValuesWithMode:DayChartsMode];
+    
+    // view controllers are created lazily
+    // in the meantime, load the array with placeholders which will be replaced on demand
+    NSMutableArray *controllers = [[NSMutableArray alloc] init];
+    for (NSUInteger i = 0; i < numberPages; i++)
+    {
+		[controllers addObject:[NSNull null]];
+    }
+    self.viewControllers = controllers;
+    
+    self.scrollView.delegate = self;
+    self.scrollView.tag = topScrollView;
+    self.mainScrollView.delegate = self;
+    self.mainScrollView.tag = mainScrollView;
+    self.pageControl.numberOfPages = numberPages;
+    self.pageControl.currentPage = 0;
+    
+    // set up the data source and delegate
+    [self.energyClockView setDataSource:self];
+    [self.energyClockView setDelegate:self];
+    self.selectedSliceIndex = -1;
+    //float animationDuration = 1.0f;
+    //[self.energyClockView setAnimationDuration:animationDuration];
+    
+    //[self.energyClockView reloadData];
+    [self checkSyncStatus];
+    
+    NSLog(@"viewDidLoad-after checkSyncStatus, self.sliceValues: %@", self.sliceValues);
+    NSLog(@"viewDidLoad-after checkSyncStatus, self.slotValuesForSlice: %@", self.slotValuesForSlice);
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -102,85 +214,11 @@ static const int mainScrollView = 10;
         }*/
     [self.energyClockView reloadData];
     
-    self.sliceDetailsView.slotValuesForSlice = self.slotValuesForSlice;
-    [self.sliceDetailsView initPlots];
-
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(initEnergyClockAfterSavingData) // when the data has been saved we will be notified
-     name:AggregatedDaysSaved
-     object:nil];
-    
-    self.sliceDetailsView.datasource = self;
-    
-    // TEST
-    // Must divide by 255.0F... RBG values are between 0.0 and 1.0
-    self.availableSliceColors = [NSArray arrayWithObjects:
-                                 [UIColor colorWithRed:93.0f/255.0f green:150.0f/255.0f blue:72.0f/255.0f alpha:1.0f],
-                                 [UIColor colorWithRed:46.0f/255.0f green:87.0f/255.0f blue:140.0f/255.0f alpha:1.0f],
-                                 [UIColor colorWithRed:231.0f/255.0f green:161.0f/255.0f blue:61.0f/255.0f alpha:1.0f],
-                                 [UIColor colorWithRed:188.0f/255.0f green:45.0f/255.0f blue:48.0f/255.0f alpha:1.0f],
-                                 [UIColor colorWithRed:111.0f/255.0f green:61.0f/255.0f blue:121.0f/255.0f alpha:1.0f],
-                                 [UIColor colorWithRed:125.0f/255.0f green:128.0f/255.0f blue:127.0f/255.0f alpha:1.0f],
-                                 nil];
-    
-    // Segmented Control #1
-    UILabel *segmentedControl1Label = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + 20.0, 400.0, 300.0, 20.0)]; // x,y,width,height
-    //[segmentedControl1Label setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    [segmentedControl1Label setText:@"Users"];
-    [segmentedControl1Label setTextAlignment:NSTextAlignmentCenter];
-    [segmentedControl1Label setBackgroundColor:[UIColor clearColor]];
-    [segmentedControl1Label setTextColor:[UIColor colorWithRed:82.0/255.0 green:113.0/255.0 blue:131.0/255.0 alpha:1.0]];
-    [segmentedControl1Label setShadowColor:[UIColor whiteColor]];
-    [segmentedControl1Label setShadowOffset:CGSizeMake(0.0, 1.0)];
-    [segmentedControl1Label setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:15.0]];
-    
-    [self.mainScrollView addSubview:segmentedControl1Label];
-    self.participantSelector = [[AKSegmentedControl alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + 20.0,
-                                                                                    CGRectGetMaxY(segmentedControl1Label.frame) + 10.0, 300.0, 37.0)];
-    [self.participantSelector addTarget:self action:@selector(segmentedViewController:) forControlEvents:UIControlEventValueChanged];
-    [self.participantSelector setSegmentedControlMode:AKSegmentedControlModeSticky];
-    [self.participantSelector setSelectedIndex:0];
-    
-    [self setupSegmentedControl];
-    
-    [[EnergyClockDataManager sharedClient] calculateValuesWithMode:DayChartsMode];
-
-    // view controllers are created lazily
-    // in the meantime, load the array with placeholders which will be replaced on demand
-    NSMutableArray *controllers = [[NSMutableArray alloc] init];
-    for (NSUInteger i = 0; i < numberPages; i++)
-    {
-		[controllers addObject:[NSNull null]];
+    if (self.waitingForNewData == NO) {
+        self.sliceDetailsView.slotValuesForSlice = self.slotValuesForSlice;
+        NSLog(@"<EnergyClockVC> calling viewDidAppear");
+        [self.sliceDetailsView initPlots];
     }
-    self.viewControllers = controllers;
-    
-    self.scrollView.delegate = self;
-    self.scrollView.tag = topScrollView;
-    self.mainScrollView.delegate = self;
-    self.mainScrollView.tag = mainScrollView;
-    self.pageControl.numberOfPages = numberPages;
-    self.pageControl.currentPage = 0;
-
-    // set up the data source and delegate
-    [self.energyClockView setDataSource:self];
-    [self.energyClockView setDelegate:self];
-    self.selectedSliceIndex = -1;
-    //float animationDuration = 1.0f;
-    //[self.energyClockView setAnimationDuration:animationDuration];
-    
-    //[self.energyClockView reloadData];
-    [self checkSyncStatus];
-    
-    NSLog(@"viewDidLoad-after checkSyncStatus, self.sliceValues: %@", self.sliceValues);
-    NSLog(@"viewDidLoad-after checkSyncStatus, self.slotValuesForSlice: %@", self.slotValuesForSlice);
 
 }
 
@@ -189,71 +227,73 @@ static const int mainScrollView = 10;
 -(void)checkSyncStatus
 {
     /* Get last sync date, ==today? -> then do nothing! */
+    NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    [calendar setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
     NSDateComponents *todayComponents =
-    [[NSCalendar currentCalendar] components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[NSDate date]];
+    [calendar components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[NSDate date]];
     System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
     NSAssert(systemObj!=nil, @"System Object with id=primary doesnt exist");
     NSLog(@"checkSyncStatus systemObj: %@", systemObj);
     NSDate *lastSyncDate = systemObj.daysupdated;
     NSLog(@"checkSyncStatus lastSyncDate: %@", lastSyncDate);
     NSLog(@"checkSyncStatus todayComponents: %@", todayComponents);
-    
-    if (lastSyncDate && !FORCEDAYCHARTSUPDATE)
-    { // we have synced today already
+
+    if ([lastSyncDate isKindOfClass:[NSDate class]] && !FORCEDAYCHARTSUPDATE){ 
+        
         NSDateComponents *lastSyncComponents =
-        [[NSCalendar currentCalendar] components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:lastSyncDate];
+        [calendar components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:lastSyncDate];
         
         if(([todayComponents year]  == [lastSyncComponents year])  &&
            ([todayComponents month] == [lastSyncComponents month]) &&
            ([todayComponents day]   == [lastSyncComponents day]))
         {
             NSLog(@"checkSyncStatus, we synced already");
+            // we have synced today already
+            self.waitingForNewData = NO;
             EnergyClockSlice *slice = [EnergyClockSlice findFirstOrderedByAttribute:@"date" ascending:NO];
             [self initValuesForNewDate:slice.date];
             self.currentDate = slice.date;
         }
+        else {
+            self.waitingForNewData = YES;
+        }
+    }
+    else {
+        self.waitingForNewData = YES;
     }
 }
 
 -(void)initEnergyClockAfterSavingData
 {
+    NSLog(@"initEnergyClockAfterSavingData");
+    NSLog(@"System numberOfEntities in initEnergyClockAfterSavingData: %@", [System numberOfEntities]);
+    NSArray *allsystems = [System findAll];
+    
+    for (System *sys in allsystems) {
+        NSLog(@"System object daysupdated: %@", sys.daysupdated);
+    }
     EnergyClockSlice *slice = [EnergyClockSlice findFirstOrderedByAttribute:@"date" ascending:NO];
     [self initValuesForNewDate:slice.date];
     self.currentDate = slice.date;
-    // OK we're done, lets reload the energyclock
+    // OK we're done, lets reload the energyclock and init the detail plots
     [self.energyClockView reloadData];
+    self.sliceDetailsView.slotValuesForSlice = self.slotValuesForSlice;
+    [self.sliceDetailsView initPlots];
 }
 
 -(NSMutableArray*)sliceValues
 {
-    if(!_sliceValues)
-    {
+    if(!_sliceValues){
         _sliceValues = [[NSMutableArray alloc]initWithCapacity:numberSlices];
-        // TEST
-        /*for (int i=0; i<numberSlices; i++) {
-            [_sliceValues insertObject:[NSNumber numberWithFloat:i+0.53] atIndex:i];
-        }*/
-        /*for (int i=0; i<numberSlices; i++) {
-            [_sliceValues insertObject:[NSNull null] atIndex:i];
-        }*/
     }
     return _sliceValues;
 }
 
 -(NSMutableArray*)slotValuesForSlice
 {
-    if(!_slotValuesForSlice)
-    {
+    if(!_slotValuesForSlice){
         _slotValuesForSlice = [[NSMutableArray alloc]initWithCapacity:numberSlices];
         
-        /*for (int i=0; i<numberSlices; i++) {
-         NSMutableArray *innerArray = [[NSMutableArray alloc]initWithCapacity:numberOfParticipants];
-         // TEST
-         for (int i=0; i<numberOfParticipants; i++) {
-         [innerArray insertObject:@(arc4random()/21*0.1) atIndex:1];
-         }
-         [_slotValuesForSlice insertObject:innerArray atIndex:i];
-         }*/
         for (int i=0; i<numberSlices; i++) {
             [_slotValuesForSlice insertObject:[NSNull null] atIndex:i];
         }
@@ -264,8 +304,7 @@ static const int mainScrollView = 10;
 // random values
 -(NSMutableArray*)radiusValuesForSlice
 {
-    if(!_radiusValuesForSlice)
-    {
+    if(!_radiusValuesForSlice){
         _radiusValuesForSlice = [[NSMutableArray alloc]initWithCapacity:numberSlices];
         
         NSSortDescriptor* sortOrder = [NSSortDescriptor sortDescriptorWithKey: @"self" ascending: YES];
@@ -364,7 +403,7 @@ static const int mainScrollView = 10;
     // Dispose of any resources that can be recreated.
 }
 
-// this method is called after the user touched one of the day charts
+// this method is called after user touched one of the day charts
 -(void)loadEnergyClockForDate:(NSDate *)date
 {
     if ([self.currentDate isEqualToDate:date]) {
@@ -376,6 +415,12 @@ static const int mainScrollView = 10;
     [self initValuesForNewDate:date];
     self.currentDate = date;
     [self.energyClockView reloadData];
+    // Reload Details Pie Charts
+    self.selectedEnergyClockSlice = 0; // select the first slice
+    [self.sliceDetailsView reloadPieChartForNewSlice:self.selectedEnergyClockSlice];
+    self.selectedParticipantId = FirstSensorID; // select the default user
+    [self.sliceDetailsView reloadPieChartForNewParticipant:self.selectedParticipantId];
+    [self.participantSelector setSelectedIndex:0]; // select the first button/segment part per default
 }
 
 -(void)initValuesForNewDate:(NSDate *)date
@@ -384,6 +429,7 @@ static const int mainScrollView = 10;
     NSArray *slicesData = [EnergyClockSlice findByAttribute:@"date" withValue:date andOrderBy:@"hour" ascending:YES];
     NSMutableArray *slotValuesForSliceTemp = [[NSMutableArray alloc] init];
     NSMutableArray *sliceValuesTemp = [[NSMutableArray alloc] init];
+    NSMutableArray *dayUserConsumptionTemp = [[NSMutableArray alloc]init];
     // DEBUGGING
     for (int i=0; i<[slicesData count]; i++) {
         EnergyClockSlice *slice = slicesData[i];
@@ -400,17 +446,23 @@ static const int mainScrollView = 10;
             NSArray *sortedkeys = [[slotValuesDict allKeys]sortedArrayUsingSelector:@selector(compare:)];
             NSLog(@"slotValuesDict: %@", slotValuesDict);
             NSLog(@"sortedkeys: %@", sortedkeys);
-            for (int i=0; i<numberOfParticipants; i++) {
+            
+            for (int i = 0; i < numberOfParticipants; i++) {
                 [innerArray insertObject:[slotValuesDict objectForKey:sortedkeys[i]] atIndex:i];
             }
+            
             [slotValuesForSliceTemp insertObject:innerArray atIndex:insertIndex];
             // fill with 12 slice values for that selected date
             [sliceValuesTemp insertObject:((EnergyClockSlice *)slicesData[insertIndex]).consumption atIndex:insertIndex];
+            
+            [dayUserConsumptionTemp insertObject:slotValuesDict atIndex:insertIndex];
+
         }
         self.sliceValues = sliceValuesTemp;
         self.slotValuesForSlice = slotValuesForSliceTemp;
-        
-        
+        self.dayUserConsumption = dayUserConsumptionTemp;
+        NSLog(@"slotValuesForSlice: %@", self.slotValuesForSlice);
+        NSLog(@"dayUserConsumption: %@", self.dayUserConsumption);
     }
 }
 
@@ -497,6 +549,32 @@ static const int mainScrollView = 10;
 {
     return [[self.slotValuesForSlice objectAtIndex:sliceIndex] objectAtIndex:slotIndex];
 }
+
+- (NSNumber *)detailsSliceValueAtIndex:(NSUInteger)index
+{
+    // return 12 Values for the current participant
+    // using dayUserConsumption-Array
+    NSDecimalNumber *result = [[self.dayUserConsumption objectAtIndex:index] objectForKey: [NSString stringWithFormat:@"%i",self.selectedParticipantId] ];
+    NSLog(@"detailsSliceValueAtIndex - result: %@", result);
+    NSLog(@"detailsSliceValueAtIndex - self.selectedParticipantId: %i", self.selectedParticipantId);
+    NSLog(@"detailsSliceValueAtIndex - selectedParticipantId as string: %@", [NSString stringWithFormat:@"%i",self.selectedParticipantId]);
+    NSLog(@"detailsSliceValueAtIndex - [self.dayUserConsumption objectAtIndex:index] %@", [self.dayUserConsumption objectAtIndex:index]);
+    NSLog(@"detailsSliceValueAtIndex - self.dayUserConsumption: %@", self.dayUserConsumption);
+    return result;
+}
+
+- (NSUInteger)getSlicesNumber
+{
+    return [self.sliceValues count];
+}
+
+- (CPTColor *)getColorForParticipantId:(NSUInteger)idx
+{
+    NSLog(@"self.CPTColorsForParticipants: %@", self.CPTColorsForParticipants);
+    NSLog(@"input idx: %@", @(idx));
+    return [self.CPTColorsForParticipants objectForKey:@(idx)];
+}
+
 
 // do i need this method?
 - (CGFloat)pieView:(BTSPieView *)pieView radiusForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex
@@ -609,7 +687,7 @@ static const int mainScrollView = 10;
     // Dynamically create buttons for segemented control
     for (NSUInteger i=0; i < numberOfParticipants; i++) {
         UIButton *userButton = [[UIButton alloc] init];
-        NSString *buttonName = [NSString stringWithFormat:@"Raum %i", i+1];
+        NSString *buttonName = [NSString stringWithFormat:@"Sensor %@", participants[i]];
 //        UIColor *colorWithApha = [[self.availableSliceColors objectAtIndex:i] colorWithAlphaComponent:0.6];
 //        UIColor *color = [self.availableSliceColors objectAtIndex:i];
 //        [userButton setBackgroundImage:[self imageFromColor:colorWithApha] forState:UIControlStateNormal];
@@ -665,12 +743,13 @@ static const int mainScrollView = 10;
     AKSegmentedControl *segmentedControl = (AKSegmentedControl *)sender;
     NSIndexSet *indexSet = [segmentedControl selectedIndexes];
     if (segmentedControl == self.participantSelector) {
-        NSUInteger selectedIndex = indexSet.firstIndex; // ?
-        [self.sliceDetailsView reloadPieChartForNewParticipant:indexSet.firstIndex];
-        NSLog(@"SegmentedControl #1 : Selected Index %@, selectedIndex: %i", [segmentedControl selectedIndexes], selectedIndex  );
+        self.selectedParticipantId = [participants[indexSet.firstIndex] integerValue];
+        [self.sliceDetailsView reloadPieChartForNewParticipant:[participants[indexSet.firstIndex] integerValue]]; // sending sensor-id/user-id ?
+        NSLog(@"SegmentedControl #1 : Selected Index %@, selectedIndex: %i", [segmentedControl selectedIndexes], indexSet.firstIndex);
     }
 }
 
+//h3lp method, creates image from color
 - (UIImage *) imageFromColor:(UIColor *)color {
     CGRect rect = CGRectMake(0, 0, 1, 1);
     UIGraphicsBeginImageContext(rect.size);

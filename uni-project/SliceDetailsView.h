@@ -10,6 +10,9 @@
 
 @protocol slicePieChartDatasource<NSObject>
 - (NSNumber *)valueForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex;
+- (NSNumber *)detailsSliceValueAtIndex:(NSUInteger)index;
+- (NSUInteger)getSlicesNumber;
+- (CPTColor *)getColorForParticipantId:(NSUInteger)idx;
 @end
 
 

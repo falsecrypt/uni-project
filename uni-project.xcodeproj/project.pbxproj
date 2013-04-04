@@ -73,6 +73,8 @@
 		CE412CFB16D5628F0061484B /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = CE412CFA16D5628F0061484B /* SSKeychain.m */; };
 		CE48562116D4493C0078BD62 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = CE48562016D4493B0078BD62 /* Icon-72.png */; };
 		CE48562316D449420078BD62 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE48562216D449410078BD62 /* Icon@2x.png */; };
+		CE4C9867170B982300A27EB1 /* ParticipantConsumption.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4C9866170B982300A27EB1 /* ParticipantConsumption.m */; };
+		CE4C986D170B98A100A27EB1 /* Participant.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4C986C170B98A000A27EB1 /* Participant.m */; };
 		CE4EDE4E16E42A2B0047479A /* BTSPieLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4EDE4816E42A2B0047479A /* BTSPieLayer.m */; };
 		CE4EDE4F16E42A2B0047479A /* BTSPieView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE4EDE4A16E42A2B0047479A /* BTSPieView.mm */; };
 		CE4EDE5016E42A2B0047479A /* BTSSliceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4EDE4D16E42A2B0047479A /* BTSSliceLayer.m */; };
@@ -188,7 +190,6 @@
 		CEF5657B163F17270066F2A2 /* FirstDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */; };
 		CEF5657F163F1D600066F2A2 /* PublicTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657E163F1D600066F2A2 /* PublicTVC.m */; };
 		CEF56586163F2DCE0066F2A2 /* PublicDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF56584163F2DCD0066F2A2 /* PublicDetailViewController.m */; };
-		CEFAAFDA16B8209500D9E744 /* Participant.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFAAFD916B8209500D9E744 /* Participant.m */; };
 		CEFDC23C163E15480011C3CF /* DetailViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFDC23B163E15480011C3CF /* DetailViewManager.m */; };
 /* End PBXBuildFile section */
 
@@ -299,6 +300,10 @@
 		CE412CFA16D5628F0061484B /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
 		CE48562016D4493B0078BD62 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "../Icon-72.png"; sourceTree = "<group>"; };
 		CE48562216D449410078BD62 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
+		CE4C9865170B982200A27EB1 /* ParticipantConsumption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticipantConsumption.h; sourceTree = "<group>"; };
+		CE4C9866170B982300A27EB1 /* ParticipantConsumption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParticipantConsumption.m; sourceTree = "<group>"; };
+		CE4C986B170B989F00A27EB1 /* Participant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Participant.h; sourceTree = "<group>"; };
+		CE4C986C170B98A000A27EB1 /* Participant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Participant.m; sourceTree = "<group>"; };
 		CE4EDE4716E42A2B0047479A /* BTSPieLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTSPieLayer.h; sourceTree = "<group>"; };
 		CE4EDE4816E42A2B0047479A /* BTSPieLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTSPieLayer.m; sourceTree = "<group>"; };
 		CE4EDE4916E42A2B0047479A /* BTSPieView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTSPieView.h; sourceTree = "<group>"; };
@@ -557,8 +562,6 @@
 		CEF5657D163F1D600066F2A2 /* PublicTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicTVC.h; sourceTree = "<group>"; };
 		CEF5657E163F1D600066F2A2 /* PublicTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicTVC.m; sourceTree = "<group>"; };
 		CEF56584163F2DCD0066F2A2 /* PublicDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicDetailViewController.m; sourceTree = "<group>"; };
-		CEFAAFD816B8209500D9E744 /* Participant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Participant.h; sourceTree = "<group>"; };
-		CEFAAFD916B8209500D9E744 /* Participant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Participant.m; sourceTree = "<group>"; };
 		CEFDC23A163E15480011C3CF /* DetailViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewManager.h; sourceTree = "<group>"; };
 		CEFDC23B163E15480011C3CF /* DetailViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -719,21 +722,8 @@
 		CE0D631E16611E8600381D05 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				CE20E92316B58FD000AC2722 /* User.h */,
-				CE20E92416B58FD000AC2722 /* User.m */,
-				CE20E92616B58FD000AC2722 /* WeekData.h */,
-				CE20E92716B58FD000AC2722 /* WeekData.m */,
-				CE20E92016B58FD000AC2722 /* MonthData.h */,
-				CE20E92116B58FD000AC2722 /* MonthData.m */,
+				CE4C9864170B873600A27EB1 /* ManagedObjects */,
 				CE0D631B16611E7500381D05 /* EcoMeterModel.xcdatamodeld */,
-				CE3543B016FCAFAF00D779C2 /* AggregatedDay.h */,
-				CE3543B116FCAFAF00D779C2 /* AggregatedDay.m */,
-				CE8363D216EE7CC100AFB5E2 /* System.h */,
-				CE8363D316EE7CC100AFB5E2 /* System.m */,
-				CE1DAA7316EAC8C40034AEBF /* EnergyClockSlice.h */,
-				CE1DAA7416EAC8C50034AEBF /* EnergyClockSlice.m */,
-				CEFAAFD816B8209500D9E744 /* Participant.h */,
-				CEFAAFD916B8209500D9E744 /* Participant.m */,
 			);
 			name = Models;
 			path = ..;
@@ -794,6 +784,29 @@
 				CE32C39C1665B7AD00C3ED81 /* EMNetworkManager.m */,
 			);
 			name = CustomNetworking;
+			sourceTree = "<group>";
+		};
+		CE4C9864170B873600A27EB1 /* ManagedObjects */ = {
+			isa = PBXGroup;
+			children = (
+				CE4C9865170B982200A27EB1 /* ParticipantConsumption.h */,
+				CE4C9866170B982300A27EB1 /* ParticipantConsumption.m */,
+				CE3543B016FCAFAF00D779C2 /* AggregatedDay.h */,
+				CE3543B116FCAFAF00D779C2 /* AggregatedDay.m */,
+				CE8363D216EE7CC100AFB5E2 /* System.h */,
+				CE8363D316EE7CC100AFB5E2 /* System.m */,
+				CE1DAA7316EAC8C40034AEBF /* EnergyClockSlice.h */,
+				CE1DAA7416EAC8C50034AEBF /* EnergyClockSlice.m */,
+				CE20E92316B58FD000AC2722 /* User.h */,
+				CE20E92416B58FD000AC2722 /* User.m */,
+				CE20E92616B58FD000AC2722 /* WeekData.h */,
+				CE20E92716B58FD000AC2722 /* WeekData.m */,
+				CE20E92016B58FD000AC2722 /* MonthData.h */,
+				CE20E92116B58FD000AC2722 /* MonthData.m */,
+				CE4C986B170B989F00A27EB1 /* Participant.h */,
+				CE4C986C170B98A000A27EB1 /* Participant.m */,
+			);
+			name = ManagedObjects;
 			sourceTree = "<group>";
 		};
 		CE4EDE4616E429680047479A /* MultiLevelPieChart */ = {
@@ -1561,7 +1574,6 @@
 				CE20E92216B58FD000AC2722 /* MonthData.m in Sources */,
 				CE20E92516B58FD000AC2722 /* User.m in Sources */,
 				CE20E92816B58FD000AC2722 /* WeekData.m in Sources */,
-				CEFAAFDA16B8209500D9E744 /* Participant.m in Sources */,
 				CE412CEF16D5412C0061484B /* ChangeUsernameTVC.m in Sources */,
 				CE412CF216D5428D0061484B /* ChangeEmailTVC.m in Sources */,
 				CE412CF516D5430D0061484B /* ResetPasswordTVC.m in Sources */,
@@ -1589,6 +1601,8 @@
 				CE3543B216FCAFAF00D779C2 /* AggregatedDay.m in Sources */,
 				CEF1813E17089A37008DEF60 /* AKSegmentedControl.m in Sources */,
 				CE137E591708FBB600F02F14 /* SliceDetailsView.m in Sources */,
+				CE4C9867170B982300A27EB1 /* ParticipantConsumption.m in Sources */,
+				CE4C986D170B98A100A27EB1 /* Participant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1737,7 +1751,7 @@
 		CE8B7F7215ED358B006CD57C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "uni-project/uni-project-Prefix.pch";
 				INFOPLIST_FILE = "uni-project/uni-project-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
@@ -1760,7 +1774,7 @@
 		CE8B7F7315ED358B006CD57C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "uni-project/uni-project-Prefix.pch";
 				INFOPLIST_FILE = "uni-project/uni-project-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
