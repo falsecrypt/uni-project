@@ -39,7 +39,6 @@
 		CE1793D11683E8E60030723A /* MyOfficeTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D01683E8E60030723A /* MyOfficeTVC.m */; };
 		CE1793D51683F3970030723A /* DataOverviewTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D41683F3970030723A /* DataOverviewTVC.m */; };
 		CE1BAC4F169528A200E3A1EA /* MyAccountTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1BAC4E169528A200E3A1EA /* MyAccountTVC.m */; };
-		CE1DAA7516EAC8C50034AEBF /* EnergyClockSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1DAA7416EAC8C50034AEBF /* EnergyClockSlice.m */; };
 		CE20E92216B58FD000AC2722 /* MonthData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92116B58FD000AC2722 /* MonthData.m */; };
 		CE20E92516B58FD000AC2722 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92416B58FD000AC2722 /* User.m */; };
 		CE20E92816B58FD000AC2722 /* WeekData.m in Sources */ = {isa = PBXBuildFile; fileRef = CE20E92716B58FD000AC2722 /* WeekData.m */; };
@@ -74,8 +73,6 @@
 		CE412CFB16D5628F0061484B /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = CE412CFA16D5628F0061484B /* SSKeychain.m */; };
 		CE48562116D4493C0078BD62 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = CE48562016D4493B0078BD62 /* Icon-72.png */; };
 		CE48562316D449420078BD62 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE48562216D449410078BD62 /* Icon@2x.png */; };
-		CE4C9867170B982300A27EB1 /* ParticipantConsumption.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4C9866170B982300A27EB1 /* ParticipantConsumption.m */; };
-		CE4C986D170B98A100A27EB1 /* Participant.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4C986C170B98A000A27EB1 /* Participant.m */; };
 		CE4EDE4E16E42A2B0047479A /* BTSPieLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4EDE4816E42A2B0047479A /* BTSPieLayer.m */; };
 		CE4EDE4F16E42A2B0047479A /* BTSPieView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE4EDE4A16E42A2B0047479A /* BTSPieView.mm */; };
 		CE4EDE5016E42A2B0047479A /* BTSSliceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4EDE4D16E42A2B0047479A /* BTSSliceLayer.m */; };
@@ -156,6 +153,8 @@
 		CEA0CE5A1661A6F60086151D /* MagicalRecord+Setup.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0CE3C1661A6F60086151D /* MagicalRecord+Setup.m */; };
 		CEA0CE5B1661A6F60086151D /* MagicalRecord+ShorthandSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0CE3E1661A6F60086151D /* MagicalRecord+ShorthandSupport.m */; };
 		CEA0CE5C1661A6F60086151D /* MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0CE401661A6F60086151D /* MagicalRecord.m */; };
+		CEB46E8A170F52FF009D3104 /* Participant.m in Sources */ = {isa = PBXBuildFile; fileRef = CEB46E89170F52FF009D3104 /* Participant.m */; };
+		CEB46E93170F9144009D3104 /* EnergyClockSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = CEB46E92170F9144009D3104 /* EnergyClockSlice.m */; };
 		CEB5A742169A705A009EB3F2 /* navBarBg.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB5A741169A705A009EB3F2 /* navBarBg.png */; };
 		CEB5A744169A7329009EB3F2 /* patternBg.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB5A743169A7329009EB3F2 /* patternBg.png */; };
 		CEBBD6471676D6DC008051D2 /* libCorePlot-CocoaTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEBBD5FB1676D6DC008051D2 /* libCorePlot-CocoaTouch.a */; };
@@ -243,8 +242,6 @@
 		CE1793D41683F3970030723A /* DataOverviewTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataOverviewTVC.m; sourceTree = "<group>"; };
 		CE1BAC4D169528A200E3A1EA /* MyAccountTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAccountTVC.h; sourceTree = "<group>"; };
 		CE1BAC4E169528A200E3A1EA /* MyAccountTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAccountTVC.m; sourceTree = "<group>"; };
-		CE1DAA7316EAC8C40034AEBF /* EnergyClockSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnergyClockSlice.h; sourceTree = "<group>"; };
-		CE1DAA7416EAC8C50034AEBF /* EnergyClockSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyClockSlice.m; sourceTree = "<group>"; };
 		CE20E92016B58FD000AC2722 /* MonthData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MonthData.h; sourceTree = "<group>"; };
 		CE20E92116B58FD000AC2722 /* MonthData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MonthData.m; sourceTree = "<group>"; };
 		CE20E92316B58FD000AC2722 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -303,10 +300,6 @@
 		CE412CFA16D5628F0061484B /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
 		CE48562016D4493B0078BD62 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "../Icon-72.png"; sourceTree = "<group>"; };
 		CE48562216D449410078BD62 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
-		CE4C9865170B982200A27EB1 /* ParticipantConsumption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticipantConsumption.h; sourceTree = "<group>"; };
-		CE4C9866170B982300A27EB1 /* ParticipantConsumption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ParticipantConsumption.m; sourceTree = "<group>"; };
-		CE4C986B170B989F00A27EB1 /* Participant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Participant.h; sourceTree = "<group>"; };
-		CE4C986C170B98A000A27EB1 /* Participant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Participant.m; sourceTree = "<group>"; };
 		CE4EDE4716E42A2B0047479A /* BTSPieLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTSPieLayer.h; sourceTree = "<group>"; };
 		CE4EDE4816E42A2B0047479A /* BTSPieLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BTSPieLayer.m; sourceTree = "<group>"; };
 		CE4EDE4916E42A2B0047479A /* BTSPieView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTSPieView.h; sourceTree = "<group>"; };
@@ -447,6 +440,10 @@
 		CEA0CE401661A6F60086151D /* MagicalRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagicalRecord.m; sourceTree = "<group>"; };
 		CEA0CE411661A6F60086151D /* MagicalRecordShorthand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagicalRecordShorthand.h; sourceTree = "<group>"; };
 		CEA0CE421661A6F60086151D /* CoreData+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CoreData+MagicalRecord.h"; sourceTree = "<group>"; };
+		CEB46E88170F52FF009D3104 /* Participant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Participant.h; sourceTree = "<group>"; };
+		CEB46E89170F52FF009D3104 /* Participant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Participant.m; sourceTree = "<group>"; };
+		CEB46E91170F9144009D3104 /* EnergyClockSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnergyClockSlice.h; sourceTree = "<group>"; };
+		CEB46E92170F9144009D3104 /* EnergyClockSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyClockSlice.m; sourceTree = "<group>"; };
 		CEB5A741169A705A009EB3F2 /* navBarBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navBarBg.png; sourceTree = "<group>"; };
 		CEB5A743169A7329009EB3F2 /* patternBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = patternBg.png; sourceTree = "<group>"; };
 		CEBBD5FB1676D6DC008051D2 /* libCorePlot-CocoaTouch.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libCorePlot-CocoaTouch.a"; sourceTree = "<group>"; };
@@ -794,22 +791,20 @@
 		CE4C9864170B873600A27EB1 /* ManagedObjects */ = {
 			isa = PBXGroup;
 			children = (
-				CE4C9865170B982200A27EB1 /* ParticipantConsumption.h */,
-				CE4C9866170B982300A27EB1 /* ParticipantConsumption.m */,
+				CEB46E91170F9144009D3104 /* EnergyClockSlice.h */,
+				CEB46E92170F9144009D3104 /* EnergyClockSlice.m */,
 				CE3543B016FCAFAF00D779C2 /* AggregatedDay.h */,
 				CE3543B116FCAFAF00D779C2 /* AggregatedDay.m */,
 				CE8363D216EE7CC100AFB5E2 /* System.h */,
 				CE8363D316EE7CC100AFB5E2 /* System.m */,
-				CE1DAA7316EAC8C40034AEBF /* EnergyClockSlice.h */,
-				CE1DAA7416EAC8C50034AEBF /* EnergyClockSlice.m */,
 				CE20E92316B58FD000AC2722 /* User.h */,
 				CE20E92416B58FD000AC2722 /* User.m */,
 				CE20E92616B58FD000AC2722 /* WeekData.h */,
 				CE20E92716B58FD000AC2722 /* WeekData.m */,
 				CE20E92016B58FD000AC2722 /* MonthData.h */,
 				CE20E92116B58FD000AC2722 /* MonthData.m */,
-				CE4C986B170B989F00A27EB1 /* Participant.h */,
-				CE4C986C170B98A000A27EB1 /* Participant.m */,
+				CEB46E88170F52FF009D3104 /* Participant.h */,
+				CEB46E89170F52FF009D3104 /* Participant.m */,
 			);
 			name = ManagedObjects;
 			sourceTree = "<group>";
@@ -1590,7 +1585,6 @@
 				CE4EDE4F16E42A2B0047479A /* BTSPieView.mm in Sources */,
 				CE4EDE5016E42A2B0047479A /* BTSSliceLayer.m in Sources */,
 				CE56031916E976CF0062FB70 /* EnergyClockDataManager.m in Sources */,
-				CE1DAA7516EAC8C50034AEBF /* EnergyClockSlice.m in Sources */,
 				CE8363D416EE7CC100AFB5E2 /* System.m in Sources */,
 				CE92D4A616F297CF0038D408 /* CPTAnimation.m in Sources */,
 				CE92D4A716F297CF0038D408 /* CPTAnimationOperation.m in Sources */,
@@ -1606,9 +1600,9 @@
 				CE3543B216FCAFAF00D779C2 /* AggregatedDay.m in Sources */,
 				CEF1813E17089A37008DEF60 /* AKSegmentedControl.m in Sources */,
 				CE137E591708FBB600F02F14 /* SliceDetailsView.m in Sources */,
-				CE4C9867170B982300A27EB1 /* ParticipantConsumption.m in Sources */,
-				CE4C986D170B98A100A27EB1 /* Participant.m in Sources */,
 				CE0D9911170E0B8C00EADCEE /* EnergyClockTVC.m in Sources */,
+				CEB46E8A170F52FF009D3104 /* Participant.m in Sources */,
+				CEB46E93170F9144009D3104 /* EnergyClockSlice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

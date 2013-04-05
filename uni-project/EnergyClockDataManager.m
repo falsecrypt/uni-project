@@ -13,13 +13,11 @@
 #import "AggregatedDay.h"
 #import "EnergyClockSlice.h"
 #import "AFJSONRequestOperation.h"
-#import "ParticipantConsumption.h"
 
 @interface EnergyClockDataManager ()
 
 @property (nonatomic, strong) NSArray *participants;
 @property (nonatomic, assign) BOOL deviceIsOnline;
-@property (nonatomic, strong)__block NSDictionary *sunriseSunset;
 
 @end
 
@@ -27,6 +25,7 @@
 
 static const NSArray *serverHours;
 static int methodCounter;
+static NSDictionary *sunriseSunset;
 
 + (EnergyClockDataManager *)sharedClient {
     static EnergyClockDataManager *_sharedClient = nil;
@@ -102,10 +101,10 @@ static int methodCounter;
             }
 
         }
-        else if ([mode isEqualToString:MultiLevelPieChartMode])
-        {
-            [self getDataFromServerWithMode:MultiLevelPieChartMode];
-        }
+//        else if ([mode isEqualToString:MultiLevelPieChartMode])
+//        {
+//            [self getDataFromServerWithMode:MultiLevelPieChartMode];
+//        }
     }
     else
     {
@@ -130,22 +129,20 @@ static int methodCounter;
 -(void)getDataFromServerWithMode:(NSString *)mode
 {
     NSLog(@"getDataFromServerWithMode...");
-    if ([mode isEqualToString:DayChartsMode])
-    {
-        for (NSNumber *userId in self.participants)
-        {
-            [self getKwPerHourForLastWeekWithUserId:userId];
-        }
-    }
-    else if ([mode isEqualToString:MultiLevelPieChartMode])
-    {
-        //[self getDataForEnergyClocks];
+    if ( [mode isEqualToString:DayChartsMode] ){
+        
+        [self resetDatabase];
+        // sync sunrise and sunset values first, then get new values and store new objects
+        [self syncSunriseSunsetData];
     }
 }
 
--(void)getParticipantDataForDate:(NSDate *)date
+-(void)processAfterGettingSunriseSunset
 {
-    
+    for (NSNumber *userId in self.participants)
+    {
+        [self getKwPerHourForLastWeekWithUserId:userId];
+    }
 }
 
 - (void)resetDatabase
@@ -153,7 +150,6 @@ static int methodCounter;
     // Delete all existing objects/entities before updating
     [AggregatedDay truncateAll];
     [EnergyClockSlice truncateAll];
-    [ParticipantConsumption truncateAll];
     NSLog(@"calling resetDatabase... end");
 }
 
@@ -166,11 +162,10 @@ static int methodCounter;
     [[EMNetworkManager sharedClient] getPath:getPath
                                   parameters:nil
                                      success:^(AFHTTPRequestOperation *operation, id data) {
-                                         [self resetDatabase];
                                          NSString *result = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                                          NSLog(@"calling syncSunriseSunsetDataWithResult... start ");
                                          // sync sunrise and sunset values first, then get new values and store new objects
-                                         [self syncSunriseSunsetDataWithResult:result forUserId:(NSNumber *)userId];
+                                         [self proccessWithOperationResult:result forUserId:(NSNumber *)userId sunriseSunsetData:sunriseSunset];
                                      }
                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                          NSLog(@"HCM Server: Request Failure Because %@",[error userInfo]);
@@ -224,17 +219,12 @@ static int methodCounter;
 //                NSLog(@"consumption: %@", consumption);
 //                NSLog(@"userID: %@", userId);
                 
-                // Lets create ParticipantConsumption Entities, 12*7=84 objects for each user
-//                ParticipantConsumption *pconObject = [ParticipantConsumption createEntity];
-//                pconObject.date = date;
-//                pconObject.hour = [NSNumber numberWithInt:[hour intValue]];
-//                pconObject.consumption = consumption;
-//                pconObject.sensorid = userId;
-                
-                
                 // 'date'-'hour' combination is unique
-                NSPredicate *energyClockFilter = [NSPredicate predicateWithFormat:@"date == %@ && hour == %@", date, [NSNumber numberWithInt:[hour intValue]] ];
-                EnergyClockSlice *slice = [EnergyClockSlice findFirstWithPredicate:energyClockFilter];
+                //NSPredicate *energyClockFilter = [NSPredicate predicateWithFormat:@"date == %@ && hour == %@", date, @([hour integerValue])];
+                //EnergyClockSlice *slice = [EnergyClockSlice findFirstWithPredicate:energyClockFilter];
+                // Performance opt.:
+                NSString *identifier = [[dateFormatter stringFromDate:date] stringByAppendingString:hour];
+                EnergyClockSlice *slice = [EnergyClockSlice findFirstByAttribute:@"identifier" withValue:identifier];
                 if (slice) { // slice already exists -> update
                     NSLog(@"UPDATING SLICE");
                     NSLog(@"updating slice... slice: %@", slice);
@@ -256,11 +246,13 @@ static int methodCounter;
                     [slotValuesDict setValue:consumption forKey: [NSString stringWithFormat:@"%@",userId]];
                     NSData *slotValues = [NSKeyedArchiver archivedDataWithRootObject:slotValuesDict];
                     slice.slotValues = slotValues;
+                    slice.identifier = [[dateFormatter stringFromDate:date] stringByAppendingString:hour];
                     NSLog(@"CREATING NEW SLICE: %@", slice);
                     NSLog(@"creating slice... slice.date: %@", slice.date);
                     NSLog(@"creating slice... slice.hour: %@", slice.hour);
                     NSLog(@"creating slice... slice.consumption: %@", slice.consumption);
                     NSLog(@"creating slice... slotValuesDict: %@", slotValuesDict);
+                    NSLog(@"creating slice... identifier: %@", slice.identifier);
                 }
                 
                 // 'date' is a unique field
@@ -356,6 +348,7 @@ static int methodCounter;
 //                NSLog(@"date: %@, consumption: %@, hour: %@, sensorid: %@", pcon.date, pcon.consumption, pcon.hour, pcon.sensorid);
 //                
 //            }
+            NSLog(@"methodCounter: %i", methodCounter);
             // we must notify only once
             if (methodCounter == numberOfParticipants) {
                 //notify observers (instances of ScrollViewContentVC)
@@ -366,57 +359,59 @@ static int methodCounter;
 }
 
 // get sunset/sunrise time from wunderground.com Weather API
-- (void)syncSunriseSunsetDataWithResult:(NSString *)result forUserId:(NSNumber *)userId
+- (void)syncSunriseSunsetData
 {
-    NSLog(@"syncSunriseSunsetDataWithResult, self.sunriseSunset  %@",self.sunriseSunset );
-    // first method call, sunriseSunset equals nil
-    if (self.sunriseSunset == nil) {
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:wundergroundRequestURL]];
+    NSLog(@"syncSunriseSunsetDataWithResult, self.sunriseSunset  %@ \n self: %@",sunriseSunset, self );
+        // Construct request URL
+        NSString *requestAstronomyUrl = [WWABaseURL stringByAppendingString:WWAKey];
+        requestAstronomyUrl = [[requestAstronomyUrl stringByAppendingString:WWAAstronomyURLpart] stringByAppendingString:WWALocationURLpart];
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:requestAstronomyUrl]];
         AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request
                                                                                             success:^
                                              (NSURLRequest *request, NSHTTPURLResponse *response, id JSON)
                                              {
-                                                 NSDictionary *jsonDict = (NSDictionary *) JSON;
+//                                                 NSDictionary *jsonDict = (NSDictionary *) JSON;
+                                                 NSArray *jsonArray = (NSArray *) JSON;
+                                                 // Key-Value Coding
+                                                 NSDictionary *jsonArrayFilteredSunrise = [jsonArray valueForKeyPath:@"moon_phase.sunrise"];
+                                                 NSDictionary *jsonArrayFilteredSunset = [jsonArray valueForKeyPath:@"moon_phase.sunset"];
+                                                 NSLog(@"\n jsonArrayFilteredSunrise: %@ \n jsonArrayFilteredSunset: %@ \n", jsonArrayFilteredSunrise, jsonArrayFilteredSunset);
                                                  
-                                                 __block NSDictionary *sunsetData = [[NSDictionary alloc] init];
-                                                 __block NSDictionary *sunriseData = [[NSDictionary alloc] init];
+//                                                 __block NSDictionary *sunsetData = [[NSDictionary alloc] init];
+//                                                 __block NSDictionary *sunriseData = [[NSDictionary alloc] init];
                                                  
-                                                 [jsonDict enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent // first loop
-                                                                                   usingBlock:^(id key, id object, BOOL *stop)
-                                                  {
-                                                      if ([(NSString *)key isEqualToString:@"moon_phase"])
-                                                      {
-                                                          [[jsonDict objectForKey:key]
-                                                           enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent // second loop
-                                                           usingBlock:^(id key, id object, BOOL *stop)
-                                                           {
-                                                               if ([(NSString *)key isEqualToString:@"sunset"])
-                                                               { // bingo
-                                                                   sunsetData = object;
-                                                               }
-                                                               if ([(NSString *)key isEqualToString:@"sunrise"])
-                                                               { // bingo
-                                                                   sunriseData = object;
-                                                               }
-                                                               
-                                                           }];
-                                                      }
-                                                  }];
+//                                                 [jsonDict enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent // first loop
+//                                                                                   usingBlock:^(id key, id object, BOOL *stop)
+//                                                  {
+//                                                      if ([(NSString *)key isEqualToString:@"moon_phase"])
+//                                                      {
+//                                                          [[jsonDict objectForKey:key]
+//                                                           enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent // second loop
+//                                                           usingBlock:^(id key, id object, BOOL *stop)
+//                                                           {
+//                                                               if ([(NSString *)key isEqualToString:@"sunset"])
+//                                                               { // bingo
+//                                                                   sunsetData = object;
+//                                                               }
+//                                                               if ([(NSString *)key isEqualToString:@"sunrise"])
+//                                                               { // bingo
+//                                                                   sunriseData = object;
+//                                                               }
+//                                                               
+//                                                           }];
+//                                                      }
+//                                                  }];
                                                  // construct result dictionary
-                                                 self.sunriseSunset = [[NSMutableDictionary alloc] initWithObjectsAndKeys:sunsetData, @"sunset", sunriseData, @"sunrise", nil];
-                                                 
-                                                 [self proccessWithOperationResult:result forUserId:(NSNumber *)userId sunriseSunsetData:self.sunriseSunset];
+                                                 sunriseSunset = [[NSMutableDictionary alloc] initWithObjectsAndKeys:jsonArrayFilteredSunset, @"sunset",
+                                                                                                                     jsonArrayFilteredSunrise, @"sunrise", nil];
+                                                 NSLog(@"\n sunriseSunset %@ \n",sunriseSunset);
+                                                 [self processAfterGettingSunriseSunset];
                                                  
                                              } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
                                                  NSLog(@"wunderground.com Weather API: Request Failure Because %@",[error userInfo]);
                                              }];
         
         [operation start];
-    }
-    // sunriseSunset Dictionary already exists 
-    else {
-        [self proccessWithOperationResult:result forUserId:(NSNumber *)userId sunriseSunsetData:self.sunriseSunset];
-    }
 
 }
 

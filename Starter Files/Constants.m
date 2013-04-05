@@ -47,11 +47,17 @@ NSString * const MultiLevelPieChartMode  = @"MultiLevelPieChartMode";
 BOOL const USEDUMMYDATA                 = NO;
 
 // wunderground Weather API, projectname: ecometerapp
-NSString * const wundergroundAPIKey     = @"7a5424a084a5ba90";
-NSString * const wundergroundRequestURL = @"http://api.wunderground.com/api/7a5424a084a5ba90/astronomy/q/Germany/Augsburg.json";
+// prefix: WWA
+// http://api.wunderground.com/api/Your_Key/astronomy/q/Your_Country/Your_City.json
+// http://api.wunderground.com/api/Your_Key/history_YYYYMMDD/q/CA/San_Francisco.json
+NSString * const WWAKey     = @"7a5424a084a5ba90";
+NSString * const WWABaseURL    = @"http://api.wunderground.com/api/";
+NSString * const WWAAstronomyURLpart = @"/astronomy/";
+NSString * const WWALocationURLpart = @"q/Germany/Augsburg.json";
+NSString * const WWAHistoryURLpart = @"/history_"; // '/history_YYYYMMDD/'
 
 NSString * const AggregatedDaysSaved    = @"AggregatedDaysSaved";
-BOOL const FORCEDAYCHARTSUPDATE         = NO;
+BOOL const FORCEDAYCHARTSUPDATE         = NO; // use this only during development
 
 NSInteger const numberOfParticipants    = 3;
 

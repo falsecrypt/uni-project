@@ -12,6 +12,7 @@
         <attribute name="consumption" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="hour" optional="YES" attributeType="Integer 16" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="slotValues" optional="YES" attributeType="Binary" syncable="YES"/>
     </entity>
     <entity name="MonthData" representedClassName="MonthData" syncable="YES">
@@ -29,19 +30,11 @@
         <attribute name="score" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="sensorid" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="updated" optional="YES" attributeType="Date" syncable="YES"/>
-        <relationship name="consumption" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ParticipantConsumption" inverseName="participant" inverseEntity="ParticipantConsumption" syncable="YES"/>
         <compoundIndexes>
             <compoundIndex>
                 <index value="sensorid"/>
             </compoundIndex>
         </compoundIndexes>
-    </entity>
-    <entity name="ParticipantConsumption" representedClassName="ParticipantConsumption" syncable="YES">
-        <attribute name="consumption" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="hour" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <attribute name="sensorid" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="participant" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Participant" inverseName="consumption" inverseEntity="Participant" syncable="YES"/>
     </entity>
     <entity name="System" representedClassName="System" syncable="YES">
         <attribute name="appstartlog" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -68,12 +61,11 @@
     </entity>
     <elements>
         <element name="AggregatedDay" positionX="610" positionY="243" width="128" height="135"/>
-        <element name="EnergyClockSlice" positionX="610" positionY="108" width="128" height="105"/>
+        <element name="EnergyClockSlice" positionX="610" positionY="108" width="128" height="120"/>
         <element name="MonthData" positionX="-198" positionY="36" width="128" height="135"/>
-        <element name="Participant" positionX="225" positionY="302" width="128" height="148"/>
+        <element name="Participant" positionX="225" positionY="302" width="128" height="135"/>
         <element name="System" positionX="-189" positionY="333" width="128" height="180"/>
         <element name="User" positionX="9" positionY="189" width="128" height="120"/>
         <element name="WeekData" positionX="196" positionY="45" width="128" height="88"/>
-        <element name="ParticipantConsumption" positionX="414" positionY="180" width="146" height="118"/>
     </elements>
 </model>

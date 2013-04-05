@@ -511,7 +511,7 @@ static const NSArray *participants;
             NSArray *sortedkeys = [[slotValuesDict allKeys]sortedArrayUsingSelector:@selector(compare:)];
             NSLog(@"slotValuesDict: %@", slotValuesDict);
             NSLog(@"sortedkeys: %@", sortedkeys);
-            
+            NSAssert(numberOfParticipants == [sortedkeys count], @"Check the number of users");
             for (int i = 0; i < numberOfParticipants; i++) {
                 [innerArray insertObject:[slotValuesDict objectForKey:sortedkeys[i]] atIndex:i];
             }

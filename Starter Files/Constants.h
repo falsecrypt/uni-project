@@ -39,8 +39,11 @@ extern NSString * const MultiLevelPieChartMode;
 // Defines whether test 'dummy' -data should be used
 extern BOOL const USEDUMMYDATA;
 
-extern NSString * const wundergroundAPIKey;
-extern NSString * const wundergroundRequestURL;
+extern NSString * const WWAKey;
+extern NSString * const WWABaseURL;
+extern NSString * const WWAAstronomyURLpart;
+extern NSString * const WWALocationURLpart;
+extern NSString * const WWAHistoryURLpart; // '/history_YYYYMMDD/'
 
 extern NSString * const AggregatedDaysSaved;
 extern BOOL const FORCEDAYCHARTSUPDATE;
