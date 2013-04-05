@@ -10,8 +10,8 @@
 #import "FirstTVC.h"
 #import "KeychainItemWrapper.h"
 #import "SSKeychain.h"
-
-#import "PublicTVC.h"
+#import "EcoMeterAppDelegate.h"
+#import "PublicScoreTVC.h"
 
 @interface FirstTVC ()
 
@@ -254,7 +254,7 @@
     NSUInteger row = indexPath.row;
     
     if (row == 1) {
-        PublicTVC *newTableViewController = [[PublicTVC alloc] init];
+        PublicScoreTVC *newTableViewController = [[PublicScoreTVC alloc] init];
         [self.navigationController pushViewController:newTableViewController animated:YES];
         
     }
@@ -296,6 +296,18 @@
               [[[segue destinationViewController] viewControllers] objectAtIndex:0]); */
         viewController.delegate = self;
     }
+//    if ([[segue identifier] isEqualToString:@"publicAreaSegue"])
+//    {
+//        // There is a navigation controller in the middle, between firsttableVC and registertableVC
+//        //RegisterTableViewController *viewController = [[[segue destinationViewController] viewControllers] objectAtIndex:0];
+//        // OR JUST:
+//        UITabBarController *destVC = (UITabBarController *)segue.destinationViewController;
+//        EcoMeterAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+//        DetailViewManager *detailViewManager = appDelegate.detailViewManager;
+//        id detailVC = (detailViewManager.splitViewController.viewControllers)[1];
+//        detailViewManager.splitViewController.viewControllers = [[NSArray alloc] initWithObjects:destVC, detailVC, nil];
+//    } 
+    
 }
 
 

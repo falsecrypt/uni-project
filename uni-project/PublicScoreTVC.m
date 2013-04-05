@@ -6,27 +6,29 @@
 //
 
 
-#import "PublicTVC.h"
+#import "PublicScoreTVC.h"
 #import "DetailViewManager.h"
 #import "PublicDetailViewController.h"
 #import "FirstDetailViewController.h"
 #import "Participant.h"
 #import "Reachability.h"
 #import "MCachedModalStoryboardSegue.h"
+#import "EnergyClockViewController.h"
 
-@interface PublicTVC ()
+@interface PublicScoreTVC ()
 
 @property BOOL deviceIsOnline;
 
 @end
 
-@implementation PublicTVC
+@implementation PublicScoreTVC
 
 NSDictionary *users;
 
 enum SectionType : NSUInteger {
-    ParticipantSection = 0,
-    OverviewSection
+    EnergyClockSection = 0,
+    ParticipantSection
+    
 };
 
 #pragma mark -
@@ -43,13 +45,15 @@ enum SectionType : NSUInteger {
 - (void)viewWillDisappear:(BOOL)animated {
     
     [super viewWillDisappear:animated];
+    NSLog(@"PTVC: viewWillDisappear");
+    
     //NSLog(@"calling SecondTableViewController - viewWillDisappear");
-    if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation)) {
-        DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
-        FirstDetailViewController *prevDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
-        detailViewManager.detailViewController = prevDetailViewController;
-        prevDetailViewController.navigationBar.topItem.title = @"Summary";
-    }
+//    if (UIDeviceOrientationIsLandscape([UIDevice currentDevice].orientation)) {
+//        DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
+//        FirstDetailViewController *prevDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
+//        detailViewManager.detailViewController = prevDetailViewController;
+//        prevDetailViewController.navigationBar.topItem.title = @"Summary";
+//    }
     
 }
 
@@ -61,7 +65,9 @@ enum SectionType : NSUInteger {
     self.parentViewController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"patternBg.png"]];
     
     self.navigationItem.title = @"Teilnehmer-Büros";
-    
+    [self.tableView setAllowsSelection:YES];
+    NSLog(@"PTVC: viewDidLoad");
+     NSLog(@"delegate:%@ dataSource:%@", self.tableView.delegate, self.tableView.dataSource);
     // allocate a reachability object
     Reachability* reach = [Reachability reachabilityWithHostname:currentCostServerBaseURLHome];
     NSNumber *numberofentities = [Participant numberOfEntities];
@@ -112,6 +118,7 @@ enum SectionType : NSUInteger {
 
 - (void)initParticipants
 {
+    NSLog(@"PTVC: initParticipants");
     if (self.deviceIsOnline)
     {
     [MagicalRecord saveInBackgroundWithBlock:^(NSManagedObjectContext *localContext)
@@ -181,25 +188,38 @@ enum SectionType : NSUInteger {
     //detailViewManager.detailViewController = detailViewController;
     NSLog(@"<PublicTableViewController> _____didSelectRowAtIndexPath_____");
     
-    if (indexPath.section == ParticipantSection)
-    {
+//            [self performSegueWithIdentifier:@"publicDataDetails"
+//                                      sender:[users objectForKey:[tableView cellForRowAtIndexPath:indexPath].textLabel.text]];
+    
+    if (indexPath.section == ParticipantSection){
         self.selectedParticipantId = [users objectForKey:[tableView cellForRowAtIndexPath:indexPath].textLabel.text];
+        NSLog(@"<PublicTableViewController> self.selectedParticipantId: %@", self.selectedParticipantId);
         [self performSegueWithIdentifier:@"publicDataDetails"
                                   sender:[users objectForKey:[tableView cellForRowAtIndexPath:indexPath].textLabel.text]];
+        NSLog(@"<PublicTableViewController> sender: %@", [users objectForKey:[tableView cellForRowAtIndexPath:indexPath].textLabel.text]);
     }
-    /*else if(indexPath.section == OverviewSection)
-    {
-        // TODO
-        DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
-        UIViewController <SubstitutableDetailViewController> *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"OverviewViewController"];
-        detailViewManager.detailViewController = detailViewController;
+    else if(indexPath.section == EnergyClockSection){
+//        DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
+//        UIViewController <SubstitutableDetailViewController> *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"OverviewViewController"];
+//        detailViewManager.detailViewController = detailViewController;
+        [self performSegueWithIdentifier:@"energyClockView" sender:nil];
         
-    }*/
+    }
     
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == ParticipantSection){
+        NSLog(@"<PublicTableViewController> willSelectRowAtIndexPath");
+        self.selectedParticipantId = [[users objectForKey:[tableView cellForRowAtIndexPath:indexPath].textLabel.text] stringValue];
+    }
+    return indexPath;
+}
+
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    NSLog(@"<PublicTableViewController> segue : %@", segue);
     
     if ([segue.identifier isEqualToString:@"publicDataDetails"])
     {
@@ -210,39 +230,43 @@ enum SectionType : NSUInteger {
         PublicDetailViewController *destViewController = customSegue.destinationViewController;
         NSLog(@"<PublicTableViewController> customSegue.destinationViewController: %@", customSegue.destinationViewController);
         destViewController.instanceWasCached  = customSegue.destinationWasCached;
-        destViewController.selectedParticipant = [sender integerValue];
+        destViewController.selectedParticipant = [self.selectedParticipantId integerValue];
         //get username from DB TODO
         
-        destViewController.title = [users allKeysForObject:[NSNumber numberWithInt:[sender integerValue]]][0];
+        destViewController.title = [users allKeysForObject:[NSNumber numberWithInt:[self.selectedParticipantId integerValue]]][0];
     }
+//    else if ([segue.identifier isEqualToString:@"energyClockView"]){
+//        MCachedModalStoryboardSegue *customSegue = (MCachedModalStoryboardSegue *)segue;
+//        EnergyClockViewController *ecVC = customSegue.destinationViewController;
+//        ecVC.instanceWasCached  = customSegue.destinationWasCached;
+//    }
 
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     //NSLog(@"users: %@", users);
-    //if (section == ParticipantSection)
-    //{
+    if (section == ParticipantSection){
+    NSLog(@"PTVC: numberOfRowsInSection");
         return users.count;
-    //}
-    /*else
-    {
+    }
+    else{
         return 1;
-    }*/
+    }
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    //if(section == ParticipantSection)
-        return @"Teilnehmer";
-    /*else
-        return @"Übersicht"; */
-}
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//    //if(section == ParticipantSection)
+//        return @"Teilnehmer";
+//    /*else
+//        return @"Übersicht"; */
+//}
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+//{
+//    return 1;
+//}
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -261,15 +285,15 @@ enum SectionType : NSUInteger {
         cell.textLabel.text = usersSorted[indexPath.row];
     }
     // Overview
-   /* else
+    else
     {
-        cell = [tableView dequeueReusableCellWithIdentifier:@"overview"];
+        cell = [tableView dequeueReusableCellWithIdentifier:@"energyclock"];
         if (cell == nil)
         {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"overview"] ;
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"energyclock"] ;
         }
-        cell.textLabel.text = @"Stromverbrauch";
-    } */
+        cell.textLabel.text = @"Energieuhr";
+    } 
     NSLog(@"section: %i", indexPath.section);
     NSAssert(cell!=nil, @"cell is nil!");
     return cell;

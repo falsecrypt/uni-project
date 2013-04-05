@@ -8,7 +8,7 @@
 #import <UIKit/UIKit.h>
 #import "DetailViewManager.h"
 
-@interface PublicTVC : UITableViewController
+@interface PublicScoreTVC : UITableViewController
 
 @property (nonatomic, strong) NSString *selectedParticipantId;
 

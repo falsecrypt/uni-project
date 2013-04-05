@@ -7,6 +7,7 @@
 
 #import "DetailViewManager.h"
 #import "FirstDetailViewController.h"
+#import "EnergyClockViewController.h"
 
 @interface DetailViewManager ()
 // Holds a reference to the split view controller's bar button item
@@ -55,14 +56,35 @@
     
     // Update the split view controller's view controllers array.
     // This causes the new detail view controller to be displayed.
-    UIViewController *navigationViewController = (self.splitViewController.viewControllers)[0];
+    id navigationViewController = (self.splitViewController.viewControllers)[0];
+    UIViewController *detail = (self.splitViewController.viewControllers)[1];
+//    if ([detail isKindOfClass:[EnergyClockViewController class]]) {
+//        NSArray *vcs = ((EnergyClockViewController *)detail).childViewControllers;
+//        for (UIViewController *vc in vcs) {
+//            for (UIView *view in vc.view.subviews ) {
+//                [view removeFromSuperview];
+//            }
+//        }
+//        for (UIViewController *vc in vcs) {
+//            [vc willMoveToParentViewController:nil];
+//            [vc removeFromParentViewController];
+//        }
+//        for (int i=0; i<[detail.view.subviews count]; i++) {
+//            UIView *view = detail.view.subviews[i];
+//            view =nil;
+//        }
+//        [detail removeFromParentViewController];
+//        NSLog(@"<DetailViewManager> ((EnergyClockViewController *)detail).viewControllers: %@", ((EnergyClockViewController *)detail).viewControllers);
+//    }
     NSArray *viewControllers = @[navigationViewController, _detailViewController];
     self.splitViewController.viewControllers = viewControllers;
-    NSLog(@"<DetailViewManager> self.splitViewController.viewControllers: %@", self.splitViewController.viewControllers);
+    //NSLog(@"<DetailViewManager> self.splitViewController.viewControllers: %@", self.splitViewController.viewControllers);
+    NSLog(@"<DetailViewManager> detail prev: %@", detail);
+    NSLog(@"<DetailViewManager> detail prev: %@", detail.view);
     // Dismiss the navigation popover if one was present.  This will
     // only occur if the device is in portrait.
-    if (self.navigationPopoverController)
-        [self.navigationPopoverController dismissPopoverAnimated:YES];
+//    if (self.navigationPopoverController)
+//        [self.navigationPopoverController dismissPopoverAnimated:YES];
 }
 
 #pragma mark -

@@ -30,6 +30,7 @@
 		CE0AE4861646051A00EC15B4 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */; };
 		CE0D631916611B1600381D05 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE0D631816611B1600381D05 /* CoreData.framework */; };
 		CE0D631D16611E7500381D05 /* EcoMeterModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CE0D631B16611E7500381D05 /* EcoMeterModel.xcdatamodeld */; };
+		CE0D9911170E0B8C00EADCEE /* EnergyClockTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0D9910170E0B8C00EADCEE /* EnergyClockTVC.m */; };
 		CE12C0271687D4C8001C4959 /* LastMonthsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12C0261687D4C8001C4959 /* LastMonthsViewController.m */; };
 		CE12C02B1687D8EA001C4959 /* CircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12C02A1687D8EA001C4959 /* CircleView.m */; };
 		CE137E591708FBB600F02F14 /* SliceDetailsView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE137E581708FBB600F02F14 /* SliceDetailsView.m */; };
@@ -188,7 +189,7 @@
 		CEF386EA16C0245A0082C372 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF386E816C0245A0082C372 /* libOCMock.a */; };
 		CEF386EB16C0245A0082C372 /* libOCMock.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF386E816C0245A0082C372 /* libOCMock.a */; };
 		CEF5657B163F17270066F2A2 /* FirstDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */; };
-		CEF5657F163F1D600066F2A2 /* PublicTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657E163F1D600066F2A2 /* PublicTVC.m */; };
+		CEF5657F163F1D600066F2A2 /* PublicScoreTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657E163F1D600066F2A2 /* PublicScoreTVC.m */; };
 		CEF56586163F2DCE0066F2A2 /* PublicDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF56584163F2DCD0066F2A2 /* PublicDetailViewController.m */; };
 		CEFDC23C163E15480011C3CF /* DetailViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFDC23B163E15480011C3CF /* DetailViewManager.m */; };
 /* End PBXBuildFile section */
@@ -225,6 +226,8 @@
 		CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		CE0D631816611B1600381D05 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		CE0D631C16611E7500381D05 /* EcoMeterModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = EcoMeterModel.xcdatamodel; sourceTree = "<group>"; };
+		CE0D990F170E0B8C00EADCEE /* EnergyClockTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnergyClockTVC.h; sourceTree = "<group>"; };
+		CE0D9910170E0B8C00EADCEE /* EnergyClockTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyClockTVC.m; sourceTree = "<group>"; };
 		CE12C0251687D4C8001C4959 /* LastMonthsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LastMonthsViewController.h; sourceTree = "<group>"; };
 		CE12C0261687D4C8001C4959 /* LastMonthsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LastMonthsViewController.m; sourceTree = "<group>"; };
 		CE12C0291687D8EA001C4959 /* CircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleView.h; sourceTree = "<group>"; };
@@ -559,8 +562,8 @@
 		CEF386F216C0246D0082C372 /* OCMockRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCMockRecorder.h; sourceTree = "<group>"; };
 		CEF56579163F17270066F2A2 /* FirstDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstDetailViewController.h; sourceTree = "<group>"; };
 		CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstDetailViewController.m; sourceTree = "<group>"; };
-		CEF5657D163F1D600066F2A2 /* PublicTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicTVC.h; sourceTree = "<group>"; };
-		CEF5657E163F1D600066F2A2 /* PublicTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicTVC.m; sourceTree = "<group>"; };
+		CEF5657D163F1D600066F2A2 /* PublicScoreTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicScoreTVC.h; sourceTree = "<group>"; };
+		CEF5657E163F1D600066F2A2 /* PublicScoreTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicScoreTVC.m; sourceTree = "<group>"; };
 		CEF56584163F2DCD0066F2A2 /* PublicDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicDetailViewController.m; sourceTree = "<group>"; };
 		CEFDC23A163E15480011C3CF /* DetailViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewManager.h; sourceTree = "<group>"; };
 		CEFDC23B163E15480011C3CF /* DetailViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewManager.m; sourceTree = "<group>"; };
@@ -655,14 +658,16 @@
 				CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */,
 				CEA0BE99163CD2D700ED0599 /* LoginScreenTVC.h */,
 				CEA0BE9A163CD2D700ED0599 /* LoginScreenTVC.m */,
-				CEF5657D163F1D600066F2A2 /* PublicTVC.h */,
-				CEF5657E163F1D600066F2A2 /* PublicTVC.m */,
+				CEF5657D163F1D600066F2A2 /* PublicScoreTVC.h */,
+				CEF5657E163F1D600066F2A2 /* PublicScoreTVC.m */,
 				CE03516616ADDAF200752192 /* PublicDetailViewController.h */,
 				CEF56584163F2DCD0066F2A2 /* PublicDetailViewController.m */,
 				CE3C80DF16DFF0A100DB4E05 /* EnergyClockViewController.h */,
 				CE3C80E016DFF0A100DB4E05 /* EnergyClockViewController.m */,
 				CE3C80E316E02F1000DB4E05 /* ScrollViewContentVC.h */,
 				CE3C80E416E02F1100DB4E05 /* ScrollViewContentVC.m */,
+				CE0D990F170E0B8C00EADCEE /* EnergyClockTVC.h */,
+				CE0D9910170E0B8C00EADCEE /* EnergyClockTVC.m */,
 			);
 			name = Public;
 			sourceTree = "<group>";
@@ -1517,7 +1522,7 @@
 				CEA0BEA1163CD99B00ED0599 /* FirstTVC.m in Sources */,
 				CEFDC23C163E15480011C3CF /* DetailViewManager.m in Sources */,
 				CEF5657B163F17270066F2A2 /* FirstDetailViewController.m in Sources */,
-				CEF5657F163F1D600066F2A2 /* PublicTVC.m in Sources */,
+				CEF5657F163F1D600066F2A2 /* PublicScoreTVC.m in Sources */,
 				CEF56586163F2DCE0066F2A2 /* PublicDetailViewController.m in Sources */,
 				CEDDE0F61641611800BEFE0A /* StartDetailViewController.m in Sources */,
 				CE0AE4861646051A00EC15B4 /* KeychainItemWrapper.m in Sources */,
@@ -1603,6 +1608,7 @@
 				CE137E591708FBB600F02F14 /* SliceDetailsView.m in Sources */,
 				CE4C9867170B982300A27EB1 /* ParticipantConsumption.m in Sources */,
 				CE4C986D170B98A100A27EB1 /* Participant.m in Sources */,
+				CE0D9911170E0B8C00EADCEE /* EnergyClockTVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

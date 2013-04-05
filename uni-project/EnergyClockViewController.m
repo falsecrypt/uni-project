@@ -12,17 +12,21 @@
 #import "AKSegmentedControl.h"
 #import "SliceDetailsView.h"
 #import "EnergyClockDataManager.h"
+#import "EcoMeterAppDelegate.h"
+#import "MBProgressHUD.h"
 
+// identifiers/tags
 static const int numberPages    = 2;
 static const int numberSlices   = 12; // 12 time intervalls, 00:00-02:00-..., sometimes == 11 !
-static const int topScrollView = 9; // ScrollView identifiers
+static const int topScrollView  = 9; // ScrollView identifiers
 static const int mainScrollView = 10;
+static const int sliceDetailsView = 13;
 
 
 @interface EnergyClockViewController ()<UIScrollViewDelegate, BTSPieViewDataSource, BTSPieViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
-@property (nonatomic, strong, readwrite) NSMutableArray *viewControllers;
+//@property (nonatomic, strong) NSMutableArray *viewControllers;
 @property (weak, nonatomic) IBOutlet BTSPieView *energyClockView;
 // Used to display so called 'EnergyClock-Multilevel-Pie Chart', center of the screen -> Slice Values
 @property (nonatomic, strong) NSMutableArray *sliceValues;
@@ -45,6 +49,7 @@ static const int mainScrollView = 10;
 @property (assign, nonatomic) NSInteger selectedEnergyClockSlice;
 @property (assign, nonatomic) BOOL waitingForNewData;
 @property (assign, nonatomic) NSInteger selectedParticipantId;
+@property (nonatomic, strong) MBProgressHUD *HUD;
 
 @end
 
@@ -73,6 +78,8 @@ static const NSArray *participants;
      name:AggregatedDaysSaved
      object:nil];
     
+    [self startHUD];
+    
     participants = [[NSArray alloc] initWithObjects:
                          [NSNumber numberWithInteger:FirstSensorID],
                          [NSNumber numberWithInteger:SecondSensorID],
@@ -80,6 +87,7 @@ static const NSArray *participants;
 
     
     self.sliceDetailsView.datasource = self;
+    self.sliceDetailsView.tag = sliceDetailsView;
     
     self.selectedEnergyClockSlice = -1;
     self.selectedParticipantId = FirstSensorID;
@@ -161,16 +169,50 @@ static const NSArray *participants;
     
     NSLog(@"viewDidLoad-after checkSyncStatus, self.sliceValues: %@", self.sliceValues);
     NSLog(@"viewDidLoad-after checkSyncStatus, self.slotValuesForSlice: %@", self.slotValuesForSlice);
+    EcoMeterAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    DetailViewManager *detailViewManager = appDelegate.detailViewManager;
+    NSLog(@"viewDidLoad detailViewManager.splitViewController.viewControllers: %@", detailViewManager.splitViewController.viewControllers);
     
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    
-    // OK we're done, lets reload the energyclock
-    //[self.energyClockView reloadData];
+//- (void)viewWillAppear:(BOOL)animated {
+//    [super viewWillAppear:animated];
+//    
+//    
+//    // OK we're done, lets reload the energyclock
+//    //[self.energyClockView reloadData];
+//
+//}
 
+- (void)viewWillDisappear:(BOOL)animated {
+    
+    [super viewWillDisappear:animated];
+    
+    // IMPORTANT:
+    if (self.sliceDetailsView) {
+        [self.sliceDetailsView killAll];
+    }
+    
+//            for (UIViewController *vc in self.childViewControllers) {
+//                [vc willMoveToParentViewController:nil];
+//                [vc removeFromParentViewController];
+//            }
+    // CANNOT REMOVE THE MAINSCROLLVIEW -> CRASH
+//for(UIView *view in self.view.subviews){
+//    NSLog(@"view: %@ removing in progress..", view);
+//    if (view.tag == mainScrollView) {
+//        for (UIView *v in view.subviews) {
+//            if (v.tag == sliceDetailsView) {
+//                NSLog(@"[inside] - bingo!");
+//                [(SliceDetailsView *)v killAll];
+//                NSLog(@"[inside] - vorbei!");
+//            }
+//        }
+//    }
+//    [view removeFromSuperview];
+//    NSLog(@"view: %@ removed!", view);
+//}
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -182,6 +224,7 @@ static const NSArray *participants;
     
     self.mainScrollView.contentSize =
     CGSizeMake(CGRectGetWidth(self.mainScrollView.frame), CGRectGetHeight(self.energyClockView.frame) + CGRectGetHeight(self.sliceDetailsView.frame));
+    NSLog(@"self.mainScrollView.contentSize h: %f, w: %f", self.mainScrollView.contentSize.height, self.mainScrollView.contentSize.width);
 
     // pages are created on demand
     // load the visible page
@@ -212,14 +255,35 @@ static const NSArray *participants;
             [self.sliceValues insertObject:[NSNumber numberWithFloat:insertIndex+0.53] atIndex:insertIndex];
             //[self.energyClockView insertSliceAtIndex:insertIndex animate:YES];
         }*/
+    
+    
     [self.energyClockView reloadData];
     
     if (self.waitingForNewData == NO) {
         self.sliceDetailsView.slotValuesForSlice = self.slotValuesForSlice;
         NSLog(@"<EnergyClockVC> calling viewDidAppear");
         [self.sliceDetailsView initPlots];
+        [self hideHUD];
     }
 
+}
+
+
+-(void)startHUD
+{
+    self.HUD = [[MBProgressHUD alloc] initWithView:self.mainScrollView];
+    [self.mainScrollView addSubview:self.HUD];
+	self.HUD.labelText = @"Loading";
+    self.HUD.yOffset = -125.f;
+    [self.HUD show:YES];
+}
+
+-(void)hideHUD
+{
+    [MBProgressHUD hideHUDForView:self.mainScrollView animated:YES];
+    //[self.HUD removeFromSuperview];
+    //self.HUD = nil;
+    //NSLog(@"after|self.mainScrollView.contentSize h: %f, w: %f", self.mainScrollView.contentSize.height, self.mainScrollView.contentSize.width);
 }
 
 // should we display the energyclock of the last date immediately
@@ -279,6 +343,7 @@ static const NSArray *participants;
     [self.energyClockView reloadData];
     self.sliceDetailsView.slotValuesForSlice = self.slotValuesForSlice;
     [self.sliceDetailsView initPlots];
+    [self hideHUD];
 }
 
 -(NSMutableArray*)sliceValues

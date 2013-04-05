@@ -14,7 +14,7 @@
 #import "DetailViewManager.h"
 #import "EcoMeterAppDelegate.h"
 #import "PublicDetailViewController.h"
-#import "PublicTVC.h"
+#import "PublicScoreTVC.h"
 
 /////////////////////////////////////////////////////////////////////////
 #pragma mark - Statics
@@ -109,7 +109,7 @@ static NSMutableDictionary * _Cached_PublicDetailViews;
     }
     _destinationWasCached = YES;
     if ([destination isKindOfClass:[PublicDetailViewController class]]) {
-        PublicTVC *Newsource = (PublicTVC *)source;
+        PublicScoreTVC *Newsource = (PublicScoreTVC *)source;
         if (![[_Cached_PublicDetailViews allKeys] containsObject:Newsource.selectedParticipantId]) {
             NSLog(@"<MCachedModalStoryboardSegue> adding destination: %@", destination);
             [_Cached_PublicDetailViews setObject:destination forKey:Newsource.selectedParticipantId];
@@ -120,20 +120,20 @@ static NSMutableDictionary * _Cached_PublicDetailViews;
         NSLog(@"<MCachedModalStoryboardSegue> _Cached_PublicDetailViews: %@", _Cached_PublicDetailViews);
     }
     else {
-
-    // Add it to the cache if doesn't exist...
-    _MCachedSegueKey *key = [_MCachedSegueKey keyWithIdentifier:identifier viewController:destination];
-    
-    
-
-    _destinationWasCached = YES;
-    if (!([_MCachedModalStoryboardSegueCache.allKeys containsObject:key])) {
-        _MCachedModalStoryboardSegueCache[key] = destination;
-        _destinationWasCached = NO;
-    }
-    
-    // Swizzle for the cached destination
-    newDest = _MCachedModalStoryboardSegueCache[key];
+        
+        // Add it to the cache if doesn't exist...
+        _MCachedSegueKey *key = [_MCachedSegueKey keyWithIdentifier:identifier viewController:destination];
+        
+        //_Cached_PublicDetailViews = nil;
+        
+        _destinationWasCached = YES;
+        if (!([_MCachedModalStoryboardSegueCache.allKeys containsObject:key])) {
+            _MCachedModalStoryboardSegueCache[key] = destination;
+            _destinationWasCached = NO;
+        }
+        
+        // Swizzle for the cached destination
+        newDest = _MCachedModalStoryboardSegueCache[key];
         
     }
     

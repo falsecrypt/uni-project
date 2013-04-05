@@ -22,7 +22,7 @@
 @property (strong, nonatomic) CPTPieChart *participantPieChart;
 @property (strong, nonatomic) CPTPieChart *totalSlicePieChart;
 
-@property (weak, nonatomic) ScrollViewContentVC *scrollViewContentVC; // check if i need this
+//@property (weak, nonatomic) ScrollViewContentVC *scrollViewContentVC; // check if i need this
 @property (assign, nonatomic) NSUInteger selectedEnergyClockSlice;
 @property (assign, nonatomic) NSUInteger selectedParticipant;
 @property (strong, nonatomic) NSArray *availableCPTColors;
@@ -78,6 +78,26 @@
     
     NSLog(@"<SliceDetailsView> participantHostingView: %@, participantGraph: %@", self.participantHostingView, self.participantGraph);
 }
+
+-(void)killAll
+{
+    // Remove the CPTLayerHostingView
+    if ( self.participantHostingView ) {
+        //[self.participantHostingView removeFromSuperview];
+        
+        self.participantHostingView.hostedGraph = nil;
+        self.participantHostingView = nil;
+    }
+    if ( self.totalSliceHostingView ) {
+        //[self.totalSliceHostingView removeFromSuperview];
+        
+        self.totalSliceHostingView.hostedGraph = nil;
+        self.totalSliceHostingView = nil;
+    }
+    
+    self.availableCPTColors = nil;
+}
+
 
 -(void)configureHostViews
 {

@@ -20,6 +20,7 @@
 
 
 -(void)initPlots;
+-(void)killAll;
 -(void)reloadPieChartForNewSlice:(NSUInteger)selectedSliceNumber;
 -(void)reloadPieChartForNewParticipant:(NSUInteger)selectedParticipant;
 

@@ -13,9 +13,10 @@
 @interface EnergyClockViewController : UIViewController <slicePieChartDatasource>
 
 @property (weak, nonatomic) IBOutlet UINavigationBar *navigationBar;
-@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (nonatomic, strong) NSMutableArray *radiusValuesForSlice;
-@property (nonatomic, strong, readonly) NSMutableArray *viewControllers;
+@property (nonatomic, strong, readwrite) NSMutableArray *viewControllers;
+@property (nonatomic, assign) BOOL instanceWasCached;
 
 -(void)loadEnergyClockForDate:(NSDate *)date;
 

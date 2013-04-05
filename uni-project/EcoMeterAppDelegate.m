@@ -59,6 +59,8 @@ extern CFAbsoluteTime StartTime;
     NSLog(@"calling didFinishLaunchingWithOptions, detailViewManager: %@", self.detailViewManager);
     self.splitViewController.delegate = self.detailViewManager;
     
+    self.window.rootViewController = self.splitViewController;
+    
 #if MEASURE_LAUNCH_TIME
     dispatch_async(dispatch_get_main_queue(), ^ {
         NSLog(@"Launched in %f sec", CFAbsoluteTimeGetCurrent() - StartTime);
