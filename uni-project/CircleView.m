@@ -41,6 +41,9 @@
     [super touchesBegan:touches withEvent:event];
     UITouch *touch = [touches anyObject];
     if ([touch.view isKindOfClass: CircleObjectView.class]) {
+        if (self.currentSelectedCircle != nil) {
+            self.currentSelectedCircle.layer.borderWidth = 0.0f;
+        }
         // Get the CircleObjectView object from the dictionary
         self.currentSelectedCircle = (self.circleObjectsDictionary)[[NSString stringWithFormat:@"%d",touch.view.tag]];
         // if consumption is 0
@@ -54,6 +57,9 @@
         else {
             self.currentSelectedCircle.backgroundColor =
             [(self.monthColors)[[NSString stringWithFormat:@"%i",self.currentSelectedCircle.tag]] colorWithAlphaComponent: 1.0f];
+            self.currentSelectedCircle.layer.borderColor = [[UIColor purpleColor] colorWithAlphaComponent:0.6f].CGColor;
+            self.currentSelectedCircle.layer.borderWidth = 2.0f;
+
         }
         
         //Is anyone listening?
@@ -106,7 +112,7 @@
 - (void)drawRect:(CGRect)rect
 {
     if (self.monthDataObjects!=nil) {
-        
+        NSLog(@"\n drawRect: self.monthDataObjects: %@", self.monthDataObjects);
         CGPoint point;
         self.circleObjectsDictionary = [[NSMutableDictionary alloc] init];
         point.x = self.bounds.origin.x + (self.bounds.size.width/5);
@@ -204,6 +210,9 @@
             UIColor *animColorEnd = (self.monthColors)[[NSString stringWithFormat:@"%i",currentCircle.tag]];
             currentCircle.backgroundColor = animColorEnd;
         }];
+        self.currentSelectedCircle = currentCircle;
+        self.currentSelectedCircle.layer.borderColor = [[UIColor purpleColor] colorWithAlphaComponent:0.6f].CGColor;
+        self.currentSelectedCircle.layer.borderWidth = 2.0f;
         
         //Is anyone listening?
         if([self.delegate respondsToSelector:@selector(setLabelsWithMonth:andConsumption:)]){

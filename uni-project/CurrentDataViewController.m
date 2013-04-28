@@ -461,8 +461,8 @@ NSMutableArray *navigationBarItems;
         //NSLog(@"hours: %i", hours);
         //NSNumber *total = [self.lastWattValues valueForKeyPath:@"@sum.value"];
         float total = 0.00;
-        for(int i=0;i<[self.lastWattValues count];i++){
-            total += [(self.lastWattValues)[i] floatValue];
+        for(NSNumber *wattValue in self.lastWattValues){
+            total += [wattValue floatValue];
         }
         total = total/[self.lastWattValues count]; // calculate average value
         float averageKwhTemp = (total/1000)*hours;
@@ -544,7 +544,10 @@ NSMutableArray *navigationBarItems;
     //max consumption is a value, beeing aggregated during a period of time, i.e. 14 days
     // we should store this value in our DB, using Core Data
     // TODO
-    [[EMNetworkManager sharedClient] getPath:@"rpc.php?userID=3&action=get&what=max" parameters:nil success:^(AFHTTPRequestOperation *operation, id data) {
+    NSString *getPath = @"rpc.php?userID=";
+    getPath = [getPath stringByAppendingString: [NSString stringWithFormat:@"%i", MySensorID] ];
+    getPath = [getPath stringByAppendingString:@"&action=get&what=max"];
+    [[EMNetworkManager sharedClient] getPath:getPath parameters:nil success:^(AFHTTPRequestOperation *operation, id data) {
         if(checkForTimeOutTimer){
             [checkForTimeOutTimer invalidate];
             checkForTimeOutTimer = nil;

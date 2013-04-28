@@ -24,6 +24,7 @@ NSString *  const scatterPlot               = @"Scatter Plot";
 NSString *  const currentCostServerBaseURLString = @"http://www.hcm-lab.de/downloads/buehling/adaptiveart/CurrentCostTreeOnline/";
 NSString *  const currentCostServerBaseURLHome   = @"www.hcm-lab.de";
 float       const OfficeArea     = 20.0f;
+NSInteger   const MySensorID     = 3;
 NSInteger   const FirstSensorID  = 3;
 NSInteger   const SecondSensorID = 4;
 NSInteger   const ThirdSensorID  = 5;
@@ -46,7 +47,7 @@ NSString * const MultiLevelPieChartMode  = @"MultiLevelPieChartMode";
 // test data flag, set to NO when not in dev mode
 BOOL const USEDUMMYDATA                 = NO;
 
-// wunderground Weather API, projectname: ecometerapp
+// Wunderground Weather API, projectname: ecometerapp
 // prefix: WWA
 // http://api.wunderground.com/api/Your_Key/astronomy/q/Your_Country/Your_City.json
 // http://api.wunderground.com/api/Your_Key/history_YYYYMMDD/q/CA/San_Francisco.json
@@ -56,8 +57,8 @@ NSString * const WWAAstronomyURLpart = @"/astronomy/";
 NSString * const WWALocationURLpart = @"q/Germany/Augsburg.json";
 NSString * const WWAHistoryURLpart = @"/history_"; // '/history_YYYYMMDD/'
 
-NSString * const AggregatedDaysSaved    = @"AggregatedDaysSaved";
-BOOL const FORCEDAYCHARTSUPDATE         = NO; // use this only during development
+NSString * const EnergyClockDataSaved    = @"AggregatedDaysSaved";
+BOOL const FORCEDAYCHARTSUPDATE         = YES; // use this only during development, default = NO
 
 NSInteger const numberOfParticipants    = 3;
 

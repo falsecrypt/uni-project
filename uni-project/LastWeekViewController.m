@@ -12,6 +12,7 @@
 #import "EMNetworkManager.h"
 #import "WeekData.h"
 #import "Reachability.h"
+#import "CPTAnimationPeriod.h"
 
 static NSString *const pieChartName = @"7DaysPieChart";
 #define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
@@ -286,7 +287,10 @@ NSMutableArray *navigationBarItems;
     NSLog(@"getDataFromServer...");
     //Get user's aggregated kilowatt values per day (max 14 days, semicolon separated, latest first).
     // userID should be set by the user! TODO
-    [[EMNetworkManager sharedClient] getPath:@"rpc.php?userID=3&action=get&what=aggregation_d" parameters:nil
+    NSString *getPath = @"rpc.php?userID=";
+    getPath = [getPath stringByAppendingString: [NSString stringWithFormat:@"%i", MySensorID] ];
+    getPath = [getPath stringByAppendingString:@"&action=get&what=aggregation_d"];
+    [[EMNetworkManager sharedClient] getPath:getPath parameters:nil
                                          success:^(AFHTTPRequestOperation *operation, id data) {
                                              self.newDataSuccess = YES;
                                              [WeekData truncateAll];
@@ -420,8 +424,9 @@ NSMutableArray *navigationBarItems;
     // Add pie chart
     self.piePlot                 = [[CPTPieChart alloc] init];
     self.piePlot.dataSource      = self;
-    self.piePlot.pieRadius  = MIN(0.7 * (self.graphHostingView.frame.size.height - 2 * self.graph.paddingLeft) / 2.0,
+    CGFloat radius  = MIN(0.7 * (self.graphHostingView.frame.size.height - 2 * self.graph.paddingLeft) / 2.0,
                              0.7 * (self.graphHostingView.frame.size.width - 2 * self.graph.paddingTop) / 2.0);
+    self.piePlot.pieRadius       = 0.0;
     self.piePlot.identifier      = pieChartName;
     self.piePlot.borderLineStyle = whiteLineStyle;
     self.piePlot.startAngle      = M_PI_4;
@@ -432,6 +437,16 @@ NSMutableArray *navigationBarItems;
     self.piePlot.plotSpace.allowsUserInteraction = YES;
     self.piePlot.overlayFill    = [CPTFill fillWithGradient:overlayGradient];
     [self.graph addPlot:self.piePlot];
+    
+    
+    [CPTAnimation animate:self.piePlot
+                 property:@"pieRadius"
+                     from:0.0
+                       to:radius
+                 duration:0.5
+                withDelay:0.1
+           animationCurve:CPTAnimationCurveBounceOut
+                 delegate:nil];
     
     NSLog(@"createPieChart: graph: %@, piePlot: %@", self.graph, self.piePlot);
     

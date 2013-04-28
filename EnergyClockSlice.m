@@ -2,7 +2,7 @@
 //  EnergyClockSlice.m
 //  uni-project
 //
-//  Created by Pavel Ermolin on 06.04.13.
+//  Created by Pavel Ermolin on 28.04.13.
 //  Copyright (c) 2013 test. All rights reserved.
 //
 
@@ -14,7 +14,8 @@
 @dynamic consumption;
 @dynamic date;
 @dynamic hour;
-@dynamic slotValues;
 @dynamic identifier;
+@dynamic slotValues;
+@dynamic temperature;
 
 @end

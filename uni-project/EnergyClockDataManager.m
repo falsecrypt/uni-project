@@ -13,6 +13,7 @@
 #import "AggregatedDay.h"
 #import "EnergyClockSlice.h"
 #import "AFJSONRequestOperation.h"
+#import "WeatherApiCommManager.h"
 
 @interface EnergyClockDataManager ()
 
@@ -129,6 +130,9 @@ static NSDictionary *sunriseSunset;
 -(void)getDataFromServerWithMode:(NSString *)mode
 {
     NSLog(@"getDataFromServerWithMode...");
+    
+    [self retrieveTemperatureValues];
+    
     if ( [mode isEqualToString:DayChartsMode] ){
         
         [self resetDatabase];
@@ -323,6 +327,8 @@ static NSDictionary *sunriseSunset;
             methodCounter++;
             // DEBUGGING
             
+            
+            
             NSLog(@"System numberOfEntities: %@", [System numberOfEntities]);
             NSArray *allsystems = [System findAll];
             
@@ -352,7 +358,7 @@ static NSDictionary *sunriseSunset;
             // we must notify only once
             if (methodCounter == numberOfParticipants) {
                 //notify observers (instances of ScrollViewContentVC)
-                [[NSNotificationCenter defaultCenter] postNotificationName:AggregatedDaysSaved object:nil userInfo:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:EnergyClockDataSaved object:nil userInfo:nil];
             }
 
         }];
@@ -362,57 +368,96 @@ static NSDictionary *sunriseSunset;
 - (void)syncSunriseSunsetData
 {
     NSLog(@"syncSunriseSunsetDataWithResult, self.sunriseSunset  %@ \n self: %@",sunriseSunset, self );
-        // Construct request URL
-        NSString *requestAstronomyUrl = [WWABaseURL stringByAppendingString:WWAKey];
-        requestAstronomyUrl = [[requestAstronomyUrl stringByAppendingString:WWAAstronomyURLpart] stringByAppendingString:WWALocationURLpart];
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:requestAstronomyUrl]];
-        AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request
-                                                                                            success:^
-                                             (NSURLRequest *request, NSHTTPURLResponse *response, id JSON)
-                                             {
-//                                                 NSDictionary *jsonDict = (NSDictionary *) JSON;
-                                                 NSArray *jsonArray = (NSArray *) JSON;
-                                                 // Key-Value Coding
-                                                 NSDictionary *jsonArrayFilteredSunrise = [jsonArray valueForKeyPath:@"moon_phase.sunrise"];
-                                                 NSDictionary *jsonArrayFilteredSunset = [jsonArray valueForKeyPath:@"moon_phase.sunset"];
-                                                 NSLog(@"\n jsonArrayFilteredSunrise: %@ \n jsonArrayFilteredSunset: %@ \n", jsonArrayFilteredSunrise, jsonArrayFilteredSunset);
-                                                 
-//                                                 __block NSDictionary *sunsetData = [[NSDictionary alloc] init];
-//                                                 __block NSDictionary *sunriseData = [[NSDictionary alloc] init];
-                                                 
-//                                                 [jsonDict enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent // first loop
-//                                                                                   usingBlock:^(id key, id object, BOOL *stop)
-//                                                  {
-//                                                      if ([(NSString *)key isEqualToString:@"moon_phase"])
-//                                                      {
-//                                                          [[jsonDict objectForKey:key]
-//                                                           enumerateKeysAndObjectsWithOptions:NSEnumerationConcurrent // second loop
-//                                                           usingBlock:^(id key, id object, BOOL *stop)
-//                                                           {
-//                                                               if ([(NSString *)key isEqualToString:@"sunset"])
-//                                                               { // bingo
-//                                                                   sunsetData = object;
-//                                                               }
-//                                                               if ([(NSString *)key isEqualToString:@"sunrise"])
-//                                                               { // bingo
-//                                                                   sunriseData = object;
-//                                                               }
-//                                                               
-//                                                           }];
-//                                                      }
-//                                                  }];
-                                                 // construct result dictionary
-                                                 sunriseSunset = [[NSMutableDictionary alloc] initWithObjectsAndKeys:jsonArrayFilteredSunset, @"sunset",
-                                                                                                                     jsonArrayFilteredSunrise, @"sunrise", nil];
-                                                 NSLog(@"\n sunriseSunset %@ \n",sunriseSunset);
-                                                 [self processAfterGettingSunriseSunset];
-                                                 
-                                             } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-                                                 NSLog(@"wunderground.com Weather API: Request Failure Because %@",[error userInfo]);
-                                             }];
-        
-        [operation start];
+    // Construct request URL
+    NSString *requestAstronomyUrl = [WWABaseURL stringByAppendingString:WWAKey];
+    requestAstronomyUrl = [[requestAstronomyUrl stringByAppendingString:WWAAstronomyURLpart] stringByAppendingString:WWALocationURLpart];
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:requestAstronomyUrl]];
+    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request
+                                                                                        success:^
+                                         (NSURLRequest *request, NSHTTPURLResponse *response, id JSON){
+                                             NSArray *jsonArray = (NSArray *) JSON;
+                                             // Key-Value Coding
+                                             NSDictionary *jsonArrayFilteredSunrise = [jsonArray valueForKeyPath:@"moon_phase.sunrise"];
+                                             NSDictionary *jsonArrayFilteredSunset = [jsonArray valueForKeyPath:@"moon_phase.sunset"];
+                                             NSLog(@"\n jsonArrayFilteredSunrise: %@ \n jsonArrayFilteredSunset: %@ \n", jsonArrayFilteredSunrise, jsonArrayFilteredSunset);
+                                             
+                                             // construct result dictionary
+                                             sunriseSunset = [[NSMutableDictionary alloc] initWithObjectsAndKeys:jsonArrayFilteredSunset, @"sunset",
+                                                              jsonArrayFilteredSunrise, @"sunrise", nil];
+                                             NSLog(@"\n sunriseSunset %@ \n",sunriseSunset);
+                                             [self processAfterGettingSunriseSunset];
+                                             
+                                         }
+                                        failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                                             NSLog(@"wunderground.com Weather API: Request Failure Because %@",[error userInfo]);
+                                         }];
+    
+    [operation start];
+    
+}
 
+-(void)retrieveTemperatureValues
+{
+    __block NSMutableArray *historyResultObjects = [[NSMutableArray alloc] init];
+    AggregatedDay *lastDay = [AggregatedDay findFirstOrderedByAttribute:@"date" ascending:NO];
+    NSDate *lastDate = lastDay.date;
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
+    [dateFormatter setDateFormat:@"yyyyMMdd/"];
+    //IMPORTANT! Actual NSDate-Object generated with this NSDateFormatter depends on the Timezone
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    NSString *requestTemperatureUrl = [WWABaseURL stringByAppendingString:WWAKey];
+    requestTemperatureUrl = [ [ [requestTemperatureUrl stringByAppendingString:WWAHistoryURLpart]
+                             stringByAppendingString:[dateFormatter stringFromDate:lastDate] ]
+                             stringByAppendingString:WWALocationURLpart];
+    NSURLRequest *temperatureRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:requestTemperatureUrl]];
+    // Construct temperature-requests
+    NSMutableArray *requestsStorage = [[NSMutableArray alloc] init];
+    requestsStorage[0] = temperatureRequest;
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    for (int i=1; i<=6; i++) {
+        [components setDay:-1];
+        lastDate = [[NSCalendar currentCalendar] dateByAddingComponents:components toDate:lastDate options:0];
+        requestTemperatureUrl = [WWABaseURL stringByAppendingString:WWAKey];
+        requestTemperatureUrl = [ [ [requestTemperatureUrl stringByAppendingString:WWAHistoryURLpart]
+                                   stringByAppendingString:[dateFormatter stringFromDate:lastDate] ]
+                                 stringByAppendingString:WWALocationURLpart];
+        NSURLRequest *temperatureRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:requestTemperatureUrl]];
+        [requestsStorage addObject:temperatureRequest];
+        
+    }
+    NSLog(@"requestsStorage : %@", requestsStorage);
+    
+    [[WeatherApiCommManager sharedClient] enqueueBatchOfHTTPRequestOperationsWithRequests:requestsStorage
+                                                                            progressBlock:^(NSUInteger numberOfCompletedOperations, NSUInteger totalNumberOfOperations) {
+                                                                               
+                                                                                
+                                                                            }
+                                                                          completionBlock:^(NSArray *operations){
+                                                                              //NSLog(@"completion block! operations:%@",operations);
+                                                                              for (id op in operations) {
+                                                                                  //NSError *nerror;
+                                                                                  
+                                                                                  AFJSONRequestOperation *myOperation = (AFJSONRequestOperation *)op;
+                                                                                  NSArray *response = [myOperation responseJSON];
+                                                                                  [historyResultObjects addObject:response];
+                                                                                  //NSLog(@"\n completion block! response:%@",response);
+                                                                                  [self storeTemperatureValues:historyResultObjects];
+                                                                              }
+                                                                              
+                                                                              NSLog(@"\n after completion block! historyResultObjects:%@",historyResultObjects);
+                                                                              
+                                                                          }];
+    
+    
+    
+}
+
+// @TODO
+-(void)storeTemperatureValues:(NSArray *)historyResultObjects{
+    
+        
+    
 }
 
 @end

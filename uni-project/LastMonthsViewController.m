@@ -187,7 +187,10 @@ NSMutableArray *navigationBarItems;
     
     NSLog(@"getDataFromServer...");
     //Get user's aggregated kilowatt values per month (max 12 months, semicolon separated, latest first).
-    [[EMNetworkManager sharedClient] getPath:@"rpc.php?userID=3&action=get&what=aggregation_m" parameters:nil
+    NSString *getPath = @"rpc.php?userID=";
+    getPath = [getPath stringByAppendingString: [NSString stringWithFormat:@"%i", MySensorID] ];
+    getPath = [getPath stringByAppendingString:@"&action=get&what=aggregation_m"];
+    [[EMNetworkManager sharedClient] getPath:getPath parameters:nil
                                          success:^(AFHTTPRequestOperation *operation, id data) {
                                              [MonthData truncateAll];
                                              NSString *oneMonthData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
@@ -269,27 +272,46 @@ NSMutableArray *navigationBarItems;
     
 }
 
--(void) calculateRadiusForCircles {
+-(void)calculateRadiusForCircles {
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     });
     NSArray *results = [MonthData findAllSortedBy:@"consumption" ascending:NO];
-    NSLog(@"calculateRadiusForCircle -> results: %@", results);
+    //NSLog(@"calculateRadiusForCircle -> results: %@", results);
+    // check if we have exactly 12 objects (last 12 months)
+    if ([MonthData countOfEntities] > 12) {
+        NSArray *sortedByDate = [ results sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO] ] ];
+        //NSLog(@"sortedByDate: %@", sortedByDate);
+        NSArray *deleteThese = [sortedByDate subarrayWithRange:NSMakeRange(12, [sortedByDate count]-12)];
+        // NSLog(@"deleteThese: %@", deleteThese);
+        for (MonthData *month in deleteThese) {
+            [month deleteEntity];
+        }
+        // overwrite with correct number of entities
+        results = [MonthData findAllSortedBy:@"consumption" ascending:NO];
+    }
+    
 
     // Get the max consumption value
-    NSDecimalNumber * consumptionMax = [results[0]consumption];
-    NSLog(@"calculateRadiusForCircle -> consumptionMax after: %@", consumptionMax);
-    // Calculate radius for every object
+    NSDecimalNumber *consumptionMax = [results[0]consumption];
+    // Calculate the max. Circle's Area
+    NSNumber *maxCircleArea = @(M_PI * pow(50.0, 2.0));
+    //NSLog(@"calculateRadiusForCircle -> consumptionMax after: %@", consumptionMax);
+    
+    // Calculate radius and area for every object
     for (MonthData *monthdata in results){
-        int circleradius = ([[monthdata consumption] intValue]*50)/[consumptionMax intValue];
+        float currentConsInPercent = ([[monthdata consumption] floatValue]) / ([consumptionMax floatValue]/100.);
+        //NSLog(@"\n currentConsInPercent -> %f", currentConsInPercent);
+        float currentCircleArea = ([maxCircleArea floatValue]/100.) * (currentConsInPercent);
+        //NSLog(@"\n currentCircleArea -> %f", currentCircleArea);
+        // Now calculate the radius and save it in the DB
+        NSUInteger circleradius = round(sqrt( currentCircleArea / M_PI ));
+        //NSLog(@"\n calculated radius -> %i for consumption -> %@", circleradius, [monthdata consumption]);
         circleradius = circleradius > 19 ? circleradius : circleradius > 0 ? 20 : 0; // if bigger than 0 : min. 20
         [monthdata setCircleradius:(NSDecimalNumber *)[NSDecimalNumber numberWithInt:circleradius]];
     }
     [[NSManagedObjectContext defaultContext] saveNestedContexts]; // SAVE
-    
-    //NSArray *resultsEND = [MonthData findAllSortedBy:@"consumption" ascending:NO];
-    //NSLog(@"calculateRadiusForCircle -> resultsEND: %@", resultsEND);
     
     self.dataView.monthDataObjects = [MonthData findAllSortedBy:@"date" ascending:YES]; // pass monthData to the view
     [self.dataView setNeedsDisplay];

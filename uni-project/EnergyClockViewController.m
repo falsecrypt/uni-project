@@ -75,7 +75,7 @@ static const NSArray *participants;
     [[NSNotificationCenter defaultCenter]
      addObserver:self
      selector:@selector(initEnergyClockAfterSavingData) // when the data has been saved we will be notified
-     name:AggregatedDaysSaved
+     name:EnergyClockDataSaved
      object:nil];
     
     [self startHUD];

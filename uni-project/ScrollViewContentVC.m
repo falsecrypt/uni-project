@@ -126,7 +126,7 @@ static float maxConsumption = 0.0f;
     [[NSNotificationCenter defaultCenter]
      addObserver:self
      selector:@selector(initPlotsAfterSavingData) // when the data has been saved we will be notified
-     name:AggregatedDaysSaved
+     name:EnergyClockDataSaved
      object:nil];
     self.weekdaysDates = [[NSMutableDictionary alloc] init];
     self.weekdays = [[NSMutableArray alloc] init];
@@ -676,6 +676,7 @@ static float maxConsumption = 0.0f;
     //NSLog(@"configureCharts..., self: %@", self);
     static BOOL animated = YES;
     float calculatedRadius = 0.0;
+    NSNumber *maxCircleArea;
     
     NSMutableArray *pageHostingViewsMutable = [[NSMutableArray alloc] init];
     NSMutableArray *pageGraphsMutable       = [[NSMutableArray alloc] init];
@@ -706,28 +707,34 @@ static float maxConsumption = 0.0f;
         pieChart.plotSpace.allowsUserInteraction = YES;
         //pieChart.pieRadius = (hostingView.bounds.size.height * 0.7) / 2;
         
-        // set pie radius relative to energy consumption - value of other days
+        // set pie radius (and circle's area) relative to energy consumption - value of other days
         // set the max possible radius first
-        if (maxRadius == 0.0) {
+        //if (maxRadius == 0.0) {
             maxRadius = (hostingView.bounds.size.height * 0.7) / 2;
-        }
+            maxCircleArea = @(M_PI * pow(maxRadius, 2.0));
+        //}
         
-        if (maxConsumption == 0.0) {
+        //if (maxConsumption == 0.0) {
             // set the maximal energy consumption value found in the DB
             maxConsumption = [((AggregatedDay *)[AggregatedDay findFirstOrderedByAttribute:@"totalconsumption" ascending:NO]).totalconsumption floatValue];
-        }
-        NSLog(@"maxRadius: %f, maxConsumption: %f", maxRadius, maxConsumption);
+        //}
+        
+        NSLog(@"\n maxRadius: %f, maxConsumption: %f, maxCircleArea: %@", maxRadius, maxConsumption, maxCircleArea);
         NSDate *currentWeekDayDate = [self.weekdaysDates objectForKey:graph.title];
         // Find the object with that Weekday, to calculate the correct radius
         AggregatedDay *aggDayObject = [AggregatedDay findFirstByAttribute:@"date" withValue:currentWeekDayDate];
+        float currentConsInPercent = ([aggDayObject.totalconsumption floatValue]) / (maxConsumption/100.);
+        float currentCircleArea = ([maxCircleArea floatValue]/100.) * (currentConsInPercent);
+        calculatedRadius = round(sqrt( currentCircleArea / M_PI ));
+        NSLog(@"\n currentConsInPercent: %f, currentCircleArea: %f, calculatedRadius: %f", currentConsInPercent, currentCircleArea, calculatedRadius);
         // found Object is the object with the maximal consumption
-        if ([aggDayObject.totalconsumption floatValue] == maxConsumption) {
-            calculatedRadius = maxRadius;
-        }
-        else {
-            float percentg = ([aggDayObject.totalconsumption floatValue] * 100.0 ) / maxConsumption;
-            calculatedRadius = maxRadius * (percentg/100.0);
-        }
+//        if ([aggDayObject.totalconsumption floatValue] == maxConsumption) {
+//            calculatedRadius = maxRadius;
+//        }
+//        else {
+//            float percentg = ([aggDayObject.totalconsumption floatValue] * 100.0 ) / maxConsumption;
+//            calculatedRadius = maxRadius * (percentg/100.0);
+//        }
         
         // insert the objects into our Dictionary for later (?)
         //[self.weekdayRadius setObject:@(calculatedRadius) forKey:graph.title];

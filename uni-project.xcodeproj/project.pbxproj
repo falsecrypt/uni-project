@@ -26,6 +26,8 @@
 		CE03516D16AE347100752192 /* ParticipantDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE03516C16AE347100752192 /* ParticipantDataManager.m */; };
 		CE071EC01659ABF1007290B1 /* icon_user.png in Resources */ = {isa = PBXBuildFile; fileRef = CE071EBF1659ABF1007290B1 /* icon_user.png */; };
 		CE071EC31659C58B007290B1 /* ProfilePopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE071EC21659C58B007290B1 /* ProfilePopoverViewController.m */; };
+		CE0927EE172C9B1800B69CC0 /* EnergyClockSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0927ED172C9B1800B69CC0 /* EnergyClockSlice.m */; };
+		CE0927F1172CA08B00B69CC0 /* WeatherApiCommManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0927F0172CA08B00B69CC0 /* WeatherApiCommManager.m */; };
 		CE0AE4821646049C00EC15B4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE0AE4811646049C00EC15B4 /* Security.framework */; };
 		CE0AE4861646051A00EC15B4 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */; };
 		CE0D631916611B1600381D05 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE0D631816611B1600381D05 /* CoreData.framework */; };
@@ -154,7 +156,6 @@
 		CEA0CE5B1661A6F60086151D /* MagicalRecord+ShorthandSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0CE3E1661A6F60086151D /* MagicalRecord+ShorthandSupport.m */; };
 		CEA0CE5C1661A6F60086151D /* MagicalRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA0CE401661A6F60086151D /* MagicalRecord.m */; };
 		CEB46E8A170F52FF009D3104 /* Participant.m in Sources */ = {isa = PBXBuildFile; fileRef = CEB46E89170F52FF009D3104 /* Participant.m */; };
-		CEB46E93170F9144009D3104 /* EnergyClockSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = CEB46E92170F9144009D3104 /* EnergyClockSlice.m */; };
 		CEB5A742169A705A009EB3F2 /* navBarBg.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB5A741169A705A009EB3F2 /* navBarBg.png */; };
 		CEB5A744169A7329009EB3F2 /* patternBg.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB5A743169A7329009EB3F2 /* patternBg.png */; };
 		CEBBD6471676D6DC008051D2 /* libCorePlot-CocoaTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEBBD5FB1676D6DC008051D2 /* libCorePlot-CocoaTouch.a */; };
@@ -220,6 +221,10 @@
 		CE071EBF1659ABF1007290B1 /* icon_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_user.png; sourceTree = "<group>"; };
 		CE071EC11659C58B007290B1 /* ProfilePopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfilePopoverViewController.h; sourceTree = "<group>"; };
 		CE071EC21659C58B007290B1 /* ProfilePopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfilePopoverViewController.m; sourceTree = "<group>"; };
+		CE0927EC172C9B1800B69CC0 /* EnergyClockSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnergyClockSlice.h; sourceTree = "<group>"; };
+		CE0927ED172C9B1800B69CC0 /* EnergyClockSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyClockSlice.m; sourceTree = "<group>"; };
+		CE0927EF172CA08B00B69CC0 /* WeatherApiCommManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherApiCommManager.h; sourceTree = "<group>"; };
+		CE0927F0172CA08B00B69CC0 /* WeatherApiCommManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherApiCommManager.m; sourceTree = "<group>"; };
 		CE0AE4811646049C00EC15B4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		CE0AE4841646051A00EC15B4 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
 		CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
@@ -442,8 +447,6 @@
 		CEA0CE421661A6F60086151D /* CoreData+MagicalRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CoreData+MagicalRecord.h"; sourceTree = "<group>"; };
 		CEB46E88170F52FF009D3104 /* Participant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Participant.h; sourceTree = "<group>"; };
 		CEB46E89170F52FF009D3104 /* Participant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Participant.m; sourceTree = "<group>"; };
-		CEB46E91170F9144009D3104 /* EnergyClockSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnergyClockSlice.h; sourceTree = "<group>"; };
-		CEB46E92170F9144009D3104 /* EnergyClockSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyClockSlice.m; sourceTree = "<group>"; };
 		CEB5A741169A705A009EB3F2 /* navBarBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navBarBg.png; sourceTree = "<group>"; };
 		CEB5A743169A7329009EB3F2 /* patternBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = patternBg.png; sourceTree = "<group>"; };
 		CEBBD5FB1676D6DC008051D2 /* libCorePlot-CocoaTouch.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libCorePlot-CocoaTouch.a"; sourceTree = "<group>"; };
@@ -784,6 +787,8 @@
 			children = (
 				CE32C39B1665B7AD00C3ED81 /* EMNetworkManager.h */,
 				CE32C39C1665B7AD00C3ED81 /* EMNetworkManager.m */,
+				CE0927EF172CA08B00B69CC0 /* WeatherApiCommManager.h */,
+				CE0927F0172CA08B00B69CC0 /* WeatherApiCommManager.m */,
 			);
 			name = CustomNetworking;
 			sourceTree = "<group>";
@@ -791,8 +796,8 @@
 		CE4C9864170B873600A27EB1 /* ManagedObjects */ = {
 			isa = PBXGroup;
 			children = (
-				CEB46E91170F9144009D3104 /* EnergyClockSlice.h */,
-				CEB46E92170F9144009D3104 /* EnergyClockSlice.m */,
+				CE0927EC172C9B1800B69CC0 /* EnergyClockSlice.h */,
+				CE0927ED172C9B1800B69CC0 /* EnergyClockSlice.m */,
 				CE3543B016FCAFAF00D779C2 /* AggregatedDay.h */,
 				CE3543B116FCAFAF00D779C2 /* AggregatedDay.m */,
 				CE8363D216EE7CC100AFB5E2 /* System.h */,
@@ -1602,7 +1607,8 @@
 				CE137E591708FBB600F02F14 /* SliceDetailsView.m in Sources */,
 				CE0D9911170E0B8C00EADCEE /* EnergyClockTVC.m in Sources */,
 				CEB46E8A170F52FF009D3104 /* Participant.m in Sources */,
-				CEB46E93170F9144009D3104 /* EnergyClockSlice.m in Sources */,
+				CE0927EE172C9B1800B69CC0 /* EnergyClockSlice.m in Sources */,
+				CE0927F1172CA08B00B69CC0 /* WeatherApiCommManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

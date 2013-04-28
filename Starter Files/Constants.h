@@ -19,6 +19,7 @@ extern NSString * const scatterPlot;
 extern NSString * const currentCostServerBaseURLString;
 extern NSString * const currentCostServerBaseURLHome;
 extern float const OfficeArea;
+extern NSInteger const MySensorID;
 extern NSInteger const FirstSensorID;
 extern NSInteger const SecondSensorID;
 extern NSInteger const ThirdSensorID;
@@ -45,7 +46,7 @@ extern NSString * const WWAAstronomyURLpart;
 extern NSString * const WWALocationURLpart;
 extern NSString * const WWAHistoryURLpart; // '/history_YYYYMMDD/'
 
-extern NSString * const AggregatedDaysSaved;
+extern NSString * const EnergyClockDataSaved;
 extern BOOL const FORCEDAYCHARTSUPDATE;
 
 extern NSInteger const numberOfParticipants;
