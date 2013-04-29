@@ -365,7 +365,12 @@ static float maxConsumption = 0.0f;
     if ([self.targetViewController respondsToSelector:@selector(loadEnergyClockForDate:)]) { // in our case its the EnergyClockVC
         
         [self.targetViewController loadEnergyClockForDate:[self.weekdaysDates objectForKey:plot.identifier]];
-        plot.graph.hostingView.backgroundColor = [UIColor purpleColor];
+        plot.graph.hostingView.backgroundColor = [UIColor colorWithRed:135.0f/255.0f green:178.0f/255.0f blue:178.0f/255.0f alpha:1.0f];
+        CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
+        textStyle.color                = [CPTColor whiteColor];
+        textStyle.fontName             = @"Helvetica-Bold";
+        textStyle.fontSize             = 15.0f;
+        plot.graph.titleTextStyle      = textStyle;
         // omg, sorry for that: (but it works)
         EnergyClockViewController *ecVC = (EnergyClockViewController *)self.parentViewController;
         NSArray *vcs = ecVC.viewControllers;
@@ -383,6 +388,11 @@ static float maxConsumption = 0.0f;
                                   [NSPredicate predicateWithFormat:@"identifier != %@", identifier]];
         for (int i=0; i<[filteredItems count]; i++) {
             ((CPTPieChart *)filteredItems[i]).graph.hostingView.backgroundColor = [UIColor clearColor];
+            CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
+            textStyle.color                = [CPTColor grayColor];
+            textStyle.fontName             = @"Helvetica-Bold";
+            textStyle.fontSize             = 15.0f;
+            ((CPTPieChart *)filteredItems[i]).graph.titleTextStyle      = textStyle;
         }
     }
     else {
@@ -390,6 +400,11 @@ static float maxConsumption = 0.0f;
                                   [NSPredicate predicateWithFormat:@"identifier != %@", identifier]];
         for (int i=0; i<[filteredItems count]; i++) {
             ((CPTPieChart *)filteredItems[i]).graph.hostingView.backgroundColor = [UIColor clearColor];
+            CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
+            textStyle.color                = [CPTColor grayColor];
+            textStyle.fontName             = @"Helvetica-Bold";
+            textStyle.fontSize             = 15.0f;
+            ((CPTPieChart *)filteredItems[i]).graph.titleTextStyle      = textStyle;
         }
     }
 }
@@ -808,8 +823,9 @@ static float maxConsumption = 0.0f;
     else if(self.pageNumber == secondPageNumber)
     {
         self.secondPagePieCharts = pieChartsMutable;
+        
     }
-    
+    [self pieChart:self.seventhPieChart sliceWasSelectedAtRecordIndex:0];
 }
 
 -(void)configureLegend

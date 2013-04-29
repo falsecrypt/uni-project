@@ -37,7 +37,7 @@ static NSDictionary *sunriseSunset;
     return _sharedClient;
 }
 
-- (id)init{
+- (id)init {
     
     if (self = [super init]){
         
@@ -56,13 +56,11 @@ static NSDictionary *sunriseSunset;
     return self;
 }
 
--(void)reachabilityChanged
-{
+- (void)reachabilityChange {
     
 }
 
--(void)calculateValuesWithMode:(NSString *)mode
-{
+- (void)calculateValuesWithMode:(NSString *)mode {
     EcoMeterAppDelegate *appDelegate = (EcoMeterAppDelegate *)[[UIApplication sharedApplication] delegate];
     self.deviceIsOnline = appDelegate.deviceIsOnline;
     NSLog(@"<calculateValuesWithMode> self.deviceIsOnline: %i", self.deviceIsOnline);
@@ -127,11 +125,8 @@ static NSDictionary *sunriseSunset;
     }
 }
 
--(void)getDataFromServerWithMode:(NSString *)mode
-{
+- (void)getDataFromServerWithMode:(NSString *)mode {
     NSLog(@"getDataFromServerWithMode...");
-    
-    [self retrieveTemperatureValues];
     
     if ( [mode isEqualToString:DayChartsMode] ){
         
@@ -141,24 +136,21 @@ static NSDictionary *sunriseSunset;
     }
 }
 
--(void)processAfterGettingSunriseSunset
-{
+- (void)processAfterGettingSunriseSunset {
     for (NSNumber *userId in self.participants)
     {
         [self getKwPerHourForLastWeekWithUserId:userId];
     }
 }
 
-- (void)resetDatabase
-{
+- (void)resetDatabase {
     // Delete all existing objects/entities before updating
     [AggregatedDay truncateAll];
     [EnergyClockSlice truncateAll];
     NSLog(@"calling resetDatabase... end");
 }
 
--(void)getKwPerHourForLastWeekWithUserId:(NSNumber *)userId
-{
+- (void)getKwPerHourForLastWeekWithUserId:(NSNumber *)userId {
     NSLog(@"getKwPerHourForLastWeekWithUserId..., userId: %@", userId);
     NSString *getPath = @"rpc.php?userID=";
     getPath = [getPath stringByAppendingString:[NSString stringWithFormat:@"%i",[userId intValue]]];
@@ -176,8 +168,7 @@ static NSDictionary *sunriseSunset;
                                      }];
 }
 
--(void)proccessWithOperationResult:(NSString *)result forUserId:(NSNumber *)userId sunriseSunsetData:(NSDictionary *)sunriseSunset
-{
+- (void)proccessWithOperationResult:(NSString *)result forUserId:(NSNumber *)userId sunriseSunsetData:(NSDictionary *)sunriseSunset {
         NSLog(@"proccessWithOperationResult...");
         // calculate the actual sunset/sunrise time we want to display
         //NSLog(@"sunriseSunset: %@", sunriseSunset);
@@ -323,12 +314,15 @@ static NSDictionary *sunriseSunset;
         methodCounter = 0;
         //[[NSManagedObjectContext defaultContext] saveNestedContexts];
         [[NSManagedObjectContext defaultContext]  saveInBackgroundCompletion:^{
+            
             NSLog(@"saving defaultContext");
             methodCounter++;
+            NSLog(@"methodCounter: %i", methodCounter);
+            if (methodCounter == numberOfParticipants) {
+                [self retrieveTemperatureValues];
+            }
+            
             // DEBUGGING
-            
-            
-            
             NSLog(@"System numberOfEntities: %@", [System numberOfEntities]);
             NSArray *allsystems = [System findAll];
             
@@ -354,19 +348,13 @@ static NSDictionary *sunriseSunset;
 //                NSLog(@"date: %@, consumption: %@, hour: %@, sensorid: %@", pcon.date, pcon.consumption, pcon.hour, pcon.sensorid);
 //                
 //            }
-            NSLog(@"methodCounter: %i", methodCounter);
-            // we must notify only once
-            if (methodCounter == numberOfParticipants) {
-                //notify observers (instances of ScrollViewContentVC)
-                [[NSNotificationCenter defaultCenter] postNotificationName:EnergyClockDataSaved object:nil userInfo:nil];
-            }
+
 
         }];
 }
 
 // get sunset/sunrise time from wunderground.com Weather API
-- (void)syncSunriseSunsetData
-{
+- (void)syncSunriseSunsetData {
     NSLog(@"syncSunriseSunsetDataWithResult, self.sunriseSunset  %@ \n self: %@",sunriseSunset, self );
     // Construct request URL
     NSString *requestAstronomyUrl = [WWABaseURL stringByAppendingString:WWAKey];
@@ -396,8 +384,7 @@ static NSDictionary *sunriseSunset;
     
 }
 
--(void)retrieveTemperatureValues
-{
+- (void)retrieveTemperatureValues {
     __block NSMutableArray *historyResultObjects = [[NSMutableArray alloc] init];
     AggregatedDay *lastDay = [AggregatedDay findFirstOrderedByAttribute:@"date" ascending:NO];
     NSDate *lastDate = lastDay.date;
@@ -411,7 +398,7 @@ static NSDictionary *sunriseSunset;
                              stringByAppendingString:[dateFormatter stringFromDate:lastDate] ]
                              stringByAppendingString:WWALocationURLpart];
     NSURLRequest *temperatureRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:requestTemperatureUrl]];
-    // Construct temperature-requests
+    // Construct temperature-requests-array /////////
     NSMutableArray *requestsStorage = [[NSMutableArray alloc] init];
     requestsStorage[0] = temperatureRequest;
     NSDateComponents *components = [[NSDateComponents alloc] init];
@@ -426,6 +413,7 @@ static NSDictionary *sunriseSunset;
         [requestsStorage addObject:temperatureRequest];
         
     }
+    ///////////////////////////////////////////////
     NSLog(@"requestsStorage : %@", requestsStorage);
     
     [[WeatherApiCommManager sharedClient] enqueueBatchOfHTTPRequestOperationsWithRequests:requestsStorage
@@ -433,30 +421,114 @@ static NSDictionary *sunriseSunset;
                                                                                
                                                                                 
                                                                             }
-                                                                          completionBlock:^(NSArray *operations){
+                                                                          completionBlock:^(NSArray *operations) {
                                                                               //NSLog(@"completion block! operations:%@",operations);
                                                                               for (id op in operations) {
-                                                                                  //NSError *nerror;
-                                                                                  
                                                                                   AFJSONRequestOperation *myOperation = (AFJSONRequestOperation *)op;
                                                                                   NSArray *response = [myOperation responseJSON];
                                                                                   [historyResultObjects addObject:response];
                                                                                   //NSLog(@"\n completion block! response:%@",response);
-                                                                                  [self storeTemperatureValues:historyResultObjects];
+                                                                                  
                                                                               }
                                                                               
-                                                                              NSLog(@"\n after completion block! historyResultObjects:%@",historyResultObjects);
+                                                                              [self storeTemperatureValues:historyResultObjects];
                                                                               
                                                                           }];
-    
-    
-    
+
 }
 
-// @TODO
--(void)storeTemperatureValues:(NSArray *)historyResultObjects{
-    
+
+- (void)storeTemperatureValues:(NSArray *)historyResultObjects {
+    NSLog(@"\n storeTemperatureValues calling");
+    NSArray *slices = [EnergyClockSlice findAll];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.dateFormat = @"yy-MM-dd";
+    [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    //NSLog(@"slice date Form: %@", date);
+    // there must be 7 objects
+    for (NSArray *response in historyResultObjects) {
+        NSArray *historyArray = [response valueForKeyPath:@"history.observations"];
+        NSString *year = [response valueForKeyPath:@"history.date.year"];
+        NSString *month = [response valueForKeyPath:@"history.date.mon"];
+        NSString *day = [response valueForKeyPath:@"history.date.mday"];
+        NSString *fullDate = [[[[year stringByAppendingString:@"-"] stringByAppendingString:month] stringByAppendingString:@"-"] stringByAppendingString:day];
+        NSDate *dateFromString = [dateFormatter dateFromString:fullDate];
+        // EnergyClockSlice *sliceObj = [EnergyClockSlice findFirstByAttribute:@"date" withValue:dateFromString];
+        // These Objects have the same date, but different time
+        NSArray *foundItems = [slices filteredArrayUsingPredicate:
+                                  [NSPredicate predicateWithFormat:@"date == %@", dateFromString]];
+        NSAssert([foundItems count] > 0, @"fountItems empty");
+        /* *********** Outer For-Loop *********** */
+        for (EnergyClockSlice *daySlice in foundItems) {
+            NSInteger sliceHour = [daySlice.hour integerValue];
+            // average temperature in the given interval, e.g. 00:00-02:00
+            
+            // 1) find all objects with date.hour == sliceHour-1 OR date.hour == sliceHour-2
+            //    calc. avg value then
+            NSMutableArray *tempValuesForSlice = [[NSMutableArray alloc] init];
+            NSLog(@"\n calc. for : %@ and %@, for date: %@\n", @(sliceHour-1), @(sliceHour-2), dateFromString);
+            /* *********** Inner For-Loop *********** */
+            for (id obj in historyArray) {
+                if (sliceHour >= 2) {
+                    if ( [[[obj valueForKey:@"date"] valueForKey:@"hour"] integerValue] == sliceHour-1 ||  [[[obj valueForKey:@"date"] valueForKey:@"hour"] integerValue] == sliceHour-2 ) {
+                        [tempValuesForSlice addObject: [obj valueForKey:@"tempm"] ];
+                    }
+                }
+                // Sometimes there are no values for 23 and 22 hours (so the tempValuesForSlice is empty) -> add temperature for 21 and 20
+                else if (sliceHour == 0) {
+                    if ( [[[obj valueForKey:@"date"] valueForKey:@"hour"] integerValue] == 23 ||  [[[obj valueForKey:@"date"] valueForKey:@"hour"] integerValue] == 22 ||
+                         [[[obj valueForKey:@"date"] valueForKey:@"hour"] integerValue] == 21 ||  [[[obj valueForKey:@"date"] valueForKey:@"hour"] integerValue] == 20) {
+                        [tempValuesForSlice addObject: [obj valueForKey:@"tempm"] ];
+                    }
+                }
+                else if (sliceHour == 1) {
+                    if ( [[[obj valueForKey:@"date"] valueForKey:@"hour"] integerValue] == 0 ||  [[[obj valueForKey:@"date"] valueForKey:@"hour"] integerValue] == 23 ) {
+                        [tempValuesForSlice addObject: [obj valueForKey:@"tempm"] ];
+                    }
+                }
+            }
+            /* *********** Inner For-Loop END *********** */
+            NSLog(@"\n tempValuesForSlice: %@ \n", tempValuesForSlice);
+            NSAssert([tempValuesForSlice count]>0, @"tempValuesForSlice empty");
+            NSNumber *avgTemperatureForSlice = [tempValuesForSlice valueForKeyPath:@"@avg.self"];
+            daySlice.temperature = avgTemperatureForSlice;
+            NSLog(@"\n calculated avgTemperatureForSlice: %@", avgTemperatureForSlice);
+            
+        }
+        /* *********** Outer For-Loop END *********** */
+        //NSLog(@"\n historyArray: %@", historyArray);
+        NSLog(@"\n historyArray count: %i", [historyArray count]);
+//        for (id obj in historyArray) {
+//            
+//            NSLog(@"\n obj inside historyArray: %@", obj);
+//            NSLog(@"\n filter inside historyArray: %@", [obj filteredArrayUsingPredicate: [NSPredicate predicateWithFormat:@"date.hour == %i",
+//                                                                                                10]]);
+//            NSLog(@"\n obj value for keypath: %@", [obj valueForKeyPath:@"date"]);
+//            
+//        }
+//        NSArray *filterResult = [historyArray filteredArrayUsingPredicate: [NSPredicate predicateWithFormat:@"%K == %@",
+//                                                                            @"date.hour", @(10)]];
+        //NSArray *filterResultSec = [historyArray filteredArrayUsingPredicate: [NSPredicate predicateWithFormat:@"conds like 'Mist'"]];
+        //NSLog(@"slice filterResult: %@", filterResult);
+        //NSLog(@"\nslice filterResult: %@", filterResultSec);
+        //NSLog(@"\n slice historyArray: %@", historyArray);
+        //NSLog(@"\n slice test: %@", [historyArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"history.observations.date.hour > %i", 0]]);
+//        NSLog(@"slice found Items: %@", foundItems);
+//        NSLog(@"slice dateFromString: %@", dateFromString);
+//        NSLog(@"slice fullDate: %@", fullDate);
+    }
+    // Save new temperature values
+    [[NSManagedObjectContext defaultContext]  saveInBackgroundCompletion:^{
         
+//        NSArray *newslices = [EnergyClockSlice findAll];
+//        for (EnergyClockSlice *slice in newslices) {
+//            NSLog(@"\n slice-temp: %@", slice.temperature);
+//        } 
+        
+        //notify observers (instances of ScrollViewContentVC)
+        [[NSNotificationCenter defaultCenter] postNotificationName:EnergyClockDataSaved object:nil userInfo:nil];
+    }];
     
 }
 

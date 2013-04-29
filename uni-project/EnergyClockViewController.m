@@ -32,6 +32,7 @@ static const int sliceDetailsView = 13;
 @property (nonatomic, strong) NSMutableArray *sliceValues;
 // Used to display so called 'EnergyClock-Multilevel-Pie Chart', center of the screen -> Slot Values
 @property (nonatomic, strong) NSMutableArray *slotValuesForSlice;
+@property (nonatomic, strong) NSMutableArray *temperatureValues;
 // Data for a Detail Pie Chart, when user selects a participant using our 'participantSelector'
 // Holds the values of all participants for the current date, Form: [Slice] => [[userId]=>[consumption]]
 @property (nonatomic, strong) NSArray *dayUserConsumption;
@@ -144,6 +145,11 @@ static const NSArray *participants;
     // view controllers are created lazily
     // in the meantime, load the array with placeholders which will be replaced on demand
     NSMutableArray *controllers = [[NSMutableArray alloc] init];
+    self.temperatureValues = [[NSMutableArray alloc]initWithCapacity:numberSlices];
+    
+    for (int i=0; i<numberSlices; i++) {
+        [self.temperatureValues insertObject:@(0) atIndex:i];
+    }
     for (NSUInteger i = 0; i < numberPages; i++)
     {
 		[controllers addObject:[NSNull null]];
@@ -366,6 +372,18 @@ static const NSArray *participants;
     return _slotValuesForSlice;
 }
 
+-(NSMutableArray*)temperatureValues
+{
+    if(!_temperatureValues){
+        _temperatureValues = [[NSMutableArray alloc]initWithCapacity:numberSlices];
+        
+        for (int i=0; i<numberSlices; i++) {
+            [_temperatureValues insertObject:[NSNull null] atIndex:i];
+        }
+    }
+    return _temperatureValues;
+}
+
 // random values
 -(NSMutableArray*)radiusValuesForSlice
 {
@@ -507,6 +525,13 @@ static const NSArray *participants;
             // energy consumption of every user/partcipant
             NSMutableArray *innerArray = [[NSMutableArray alloc]initWithCapacity:numberOfParticipants];
             EnergyClockSlice *slice = slicesData[insertIndex];
+            if (insertIndex > 0) {
+                [self.temperatureValues replaceObjectAtIndex:insertIndex-1 withObject:slice.temperature];
+            }
+            else {
+                [self.temperatureValues replaceObjectAtIndex:[slicesData count]-1 withObject:slice.temperature];
+            }
+            NSLog(@"slice.date: %@, slice.hour: %@, slice.temperature: %@", slice.date, slice.hour, slice.temperature);
             NSMutableDictionary *slotValuesDict = [NSKeyedUnarchiver unarchiveObjectWithData:slice.slotValues];
             NSArray *sortedkeys = [[slotValuesDict allKeys]sortedArrayUsingSelector:@selector(compare:)];
             NSLog(@"slotValuesDict: %@", slotValuesDict);
@@ -524,16 +549,17 @@ static const NSArray *participants;
 
         }
         self.sliceValues = sliceValuesTemp;
+        NSLog(@"self.sliceValues: %@", self.sliceValues);
         self.slotValuesForSlice = slotValuesForSliceTemp;
         self.dayUserConsumption = dayUserConsumptionTemp;
         NSLog(@"slotValuesForSlice: %@", self.slotValuesForSlice);
         NSLog(@"dayUserConsumption: %@", self.dayUserConsumption);
+        NSLog(@"\n initValuesForNewDate self.temperatureValues %@ \n", self.temperatureValues);
     }
 }
 
 
-- (void)gotoPage:(BOOL)animated
-{
+- (void)gotoPage:(BOOL)animated {
     NSInteger page = self.pageControl.currentPage;
     
     // load the visible page and the page on either side of it (to avoid flashes when the user starts scrolling)
@@ -555,16 +581,14 @@ static const NSArray *participants;
     [self.scrollView scrollRectToVisible:bounds animated:animated];
 }
 
-- (IBAction)changePage:(id)sender
-{
+- (IBAction)changePage:(id)sender {
     NSLog(@"<EnergyClockViewController> changePage...");
     [self gotoPage:YES];    // YES = animate
 }
 
 #pragma mark - BTSPieView Data Source
 
-- (NSUInteger)numberOfSlicesInPieView:(BTSPieView *)pieView
-{
+- (NSUInteger)numberOfSlicesInPieView:(BTSPieView *)pieView {
     NSLog(@"numberOfSlicesInPieView:");
     NSLog(@"sliceValues: %@", self.sliceValues);
     return [self.sliceValues count];
@@ -572,51 +596,34 @@ static const NSArray *participants;
 }
 
 // TODO : new
-- (NSUInteger)numberOfSlotsInPieView:(BTSPieView *)pieView
-{
+- (NSUInteger)numberOfSlotsInPieView:(BTSPieView *)pieView {
     return numberOfParticipants;
 }
 
-- (CGFloat)pieView:(BTSPieView *)pieView valueForSliceAtIndex:(NSUInteger)index
-{
+- (CGFloat)pieView:(BTSPieView *)pieView valueForSliceAtIndex:(NSUInteger)index {
     NSLog(@"valueForSliceAtIndex, returning: %f", (CGFloat)[[self.sliceValues objectAtIndex:index]floatValue]);
-    
-    return (CGFloat)[[self.sliceValues objectAtIndex:index]floatValue];
-    
-    //return 10;
-    
-    //return (arc4random()%80)+ 10;
-    
-    /*int result = 0;
-    
-    // night values
-    if (index >= 9 || index <= 3) {
-        result = (arc4random() % (10))+5;
-        NSLog(@"pieView:valueForSliceAtIndex: 'night' - index: %i, result: %i", index, result);
+    CGFloat result = 0.0f;
+    if (index < [self.sliceValues count]-1) {
+        result = (CGFloat)[[self.sliceValues objectAtIndex:index+1]floatValue];
     }
-    // day values
     else {
-        result = (arc4random() % (40))+40;
-        NSLog(@"pieView:valueForSliceAtIndex: 'day'- index: %i, result: %i", index, result);
+        result = (CGFloat)[[self.sliceValues objectAtIndex:0]floatValue];
     }
-    //return index * 10 + 10;
-    return result; */
+ 
+    return result;
 }
 
 // TODO : new
-- (CGFloat)pieView:(BTSPieView *)pieView valueForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex
-{
+- (CGFloat)pieView:(BTSPieView *)pieView valueForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex {
     return (CGFloat)[[[self.slotValuesForSlice objectAtIndex:sliceIndex] objectAtIndex:slotIndex] floatValue];
 
 }
 // for SliceDetailsView
-- (NSNumber *)valueForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex
-{
+- (NSNumber *)valueForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex {
     return [[self.slotValuesForSlice objectAtIndex:sliceIndex] objectAtIndex:slotIndex];
 }
 
-- (NSNumber *)detailsSliceValueAtIndex:(NSUInteger)index
-{
+- (NSNumber *)detailsSliceValueAtIndex:(NSUInteger)index {
     // return 12 Values for the current participant
     // using dayUserConsumption-Array
     NSDecimalNumber *result = [[self.dayUserConsumption objectAtIndex:index] objectForKey: [NSString stringWithFormat:@"%i",self.selectedParticipantId] ];
@@ -628,13 +635,11 @@ static const NSArray *participants;
     return result;
 }
 
-- (NSUInteger)getSlicesNumber
-{
+- (NSUInteger)getSlicesNumber {
     return [self.sliceValues count];
 }
 
-- (CPTColor *)getColorForParticipantId:(NSUInteger)idx
-{
+- (CPTColor *)getColorForParticipantId:(NSUInteger)idx {
     NSLog(@"self.CPTColorsForParticipants: %@", self.CPTColorsForParticipants);
     NSLog(@"input idx: %@", @(idx));
     return [self.CPTColorsForParticipants objectForKey:@(idx)];
@@ -642,18 +647,20 @@ static const NSArray *participants;
 
 
 // do i need this method?
-- (CGFloat)pieView:(BTSPieView *)pieView radiusForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex
-{
+- (CGFloat)pieView:(BTSPieView *)pieView radiusForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex {
     return (CGFloat)[[[self.radiusValuesForSlice objectAtIndex:sliceIndex] objectAtIndex:slotIndex] floatValue];
 }
 
-- (NSArray *)getRadiusArray
-{
+- (NSArray *)getRadiusArray {
     return self.radiusValuesForSlice;
 }
 
-- (NSArray *)getSlotValuesForSliceArray
-{
+- (NSArray *)getTemperatureValues {
+    NSLog(@"\n self.temperatureValues %@ !\n", self.temperatureValues);
+    return self.temperatureValues;
+}
+
+- (NSArray *)getSlotValuesForSliceArray {
     return self.slotValuesForSlice;
 }
 /* DEPRECATED
@@ -664,20 +671,17 @@ static const NSArray *participants;
  */
 
 // TODO : new
-- (UIColor *)pieView:(BTSPieView *)pieView colorForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex sliceCount:(NSUInteger)sliceCount
-{
+- (UIColor *)pieView:(BTSPieView *)pieView colorForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex sliceCount:(NSUInteger)sliceCount {
     NSLog(@"color for slotIndex %i !", slotIndex);
     return [self.availableSliceColors objectAtIndex:slotIndex];
 }
 
 #pragma mark - BTSPieView Delegate
 
-- (void)pieView:(BTSPieView *)pieView willSelectSliceAtIndex:(NSInteger)index
-{
+- (void)pieView:(BTSPieView *)pieView willSelectSliceAtIndex:(NSInteger)index {
 }
 
-- (void)pieView:(BTSPieView *)pieView didSelectSliceAtIndex:(NSInteger)index
-{
+- (void)pieView:(BTSPieView *)pieView didSelectSliceAtIndex:(NSInteger)index {
     /*
     // save the index the user selected.
     _selectedSliceIndex = index;
@@ -698,12 +702,10 @@ static const NSArray *participants;
     [self.sliceDetailsView reloadPieChartForNewSlice:index];
 }
 
-- (void)pieView:(BTSPieView *)pieView willDeselectSliceAtIndex:(NSInteger)index
-{
+- (void)pieView:(BTSPieView *)pieView willDeselectSliceAtIndex:(NSInteger)index {
 }
 
-- (void)pieView:(BTSPieView *)pieView didDeselectSliceAtIndex:(NSInteger)index
-{
+- (void)pieView:(BTSPieView *)pieView didDeselectSliceAtIndex:(NSInteger)index {
     /*
     [_selectedSliceValueSlider setMinimumTrackTintColor:nil];
     [_selectedSliceValueSlider setMaximumTrackTintColor:nil];
@@ -719,8 +721,7 @@ static const NSArray *participants;
 }
 
 
-- (void)setupSegmentedControl
-{
+- (void)setupSegmentedControl {
     UIImage *backgroundImage = [[UIImage imageNamed:@"segmented-bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10.0, 10.0, 10.0, 10.0)];
     [self.participantSelector setBackgroundImage:backgroundImage];
     [self.participantSelector setContentEdgeInsets:UIEdgeInsetsMake(2.0, 2.0, 3.0, 2.0)];
