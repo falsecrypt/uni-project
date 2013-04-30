@@ -17,6 +17,7 @@
 - (CALayer *)sliceLayers;
 - (CALayer *)labelLayers;
 - (CALayer *)tempLabelLayers;
+- (CALayer *)tempUserLabelLayers;
 
 - (void)removeAllPieLayers;
 @end

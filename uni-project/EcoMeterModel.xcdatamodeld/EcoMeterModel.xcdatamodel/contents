@@ -15,6 +15,7 @@
         <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="slotValues" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="temperature" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="temperatureUsers" optional="YES" attributeType="Binary" syncable="YES"/>
     </entity>
     <entity name="MonthData" representedClassName="MonthData" syncable="YES">
         <attribute name="circleradius" optional="YES" attributeType="Integer 16" defaultValueString="0.0" syncable="YES"/>
@@ -62,7 +63,7 @@
     </entity>
     <elements>
         <element name="AggregatedDay" positionX="610" positionY="243" width="128" height="135"/>
-        <element name="EnergyClockSlice" positionX="610" positionY="108" width="128" height="135"/>
+        <element name="EnergyClockSlice" positionX="610" positionY="108" width="128" height="150"/>
         <element name="MonthData" positionX="-198" positionY="36" width="128" height="135"/>
         <element name="Participant" positionX="225" positionY="302" width="128" height="135"/>
         <element name="System" positionX="-189" positionY="333" width="128" height="180"/>

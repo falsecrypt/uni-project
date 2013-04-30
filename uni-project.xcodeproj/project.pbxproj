@@ -26,7 +26,6 @@
 		CE03516D16AE347100752192 /* ParticipantDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE03516C16AE347100752192 /* ParticipantDataManager.m */; };
 		CE071EC01659ABF1007290B1 /* icon_user.png in Resources */ = {isa = PBXBuildFile; fileRef = CE071EBF1659ABF1007290B1 /* icon_user.png */; };
 		CE071EC31659C58B007290B1 /* ProfilePopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE071EC21659C58B007290B1 /* ProfilePopoverViewController.m */; };
-		CE0927EE172C9B1800B69CC0 /* EnergyClockSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0927ED172C9B1800B69CC0 /* EnergyClockSlice.m */; };
 		CE0927F1172CA08B00B69CC0 /* WeatherApiCommManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0927F0172CA08B00B69CC0 /* WeatherApiCommManager.m */; };
 		CE0AE4821646049C00EC15B4 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE0AE4811646049C00EC15B4 /* Security.framework */; };
 		CE0AE4861646051A00EC15B4 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = CE0AE4851646051A00EC15B4 /* KeychainItemWrapper.m */; };
@@ -38,6 +37,7 @@
 		CE137E591708FBB600F02F14 /* SliceDetailsView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE137E581708FBB600F02F14 /* SliceDetailsView.m */; };
 		CE1458B4167C06F400F7D82F /* MCachedModalStoryboardSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1458B2167C06F400F7D82F /* MCachedModalStoryboardSegue.m */; };
 		CE15BCF616A508C5007BBD0A /* currentDataBottomViewBackg.png in Resources */ = {isa = PBXBuildFile; fileRef = CE15BCF516A508C5007BBD0A /* currentDataBottomViewBackg.png */; };
+		CE161308172E89DE00B0B2E0 /* EnergyClockSlice.m in Sources */ = {isa = PBXBuildFile; fileRef = CE161307172E89DE00B0B2E0 /* EnergyClockSlice.m */; };
 		CE1793D11683E8E60030723A /* MyOfficeTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D01683E8E60030723A /* MyOfficeTVC.m */; };
 		CE1793D51683F3970030723A /* DataOverviewTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1793D41683F3970030723A /* DataOverviewTVC.m */; };
 		CE1BAC4F169528A200E3A1EA /* MyAccountTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE1BAC4E169528A200E3A1EA /* MyAccountTVC.m */; };
@@ -221,8 +221,6 @@
 		CE071EBF1659ABF1007290B1 /* icon_user.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_user.png; sourceTree = "<group>"; };
 		CE071EC11659C58B007290B1 /* ProfilePopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfilePopoverViewController.h; sourceTree = "<group>"; };
 		CE071EC21659C58B007290B1 /* ProfilePopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfilePopoverViewController.m; sourceTree = "<group>"; };
-		CE0927EC172C9B1800B69CC0 /* EnergyClockSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnergyClockSlice.h; sourceTree = "<group>"; };
-		CE0927ED172C9B1800B69CC0 /* EnergyClockSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyClockSlice.m; sourceTree = "<group>"; };
 		CE0927EF172CA08B00B69CC0 /* WeatherApiCommManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherApiCommManager.h; sourceTree = "<group>"; };
 		CE0927F0172CA08B00B69CC0 /* WeatherApiCommManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherApiCommManager.m; sourceTree = "<group>"; };
 		CE0AE4811646049C00EC15B4 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -241,6 +239,8 @@
 		CE1458B2167C06F400F7D82F /* MCachedModalStoryboardSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MCachedModalStoryboardSegue.m; sourceTree = "<group>"; };
 		CE1458B3167C06F400F7D82F /* MCachedModalStoryboardSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MCachedModalStoryboardSegue.h; sourceTree = "<group>"; };
 		CE15BCF516A508C5007BBD0A /* currentDataBottomViewBackg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = currentDataBottomViewBackg.png; sourceTree = "<group>"; };
+		CE161306172E89DE00B0B2E0 /* EnergyClockSlice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnergyClockSlice.h; sourceTree = "<group>"; };
+		CE161307172E89DE00B0B2E0 /* EnergyClockSlice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyClockSlice.m; sourceTree = "<group>"; };
 		CE1793CF1683E8E60030723A /* MyOfficeTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyOfficeTVC.h; sourceTree = "<group>"; };
 		CE1793D01683E8E60030723A /* MyOfficeTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyOfficeTVC.m; sourceTree = "<group>"; };
 		CE1793D31683F3970030723A /* DataOverviewTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataOverviewTVC.h; sourceTree = "<group>"; };
@@ -796,8 +796,8 @@
 		CE4C9864170B873600A27EB1 /* ManagedObjects */ = {
 			isa = PBXGroup;
 			children = (
-				CE0927EC172C9B1800B69CC0 /* EnergyClockSlice.h */,
-				CE0927ED172C9B1800B69CC0 /* EnergyClockSlice.m */,
+				CE161306172E89DE00B0B2E0 /* EnergyClockSlice.h */,
+				CE161307172E89DE00B0B2E0 /* EnergyClockSlice.m */,
 				CE3543B016FCAFAF00D779C2 /* AggregatedDay.h */,
 				CE3543B116FCAFAF00D779C2 /* AggregatedDay.m */,
 				CE8363D216EE7CC100AFB5E2 /* System.h */,
@@ -1607,8 +1607,8 @@
 				CE137E591708FBB600F02F14 /* SliceDetailsView.m in Sources */,
 				CE0D9911170E0B8C00EADCEE /* EnergyClockTVC.m in Sources */,
 				CEB46E8A170F52FF009D3104 /* Participant.m in Sources */,
-				CE0927EE172C9B1800B69CC0 /* EnergyClockSlice.m in Sources */,
 				CE0927F1172CA08B00B69CC0 /* WeatherApiCommManager.m in Sources */,
+				CE161308172E89DE00B0B2E0 /* EnergyClockSlice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

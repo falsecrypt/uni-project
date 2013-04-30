@@ -58,7 +58,7 @@ NSString * const WWALocationURLpart = @"q/Germany/Augsburg.json";
 NSString * const WWAHistoryURLpart = @"/history_"; // '/history_YYYYMMDD/'
 
 NSString * const EnergyClockDataSaved    = @"AggregatedDaysSaved";
-BOOL const FORCEDAYCHARTSUPDATE         = YES; // use this only during development, default = NO
+BOOL const FORCEDAYCHARTSUPDATE         = NO; // use this only during development, default = NO
 
 NSInteger const numberOfParticipants    = 3;
 

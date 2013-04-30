@@ -19,6 +19,7 @@
 
 @property (nonatomic, strong) NSArray *participants;
 @property (nonatomic, assign) BOOL deviceIsOnline;
+@property (nonatomic, strong) NSArray *cachedSlices;
 
 @end
 
@@ -98,29 +99,29 @@ static NSDictionary *sunriseSunset;
             else {
                 [self getDataFromServerWithMode:DayChartsMode];
             }
-
+            
         }
-//        else if ([mode isEqualToString:MultiLevelPieChartMode])
-//        {
-//            [self getDataFromServerWithMode:MultiLevelPieChartMode];
-//        }
+        //        else if ([mode isEqualToString:MultiLevelPieChartMode])
+        //        {
+        //            [self getDataFromServerWithMode:MultiLevelPieChartMode];
+        //        }
     }
     else
     {
         
         /*NSNumber *numberofentities = [Participant numberOfEntities];
-        
-        if (numberofentities > 0) {
-            
-            Participant *participant =
-            [Participant findFirstByAttribute:@"sensorid" withValue:[NSNumber numberWithInt:self.currentParticipantId]];
-            NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-            NSString *RankWasCalculatedWithId = [RankWasCalculated stringByAppendingString:[NSString stringWithFormat:@"%d", self.currentParticipantId]];
-            [center postNotificationName:RankWasCalculatedWithId object:participant.rank userInfo:nil];
-            NSString *ScoreWasCalculatedWithId = [ScoreWasCalculated stringByAppendingString:[NSString stringWithFormat:@"%d",self.currentParticipantId]];
-            // notify the corresponding instance of PublicDetailViewController
-            [center postNotificationName:ScoreWasCalculatedWithId object:participant.score userInfo:nil];
-        } */
+         
+         if (numberofentities > 0) {
+         
+         Participant *participant =
+         [Participant findFirstByAttribute:@"sensorid" withValue:[NSNumber numberWithInt:self.currentParticipantId]];
+         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+         NSString *RankWasCalculatedWithId = [RankWasCalculated stringByAppendingString:[NSString stringWithFormat:@"%d", self.currentParticipantId]];
+         [center postNotificationName:RankWasCalculatedWithId object:participant.rank userInfo:nil];
+         NSString *ScoreWasCalculatedWithId = [ScoreWasCalculated stringByAppendingString:[NSString stringWithFormat:@"%d",self.currentParticipantId]];
+         // notify the corresponding instance of PublicDetailViewController
+         [center postNotificationName:ScoreWasCalculatedWithId object:participant.score userInfo:nil];
+         } */
         
     }
 }
@@ -137,6 +138,7 @@ static NSDictionary *sunriseSunset;
 }
 
 - (void)processAfterGettingSunriseSunset {
+    
     for (NSNumber *userId in self.participants)
     {
         [self getKwPerHourForLastWeekWithUserId:userId];
@@ -169,35 +171,46 @@ static NSDictionary *sunriseSunset;
 }
 
 - (void)proccessWithOperationResult:(NSString *)result forUserId:(NSNumber *)userId sunriseSunsetData:(NSDictionary *)sunriseSunset {
-        NSLog(@"proccessWithOperationResult...");
-        // calculate the actual sunset/sunrise time we want to display
-        //NSLog(@"sunriseSunset: %@", sunriseSunset);
-        //NSLog(@"serverHours: %@", serverHours);
-        NSUInteger sunriseHour = [[[sunriseSunset objectForKey:@"sunrise"] objectForKey:@"hour"] integerValue];
-        if (![serverHours containsObject:@(sunriseHour)]) {
-            sunriseHour += 1;
-        }
-        NSUInteger sunsetHour = [[[sunriseSunset objectForKey:@"sunset"] objectForKey:@"hour"] integerValue];
-        if (![serverHours containsObject:@(sunsetHour)]) {
-            sunsetHour += 1;
-        }
-        
-        // split the result-string, extract the values, create and store Model-Objects in the DB
-        // calculate day and night consumption for this user
-        NSArray *resultComponents   = [result componentsSeparatedByString:@";"];
-        NSLog(@"resultComponents: %@", resultComponents);
-        NSString *lastDateString = @""; // we will make sure, that we store only 7 AggregatedDay-Objects
-        NSUInteger objectsCounter = 0;
-        for (NSString *obj in resultComponents){
-            NSArray *data = [obj componentsSeparatedByString:@"="];
-            NSLog(@"data: %@", data);
-            NSString *dateString = [data[0] substringWithRange:(NSMakeRange(0, 8))];
-            NSLog(@"dateString: %@", dateString);
+    NSLog(@"proccessWithOperationResult...");
+    // calculate the actual sunset/sunrise time we want to display
+    //NSLog(@"sunriseSunset: %@", sunriseSunset);
+    //NSLog(@"serverHours: %@", serverHours);
+    NSUInteger sunriseHour = [[[sunriseSunset objectForKey:@"sunrise"] objectForKey:@"hour"] integerValue];
+    if (![serverHours containsObject:@(sunriseHour)]) {
+        sunriseHour += 1;
+    }
+    NSUInteger sunsetHour = [[[sunriseSunset objectForKey:@"sunset"] objectForKey:@"hour"] integerValue];
+    if (![serverHours containsObject:@(sunsetHour)]) {
+        sunsetHour += 1;
+    }
+    
+    // split the result-string, extract the values, create and store Model-Objects in the DB
+    // calculate day and night consumption for this user
+    NSArray *resultComponents   = [result componentsSeparatedByString:@";"];
+    NSLog(@"resultComponents: %@", resultComponents);
+    NSString *lastDateString = @""; // we will make sure, that we store only 7 AggregatedDay-Objects
+    NSUInteger objectsCounter = 0;
+    for (NSString *obj in resultComponents){
+        NSArray *data = [obj componentsSeparatedByString:@"="];
+        NSLog(@"data: %@", data);
+        NSString *dateString = [data[0] substringWithRange:(NSMakeRange(0, 8))];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+        [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
+        [dateFormatter setDateFormat:@"yy-MM-dd"];
+        //IMPORTANT! Actual NSDate-Object generated with this NSDateFormatter depends on the Timezone
+        [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"Europe/Berlin"]];
+        NSString *today = [dateFormatter stringFromDate:[NSDate date]];
+        NSLog(@"today: %@", today);
+        NSLog(@"dateString: %@", dateString);
+        // We dont want to show today's data, since we dont have all the data
+        // only past 7 days
+        if (![today isEqualToString:dateString]) {
             if (![lastDateString isEqualToString:dateString]){
                 objectsCounter++;
                 lastDateString = [dateString copy];
             }
-            if (objectsCounter <= 7){    
+            
+            if (objectsCounter <= 7){
                 NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
                 [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
                 [dateFormatter setDateFormat:@"yy-MM-dd"];
@@ -208,11 +221,11 @@ static NSDictionary *sunriseSunset;
                 NSString *withoutComma = [data[1] stringByReplacingOccurrencesOfString:@"," withString:@"."];
                 double temp = [withoutComma doubleValue];
                 NSDecimalNumber *consumption = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:temp];
-//                NSLog(@"Data for ParticipantConsumption-Entities");
-//                NSLog(@"date: %@", date);
-//                NSLog(@"hour: %@", hour);
-//                NSLog(@"consumption: %@", consumption);
-//                NSLog(@"userID: %@", userId);
+                //                NSLog(@"Data for ParticipantConsumption-Entities");
+                //                NSLog(@"date: %@", date);
+                //                NSLog(@"hour: %@", hour);
+                //                NSLog(@"consumption: %@", consumption);
+                //                NSLog(@"userID: %@", userId);
                 
                 // 'date'-'hour' combination is unique
                 //NSPredicate *energyClockFilter = [NSPredicate predicateWithFormat:@"date == %@ && hour == %@", date, @([hour integerValue])];
@@ -303,54 +316,55 @@ static NSDictionary *sunriseSunset;
                     
                 }
             }
-            
         }
-        // LOGGING
-        System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
-        systemObj.daysupdated = [NSDate date];
-        for (AggregatedDay *day in [AggregatedDay findAll]) {
-            day.totalconsumption = [day.nightconsumption decimalNumberByAdding:day.dayconsumption];
+        
+    }
+    // LOGGING
+    System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
+    systemObj.daysupdated = [NSDate date];
+    for (AggregatedDay *day in [AggregatedDay findAll]) {
+        day.totalconsumption = [day.nightconsumption decimalNumberByAdding:day.dayconsumption];
+    }
+    methodCounter = 0;
+    //[[NSManagedObjectContext defaultContext] saveNestedContexts];
+    [[NSManagedObjectContext defaultContext]  saveInBackgroundCompletion:^{
+        
+        NSLog(@"saving defaultContext");
+        methodCounter++;
+        NSLog(@"methodCounter: %i", methodCounter);
+        if (methodCounter == numberOfParticipants) {
+            [self retrieveOutsideTemperatureValues];
         }
-        methodCounter = 0;
-        //[[NSManagedObjectContext defaultContext] saveNestedContexts];
-        [[NSManagedObjectContext defaultContext]  saveInBackgroundCompletion:^{
-            
-            NSLog(@"saving defaultContext");
-            methodCounter++;
-            NSLog(@"methodCounter: %i", methodCounter);
-            if (methodCounter == numberOfParticipants) {
-                [self retrieveTemperatureValues];
-            }
-            
-            // DEBUGGING
-            NSLog(@"System numberOfEntities: %@", [System numberOfEntities]);
-            NSArray *allsystems = [System findAll];
-            
-            for (System *sys in allsystems) {
-                NSLog(@"System object daysupdated: %@", sys.daysupdated);
-            }
-//            NSArray *days = [AggregatedDay findAllSortedBy:@"date" ascending:YES];
-//            NSArray *slices = [EnergyClockSlice findAllSortedBy:@"date" ascending:YES];
-//            NSArray *pconObjects = [ParticipantConsumption findAllSortedBy:@"date" ascending:YES];
-//            NSLog(@"number of days: %i", [days count]);
-//            for (AggregatedDay *day in days) {
-//                NSLog(@"date: %@, dayconsumption: %@, nightconsumption: %@", day.date, day.dayconsumption, day.nightconsumption);
-//                
-//            }
-//            NSLog(@"number of slices: %i", [slices count]);
-//            for (EnergyClockSlice *slice in slices) {
-//                NSMutableDictionary *slotValuesDict = [NSKeyedUnarchiver unarchiveObjectWithData:slice.slotValues];
-//                NSLog(@"date: %@, consumption: %@, hour: %@, slotValues: %@", slice.date, slice.consumption, slice.hour, slotValuesDict);
-//                
-//            }
-//            NSLog(@"number of pcons: %i", [pconObjects count]);
-//            for (ParticipantConsumption *pcon in pconObjects) {
-//                NSLog(@"date: %@, consumption: %@, hour: %@, sensorid: %@", pcon.date, pcon.consumption, pcon.hour, pcon.sensorid);
-//                
-//            }
-
-
-        }];
+        
+        // DEBUGGING
+        NSLog(@"System numberOfEntities: %@", [System numberOfEntities]);
+        NSArray *allsystems = [System findAll];
+        
+        for (System *sys in allsystems) {
+            NSLog(@"System object daysupdated: %@", sys.daysupdated);
+        }
+        //            NSArray *days = [AggregatedDay findAllSortedBy:@"date" ascending:YES];
+        //            NSArray *slices = [EnergyClockSlice findAllSortedBy:@"date" ascending:YES];
+        //            NSArray *pconObjects = [ParticipantConsumption findAllSortedBy:@"date" ascending:YES];
+        //            NSLog(@"number of days: %i", [days count]);
+        //            for (AggregatedDay *day in days) {
+        //                NSLog(@"date: %@, dayconsumption: %@, nightconsumption: %@", day.date, day.dayconsumption, day.nightconsumption);
+        //
+        //            }
+        //            NSLog(@"number of slices: %i", [slices count]);
+        //            for (EnergyClockSlice *slice in slices) {
+        //                NSMutableDictionary *slotValuesDict = [NSKeyedUnarchiver unarchiveObjectWithData:slice.slotValues];
+        //                NSLog(@"date: %@, consumption: %@, hour: %@, slotValues: %@", slice.date, slice.consumption, slice.hour, slotValuesDict);
+        //
+        //            }
+        //            NSLog(@"number of pcons: %i", [pconObjects count]);
+        //            for (ParticipantConsumption *pcon in pconObjects) {
+        //                NSLog(@"date: %@, consumption: %@, hour: %@, sensorid: %@", pcon.date, pcon.consumption, pcon.hour, pcon.sensorid);
+        //
+        //            }
+        
+        
+    }];
 }
 
 // get sunset/sunrise time from wunderground.com Weather API
@@ -376,18 +390,143 @@ static NSDictionary *sunriseSunset;
                                              [self processAfterGettingSunriseSunset];
                                              
                                          }
-                                        failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
-                                             NSLog(@"wunderground.com Weather API: Request Failure Because %@",[error userInfo]);
-                                         }];
+                                                                                        failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                                                                                            NSLog(@"wunderground.com Weather API: Request Failure Because %@",[error userInfo]);
+                                                                                        }];
     
     [operation start];
     
 }
 
-- (void)retrieveTemperatureValues {
+// Help Method
+- (NSDictionary *)getURLParameters:(NSURL *)url {
+    
+    NSString * q = [url query];
+    NSArray * pairs = [q componentsSeparatedByString:@"&"];
+    NSMutableDictionary * kvPairs = [NSMutableDictionary dictionary];
+    for (NSString * pair in pairs) {
+        NSArray * bits = [pair componentsSeparatedByString:@"="];
+        NSString * key = [[bits objectAtIndex:0] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString * value = [[bits objectAtIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        [kvPairs setObject:value forKey:key];
+    }
+    return kvPairs;
+}
+
+
+- (void)retrieveUserTemperatureValues {
+    // Get Temp-Values for all Participants  /////////
+    // Construct temperature-requests-array /////////
+    NSMutableArray *requestsStorage = [[NSMutableArray alloc] init];
+    
+    for (NSNumber *sensorId in self.participants) {
+        
+        NSString *requestTemperatureUrl = currentCostServerBaseURLString;
+        requestTemperatureUrl = [requestTemperatureUrl stringByAppendingString:@"rpc.php?userID="];
+        requestTemperatureUrl = [requestTemperatureUrl stringByAppendingString:[sensorId stringValue]];
+        requestTemperatureUrl = [requestTemperatureUrl stringByAppendingString:@"&action=get&what=tempRep"];
+        NSURLRequest *temperatureRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:requestTemperatureUrl]];
+        [requestsStorage addObject:temperatureRequest];
+        
+    }
+    ///////////////////////////////////////////////
+    NSLog(@"requestsStorage UserTemps: %@", requestsStorage);
+    
+    [[EMNetworkManager sharedClient]
+     enqueueBatchOfHTTPRequestOperationsWithRequests:requestsStorage
+     progressBlock:^(NSUInteger numberOfCompletedOperations, NSUInteger totalNumberOfOperations) {
+         
+         
+     } completionBlock:^(NSArray *operations) {
+         NSLog(@"\nTempUsers operations: %@", operations);
+         for (AFHTTPRequestOperation *ro in operations) {
+             
+             if (ro.error) {
+                 NSLog(@"++++++++++++++ Operation error");
+             } else {
+                 
+                 if (ro.responseData != nil && ro.responseData.length > 0) {
+                     NSDictionary *urlParameters = [self getURLParameters:ro.request.URL];
+                     // Get userID from Request Parameters
+                     NSString *userID = [urlParameters objectForKey:@"userID"];
+                     NSString *tempData = [[NSString alloc] initWithData:ro.responseData encoding:NSUTF8StringEncoding];
+                     NSArray *components    = [tempData componentsSeparatedByString:@";"];
+                     NSLog(@"\nTempUsers userID: %@", userID);
+                     NSLog(@"\nTempUsers components: %@", components);
+                     //NSLog(@"\nTempUsers ro.responseData: %@", ro.responseData);
+                     // In Components are all Temp-Values with Data and Hour for the User with userID
+                     for (NSString *obj in components) {
+                         if ([obj length] > 0) {
+                             NSLog(@"\nTempUsers, obj: %@", obj);
+                             NSArray *data = [obj componentsSeparatedByString:@"="];
+                             NSLog(@"data: %@", data);
+                             NSString *dateString = [data[0] substringWithRange:(NSMakeRange(0, 10))];
+                             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+                             [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
+                             [dateFormatter setDateFormat:@"yy-MM-dd"];
+                             //IMPORTANT! Actual NSDate-Object generated with this NSDateFormatter depends on the Timezone
+                             [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+                             NSDate *date = [dateFormatter dateFromString:dateString];
+                             NSString *hour = [data[0] substringWithRange:(NSMakeRange(11, [data[0] length]-11))];
+                             NSLog(@"calc. date: %@ and hour: %@", date, hour);
+                             //NSLog(@"yeah! self.cachedSlices: %@", self.cachedSlices);
+                             NSArray *filteredSlice = [self.cachedSlices filteredArrayUsingPredicate:
+                                                       [NSPredicate predicateWithFormat:@"hour == %@ AND date == %@", @([hour integerValue]), date]];
+                             //EnergyClockSlice *foundSliceFromDB = [EnergyClockSlice findFirstWithPredicate:
+                             //[NSPredicate predicateWithFormat:@"hour == %@ AND date == %@", @([hour integerValue]), date]];
+                             NSLog(@"yeah! found slice: %@", filteredSlice);
+                             //NSLog(@"yeah! found foundSliceFromDB: %@", foundSliceFromDB);
+                             // We have found the slice with this date and hour
+                             // Save the new UserTemp-Values-Dict!
+                             if ([filteredSlice count] > 0) {
+                                 EnergyClockSlice *slice = filteredSlice[0];
+                                 NSMutableDictionary *temperatureUsers = [[NSMutableDictionary alloc] init];
+                                 if (slice.temperatureUsers != nil) {
+                                     temperatureUsers = [NSKeyedUnarchiver unarchiveObjectWithData:slice.temperatureUsers];
+                                 }
+                                 [temperatureUsers setObject:@([data[1] floatValue]) forKey:userID];
+                                 NSData *temperatureUsersData = [NSKeyedArchiver archivedDataWithRootObject:temperatureUsers];
+                                 slice.temperatureUsers = temperatureUsersData; // aaand Save It!
+                             }
+                             
+                         }//end if length
+                         
+                     }//end for components
+                     
+                 }//end if responsedata check
+                 
+             }//end else no error
+             
+             
+         }//end for completionBlock - operations
+         
+         // Save new user-temperature values
+         [[NSManagedObjectContext defaultContext]  saveInBackgroundCompletion:^{
+             
+                        NSArray *newslices = [EnergyClockSlice findAll];
+             NSLog(@"saving: slicesData: %i Objs found", [newslices count]);
+                         for (EnergyClockSlice *slice in newslices) {
+                              NSLog(@"\n saved temperatureUsers: %@", [NSKeyedUnarchiver unarchiveObjectWithData:slice.temperatureUsers]);
+                          }
+             
+             //notify observers (instances of ScrollViewContentVC)
+             [[NSNotificationCenter defaultCenter] postNotificationName:EnergyClockDataSaved object:nil userInfo:nil];
+         }];
+         
+         
+     }];
+    
+    
+    
+    
+}
+
+- (void)retrieveOutsideTemperatureValues {
     __block NSMutableArray *historyResultObjects = [[NSMutableArray alloc] init];
     AggregatedDay *lastDay = [AggregatedDay findFirstOrderedByAttribute:@"date" ascending:NO];
+    NSLog(@"lastDay found: %@", lastDay);
     NSDate *lastDate = lastDay.date;
+    NSLog(@"lastDay-date found: %@", lastDate);
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
     [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
     [dateFormatter setDateFormat:@"yyyyMMdd/"];
@@ -395,7 +534,7 @@ static NSDictionary *sunriseSunset;
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
     NSString *requestTemperatureUrl = [WWABaseURL stringByAppendingString:WWAKey];
     requestTemperatureUrl = [ [ [requestTemperatureUrl stringByAppendingString:WWAHistoryURLpart]
-                             stringByAppendingString:[dateFormatter stringFromDate:lastDate] ]
+                               stringByAppendingString:[dateFormatter stringFromDate:lastDate] ]
                              stringByAppendingString:WWALocationURLpart];
     NSURLRequest *temperatureRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:requestTemperatureUrl]];
     // Construct temperature-requests-array /////////
@@ -418,7 +557,7 @@ static NSDictionary *sunriseSunset;
     
     [[WeatherApiCommManager sharedClient] enqueueBatchOfHTTPRequestOperationsWithRequests:requestsStorage
                                                                             progressBlock:^(NSUInteger numberOfCompletedOperations, NSUInteger totalNumberOfOperations) {
-                                                                               
+                                                                                
                                                                                 
                                                                             }
                                                                           completionBlock:^(NSArray *operations) {
@@ -431,16 +570,16 @@ static NSDictionary *sunriseSunset;
                                                                                   
                                                                               }
                                                                               
-                                                                              [self storeTemperatureValues:historyResultObjects];
+                                                                              [self storeOutsideTemperatureValues:historyResultObjects];
                                                                               
                                                                           }];
-
+    
 }
 
 
-- (void)storeTemperatureValues:(NSArray *)historyResultObjects {
+- (void)storeOutsideTemperatureValues:(NSArray *)historyResultObjects {
     NSLog(@"\n storeTemperatureValues calling");
-    NSArray *slices = [EnergyClockSlice findAll];
+    self.cachedSlices = [EnergyClockSlice findAll];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     dateFormatter.dateFormat = @"yy-MM-dd";
     [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
@@ -456,8 +595,8 @@ static NSDictionary *sunriseSunset;
         NSDate *dateFromString = [dateFormatter dateFromString:fullDate];
         // EnergyClockSlice *sliceObj = [EnergyClockSlice findFirstByAttribute:@"date" withValue:dateFromString];
         // These Objects have the same date, but different time
-        NSArray *foundItems = [slices filteredArrayUsingPredicate:
-                                  [NSPredicate predicateWithFormat:@"date == %@", dateFromString]];
+        NSArray *foundItems = [self.cachedSlices filteredArrayUsingPredicate:
+                               [NSPredicate predicateWithFormat:@"date == %@", dateFromString]];
         NSAssert([foundItems count] > 0, @"fountItems empty");
         /* *********** Outer For-Loop *********** */
         for (EnergyClockSlice *daySlice in foundItems) {
@@ -478,7 +617,7 @@ static NSDictionary *sunriseSunset;
                 // Sometimes there are no values for 23 and 22 hours (so the tempValuesForSlice is empty) -> add temperature for 21 and 20
                 else if (sliceHour == 0) {
                     if ( [[[obj valueForKey:@"date"] valueForKey:@"hour"] integerValue] == 23 ||  [[[obj valueForKey:@"date"] valueForKey:@"hour"] integerValue] == 22 ||
-                         [[[obj valueForKey:@"date"] valueForKey:@"hour"] integerValue] == 21 ||  [[[obj valueForKey:@"date"] valueForKey:@"hour"] integerValue] == 20) {
+                        [[[obj valueForKey:@"date"] valueForKey:@"hour"] integerValue] == 21 ||  [[[obj valueForKey:@"date"] valueForKey:@"hour"] integerValue] == 20) {
                         [tempValuesForSlice addObject: [obj valueForKey:@"tempm"] ];
                     }
                 }
@@ -499,35 +638,35 @@ static NSDictionary *sunriseSunset;
         /* *********** Outer For-Loop END *********** */
         //NSLog(@"\n historyArray: %@", historyArray);
         NSLog(@"\n historyArray count: %i", [historyArray count]);
-//        for (id obj in historyArray) {
-//            
-//            NSLog(@"\n obj inside historyArray: %@", obj);
-//            NSLog(@"\n filter inside historyArray: %@", [obj filteredArrayUsingPredicate: [NSPredicate predicateWithFormat:@"date.hour == %i",
-//                                                                                                10]]);
-//            NSLog(@"\n obj value for keypath: %@", [obj valueForKeyPath:@"date"]);
-//            
-//        }
-//        NSArray *filterResult = [historyArray filteredArrayUsingPredicate: [NSPredicate predicateWithFormat:@"%K == %@",
-//                                                                            @"date.hour", @(10)]];
+        //        for (id obj in historyArray) {
+        //
+        //            NSLog(@"\n obj inside historyArray: %@", obj);
+        //            NSLog(@"\n filter inside historyArray: %@", [obj filteredArrayUsingPredicate: [NSPredicate predicateWithFormat:@"date.hour == %i",
+        //                                                                                                10]]);
+        //            NSLog(@"\n obj value for keypath: %@", [obj valueForKeyPath:@"date"]);
+        //
+        //        }
+        //        NSArray *filterResult = [historyArray filteredArrayUsingPredicate: [NSPredicate predicateWithFormat:@"%K == %@",
+        //                                                                            @"date.hour", @(10)]];
         //NSArray *filterResultSec = [historyArray filteredArrayUsingPredicate: [NSPredicate predicateWithFormat:@"conds like 'Mist'"]];
         //NSLog(@"slice filterResult: %@", filterResult);
         //NSLog(@"\nslice filterResult: %@", filterResultSec);
         //NSLog(@"\n slice historyArray: %@", historyArray);
         //NSLog(@"\n slice test: %@", [historyArray filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"history.observations.date.hour > %i", 0]]);
-//        NSLog(@"slice found Items: %@", foundItems);
-//        NSLog(@"slice dateFromString: %@", dateFromString);
-//        NSLog(@"slice fullDate: %@", fullDate);
+        //        NSLog(@"slice found Items: %@", foundItems);
+        //        NSLog(@"slice dateFromString: %@", dateFromString);
+        //        NSLog(@"slice fullDate: %@", fullDate);
     }
     // Save new temperature values
     [[NSManagedObjectContext defaultContext]  saveInBackgroundCompletion:^{
         
-//        NSArray *newslices = [EnergyClockSlice findAll];
-//        for (EnergyClockSlice *slice in newslices) {
-//            NSLog(@"\n slice-temp: %@", slice.temperature);
-//        } 
-        
+        //        NSArray *newslices = [EnergyClockSlice findAll];
+        //        for (EnergyClockSlice *slice in newslices) {
+        //            NSLog(@"\n slice-temp: %@", slice.temperature);
+        //        } 
+        [self retrieveUserTemperatureValues];
         //notify observers (instances of ScrollViewContentVC)
-        [[NSNotificationCenter defaultCenter] postNotificationName:EnergyClockDataSaved object:nil userInfo:nil];
+        //[[NSNotificationCenter defaultCenter] postNotificationName:EnergyClockDataSaved object:nil userInfo:nil];
     }];
     
 }

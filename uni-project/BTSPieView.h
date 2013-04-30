@@ -35,7 +35,9 @@
 - (CGFloat)pieView:(BTSPieView *)pieView radiusForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex;
 - (NSArray *)getRadiusArray;
 - (NSArray *)getTemperatureValues;
+- (NSDictionary *)getUserTemperatureValues;
 - (NSArray *)getSlotValuesForSliceArray;
+- (UIColor *)getColorForTempLabel:(NSUInteger)idx;
 //*************************//
 - (CGFloat)pieView:(BTSPieView *)pieView valueForSliceAtIndex:(NSUInteger)index;
 @end 

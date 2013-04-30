@@ -9,7 +9,8 @@ typedef enum {
     BTSPieLayerLines,
     BTSPieLayerSlices,
     BTSPieLayerLabels,
-    BTSPieLayerTempLabels
+    BTSPieLayerTempLabels,
+    BTSPieLayerUserTempLabels
 } BTSPieLayerGroup;
 
 @implementation BTSPieLayer
@@ -23,6 +24,7 @@ typedef enum {
         [self addSublayer:[CALayer layer]]; // BTSPieLayerSlices
         [self addSublayer:[CALayer layer]]; // BTSPieLayerLabels
         [self addSublayer:[CALayer layer]]; // BTSPieLayerTempLabels
+        [self addSublayer:[CALayer layer]]; // BTSPieLayerUserTempLabels
         
         [[self sublayers] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             [obj setContentsScale:[[UIScreen mainScreen] scale]];
@@ -50,6 +52,11 @@ typedef enum {
 - (CALayer *)tempLabelLayers
 {
     return [[self sublayers] objectAtIndex:BTSPieLayerTempLabels];
+}
+
+- (CALayer *)tempUserLabelLayers
+{
+    return [[self sublayers] objectAtIndex:BTSPieLayerUserTempLabels];
 }
 
 - (void)removeAllPieLayers

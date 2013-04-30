@@ -33,6 +33,7 @@ static const int sliceDetailsView = 13;
 // Used to display so called 'EnergyClock-Multilevel-Pie Chart', center of the screen -> Slot Values
 @property (nonatomic, strong) NSMutableArray *slotValuesForSlice;
 @property (nonatomic, strong) NSMutableArray *temperatureValues;
+@property (nonatomic, strong) NSMutableDictionary *userTemperatureValues;
 // Data for a Detail Pie Chart, when user selects a participant using our 'participantSelector'
 // Holds the values of all participants for the current date, Form: [Slice] => [[userId]=>[consumption]]
 @property (nonatomic, strong) NSArray *dayUserConsumption;
@@ -82,10 +83,10 @@ static const NSArray *participants;
     [self startHUD];
     
     participants = [[NSArray alloc] initWithObjects:
-                         [NSNumber numberWithInteger:FirstSensorID],
-                         [NSNumber numberWithInteger:SecondSensorID],
-                         [NSNumber numberWithInteger:ThirdSensorID], nil];
-
+                    [NSNumber numberWithInteger:FirstSensorID],
+                    [NSNumber numberWithInteger:SecondSensorID],
+                    [NSNumber numberWithInteger:ThirdSensorID], nil];
+    
     
     self.sliceDetailsView.datasource = self;
     self.sliceDetailsView.tag = sliceDetailsView;
@@ -122,7 +123,7 @@ static const NSArray *participants;
     
     // Segmented Control #1
     UILabel *segmentedControl1Label = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + 10.0, 400.0, 300.0, 20.0)]; // x,y,width,height
-    //[segmentedControl1Label setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+                                                                                                                                       //[segmentedControl1Label setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     [segmentedControl1Label setText:SegmentedControlLabelText];
     [segmentedControl1Label setTextAlignment:NSTextAlignmentCenter];
     [segmentedControl1Label setBackgroundColor:[UIColor clearColor]];
@@ -146,10 +147,11 @@ static const NSArray *participants;
     // in the meantime, load the array with placeholders which will be replaced on demand
     NSMutableArray *controllers = [[NSMutableArray alloc] init];
     self.temperatureValues = [[NSMutableArray alloc]initWithCapacity:numberSlices];
-    
+    self.userTemperatureValues = [[NSMutableDictionary alloc] init];
     for (int i=0; i<numberSlices; i++) {
         [self.temperatureValues insertObject:@(0) atIndex:i];
     }
+    
     for (NSUInteger i = 0; i < numberPages; i++)
     {
 		[controllers addObject:[NSNull null]];
@@ -183,8 +185,8 @@ static const NSArray *participants;
 
 //- (void)viewWillAppear:(BOOL)animated {
 //    [super viewWillAppear:animated];
-//    
-//    
+//
+//
 //    // OK we're done, lets reload the energyclock
 //    //[self.energyClockView reloadData];
 //
@@ -199,25 +201,25 @@ static const NSArray *participants;
         [self.sliceDetailsView killAll];
     }
     
-//            for (UIViewController *vc in self.childViewControllers) {
-//                [vc willMoveToParentViewController:nil];
-//                [vc removeFromParentViewController];
-//            }
+    //            for (UIViewController *vc in self.childViewControllers) {
+    //                [vc willMoveToParentViewController:nil];
+    //                [vc removeFromParentViewController];
+    //            }
     // CANNOT REMOVE THE MAINSCROLLVIEW -> CRASH
-//for(UIView *view in self.view.subviews){
-//    NSLog(@"view: %@ removing in progress..", view);
-//    if (view.tag == mainScrollView) {
-//        for (UIView *v in view.subviews) {
-//            if (v.tag == sliceDetailsView) {
-//                NSLog(@"[inside] - bingo!");
-//                [(SliceDetailsView *)v killAll];
-//                NSLog(@"[inside] - vorbei!");
-//            }
-//        }
-//    }
-//    [view removeFromSuperview];
-//    NSLog(@"view: %@ removed!", view);
-//}
+    //for(UIView *view in self.view.subviews){
+    //    NSLog(@"view: %@ removing in progress..", view);
+    //    if (view.tag == mainScrollView) {
+    //        for (UIView *v in view.subviews) {
+    //            if (v.tag == sliceDetailsView) {
+    //                NSLog(@"[inside] - bingo!");
+    //                [(SliceDetailsView *)v killAll];
+    //                NSLog(@"[inside] - vorbei!");
+    //            }
+    //        }
+    //    }
+    //    [view removeFromSuperview];
+    //    NSLog(@"view: %@ removed!", view);
+    //}
     
 }
 
@@ -231,7 +233,7 @@ static const NSArray *participants;
     self.mainScrollView.contentSize =
     CGSizeMake(CGRectGetWidth(self.mainScrollView.frame), CGRectGetHeight(self.energyClockView.frame) + CGRectGetHeight(self.sliceDetailsView.frame));
     NSLog(@"self.mainScrollView.contentSize h: %f, w: %f", self.mainScrollView.contentSize.height, self.mainScrollView.contentSize.width);
-
+    
     // pages are created on demand
     // load the visible page
     // load the page on either side to avoid flashes when the user starts scrolling
@@ -239,9 +241,9 @@ static const NSArray *participants;
     [self loadScrollViewWithPage:0];
     [self loadScrollViewWithPage:1];
     
-//    CGRect parentLayerBounds = [self.energyClockView bounds];
-//    CGFloat centerX = parentLayerBounds.size.width / 2.0f;
-//    CGFloat centerY = parentLayerBounds.size.height / 2.0f;
+    //    CGRect parentLayerBounds = [self.energyClockView bounds];
+    //    CGFloat centerX = parentLayerBounds.size.width / 2.0f;
+    //    CGFloat centerY = parentLayerBounds.size.height / 2.0f;
     
     // Reduce the radius just a bit so the the pie chart layers do not hug the edge of the view.
     // self.energyClockViewRadius = MIN(centerX, centerY) - 20.0;
@@ -249,18 +251,18 @@ static const NSArray *participants;
     // Create and display Pie Chart slices, animated
     // we use dummy values for testing purposes
     
-        /*for (int insertIndex=0; insertIndex<numberSlices; insertIndex++) {
-            
-            NSMutableArray *innerArray = [[NSMutableArray alloc]initWithCapacity:numberOfParticipants];
-            
-            for (int i=0; i<numberOfParticipants; i++) {
-                [innerArray insertObject:@(arc4random()/21*0.1) atIndex:i];
-            }
-            [self.slotValuesForSlice insertObject:innerArray atIndex:insertIndex];
-
-            [self.sliceValues insertObject:[NSNumber numberWithFloat:insertIndex+0.53] atIndex:insertIndex];
-            //[self.energyClockView insertSliceAtIndex:insertIndex animate:YES];
-        }*/
+    /*for (int insertIndex=0; insertIndex<numberSlices; insertIndex++) {
+     
+     NSMutableArray *innerArray = [[NSMutableArray alloc]initWithCapacity:numberOfParticipants];
+     
+     for (int i=0; i<numberOfParticipants; i++) {
+     [innerArray insertObject:@(arc4random()/21*0.1) atIndex:i];
+     }
+     [self.slotValuesForSlice insertObject:innerArray atIndex:insertIndex];
+     
+     [self.sliceValues insertObject:[NSNumber numberWithFloat:insertIndex+0.53] atIndex:insertIndex];
+     //[self.energyClockView insertSliceAtIndex:insertIndex animate:YES];
+     }*/
     
     
     [self.energyClockView reloadData];
@@ -271,7 +273,7 @@ static const NSArray *participants;
         [self.sliceDetailsView initPlots];
         [self hideHUD];
     }
-
+    
 }
 
 
@@ -307,8 +309,8 @@ static const NSArray *participants;
     NSDate *lastSyncDate = systemObj.daysupdated;
     NSLog(@"checkSyncStatus lastSyncDate: %@", lastSyncDate);
     NSLog(@"checkSyncStatus todayComponents: %@", todayComponents);
-
-    if ([lastSyncDate isKindOfClass:[NSDate class]] && !FORCEDAYCHARTSUPDATE){ 
+    
+    if ([lastSyncDate isKindOfClass:[NSDate class]] && !FORCEDAYCHARTSUPDATE){
         
         NSDateComponents *lastSyncComponents =
         [calendar components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:lastSyncDate];
@@ -429,9 +431,9 @@ static const NSArray *participants;
         NSLog(@"<EnergyClockViewController> controller.view.subviews: %@", controller.view.subviews);
         
         /*
-        NSDictionary *numberItem = [self.contentList objectAtIndex:page];
-        controller.numberImage.image = [UIImage imageNamed:[numberItem valueForKey:kImageKey]];
-        controller.numberTitle.text = [numberItem valueForKey:kNameKey];
+         NSDictionary *numberItem = [self.contentList objectAtIndex:page];
+         controller.numberImage.image = [UIImage imageNamed:[numberItem valueForKey:kImageKey]];
+         controller.numberTitle.text = [numberItem valueForKey:kNameKey];
          */
     }
 }
@@ -494,7 +496,7 @@ static const NSArray *participants;
         return;
     }
     NSLog(@"<EnergyClockViewController> -loadEnergyClockForWeekDay, plot with date: %@ touched", date);
-
+    
     [self initValuesForNewDate:date];
     self.currentDate = date;
     [self.energyClockView reloadData];
@@ -510,13 +512,14 @@ static const NSArray *participants;
 {
     // check if data exists @todo
     NSArray *slicesData = [EnergyClockSlice findByAttribute:@"date" withValue:date andOrderBy:@"hour" ascending:YES];
+    NSLog(@"initValuesForNewDate: slicesData: %i Objs found", [slicesData count]);
     NSMutableArray *slotValuesForSliceTemp = [[NSMutableArray alloc] init];
     NSMutableArray *sliceValuesTemp = [[NSMutableArray alloc] init];
     NSMutableArray *dayUserConsumptionTemp = [[NSMutableArray alloc]init];
     // DEBUGGING
     for (int i=0; i<[slicesData count]; i++) {
         EnergyClockSlice *slice = slicesData[i];
-        NSLog(@"date: %@, hour: %@, consumption: %@", slice.date, slice.hour, slice.consumption);
+        NSLog(@"date: %@, hour: %@, consumption: %@, tempUsers: %@", slice.date, slice.hour, slice.consumption, [NSKeyedUnarchiver unarchiveObjectWithData:slice.temperatureUsers]);
     }
     if ([slicesData count] > 0) {
         
@@ -525,6 +528,12 @@ static const NSArray *participants;
             // energy consumption of every user/partcipant
             NSMutableArray *innerArray = [[NSMutableArray alloc]initWithCapacity:numberOfParticipants];
             EnergyClockSlice *slice = slicesData[insertIndex];
+            // Get User-Temp-Dict
+            NSDictionary *userTemperatureValues = [[NSDictionary alloc] init];
+            if (slice.temperatureUsers != nil) {
+                userTemperatureValues = [NSKeyedUnarchiver unarchiveObjectWithData:slice.temperatureUsers];
+            }
+            [self.userTemperatureValues setObject:userTemperatureValues forKey:slice.hour];
             if (insertIndex > 0) {
                 [self.temperatureValues replaceObjectAtIndex:insertIndex-1 withObject:slice.temperature];
             }
@@ -546,13 +555,14 @@ static const NSArray *participants;
             [sliceValuesTemp insertObject:((EnergyClockSlice *)slicesData[insertIndex]).consumption atIndex:insertIndex];
             
             [dayUserConsumptionTemp insertObject:slotValuesDict atIndex:insertIndex];
-
+            
         }
         self.sliceValues = sliceValuesTemp;
         NSLog(@"self.sliceValues: %@", self.sliceValues);
         self.slotValuesForSlice = slotValuesForSliceTemp;
         self.dayUserConsumption = dayUserConsumptionTemp;
         NSLog(@"slotValuesForSlice: %@", self.slotValuesForSlice);
+        NSLog(@"original setting userTemperatureValues : %@", self.userTemperatureValues );
         NSLog(@"dayUserConsumption: %@", self.dayUserConsumption);
         NSLog(@"\n initValuesForNewDate self.temperatureValues %@ \n", self.temperatureValues);
     }
@@ -609,14 +619,14 @@ static const NSArray *participants;
     else {
         result = (CGFloat)[[self.sliceValues objectAtIndex:0]floatValue];
     }
- 
+    
     return result;
 }
 
 // TODO : new
 - (CGFloat)pieView:(BTSPieView *)pieView valueForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex {
     return (CGFloat)[[[self.slotValuesForSlice objectAtIndex:sliceIndex] objectAtIndex:slotIndex] floatValue];
-
+    
 }
 // for SliceDetailsView
 - (NSNumber *)valueForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex {
@@ -645,6 +655,13 @@ static const NSArray *participants;
     return [self.CPTColorsForParticipants objectForKey:@(idx)];
 }
 
+- (UIColor *)getColorForTempLabel:(NSUInteger)idx {
+    NSLog(@"self.CPTColorsForParticipants: %@", self.availableSliceColors);
+    NSLog(@"input idx: %@", @(idx));
+    NSLog(@"getColorForTempLabel returning: %@", [self.availableSliceColors objectAtIndex:idx]);
+    return [self.availableSliceColors objectAtIndex:idx];
+}
+
 
 // do i need this method?
 - (CGFloat)pieView:(BTSPieView *)pieView radiusForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex {
@@ -660,14 +677,19 @@ static const NSArray *participants;
     return self.temperatureValues;
 }
 
+- (NSDictionary *)getUserTemperatureValues {
+    NSLog(@"\n getUserTemperatureValues %@ !\n", self.userTemperatureValues);
+    return self.userTemperatureValues;
+}
+
 - (NSArray *)getSlotValuesForSliceArray {
     return self.slotValuesForSlice;
 }
 /* DEPRECATED
-- (UIColor *)pieView:(BTSPieView *)pieView colorForSliceAtIndex:(NSUInteger)index sliceCount:(NSUInteger)sliceCount
-{
-    return [(BTSSliceData *)[_slices objectAtIndex:index] color];
-}
+ - (UIColor *)pieView:(BTSPieView *)pieView colorForSliceAtIndex:(NSUInteger)index sliceCount:(NSUInteger)sliceCount
+ {
+ return [(BTSSliceData *)[_slices objectAtIndex:index] color];
+ }
  */
 
 // TODO : new
@@ -683,18 +705,18 @@ static const NSArray *participants;
 
 - (void)pieView:(BTSPieView *)pieView didSelectSliceAtIndex:(NSInteger)index {
     /*
-    // save the index the user selected.
-    _selectedSliceIndex = index;
-    
-    // update the selected slice UI components with the model values
-    BTSSliceData *sliceData = [_slices objectAtIndex:(NSUInteger)_selectedSliceIndex];
-    [_selectedSliceValueLabel setText:[NSString stringWithFormat:@"%d", [sliceData value]]];
-    [_selectedSliceValueLabel setAlpha:1.0];
-    
-    [_selectedSliceValueSlider setValue:[sliceData value]];
-    [_selectedSliceValueSlider setEnabled:YES];
-    [_selectedSliceValueSlider setMinimumTrackTintColor:[sliceData color]];
-    [_selectedSliceValueSlider setMaximumTrackTintColor:[sliceData color]];
+     // save the index the user selected.
+     _selectedSliceIndex = index;
+     
+     // update the selected slice UI components with the model values
+     BTSSliceData *sliceData = [_slices objectAtIndex:(NSUInteger)_selectedSliceIndex];
+     [_selectedSliceValueLabel setText:[NSString stringWithFormat:@"%d", [sliceData value]]];
+     [_selectedSliceValueLabel setAlpha:1.0];
+     
+     [_selectedSliceValueSlider setValue:[sliceData value]];
+     [_selectedSliceValueSlider setEnabled:YES];
+     [_selectedSliceValueSlider setMinimumTrackTintColor:[sliceData color]];
+     [_selectedSliceValueSlider setMaximumTrackTintColor:[sliceData color]];
      */
     
     NSLog(@"slice %i ws selected!", index);
@@ -707,16 +729,16 @@ static const NSArray *participants;
 
 - (void)pieView:(BTSPieView *)pieView didDeselectSliceAtIndex:(NSInteger)index {
     /*
-    [_selectedSliceValueSlider setMinimumTrackTintColor:nil];
-    [_selectedSliceValueSlider setMaximumTrackTintColor:nil];
-    
-    // nothing is selected... so turn off the "selected value" controls
-    _selectedSliceIndex = -1;
-    [_selectedSliceValueSlider setEnabled:NO];
-    [_selectedSliceValueSlider setValue:0.0];
-    [_selectedSliceValueLabel setAlpha:0.0];
-    
-    [self updateSelectedSliceValue:_selectedSliceValueSlider];
+     [_selectedSliceValueSlider setMinimumTrackTintColor:nil];
+     [_selectedSliceValueSlider setMaximumTrackTintColor:nil];
+     
+     // nothing is selected... so turn off the "selected value" controls
+     _selectedSliceIndex = -1;
+     [_selectedSliceValueSlider setEnabled:NO];
+     [_selectedSliceValueSlider setValue:0.0];
+     [_selectedSliceValueLabel setAlpha:0.0];
+     
+     [self updateSelectedSliceValue:_selectedSliceValueSlider];
      */
 }
 
@@ -735,34 +757,34 @@ static const NSArray *participants;
                                                    resizableImageWithCapInsets:UIEdgeInsetsMake(0.0, 4.0, 0.0, 1.0)];
     UIImage *buttonBackgroundImagePressedRight = [[UIImage imageNamed:@"segmented-bg-pressed-right.png"]
                                                   resizableImageWithCapInsets:UIEdgeInsetsMake(0.0, 1.0, 0.0, 4.0)];
-//
-//    // Button 1
-//    UIButton *buttonSocial = [[UIButton alloc] init];
-//    UIImage *buttonSocialImageNormal = [UIImage imageNamed:@"social-icon.png"];
-//    
-//    [buttonSocial setImageEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 5.0)];
-//    [buttonSocial setBackgroundImage:buttonBackgroundImagePressedLeft forState:UIControlStateHighlighted];
-//    [buttonSocial setBackgroundImage:buttonBackgroundImagePressedLeft forState:UIControlStateSelected];
-//    [buttonSocial setBackgroundImage:buttonBackgroundImagePressedLeft forState:(UIControlStateHighlighted|UIControlStateSelected)];
-//    [buttonSocial setImage:buttonSocialImageNormal forState:UIControlStateNormal];
-//    [buttonSocial setImage:buttonSocialImageNormal forState:UIControlStateSelected];
-//    [buttonSocial setImage:buttonSocialImageNormal forState:UIControlStateHighlighted];
-//    [buttonSocial setImage:buttonSocialImageNormal forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    //
+    //    // Button 1
+    //    UIButton *buttonSocial = [[UIButton alloc] init];
+    //    UIImage *buttonSocialImageNormal = [UIImage imageNamed:@"social-icon.png"];
+    //
+    //    [buttonSocial setImageEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 5.0)];
+    //    [buttonSocial setBackgroundImage:buttonBackgroundImagePressedLeft forState:UIControlStateHighlighted];
+    //    [buttonSocial setBackgroundImage:buttonBackgroundImagePressedLeft forState:UIControlStateSelected];
+    //    [buttonSocial setBackgroundImage:buttonBackgroundImagePressedLeft forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    //    [buttonSocial setImage:buttonSocialImageNormal forState:UIControlStateNormal];
+    //    [buttonSocial setImage:buttonSocialImageNormal forState:UIControlStateSelected];
+    //    [buttonSocial setImage:buttonSocialImageNormal forState:UIControlStateHighlighted];
+    //    [buttonSocial setImage:buttonSocialImageNormal forState:(UIControlStateHighlighted|UIControlStateSelected)];
     
     NSMutableArray *buttonsArray = [[NSMutableArray alloc] initWithCapacity:numberOfParticipants];
     // Dynamically create buttons for segemented control
     for (NSUInteger i=0; i < numberOfParticipants; i++) {
         UIButton *userButton = [[UIButton alloc] init];
         NSString *buttonName = [NSString stringWithFormat:@"Sensor %@", participants[i]];
-//        UIColor *colorWithApha = [[self.availableSliceColors objectAtIndex:i] colorWithAlphaComponent:0.6];
-//        UIColor *color = [self.availableSliceColors objectAtIndex:i];
-//        [userButton setBackgroundImage:[self imageFromColor:colorWithApha] forState:UIControlStateNormal];
-//        [userButton setBackgroundImage:[self imageFromColor:color] forState:UIControlStateHighlighted];
-//        [userButton setBackgroundImage:[self imageFromColor:color] forState:UIControlStateSelected];
-//        [userButton setBackgroundImage:[self imageFromColor:color] forState:(UIControlStateHighlighted|UIControlStateSelected)];
-//        [userButton setTitleColor:[self.availableSliceColors objectAtIndex:i] forState:UIControlStateHighlighted];
-//        [userButton setTitleColor:[self.availableSliceColors objectAtIndex:i] forState:UIControlStateNormal];
-//        [userButton setTitleColor:[self.availableSliceColors objectAtIndex:i] forState:UIControlStateSelected];
+        //        UIColor *colorWithApha = [[self.availableSliceColors objectAtIndex:i] colorWithAlphaComponent:0.6];
+        //        UIColor *color = [self.availableSliceColors objectAtIndex:i];
+        //        [userButton setBackgroundImage:[self imageFromColor:colorWithApha] forState:UIControlStateNormal];
+        //        [userButton setBackgroundImage:[self imageFromColor:color] forState:UIControlStateHighlighted];
+        //        [userButton setBackgroundImage:[self imageFromColor:color] forState:UIControlStateSelected];
+        //        [userButton setBackgroundImage:[self imageFromColor:color] forState:(UIControlStateHighlighted|UIControlStateSelected)];
+        //        [userButton setTitleColor:[self.availableSliceColors objectAtIndex:i] forState:UIControlStateHighlighted];
+        //        [userButton setTitleColor:[self.availableSliceColors objectAtIndex:i] forState:UIControlStateNormal];
+        //        [userButton setTitleColor:[self.availableSliceColors objectAtIndex:i] forState:UIControlStateSelected];
         
         if (i==0) {
             [userButton setImageEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 5.0)];
@@ -826,17 +848,17 @@ static const NSArray *participants;
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-//    CALayer *imageLayer = [CALayer layer];
-//    imageLayer.frame = CGRectMake(0, 0, img.size.width, img.size.height);
-//    imageLayer.contents = (id) img.CGImage;
-//    
-//    imageLayer.masksToBounds = YES;
-//    imageLayer.cornerRadius = 5.0;
-//    
-//    UIGraphicsBeginImageContext(img.size);
-//    [imageLayer renderInContext:UIGraphicsGetCurrentContext()];
-//    UIImage *roundedImage = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
+    //    CALayer *imageLayer = [CALayer layer];
+    //    imageLayer.frame = CGRectMake(0, 0, img.size.width, img.size.height);
+    //    imageLayer.contents = (id) img.CGImage;
+    //
+    //    imageLayer.masksToBounds = YES;
+    //    imageLayer.cornerRadius = 5.0;
+    //    
+    //    UIGraphicsBeginImageContext(img.size);
+    //    [imageLayer renderInContext:UIGraphicsGetCurrentContext()];
+    //    UIImage *roundedImage = UIGraphicsGetImageFromCurrentImageContext();
+    //    UIGraphicsEndImageContext();
     
     return img;
 }
