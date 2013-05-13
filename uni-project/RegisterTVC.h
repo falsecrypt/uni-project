@@ -14,7 +14,7 @@
 @end
 
 
-@interface RegisterTVC : UITableViewController
+@interface RegisterTVC : UITableViewController<UITextFieldDelegate>
 
 @property (nonatomic, weak) id<RegisterScreenViewControllerDelegate> delegate;
 

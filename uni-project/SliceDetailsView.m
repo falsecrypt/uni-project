@@ -307,8 +307,12 @@
         // 3 - Calculate percentage value
         float slotValue = [[self.datasource valueForSlotAtIndex:(numberOfParticipants-index)-1 sliceAtIndex:self.selectedEnergyClockSlice] floatValue];
         float percent = slotValue/slotValuesSum;
+
         // 4 - Set up display label
         labelValue = [NSString stringWithFormat:@"%0.1f %%", (percent * 100.0f)];
+        if (percent <= 0.0) {
+            labelValue = @"";
+        }
         
     }
     else if([(NSString *)plot.identifier isEqualToString:@"participantPieChart"]){
@@ -341,7 +345,7 @@
     }
     else if ([(NSString *)pieChart.identifier isEqualToString:@"totalSlicePieChart"]){
         NSLog(@"CPTColor for index %i !", index);
-        fillColor = [self.availableCPTColors objectAtIndex:index];
+        fillColor = [self.availableCPTColors objectAtIndex:(numberOfParticipants-index)-1];
     }
     
     sector=[CPTFill fillWithColor:(CPTColor *)fillColor];

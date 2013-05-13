@@ -630,6 +630,11 @@ static NSDictionary *sunriseSunset;
             /* *********** Inner For-Loop END *********** */
             NSLog(@"\n tempValuesForSlice: %@ \n", tempValuesForSlice);
             NSAssert([tempValuesForSlice count]>0, @"tempValuesForSlice empty");
+            for (int k=0; k<[tempValuesForSlice count]; k++) {
+                if ([tempValuesForSlice[k] isEqualToString:@""]) {
+                    tempValuesForSlice[k] = @(0);
+                }
+            }
             NSNumber *avgTemperatureForSlice = [tempValuesForSlice valueForKeyPath:@"@avg.self"];
             daySlice.temperature = avgTemperatureForSlice;
             NSLog(@"\n calculated avgTemperatureForSlice: %@", avgTemperatureForSlice);

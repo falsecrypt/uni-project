@@ -73,6 +73,7 @@
 		CE412CF516D5430D0061484B /* ResetPasswordTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE412CF416D5430C0061484B /* ResetPasswordTVC.m */; };
 		CE412CF816D543670061484B /* ChangePasswordTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CE412CF716D543670061484B /* ChangePasswordTVC.m */; };
 		CE412CFB16D5628F0061484B /* SSKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = CE412CFA16D5628F0061484B /* SSKeychain.m */; };
+		CE47340E17404A860073E286 /* UINavigationController+KeyboardDismiss.m in Sources */ = {isa = PBXBuildFile; fileRef = CE47340D17404A860073E286 /* UINavigationController+KeyboardDismiss.m */; };
 		CE48562116D4493C0078BD62 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = CE48562016D4493B0078BD62 /* Icon-72.png */; };
 		CE48562316D449420078BD62 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE48562216D449410078BD62 /* Icon@2x.png */; };
 		CE4EDE4E16E42A2B0047479A /* BTSPieLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4EDE4816E42A2B0047479A /* BTSPieLayer.m */; };
@@ -303,6 +304,8 @@
 		CE412CF716D543670061484B /* ChangePasswordTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordTVC.m; sourceTree = "<group>"; };
 		CE412CF916D5628F0061484B /* SSKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSKeychain.h; sourceTree = "<group>"; };
 		CE412CFA16D5628F0061484B /* SSKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSKeychain.m; sourceTree = "<group>"; };
+		CE47340C17404A850073E286 /* UINavigationController+KeyboardDismiss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+KeyboardDismiss.h"; sourceTree = "<group>"; };
+		CE47340D17404A860073E286 /* UINavigationController+KeyboardDismiss.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+KeyboardDismiss.m"; sourceTree = "<group>"; };
 		CE48562016D4493B0078BD62 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "../Icon-72.png"; sourceTree = "<group>"; };
 		CE48562216D449410078BD62 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
 		CE4EDE4716E42A2B0047479A /* BTSPieLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BTSPieLayer.h; sourceTree = "<group>"; };
@@ -668,6 +671,8 @@
 				CE3C80E416E02F1100DB4E05 /* ScrollViewContentVC.m */,
 				CE0D990F170E0B8C00EADCEE /* EnergyClockTVC.h */,
 				CE0D9910170E0B8C00EADCEE /* EnergyClockTVC.m */,
+				CE47340C17404A850073E286 /* UINavigationController+KeyboardDismiss.h */,
+				CE47340D17404A860073E286 /* UINavigationController+KeyboardDismiss.m */,
 			);
 			name = Public;
 			sourceTree = "<group>";
@@ -1609,6 +1614,7 @@
 				CEB46E8A170F52FF009D3104 /* Participant.m in Sources */,
 				CE0927F1172CA08B00B69CC0 /* WeatherApiCommManager.m in Sources */,
 				CE161308172E89DE00B0B2E0 /* EnergyClockSlice.m in Sources */,
+				CE47340E17404A860073E286 /* UINavigationController+KeyboardDismiss.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

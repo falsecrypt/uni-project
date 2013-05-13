@@ -58,7 +58,7 @@ NSMutableArray *navigationBarItems;
     [super viewDidLoad];
     
     if (!self.instanceWasCached) {
-    
+        
         DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
         detailViewManager.detailViewController = self;
         
@@ -114,9 +114,9 @@ NSMutableArray *navigationBarItems;
         // here we set up a NSNotification observer. The Reachability that caused the notification
         // is passed in the object parameter
         /*[[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(reachabilityChanged:)
-                                                     name:kReachabilityChangedNotification
-                                                   object:nil]; */
+         selector:@selector(reachabilityChanged:)
+         name:kReachabilityChangedNotification
+         object:nil]; */
         
         [reach startNotifier];
         
@@ -125,18 +125,18 @@ NSMutableArray *navigationBarItems;
     }
 }
 /*
--(void)reachabilityChanged:(NSNotification*)note {
-    Reachability * reach = [note object];
-    
-    if([reach isReachable])
-    {
-        NSLog(@"Notification Says Reachable");
-    }
-    else
-    {
-        NSLog(@"Notification Says Unreachable");
-    }
-}
+ -(void)reachabilityChanged:(NSNotification*)note {
+ Reachability * reach = [note object];
+ 
+ if([reach isReachable])
+ {
+ NSLog(@"Notification Says Reachable");
+ }
+ else
+ {
+ NSLog(@"Notification Says Unreachable");
+ }
+ }
  */
 
 - (void) initPieChartOnline {
@@ -173,12 +173,12 @@ NSMutableArray *navigationBarItems;
             //[WeekData truncateAll];
             [self getWeekData];
         }
-
+        
     }
     else {
         [self readyToMakePieChart];
     }
-
+    
 }
 
 - (void) initPieChartOffline{
@@ -232,14 +232,14 @@ NSMutableArray *navigationBarItems;
         NSLog(@"initPieChart END-> dayDataDictionary: %@", self.dayDataDictionary);
     }
     else {
-       [self readyToMakePieChart]; 
+        [self readyToMakePieChart];
     }
     
 }
 
 -(void)getWeekData {
     NSLog(@"startSynchronization...");
-
+    
     // Start this first timer immediately, without delay
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSTimer* firstTimer = [NSTimer timerWithTimeInterval:0.01
@@ -291,68 +291,68 @@ NSMutableArray *navigationBarItems;
     getPath = [getPath stringByAppendingString: [NSString stringWithFormat:@"%i", MySensorID] ];
     getPath = [getPath stringByAppendingString:@"&action=get&what=aggregation_d"];
     [[EMNetworkManager sharedClient] getPath:getPath parameters:nil
-                                         success:^(AFHTTPRequestOperation *operation, id data) {
-                                             self.newDataSuccess = YES;
-                                             [WeekData truncateAll];
-                                             NSString *oneWeekData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                                             NSArray *components   = [oneWeekData componentsSeparatedByString:@";"];
+                                     success:^(AFHTTPRequestOperation *operation, id data) {
+                                         self.newDataSuccess = YES;
+                                         [WeekData truncateAll];
+                                         NSString *oneWeekData = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                                         NSArray *components   = [oneWeekData componentsSeparatedByString:@";"];
+                                         
+                                         for (NSString *obj in components) {
                                              
-                                             for (NSString *obj in components) {
+                                             NSArray *day = [obj componentsSeparatedByString:@"="];
+                                             NSLog(@"day : %@", day);
+                                             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+                                             [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
+                                             [dateFormatter setDateFormat:@"yy-MM-dd"];
+                                             NSDate *date = [dateFormatter dateFromString:day[0]];
+                                             NSString *withoutComma = [day[1] stringByReplacingOccurrencesOfString:@"," withString:@"."];
+                                             double temp = [withoutComma doubleValue];
+                                             NSDecimalNumber *dayConsumption = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:temp];
+                                             NSLog(@"dayConsumption : %@", dayConsumption);
+                                             
+                                             WeekData *newData = [WeekData createEntity];
+                                             [newData setDay:date];
+                                             [newData setConsumption:dayConsumption];
+                                             
+                                         }
+                                         
+                                         [[NSManagedObjectContext defaultContext] saveNestedContexts];
+                                         
+                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                             [self readyToMakePieChart];
+                                         });
+                                         
+                                     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                         NSLog(@"Failed during getting 7-Weeks-Data: %@",[error localizedDescription]);
+                                         if (USEDUMMYDATA)
+                                         {
+                                             [WeekData truncateAll]; // OK, Lets remove all old DB-Objects and generate new ones..
+                                                                     // create 7 Dummy WeekData Objects
+                                             for (int i=0; i<7; i++) {
                                                  
-                                                 NSArray *day = [obj componentsSeparatedByString:@"="];
-                                                 NSLog(@"day : %@", day);
-                                                 NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
-                                                 [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
-                                                 [dateFormatter setDateFormat:@"yy-MM-dd"];
-                                                 NSDate *date = [dateFormatter dateFromString:day[0]];
-                                                 NSString *withoutComma = [day[1] stringByReplacingOccurrencesOfString:@"," withString:@"."];
-                                                 double temp = [withoutComma doubleValue];
-                                                 NSDecimalNumber *dayConsumption = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:temp];
-                                                 NSLog(@"dayConsumption : %@", dayConsumption);
-
+                                                 NSDateComponents *componentsToSubtract = [[NSDateComponents alloc] init];
+                                                 [componentsToSubtract setDay:(-i-1)];
+                                                 
+                                                 NSDate *day = [[NSCalendar currentCalendar] dateByAddingComponents:componentsToSubtract toDate:[NSDate date] options:0];
                                                  WeekData *newData = [WeekData createEntity];
-                                                 [newData setDay:date];
-                                                 [newData setConsumption:dayConsumption];
-
+                                                 [newData setDay:day];
+                                                 [newData setConsumption:(NSDecimalNumber *)[NSDecimalNumber numberWithDouble:(double)(arc4random() % 51 * 0.1)+0.6]];
+                                                 
                                              }
-
                                              [[NSManagedObjectContext defaultContext] saveNestedContexts];
                                              
                                              dispatch_async(dispatch_get_main_queue(), ^{
                                                  [self readyToMakePieChart];
                                              });
-
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Failed during getting 7-Weeks-Data: %@",[error localizedDescription]);
-        if (USEDUMMYDATA)
-        {
-            [WeekData truncateAll]; // OK, Lets remove all old DB-Objects and generate new ones..
-            // create 7 Dummy WeekData Objects
-            for (int i=0; i<7; i++) {
-
-                NSDateComponents *componentsToSubtract = [[NSDateComponents alloc] init];
-                [componentsToSubtract setDay:(-i-1)];
-                
-                NSDate *day = [[NSCalendar currentCalendar] dateByAddingComponents:componentsToSubtract toDate:[NSDate date] options:0];
-                WeekData *newData = [WeekData createEntity];
-                [newData setDay:day];
-                [newData setConsumption:(NSDecimalNumber *)[NSDecimalNumber numberWithDouble:(double)(arc4random() % 51 * 0.1)+0.6]];
-                
-            }
-            [[NSManagedObjectContext defaultContext] saveNestedContexts];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self readyToMakePieChart];
-            });
-        }
-        else
-        {
-            self.deviceIsOnline = NO;
-            [self initPieChartOffline];
-        }
-    }];
+                                         }
+                                         else
+                                         {
+                                             self.deviceIsOnline = NO;
+                                             [self initPieChartOffline];
+                                         }
+                                     }];
     
-
+    
     
 }
 
@@ -367,7 +367,7 @@ NSMutableArray *navigationBarItems;
     //[self.graph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
     
     self.graph.delegate = self;
-
+    
     self.graph.title = @"";
     CPTMutableTextStyle *textStyle = [CPTMutableTextStyle textStyle];
     textStyle.color                = [CPTColor grayColor];
@@ -425,7 +425,7 @@ NSMutableArray *navigationBarItems;
     self.piePlot                 = [[CPTPieChart alloc] init];
     self.piePlot.dataSource      = self;
     CGFloat radius  = MIN(0.7 * (self.graphHostingView.frame.size.height - 2 * self.graph.paddingLeft) / 2.0,
-                             0.7 * (self.graphHostingView.frame.size.width - 2 * self.graph.paddingTop) / 2.0);
+                          0.7 * (self.graphHostingView.frame.size.width - 2 * self.graph.paddingTop) / 2.0);
     self.piePlot.pieRadius       = 0.0;
     self.piePlot.identifier      = pieChartName;
     self.piePlot.borderLineStyle = whiteLineStyle;
@@ -458,16 +458,16 @@ NSMutableArray *navigationBarItems;
 -(void)selectSliceOnFirstLaunch {
     NSLog(@"calling selectSliceOnFirstLaunch");
     /*selecting = TRUE;
-    repeatingTouch = NO;
-    firstTime = NO;
-    NSUInteger index = [plotDataConsumption count]-1;
-    currentSliceIndex = index;
-    NSLog(@"selectSliceOnFirstLaunch: graph: %@, piePlot: %@", self.graph, piePlot);
-    [piePlot reloadData];
-    
-    [piePlot setNeedsDisplay];*/
+     repeatingTouch = NO;
+     firstTime = NO;
+     NSUInteger index = [plotDataConsumption count]-1;
+     currentSliceIndex = index;
+     NSLog(@"selectSliceOnFirstLaunch: graph: %@, piePlot: %@", self.graph, piePlot);
+     [piePlot reloadData];
+     
+     [piePlot setNeedsDisplay];*/
     self.firstTime = NO;
-    int64_t delayInSeconds = 1.0;
+    int64_t delayInSeconds = 1.3;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         [self pieChart:self.piePlot sliceWasSelectedAtRecordIndex:[plotDataConsumption count]-1];
@@ -507,11 +507,11 @@ NSMutableArray *navigationBarItems;
     [plot setNeedsDisplay];
     
     /*CABasicAnimation *fadeInAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-    fadeInAnimation.duration = 1.0f;
-    fadeInAnimation.removedOnCompletion = NO;
-    fadeInAnimation.fillMode = kCAFillModeForwards;
-    fadeInAnimation.toValue = [NSNumber numberWithFloat:1.0];
-    [piePlot addAnimation:fadeInAnimation forKey:@"animateOpacity"];*/
+     fadeInAnimation.duration = 1.0f;
+     fadeInAnimation.removedOnCompletion = NO;
+     fadeInAnimation.fillMode = kCAFillModeForwards;
+     fadeInAnimation.toValue = [NSNumber numberWithFloat:1.0];
+     [piePlot addAnimation:fadeInAnimation forKey:@"animateOpacity"];*/
     
     
     /*CABasicAnimation *rotation = [CABasicAnimation animationWithKeyPath:@"startAngle"];
@@ -532,38 +532,38 @@ NSMutableArray *navigationBarItems;
     CPTFill *sector = [[CPTFill alloc] init];
     
     /*
-    UIColor *color1;
-    UIColor *color2;
-    
-    if (index==currentSliceIndex) {
-        color1 = [UIColor colorWithRed:35/255.0f green:82/255.0f blue:0/255.0f alpha:1.0f];
-        color2 = [UIColor colorWithRed:35/255.0f green:205/255.0f blue:0/255.0f alpha:1.0f];
-        
-    }
-    else {
-        color1=[UIColor colorWithRed:0.0 green:0.7 blue:1.0 alpha:1.0];
-        color2=[UIColor colorWithRed:0.0 green:0.1 blue:0.2 alpha:1.0];
-    }
-    
-    //filling with gradient color with CPTColor
-    CPTGradient *areaGradientUI = [CPTGradient gradientWithBeginningColor:(CPTColor *)color1 endingColor:(CPTColor *)color2];
-    
-    areaGradientUI.gradientType = CPTGradientTypeAxial;
-    
-    //sector=[CPTFill fillWithGradient:areaGradientUI];
-    
-    CPTGradient *overlayGradient = [[CPTGradient alloc] init];
-    overlayGradient.gradientType = CPTGradientTypeRadial;
-    overlayGradient              = [overlayGradient addColorStop:[[CPTColor redColor] colorWithAlphaComponent:0.5] atPosition:0.0];
-    overlayGradient              = [overlayGradient addColorStop:[[CPTColor greenColor] colorWithAlphaComponent:0.9] atPosition:0.3];
-    overlayGradient              = [overlayGradient addColorStop:[[CPTColor greenColor] colorWithAlphaComponent:0.9] atPosition:0.5];
-    overlayGradient              = [overlayGradient addColorStop:[[CPTColor blueColor] colorWithAlphaComponent:0.6] atPosition:0.8];
+     UIColor *color1;
+     UIColor *color2;
      
-    */
+     if (index==currentSliceIndex) {
+     color1 = [UIColor colorWithRed:35/255.0f green:82/255.0f blue:0/255.0f alpha:1.0f];
+     color2 = [UIColor colorWithRed:35/255.0f green:205/255.0f blue:0/255.0f alpha:1.0f];
+     
+     }
+     else {
+     color1=[UIColor colorWithRed:0.0 green:0.7 blue:1.0 alpha:1.0];
+     color2=[UIColor colorWithRed:0.0 green:0.1 blue:0.2 alpha:1.0];
+     }
+     
+     //filling with gradient color with CPTColor
+     CPTGradient *areaGradientUI = [CPTGradient gradientWithBeginningColor:(CPTColor *)color1 endingColor:(CPTColor *)color2];
+     
+     areaGradientUI.gradientType = CPTGradientTypeAxial;
+     
+     //sector=[CPTFill fillWithGradient:areaGradientUI];
+     
+     CPTGradient *overlayGradient = [[CPTGradient alloc] init];
+     overlayGradient.gradientType = CPTGradientTypeRadial;
+     overlayGradient              = [overlayGradient addColorStop:[[CPTColor redColor] colorWithAlphaComponent:0.5] atPosition:0.0];
+     overlayGradient              = [overlayGradient addColorStop:[[CPTColor greenColor] colorWithAlphaComponent:0.9] atPosition:0.3];
+     overlayGradient              = [overlayGradient addColorStop:[[CPTColor greenColor] colorWithAlphaComponent:0.9] atPosition:0.5];
+     overlayGradient              = [overlayGradient addColorStop:[[CPTColor blueColor] colorWithAlphaComponent:0.6] atPosition:0.8];
+     
+     */
     //CPTColor *startColor = [CPTColor colorWithComponentRed:1/255.0f green:56/255.0f blue:1/255.0f alpha:1.0f];
     //CPTColor *endColor = [CPTColor colorWithComponentRed:2/255.0f green:96/255.0f blue:2/255.0f alpha:1.0f];
     //CPTGradient *areaGradientUI = [CPTGradient gradientWithBeginningColor:startColor
-     //                                                         endingColor:endColor];
+    //                                                         endingColor:endColor];
     //sector=[CPTFill fillWithGradient:areaGradientUI];
     NSNumber *consumption = plotDataConsumption[index];
     NSLog(@"consumption: %@", consumption);
@@ -646,7 +646,7 @@ NSMutableArray *navigationBarItems;
     CGFloat result = 0.0;
     
     NSLog(@"radialOffsetForPieChart: recordIndex %i, currentSliceIndex %i, selecting %i, repeatingTouch %i", index, self.currentSliceIndex, self.selecting, self.repeatingTouch);
-
+    
     if ( [(NSString *)pieChart.identifier isEqualToString:pieChartName] && self.selecting && index==self.currentSliceIndex) {
         result = 20.0;
         if (self.repeatingTouch) {
@@ -678,9 +678,9 @@ NSMutableArray *navigationBarItems;
     [navigationBarItems removeObject:self.profileBarButtonItem];
     [self.navigationBar.topItem setRightBarButtonItems:navigationBarItems animated:YES];
     [self.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
-//    NSLog(@"rightBarButtonItems: %@", [self.navigationBar.topItem rightBarButtonItems]);
-//    NSLog(@"navigationBarItems: %@", navigationBarItems);
-//    NSLog(@"self.profileBarButtonItem: %@", self.profileBarButtonItem);
+    //    NSLog(@"rightBarButtonItems: %@", [self.navigationBar.topItem rightBarButtonItems]);
+    //    NSLog(@"navigationBarItems: %@", navigationBarItems);
+    //    NSLog(@"self.profileBarButtonItem: %@", self.profileBarButtonItem);
     // Going back
     [(self.splitViewController.viewControllers)[0]popToRootViewControllerAnimated:TRUE];
     DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
@@ -708,15 +708,26 @@ NSMutableArray *navigationBarItems;
     NSLog(@"calculateColorValuesForDays -> plotDataDates: %@", plotDataDates);
     float avgConsumption = 0.0f;
     float specificYearConsumption = 0.0f;
+    float daysNumberInYear = 0.0f;
+    NSUInteger currentYear = [[[NSCalendar currentCalendar] components:NSYearCalendarUnit fromDate:[NSDate date]] year];
+    // check for leap year
+    if (( (currentYear % 4 == 0) && (currentYear % 100 != 0) ) || (currentYear % 400 == 0)) {
+        // Leap year!
+        daysNumberInYear = 366.0f;
+    }
+    else {
+        // Normal year!
+        daysNumberInYear = 365.0f;
+    }
     // Color Management
     for (NSDecimalNumber *dayConsumption in plotDataConsumption) {
         
-        avgConsumption = [dayConsumption floatValue]*365.0f;
+        avgConsumption = [dayConsumption floatValue] * daysNumberInYear;
         NSLog(@"___avgConsumption: %f", avgConsumption);
         specificYearConsumption = avgConsumption/OfficeArea;
         NSLog(@"___specificYearConsumption: %f", specificYearConsumption);
-        if (specificYearConsumption <= 55.0) {
-            float redComponent = 255.0f - ((55.0f - specificYearConsumption)*(256.0f/55.0f));
+        if (specificYearConsumption <= AvgOfficeEnergyConsumption) {
+            float redComponent = 255.0f - ((AvgOfficeEnergyConsumption - specificYearConsumption)*(256.0f/AvgOfficeEnergyConsumption));
             if (redComponent < 0.0) {
                 redComponent = 0.0;
             }
@@ -726,7 +737,7 @@ NSMutableArray *navigationBarItems;
             [self.daysColors setValue:dayColor forKey: [dayConsumption stringValue]];
         }
         else {
-            float greenComponent = 255.0f - ((specificYearConsumption - 55.0f)*(256.0f/25.0f));
+            float greenComponent = 255.0f - ((specificYearConsumption - AvgOfficeEnergyConsumption)*(256.0f/25.0f));
             if (greenComponent < 0.0) {
                 greenComponent = 0.0;
             }

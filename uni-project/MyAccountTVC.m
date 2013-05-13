@@ -6,8 +6,18 @@
 //
 
 #import "MyAccountTVC.h"
+#import "KeychainItemWrapper.h"
+#import "ProfilePopoverViewController.h"
+#import "DetailViewManager.h"
+#import "FirstDetailViewController.h"
+
 
 @interface MyAccountTVC ()
+
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *profileBarButtonItem;
+- (IBAction)profileButtonTapped:(UIBarButtonItem *)sender;
+@property (nonatomic, strong) ProfilePopoverViewController *userProfile;
+@property (nonatomic, strong) UIPopoverController *profilePopover;
 
 @end
 
@@ -30,12 +40,50 @@
     [tempImageView setFrame:self.tableView.frame];
     tempImageView.backgroundColor = [[UIColor alloc] initWithPatternImage:[UIImage imageNamed:@"patternBg"]];
     self.tableView.backgroundView = tempImageView;
+    
+    NSString *firstNotificationName = @"UserLoggedInNotification";
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showProfileAfterUserLoggedIn)
+     name:firstNotificationName
+     object:nil];
+    
+    NSString *registeredNotificationName = @"UserRegisteredNotification";
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showProfileAfterUserLoggedIn)
+     name:registeredNotificationName
+     object:nil];
+    
+    NSString *secondNotificationName = @"UserLoggedOffNotification";
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(hideProfileAfterUserLoggedOff)
+     name:secondNotificationName
+     object:nil];
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+// -------------------------------------------------------------------------------
+//	viewWillAppear:
+// -------------------------------------------------------------------------------
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    KeychainItemWrapper *keychain =
+    [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
+    if ( ([[keychain objectForKey:(__bridge id)(kSecAttrLabel)] isEqualToString:@"LOGGEDOFF"] )
+        || ( [[keychain objectForKey:(__bridge id)kSecAttrAccount] length] == 0 ) /* Or Username is empty */
+        || ( [[keychain objectForKey:(__bridge id)kSecValueData] length]== 0) ) /* Or Password is empty */ {
+        NSLog(@"user is not logged in, removing profileBarButtonItem");
+        [self.navigationItem setRightBarButtonItem:self.profileBarButtonItem animated:YES];
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -97,4 +145,45 @@
      */
 }
 
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    NSLog(@"prepareForSegue: %@", segue.identifier);
+    
+    ((UIViewController *)segue.destinationViewController).navigationItem.rightBarButtonItem = self.profileBarButtonItem;
+
+}
+
+- (void)showProfileAfterUserLoggedIn {
+    //NSLog(@"!!!!! 1 calling showProfileAfterUserLoggedIn !!!!!!!!!!");
+    //[navigationBarItems addObject:self.profileBarButtonItem];
+    NSLog(@"FirstDetail: user logged in: adding profileBarButtonItem: %@", self.profileBarButtonItem);
+    [self.navigationItem setRightBarButtonItem:self.profileBarButtonItem animated:YES];
+}
+
+- (void)hideProfileAfterUserLoggedOff {
+    if (self.profilePopover)
+        [self.profilePopover dismissPopoverAnimated:YES];
+    // Dismiss the Profile button
+    [self.navigationItem setRightBarButtonItem:nil animated:YES];
+    // Going back:
+    // 1. To the First Table View Controller on the left, 'Master-View'
+    [(self.splitViewController.viewControllers)[0]popToRootViewControllerAnimated:TRUE];
+    // 2. To the First View Controller on the right, 'Detail-View'
+    DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
+    FirstDetailViewController *startDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
+    detailViewManager.detailViewController = startDetailViewController;
+    startDetailViewController.navigationBar.topItem.title = @"Summary";
+}
+
+- (IBAction)profileButtonTapped:(UIBarButtonItem *)sender {
+    if (_userProfile == nil) {
+        self.userProfile = [[ProfilePopoverViewController alloc] init];
+        //_userProfile.delegate = self;
+        self.profilePopover = [[UIPopoverController alloc] initWithContentViewController:_userProfile];
+        
+    }
+    [self.profilePopover presentPopoverFromBarButtonItem:sender
+                                permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    
+}
 @end

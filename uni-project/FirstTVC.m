@@ -30,10 +30,10 @@
 // -------------------------------------------------------------------------------
 //	shouldAutorotateToInterfaceOrientation:
 // -------------------------------------------------------------------------------
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+/*- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return YES;
-}
+}*/
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -83,6 +83,7 @@
         //NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
         //self.userLoggedInVar = [keychain objectForKey:(__bridge id)(kSecAttrLabel)];
+        NSLog(@"LOGGEDIN Flag = %@", [keychain objectForKey:(__bridge id)(kSecAttrLabel)]);
         NSLog(@"kSecAttrLabel: %@", [keychain objectForKey:(__bridge id)(kSecAttrLabel)]);
         if ([[keychain objectForKey:(__bridge id)(kSecAttrLabel)] isEqualToString:@"LOGGEDIN"]) {
             NSLog(@"user already logged in");
@@ -381,10 +382,10 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {   
     if(self.userLoggedInVar && section == 2) {
-        return @"Private";
+        return @"Mein Energieverbrauch";
     }
     else if (self.hideLoginSection && section == 1){
-        return @"Register";
+        return @"Registrieren";
     }
     else {
         return [super tableView:tableView titleForHeaderInSection:section];
@@ -460,7 +461,9 @@
 
 -(void)hidePrivateDataAfterUserLoggedOff
 {
+    NSLog(@"hidePrivateDataAfterUserLoggedOff");
     self.userLoggedInVar = false;
+    self.hideLoginSection = false;
     
     NSIndexPath *indexPathMeinBuero = [NSIndexPath indexPathForRow:0 inSection:2];
     [self.tableView cellForRowAtIndexPath:indexPathMeinBuero].hidden = YES;
@@ -469,6 +472,8 @@
     
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 2)] withRowAnimation:UITableViewRowAnimationAutomatic];
     [self.tableView reloadData];
+    
+    NSLog(@"login.hidden = %i", [self.tableView cellForRowAtIndexPath:indexPathLogin].hidden);
     
 }
 

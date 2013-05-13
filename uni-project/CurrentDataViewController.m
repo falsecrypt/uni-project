@@ -40,8 +40,8 @@ static const NSString *kPlotIdentifier = @"Data Source Plot";
 @property (nonatomic, assign) float angle;
 @property (nonatomic, assign) int maxVal;
 @property (nonatomic, weak)   IBOutlet UIImageView *speedometerImageView;
-@property (nonatomic, assign) int userMaximumWatt;
-@property (nonatomic, assign) int userCurrentWatt;
+@property (nonatomic, assign) NSUInteger userMaximumWatt;
+@property (nonatomic, assign) NSUInteger userCurrentWatt;
 @property (nonatomic, weak)   IBOutlet UILabel *spReadingFirstNumber;
 @property (nonatomic, weak)   IBOutlet UILabel *spReadingSecondNumber;
 @property (nonatomic, weak)   IBOutlet UILabel *spReadingThirdNumber;
@@ -115,8 +115,8 @@ NSMutableArray *navigationBarItems;
         [self.navigationBar.topItem setLeftBarButtonItem:self.navigationPaneBarButtonItem
                                                 animated:NO];
     
-    self.bottomMainView.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"currentDataBottomViewBackg.png"]];
-    self.view.backgroundColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"patternBg"]];
+    self.bottomMainView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"currentDataBottomViewBackg.png"]];
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"patternBg"]];
 
     __block MBProgressHUD *hud;
     
@@ -309,6 +309,9 @@ NSMutableArray *navigationBarItems;
     CPTMutableLineStyle *minorGridLineStyle = [CPTMutableLineStyle lineStyle];
     minorGridLineStyle.lineWidth = 0.25;
     minorGridLineStyle.lineColor = [[CPTColor whiteColor] colorWithAlphaComponent:0.1];
+    NSNumberFormatter *labelFormatter = [[NSNumberFormatter alloc] init];
+    labelFormatter.numberStyle = kCFNumberFormatterDecimalStyle;
+    labelFormatter.maximumFractionDigits = 0;
     
     // Axes
     // X axis
@@ -321,9 +324,6 @@ NSMutableArray *navigationBarItems;
     x.minorTicksPerInterval       = 1;
     x.title                       = @"Zeit (Min.)";
     x.titleOffset                 = 23.0;
-    NSNumberFormatter *labelFormatter = [[NSNumberFormatter alloc] init];
-    labelFormatter.numberStyle = kCFNumberFormatterDecimalStyle;
-    labelFormatter.maximumFractionDigits = 0;
     x.labelFormatter              = labelFormatter;
     
     // Y axis
@@ -339,7 +339,7 @@ NSMutableArray *navigationBarItems;
     y.axisConstraints             = [CPTConstraints constraintWithLowerOffset:0.0];
     y.labelFormatter              = labelFormatter;
     
-    // Rotate the labels by 45 degrees, just to show it can be done.
+    // Rotate the labels by 45 degrees
     x.labelRotation = M_PI * 0.25;
     
     // Create the plot
@@ -982,33 +982,33 @@ NSMutableArray *navigationBarItems;
     }
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-
-    NSLog(@"DETAIL frame w:%f h:%f", self.view.frame.size.width, self.view.frame.size.height);
-    NSLog(@"DETAIL bounds w:%f h:%f", self.view.bounds.size.width, self.view.bounds.size.height);
-    
-}
+//- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+//
+//    NSLog(@"DETAIL frame w:%f h:%f", self.view.frame.size.width, self.view.frame.size.height);
+//    NSLog(@"DETAIL bounds w:%f h:%f", self.view.bounds.size.width, self.view.bounds.size.height);
+//    
+//}
 
 // Faster one-part variant, called from within a rotating animation block
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration {
-    
-    if(interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight)
-    {
-        NSLog(@"Rotating to Landscape");
-        [self.needleImageView setCenter:self.speedometerImageView.center];
-        [self.meterImageViewDot setFrame:CGRectMake((self.speedometerImageView.frame.origin.x)+(155), 213, 57, 57)];
-    }
-    else {
-        NSLog(@"Rotating to Portrait");
-        [self.needleImageView setCenter:self.speedometerImageView.center];
-        [self.meterImageViewDot setFrame:CGRectMake((self.speedometerImageView.frame.origin.x)+(155), 213, 57, 57)];
-    }
-}
+//- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration {
+//    
+//    if(interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight)
+//    {
+//        NSLog(@"Rotating to Landscape");
+//        [self.needleImageView setCenter:self.speedometerImageView.center];
+//        [self.meterImageViewDot setFrame:CGRectMake((self.speedometerImageView.frame.origin.x)+(155), 213, 57, 57)];
+//    }
+//    else {
+//        NSLog(@"Rotating to Portrait");
+//        [self.needleImageView setCenter:self.speedometerImageView.center];
+//        [self.meterImageViewDot setFrame:CGRectMake((self.speedometerImageView.frame.origin.x)+(155), 213, 57, 57)];
+//    }
+//}
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+/*- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
     return YES;
-}
+}*/
 
 @end

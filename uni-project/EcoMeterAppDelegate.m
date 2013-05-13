@@ -28,13 +28,6 @@ extern CFAbsoluteTime StartTime;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
-	// Initialize the app window
-    /*
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = self.splitViewController;
-    [self.window makeKeyAndVisible];
-     */
-    
     [self customizeAppearance];
     
     [self setupReachability];
@@ -103,7 +96,12 @@ extern CFAbsoluteTime StartTime;
     NSLog(@"calling didFinishLaunchingWithOptions, userLoggedIn: %i", [defaults boolForKey:@"userLoggedIn"]);
      */
     
-     
+    // Delete Account, Testing
+//    KeychainItemWrapper *keychain =
+//    [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
+//    [keychain resetKeychainItem];
+    
+    
     return YES;
 }
 

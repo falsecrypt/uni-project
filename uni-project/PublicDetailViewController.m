@@ -287,11 +287,11 @@ typedef enum {
 // -------------------------------------------------------------------------------
 //	shouldAutorotateToInterfaceOrientation:
 // -------------------------------------------------------------------------------
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+/*- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     
     NSLog(@"<PublicDetailViewController> shouldAutorotateToInterfaceOrientation, frame w:%f h:%f", self.view.frame.size.width, self.view.frame.size.height);
     NSLog(@"<PublicDetailViewController> shouldAutorotateToInterfaceOrientation, bounds w:%f h:%f", self.view.bounds.size.width, self.view.bounds.size.height);
     return YES;
-}
+}*/
 
 @end

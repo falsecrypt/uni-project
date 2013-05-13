@@ -14,7 +14,7 @@
 
 @property (nonatomic, strong) ProfilePopoverViewController *userProfile;
 @property (nonatomic, strong) UIPopoverController *profilePopover;
-@property (nonatomic, weak)   IBOutlet UIBarButtonItem *profileBarButtonItem;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *profileBarButtonItem;
 
 - (IBAction)profileButtonTapped:(id)sender;
 
@@ -79,6 +79,13 @@ NSMutableArray *navigationBarItems;
      name:firstNotificationName
      object:nil];
     
+    NSString *registeredNotificationName = @"UserRegisteredNotification";
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showProfileAfterUserLoggedIn)
+     name:registeredNotificationName
+     object:nil];
+    
     NSString *secondNotificationName = @"UserLoggedOffNotification";
     [[NSNotificationCenter defaultCenter]
      addObserver:self
@@ -92,23 +99,18 @@ NSMutableArray *navigationBarItems;
 // -------------------------------------------------------------------------------
 - (void)viewWillAppear:(BOOL)animated
 {
-    NSLog(@"calling FirstDetailViewController - viewWillAppear start");
     [super viewWillAppear:animated];
     // NSLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
     self.navigationBar.topItem.title = @"Summary";
+    NSLog(@"calling FirstDetailViewController - viewWillAppear start");
     KeychainItemWrapper *keychain =
     [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
-    if ([[keychain objectForKey:(__bridge id)(kSecAttrLabel)] isEqualToString:@"LOGGEDOFF"]) {
+    if ( ([[keychain objectForKey:(__bridge id)(kSecAttrLabel)] isEqualToString:@"LOGGEDOFF"] )
+        || ( [[keychain objectForKey:(__bridge id)kSecAttrAccount] length] == 0 ) /* Or Username is empty */
+        || ( [[keychain objectForKey:(__bridge id)kSecValueData] length]== 0) ) /* Or Password is empty */ {
         NSLog(@"user is not logged in, removing profileBarButtonItem");
-        //[navigationBarItems removeObject:self.profileBarButtonItem];
-        //[self.navigationBar.topItem setRightBarButtonItems:navigationBarItems animated:NO]; // not working?
         [self.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
     }
-    
-    //NSLog(@"navigationBarItems: %@", navigationBarItems);
-    //NSLog(@"rightBarButtonItems: %@", [self.navigationBar.topItem rightBarButtonItems]);
-   // NSLog(@"[defaults boolForKey:@'userLoggedIn'] %i", [defaults boolForKey:@"userLoggedIn"]);
-    //NSLog(@"self.profileBarButtonItem: %@", self.profileBarButtonItem);
     
 }
 
@@ -126,9 +128,9 @@ NSMutableArray *navigationBarItems;
 // -------------------------------------------------------------------------------
 //	shouldAutorotateToInterfaceOrientation:
 // -------------------------------------------------------------------------------
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+/*- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return YES;
-}
+}*/
 
 - (IBAction)profileButtonTapped:(id)sender {
     if (_userProfile == nil) {

@@ -9,7 +9,6 @@
 #import "ChangePasswordTVC.h"
 
 @interface ChangePasswordTVC ()
-
 @end
 
 @implementation ChangePasswordTVC

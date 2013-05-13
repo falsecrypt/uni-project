@@ -241,8 +241,8 @@
 
         avgConsumption = [[month consumption] floatValue]*12.0;
         specificYearConsumption = avgConsumption/OfficeArea;
-        if (specificYearConsumption <= 55.0) {
-            float redComponent = 255.0f - ((55.0f - specificYearConsumption)*(256.0f/55.0f));
+        if (specificYearConsumption <= AvgOfficeEnergyConsumption) {
+            float redComponent = 255.0f - ((AvgOfficeEnergyConsumption - specificYearConsumption)*(256.0f/AvgOfficeEnergyConsumption));
             if (redComponent < 0.0) {
                 redComponent = 0.0;
             }
@@ -254,7 +254,7 @@
             [self.monthColors setValue:monthColor forKey:[NSString stringWithFormat:@"%i",[[month month]intValue]]];
         }
         else {
-            float greenComponent = 255.0f - ((specificYearConsumption - 55.0f)*(256.0f/25.0f));
+            float greenComponent = 255.0f - ((specificYearConsumption - AvgOfficeEnergyConsumption)*(256.0f/25.0f));
             if (greenComponent < 0.0) {
                 greenComponent = 0.0;
             }

@@ -694,7 +694,8 @@ static const NSArray *participants;
 
 // TODO : new
 - (UIColor *)pieView:(BTSPieView *)pieView colorForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex sliceCount:(NSUInteger)sliceCount {
-    NSLog(@"color for slotIndex %i !", slotIndex);
+    NSLog(@"color for slotIndex %i found color: %@!", slotIndex, [self.availableSliceColors objectAtIndex:slotIndex]);
+    
     return [self.availableSliceColors objectAtIndex:slotIndex];
 }
 

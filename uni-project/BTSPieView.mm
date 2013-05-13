@@ -198,7 +198,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
         NSLog(@"number of Slots: %i", slotCount);
         for (int i=0; i<slotCount; i++) {
             UIColor *slotColor = [_delegate pieView:self
-                                colorForSlotAtIndex:i      // Slot Number
+                                colorForSlotAtIndex:(slotCount-1)-i      // Slot Number
                                        sliceAtIndex:index
                                          sliceCount:sliceCount];
             
