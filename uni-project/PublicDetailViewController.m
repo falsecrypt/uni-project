@@ -85,7 +85,7 @@ typedef enum {
         //detailViewManager.detailViewController = self;
         
         NSString *rankNotificationName = @"RankWasCalculated";
-            rankNotificationName = [rankNotificationName stringByAppendingString:[NSString stringWithFormat:@"%d",self.selectedParticipant]];
+        rankNotificationName = [rankNotificationName stringByAppendingString:[NSString stringWithFormat:@"%d",self.selectedParticipant]];
         [[NSNotificationCenter defaultCenter]
          addObserver:self
          selector:@selector(addRankViewWithNotification:)

@@ -192,6 +192,8 @@
 		CEF5657B163F17270066F2A2 /* FirstDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657A163F17270066F2A2 /* FirstDetailViewController.m */; };
 		CEF5657F163F1D600066F2A2 /* PublicScoreTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5657E163F1D600066F2A2 /* PublicScoreTVC.m */; };
 		CEF56586163F2DCE0066F2A2 /* PublicDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF56584163F2DCD0066F2A2 /* PublicDetailViewController.m */; };
+		CEF97D7D1741861D00237730 /* ChangeAccountImageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF97D7C1741861D00237730 /* ChangeAccountImageVC.m */; };
+		CEF97D7F17418DF000237730 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF97D7E17418DF000237730 /* MobileCoreServices.framework */; };
 		CEFDC23C163E15480011C3CF /* DetailViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEFDC23B163E15480011C3CF /* DetailViewManager.m */; };
 /* End PBXBuildFile section */
 
@@ -568,6 +570,9 @@
 		CEF5657D163F1D600066F2A2 /* PublicScoreTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PublicScoreTVC.h; sourceTree = "<group>"; };
 		CEF5657E163F1D600066F2A2 /* PublicScoreTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicScoreTVC.m; sourceTree = "<group>"; };
 		CEF56584163F2DCD0066F2A2 /* PublicDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PublicDetailViewController.m; sourceTree = "<group>"; };
+		CEF97D7B1741861D00237730 /* ChangeAccountImageVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeAccountImageVC.h; sourceTree = "<group>"; };
+		CEF97D7C1741861D00237730 /* ChangeAccountImageVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeAccountImageVC.m; sourceTree = "<group>"; };
+		CEF97D7E17418DF000237730 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		CEFDC23A163E15480011C3CF /* DetailViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewManager.h; sourceTree = "<group>"; };
 		CEFDC23B163E15480011C3CF /* DetailViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -577,6 +582,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEF97D7F17418DF000237730 /* MobileCoreServices.framework in Frameworks */,
 				CE54E7BF168292B600F91C5E /* SystemConfiguration.framework in Frameworks */,
 				CE0D631916611B1600381D05 /* CoreData.framework in Frameworks */,
 				CE0AE4821646049C00EC15B4 /* Security.framework in Frameworks */,
@@ -646,6 +652,8 @@
 				CE412CF416D5430C0061484B /* ResetPasswordTVC.m */,
 				CE412CF616D543660061484B /* ChangePasswordTVC.h */,
 				CE412CF716D543670061484B /* ChangePasswordTVC.m */,
+				CEF97D7B1741861D00237730 /* ChangeAccountImageVC.h */,
+				CEF97D7C1741861D00237730 /* ChangeAccountImageVC.m */,
 			);
 			name = Private;
 			sourceTree = "<group>";
@@ -845,6 +853,7 @@
 		CE8B7F4515ED358B006CD57C = {
 			isa = PBXGroup;
 			children = (
+				CEF97D7E17418DF000237730 /* MobileCoreServices.framework */,
 				CEF386E716C023D80082C372 /* Libraries */,
 				CE8B7F5A15ED358B006CD57C /* uni-project */,
 				CEA0263B16BEF3D4005CE31A /* EcoMeterLogicTests */,
@@ -1302,6 +1311,8 @@
 				CE8B7F4C15ED358B006CD57C /* Sources */,
 				CE8B7F4D15ED358B006CD57C /* Frameworks */,
 				CE8B7F4E15ED358B006CD57C /* Resources */,
+				CE028633174286F8000D33E6 /* xcode-build-bump */,
+				CE0286341742889A000D33E6 /* xcode-version-bump */,
 			);
 			buildRules = (
 			);
@@ -1469,6 +1480,34 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		CE028633174286F8000D33E6 /* xcode-build-bump */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "xcode-build-bump";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = "#!bin/bash";
+			shellScript = "buildPlist=${INFOPLIST_FILE}\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" $buildPlist)\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" $buildPlist";
+		};
+		CE0286341742889A000D33E6 /* xcode-version-bump */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "xcode-version-bump";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "VERSIONNUM=$(/usr/libexec/PlistBuddy -c \"Print CFBundleShortVersionString\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nNEWSUBVERSION=`echo $VERSIONNUM | awk -F \".\" '{print $3}'`\nNEWSUBVERSION=$(($NEWSUBVERSION + 1))\nNEWVERSIONSTRING=`echo $VERSIONNUM | awk -F \".\" '{print $1 \".\" $2 \".'$NEWSUBVERSION'\" }'`\n/usr/libexec/PlistBuddy -c \"Set :CFBundleShortVersionString $NEWVERSIONSTRING\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
+		};
 		CE323F7C16B74DA7004DE45C /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1615,6 +1654,7 @@
 				CE0927F1172CA08B00B69CC0 /* WeatherApiCommManager.m in Sources */,
 				CE161308172E89DE00B0B2E0 /* EnergyClockSlice.m in Sources */,
 				CE47340E17404A860073E286 /* UINavigationController+KeyboardDismiss.m in Sources */,
+				CEF97D7D1741861D00237730 /* ChangeAccountImageVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

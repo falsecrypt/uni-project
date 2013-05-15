@@ -34,7 +34,8 @@ extern NSInteger const D;
 
 extern NSString * const ScoreWasCalculated;
 extern NSString * const RankWasCalculated;
-
+extern NSString * const ScoreWasCalculatedWithId;
+extern NSString * const NewAccountImageAvailable;
 extern NSString * const DayChartsMode;
 extern NSString * const MultiLevelPieChartMode;
 

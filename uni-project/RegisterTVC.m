@@ -9,6 +9,7 @@
 #import "RegisterTVC.h"
 #import "KeychainItemWrapper.h"
 #import "EMNetworkManager.h"
+#import "User.h"
 
 @interface RegisterTVC ()
 
@@ -182,6 +183,15 @@
         NSLog(@"publicUsernameRetrieved from NSUserDefaults: %@", publicUsernameRetrieved);
         [self.delegate didDismissPresentedViewControllerRegister];
         //[self.delegate userDidRegistered];
+        
+        // Save the User-Object
+        [MagicalRecord saveInBackgroundWithBlock:^(NSManagedObjectContext *localContext) {
+            User *newUser = [User createInContext:localContext];
+            newUser.created = [NSDate date];
+            newUser.sensorid = @(MySensorID);
+        } completion:^{
+            NSLog(@"NEW USER SAVED!");
+        }];
         
         NSString *notificationName = @"UserRegisteredNotification";
         [[NSNotificationCenter defaultCenter]

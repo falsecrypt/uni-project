@@ -44,7 +44,8 @@
 - (void)startCalculatingRankAndScoreWithNetworkStatus: (BOOL)isReachable {
     
     if (isReachable) {
-        
+        NSNumber *numberofentities = [Participant numberOfEntities];
+        NSLog(@"startCalculatingRankAndScoreWithNetworkStatus numberofentities %@", numberofentities);
         [self startCalculatingConsumptionSumForParticipantId:self.currentParticipantId];
         
     }
@@ -55,11 +56,11 @@
             Participant *participant =
             [Participant findFirstByAttribute:@"sensorid" withValue:[NSNumber numberWithInt:self.currentParticipantId]];
             NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-            NSString *RankWasCalculatedWithId = [RankWasCalculated stringByAppendingString:[NSString stringWithFormat:@"%d", self.currentParticipantId]];
-            [center postNotificationName:RankWasCalculatedWithId object:participant.rank userInfo:nil];
-            NSString *ScoreWasCalculatedWithId = [ScoreWasCalculated stringByAppendingString:[NSString stringWithFormat:@"%d",self.currentParticipantId]];
+            NSString *RankWasCalculatedWithId_ = [RankWasCalculated stringByAppendingString:[NSString stringWithFormat:@"%d", self.currentParticipantId]];
+            [center postNotificationName:RankWasCalculatedWithId_ object:participant.rank userInfo:nil];
+            NSString *ScoreWasCalculatedWithId_ = [ScoreWasCalculated stringByAppendingString:[NSString stringWithFormat:@"%d",self.currentParticipantId]];
             // notify the corresponding instance of PublicDetailViewController
-            [center postNotificationName:ScoreWasCalculatedWithId object:participant.score userInfo:nil];
+            [center postNotificationName:ScoreWasCalculatedWithId_ object:participant.score userInfo:nil];
         }
         
     }
@@ -272,10 +273,10 @@
             
             //NSLog(@"!!!!!!!!! <ParticipantDataManager> sending 'RankWasCalculated' Notification !!!!!!!!!!!");
 
-            NSString *RankWasCalculatedWithId = [RankWasCalculated stringByAppendingString:[NSString stringWithFormat:@"%d",self.currentParticipantId]];
+            NSString *RankWasCalculatedWithId_ = [RankWasCalculated stringByAppendingString:[NSString stringWithFormat:@"%d",self.currentParticipantId]];
             // notify the corresponding instance of PublicDetailViewController
             // touching UI? -> main thread!
-            [[NSNotificationCenter defaultCenter] postNotificationName:RankWasCalculatedWithId object:rankAsNumber userInfo:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:RankWasCalculatedWithId_ object:rankAsNumber userInfo:nil];
             
         }];
     }
@@ -317,9 +318,9 @@
             
             NSLog(@"<ParticipantDataManager> saving score!! - participant.score: %@", participant.score);
             
-            NSString *ScoreWasCalculatedWithId = [ScoreWasCalculated stringByAppendingString:[NSString stringWithFormat:@"%d",self.currentParticipantId]];
+            NSString *ScoreWasCalculatedWithId_ = [ScoreWasCalculated stringByAppendingString:[NSString stringWithFormat:@"%d",self.currentParticipantId]];
             // notify the corresponding instance of PublicDetailViewController
-            [[NSNotificationCenter defaultCenter] postNotificationName:ScoreWasCalculatedWithId object:[NSNumber numberWithFloat:score] userInfo:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:ScoreWasCalculatedWithId_ object:[NSNumber numberWithFloat:score] userInfo:nil];
             
         }];
         
@@ -333,9 +334,10 @@
         Participant *participant =
         [Participant findFirstByAttribute:@"sensorid" withValue:[NSNumber numberWithInt:self.currentParticipantId] inContext:[NSManagedObjectContext contextForCurrentThread]];
         
-        NSString *ScoreWasCalculatedWithId = [ScoreWasCalculated stringByAppendingString:[NSString stringWithFormat:@"%d",self.currentParticipantId]];
+        NSString *ScoreWasCalculatedWithId_ = [ScoreWasCalculated stringByAppendingString:[NSString stringWithFormat:@"%d",self.currentParticipantId]];
         // notify the corresponding instance of PublicDetailViewController
-        [[NSNotificationCenter defaultCenter] postNotificationName:ScoreWasCalculatedWithId object:participant.score userInfo:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ScoreWasCalculatedWithId_ object:participant.score userInfo:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ScoreWasCalculatedWithId object:@{@(self.currentParticipantId): participant.score} userInfo:nil];
     }
     
     

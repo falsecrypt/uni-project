@@ -41,6 +41,9 @@ NSInteger   const D              = 7;
 
 NSString * const ScoreWasCalculated      = @"ScoreWasCalculated";
 NSString * const RankWasCalculated       = @"RankWasCalculated";
+NSString * const ScoreWasCalculatedWithId = @"ScoreWasCalculatedWithId";
+
+NSString * const NewAccountImageAvailable = @"NewAccountImageAvailable";
 
 NSString * const DayChartsMode           = @"DayChartsMode";
 NSString * const MultiLevelPieChartMode  = @"MultiLevelPieChartMode";

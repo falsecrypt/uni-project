@@ -7,10 +7,11 @@
 
 #import "ProfilePopoverViewController.h"
 #import "KeychainItemWrapper.h"
-#import "SSKeychain.h"
+#import "User.h"
+#import "Participant.h"
 
 @interface ProfilePopoverViewController ()
-
+@property (strong, nonatomic) UIImageView *imageView;
 @end
 
 @implementation ProfilePopoverViewController
@@ -43,19 +44,35 @@
     self.contentSizeForViewInPopover = CGSizeMake(150.0, 180.0);
     UIView* popoverView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 140, 180)];
     popoverView.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1.0];
-    /*UITableView *table = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, 150, 140) style:UITableViewStylePlain];
-    table.backgroundColor=[UIColor whiteColor];
-    [table setDataSource:self];
-    [table setDelegate:self];
-    [table setRowHeight:80];
-    [self.view addSubview:table];
-    [popoverView addSubview:table];*/
+
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(updateAccountImage)
+     name:NewAccountImageAvailable
+     object:nil];
     
     // width, height = 100
-    UIImageView *profilePic = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 100, 100)];
-    UIImage *img = [UIImage imageNamed:@"defaultAvatar.png"];
-    [profilePic setImage:img];
-    
+    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 100, 100)];
+    self.imageView.layer.cornerRadius = 10.0;
+    self.imageView.clipsToBounds = YES;
+    User *me = [User findFirstByAttribute:@"sensorid" withValue:@(MySensorID)];
+    Participant *participantObj = [Participant findFirstByAttribute:@"sensorid" withValue:@(MySensorID)];
+    NSData *imgData = me.profileimage;
+    NSLog(@"getting image data with size: %@ ", [NSByteCountFormatter stringFromByteCount:imgData.length countStyle:NSByteCountFormatterCountStyleFile]);
+    NSLog(@"getting image data with size: %@ ", [NSByteCountFormatter stringFromByteCount:participantObj.profileimage.length countStyle:NSByteCountFormatterCountStyleFile]);
+    if ([imgData length] > 0) {
+        UIImage *profileImg = [[UIImage alloc]initWithData: imgData];
+        [self.imageView setImage:profileImg];
+    }
+    else if ([participantObj.profileimage length] > 0){
+        UIImage *profileImg = [[UIImage alloc]initWithData: participantObj.profileimage];
+        [self.imageView setImage:profileImg];
+    }
+    else {
+        UIImage *img = [UIImage imageNamed:@"defaultAvatar.png"];
+        [self.imageView setImage:img];
+    }
+
     self.userName = [[UILabel alloc] initWithFrame:CGRectMake(10,110,120,20)];
     self.userName.backgroundColor = [UIColor clearColor];
     self.userName.textColor = [UIColor colorWithWhite:0.5 alpha:1.0];
@@ -78,7 +95,7 @@
     [logOffButton setTitleColor: [UIColor lightGrayColor] forState: UIControlStateNormal];
     //[logOffButton setBackgroundColor: [UIColor lightGrayColor]];
     
-    [popoverView addSubview:profilePic];
+    [popoverView addSubview:self.imageView];
     [popoverView addSubview:self.userName];
     [popoverView addSubview:logOffButton];
     
@@ -102,6 +119,13 @@
      postNotificationName:notificationName
      object:nil];
     
+}
+
+- (void)updateAccountImage {
+    User *me = [User findFirstByAttribute:@"sensorid" withValue:@(MySensorID)];
+    NSData *imgData = me.profileimage;
+    UIImage *profileImg = [[UIImage alloc]initWithData: imgData];
+    [self.imageView setImage:profileImg];
 }
 
 
