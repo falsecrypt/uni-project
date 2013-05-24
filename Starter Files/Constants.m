@@ -1,18 +1,6 @@
-
-
 #import "Constants.h"
 
 @implementation Constants
-
-NSString *  const CPDThemeNameDarkGradient  = @"Dark Gradient";
-NSString *  const CPDThemeNamePlainBlack    = @"Plain Black";
-NSString *  const CPDThemeNamePlainWhite    = @"Plain White";
-NSString *  const CPDThemeNameSlate         = @"Slate";
-NSString *  const CPDThemeNameStocks        = @"Stocks";
-
-NSString *  const CPDTickerSymbolAAPL       = @"AAPL";
-NSString *  const CPDTickerSymbolGOOG       = @"GOOG";
-NSString *  const CPDTickerSymbolMSFT       = @"MSFT";
 
 NSString *  const pieChart                  = @"Pie Chart";
 NSString *  const barGraph                  = @"Bar Graph";
@@ -68,7 +56,7 @@ NSInteger const numberOfParticipants    = 3;
 
 // Used in 'EcoMeterAppDelegate.m'
 NSString * const CoreDataDBName         = @"ecoMeterDB.sqlite";
-NSString * const SegmentedControlLabelText = @"Users";
+NSString * const SegmentedControlLabelText = @"Teilnehmer";
 
 
 @end

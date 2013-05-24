@@ -31,6 +31,7 @@ public:
             _percentages[currentIndex] = percentage;
             
             CGFloat angle = (CGFloat) (twoPie * percentage);
+            DLog(@"angle: %f, percentage: %f, _values[currentIndex]: %f", angle, percentage, _values[currentIndex]);
             _angles[currentIndex] = angle;
         }
     }

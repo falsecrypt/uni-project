@@ -38,7 +38,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        NSLog(@"<SliceDetailsView> initWithFrame...");
+        DLog(@"<SliceDetailsView> initWithFrame...");
 
         
     }
@@ -58,7 +58,7 @@
 #pragma mark - Chart behavior
 -(void)initPlots
 {
-    NSLog(@"<SliceDetailsView> initPlots...");
+    DLog(@"<SliceDetailsView> initPlots...");
     self.selectedEnergyClockSlice = 0;
     self.selectedParticipant = FirstSensorID;
     self.availableCPTColors =
@@ -76,7 +76,7 @@
     [self configureCharts];
     //[self configureLegend];
     
-    NSLog(@"<SliceDetailsView> participantHostingView: %@, participantGraph: %@", self.participantHostingView, self.participantGraph);
+    DLog(@"<SliceDetailsView> participantHostingView: %@, participantGraph: %@", self.participantHostingView, self.participantGraph);
 }
 
 -(void)killAll
@@ -101,7 +101,7 @@
 
 -(void)configureHostViews
 {
-    NSLog(@"<SliceDetailsView> configureHostViews...");
+    DLog(@"<SliceDetailsView> configureHostViews...");
     
     // 1 - Set up view frames
     CGRect rectParticipant = self.bounds;
@@ -129,7 +129,7 @@
 
 -(void)configureGraphs
 {
-    NSLog(@"<SliceDetailsView> configureGraphs...");
+    DLog(@"<SliceDetailsView> configureGraphs...");
     
     // create instances
     self.participantGraph = [[CPTXYGraph alloc] init];
@@ -171,7 +171,7 @@
 -(void)configureCharts
 {
     
-    //NSLog(@"configureCharts..., self: %@", self);
+    //DLog(@"configureCharts..., self: %@", self);
     static BOOL animated = YES;
     CGFloat maxPieRadius = (self.participantHostingView.bounds.size.height * 0.65) / 2.0;
     
@@ -194,6 +194,7 @@
     CPTMutableLineStyle *customLineStyle = [CPTMutableLineStyle lineStyle];
     customLineStyle.lineColor = [[CPTColor blackColor]colorWithAlphaComponent:0.3];
     self.participantPieChart.borderLineStyle = customLineStyle;
+    self.participantPieChart.labelRotationRelativeToRadius = YES;
     // 2.
     self.totalSlicePieChart.dataSource = self;
     self.totalSlicePieChart.delegate = self;
@@ -204,7 +205,7 @@
     self.totalSlicePieChart.identifier = @"totalSlicePieChart";
     self.totalSlicePieChart.startAngle = M_PI_2;
     self.totalSlicePieChart.sliceDirection = CPTPieDirectionCounterClockwise;
-    //pieChart.labelRotationRelativeToRadius = YES;
+    //self.totalSlicePieChart.labelRotationRelativeToRadius = YES;
     //pieChart.labelRotation                 = -M_PI_2;
     self.totalSlicePieChart.labelOffset = -1.0;
     
@@ -250,14 +251,14 @@
 // how many slices should be displayed
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
-//    NSLog(@"numberOfRecordsForPlot - new");
+//    DLog(@"numberOfRecordsForPlot - new");
     NSUInteger result = 0;
     if([(NSString *)plot.identifier isEqualToString:@"participantPieChart"]){
-//        NSLog(@"numberOfRecordsForPlot - participantPieChart is here!!!");
+//        DLog(@"numberOfRecordsForPlot - participantPieChart is here!!!");
         result = [self.datasource getSlicesNumber];
     }
     else if ([(NSString *)plot.identifier isEqualToString:@"totalSlicePieChart"]){
-//        NSLog(@"numberOfRecordsForPlot - totalSlicePieChart is here!!!");
+//        DLog(@"numberOfRecordsForPlot - totalSlicePieChart is here!!!");
         result = numberOfParticipants;
     }
     return result;
@@ -272,7 +273,7 @@
 
             //result = [NSNumber numberWithFloat:(arc4random()%8)+1.0];
             result = [self.datasource detailsSliceValueAtIndex:index];
-            NSLog(@"numberForPlot - participantPieChart - result: %@", result);
+            DLog(@"numberForPlot - participantPieChart - result: %@", result);
         }
         else if ([(NSString *)plot.identifier isEqualToString:@"totalSlicePieChart"]){
 
@@ -289,7 +290,7 @@
 
 -(CPTLayer *)dataLabelForPlot:(CPTPlot *)plot recordIndex:(NSUInteger)index
 {
-    NSLog(@"dataLabelForPlot-Slice Details");
+    DLog(@"dataLabelForPlot-Slice Details");
     
     // 1 - Define label text style
     static CPTMutableTextStyle *labelText = nil;
@@ -327,7 +328,7 @@
         //labelValue = [NSString stringWithFormat:@"%i",index];
         
         CGFloat medAngle = [(CPTPieChart *)plot medianAngleForPieSliceIndex:index];
-        NSLog(@"labelValue: %@ and medAngle: %f", labelValue, medAngle);
+        DLog(@"labelValue: %@ and medAngle: %f", labelValue, medAngle);
         
     }
     // 5 - Create and return layer with label text
@@ -337,14 +338,14 @@
 
 -(CPTFill *)sliceFillForPieChart:(CPTPieChart *)pieChart recordIndex:(NSUInteger)index
 {
-    NSLog(@"sliceFillForPieChart - new");
+    DLog(@"sliceFillForPieChart - new");
     CPTFill *sector = [[CPTFill alloc] init];
     CPTColor *fillColor = [[CPTColor alloc] init];
     if([(NSString *)pieChart.identifier isEqualToString:@"participantPieChart"]){
         fillColor = [self.datasource getColorForParticipantId:self.selectedParticipant];
     }
     else if ([(NSString *)pieChart.identifier isEqualToString:@"totalSlicePieChart"]){
-        NSLog(@"CPTColor for index %i !", index);
+        DLog(@"CPTColor for index %i !", index);
         fillColor = [self.availableCPTColors objectAtIndex:(numberOfParticipants-index)-1];
     }
     
@@ -362,7 +363,7 @@
 -(void)reloadPieChartForNewParticipant:(NSUInteger)selectedParticipant
 {
     // @todo
-    NSLog(@"reloadPieChartForNewParticipant - selectedParticipant: %i", selectedParticipant);
+    DLog(@"reloadPieChartForNewParticipant - selectedParticipant: %i", selectedParticipant);
     self.selectedParticipant = selectedParticipant;
     [self.participantGraph reloadData];
 }

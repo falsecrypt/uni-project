@@ -16,10 +16,10 @@ int main(int argc, char *argv[])
             return UIApplicationMain(argc, argv, nil, NSStringFromClass([EcoMeterAppDelegate class]));
         }
         @catch (NSException *exception) {
-            NSLog(@"Uncaught exception: %@", exception.name);
-            NSLog(@"reason: %@", exception.reason);
-            NSLog(@"userInfo: %@", exception.userInfo);
-            NSLog(@"Stack trace: %@", [exception callStackSymbols]);
+            DLog(@"Uncaught exception: %@", exception.name);
+            DLog(@"reason: %@", exception.reason);
+            DLog(@"userInfo: %@", exception.userInfo);
+            DLog(@"Stack trace: %@", [exception callStackSymbols]);
             @throw exception; //forward exception
         }
     }

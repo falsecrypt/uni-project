@@ -100,15 +100,15 @@ NSMutableArray *navigationBarItems;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    // NSLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
-    self.navigationBar.topItem.title = @"Summary";
-    NSLog(@"calling FirstDetailViewController - viewWillAppear start");
+    // DLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
+    self.navigationBar.topItem.title = @"Home";
+    DLog(@"calling FirstDetailViewController - viewWillAppear start");
     KeychainItemWrapper *keychain =
     [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
     if ( ([[keychain objectForKey:(__bridge id)(kSecAttrLabel)] isEqualToString:@"LOGGEDOFF"] )
         || ( [[keychain objectForKey:(__bridge id)kSecAttrAccount] length] == 0 ) /* Or Username is empty */
         || ( [[keychain objectForKey:(__bridge id)kSecValueData] length]== 0) ) /* Or Password is empty */ {
-        NSLog(@"user is not logged in, removing profileBarButtonItem");
+        DLog(@"user is not logged in, removing profileBarButtonItem");
         [self.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
     }
     
@@ -144,9 +144,9 @@ NSMutableArray *navigationBarItems;
 }
 
 - (void)showProfileAfterUserLoggedIn {
-    //NSLog(@"!!!!! 1 calling showProfileAfterUserLoggedIn !!!!!!!!!!");
+    //DLog(@"!!!!! 1 calling showProfileAfterUserLoggedIn !!!!!!!!!!");
     //[navigationBarItems addObject:self.profileBarButtonItem];
-    NSLog(@"FirstDetail: user logged in: adding profileBarButtonItem: %@", self.profileBarButtonItem);
+    DLog(@"FirstDetail: user logged in: adding profileBarButtonItem: %@", self.profileBarButtonItem);
     [self.navigationBar.topItem setRightBarButtonItem:self.profileBarButtonItem animated:YES];
 }
 
@@ -154,8 +154,8 @@ NSMutableArray *navigationBarItems;
     if (self.profilePopover)
         [self.profilePopover dismissPopoverAnimated:YES];
     //[navigationBarItems removeObject:self.profileBarButtonItem];
-    //NSLog(@"FirstDetail: user logged off: removing profileBarButtonItem: %@", self.profileBarButtonItem);
+    //DLog(@"FirstDetail: user logged off: removing profileBarButtonItem: %@", self.profileBarButtonItem);
     [self.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
-    //NSLog(@"FirstDetail: user logged off: after removing profileBarButtonItem, navigationBarItems: %@", navigationBarItems);
+    //DLog(@"FirstDetail: user logged off: after removing profileBarButtonItem, navigationBarItems: %@", navigationBarItems);
 }
 @end

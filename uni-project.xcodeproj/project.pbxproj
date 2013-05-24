@@ -95,9 +95,6 @@
 		CE8B7F5915ED358B006CD57C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8B7F5815ED358B006CD57C /* CoreGraphics.framework */; };
 		CE8B7F5F15ED358B006CD57C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CE8B7F5D15ED358B006CD57C /* InfoPlist.strings */; };
 		CE8B7F7C15ED35D1006CD57C /* EcoMeterAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F7515ED35D1006CD57C /* EcoMeterAppDelegate.m */; };
-		CE8B7F7D15ED35D1006CD57C /* MDDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F7715ED35D1006CD57C /* MDDetailViewController.m */; };
-		CE8B7F7E15ED35D1006CD57C /* MDMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F7915ED35D1006CD57C /* MDMasterViewController.m */; };
-		CE8B7F7F15ED35D1006CD57C /* MDMultipleMasterDetailManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F7B15ED35D1006CD57C /* MDMultipleMasterDetailManager.m */; };
 		CE8B7F8315ED3630006CD57C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8B7F8215ED3630006CD57C /* main.m */; };
 		CE8DCEB916815ABB0030FA4C /* LastWeekViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE8DCEB816815ABB0030FA4C /* LastWeekViewController.m */; };
 		CE92D4A616F297CF0038D408 /* CPTAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = CE92D49316F297CF0038D408 /* CPTAnimation.m */; };
@@ -166,7 +163,6 @@
 		CEE88E3915F42BD800382450 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEE88E3815F42BD800382450 /* MainStoryboard.storyboard */; };
 		CEEAE27415F2749500A550FA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEAE27315F2749500A550FA /* QuartzCore.framework */; };
 		CEEAE27A15F275CA00A550FA /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = CEEAE27715F275CA00A550FA /* Constants.m */; };
-		CEEAE27B15F275CA00A550FA /* CPDStockPriceStore.m in Sources */ = {isa = PBXBuildFile; fileRef = CEEAE27915F275CA00A550FA /* CPDStockPriceStore.m */; };
 		CEEAE27E15F2BEA100A550FA /* icon_piechart.png in Resources */ = {isa = PBXBuildFile; fileRef = CEEAE27D15F2BEA100A550FA /* icon_piechart.png */; };
 		CEEAE28015F2C06000A550FA /* icon_smile_face.png in Resources */ = {isa = PBXBuildFile; fileRef = CEEAE27F15F2C06000A550FA /* icon_smile_face.png */; };
 		CEF1813E17089A37008DEF60 /* AKSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF1813D17089A37008DEF60 /* AKSegmentedControl.m */; };
@@ -340,12 +336,6 @@
 		CE8B7F6215ED358B006CD57C /* uni-project-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "uni-project-Prefix.pch"; sourceTree = "<group>"; };
 		CE8B7F7415ED35D1006CD57C /* EcoMeterAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EcoMeterAppDelegate.h; sourceTree = "<group>"; };
 		CE8B7F7515ED35D1006CD57C /* EcoMeterAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EcoMeterAppDelegate.m; sourceTree = "<group>"; };
-		CE8B7F7615ED35D1006CD57C /* MDDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDDetailViewController.h; sourceTree = "<group>"; };
-		CE8B7F7715ED35D1006CD57C /* MDDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDDetailViewController.m; sourceTree = "<group>"; };
-		CE8B7F7815ED35D1006CD57C /* MDMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDMasterViewController.h; sourceTree = "<group>"; };
-		CE8B7F7915ED35D1006CD57C /* MDMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDMasterViewController.m; sourceTree = "<group>"; };
-		CE8B7F7A15ED35D1006CD57C /* MDMultipleMasterDetailManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MDMultipleMasterDetailManager.h; sourceTree = "<group>"; };
-		CE8B7F7B15ED35D1006CD57C /* MDMultipleMasterDetailManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MDMultipleMasterDetailManager.m; sourceTree = "<group>"; };
 		CE8B7F8215ED3630006CD57C /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CE8DCEB716815ABB0030FA4C /* LastWeekViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LastWeekViewController.h; sourceTree = "<group>"; };
 		CE8DCEB816815ABB0030FA4C /* LastWeekViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LastWeekViewController.m; sourceTree = "<group>"; };
@@ -536,8 +526,6 @@
 		CEEAE27315F2749500A550FA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		CEEAE27615F275CA00A550FA /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		CEEAE27715F275CA00A550FA /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
-		CEEAE27815F275CA00A550FA /* CPDStockPriceStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPDStockPriceStore.h; sourceTree = "<group>"; };
-		CEEAE27915F275CA00A550FA /* CPDStockPriceStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CPDStockPriceStore.m; sourceTree = "<group>"; };
 		CEEAE27D15F2BEA100A550FA /* icon_piechart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_piechart.png; sourceTree = "<group>"; };
 		CEEAE27F15F2C06000A550FA /* icon_smile_face.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_smile_face.png; sourceTree = "<group>"; };
 		CEF1813C17089A37008DEF60 /* AKSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKSegmentedControl.h; sourceTree = "<group>"; };
@@ -688,12 +676,8 @@
 		CE03516E16AE355300752192 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				CE8B7F7815ED35D1006CD57C /* MDMasterViewController.h */,
-				CE8B7F7915ED35D1006CD57C /* MDMasterViewController.m */,
 				CEDDE0F41641611800BEFE0A /* StartDetailViewController.h */,
 				CEDDE0F51641611800BEFE0A /* StartDetailViewController.m */,
-				CE8B7F7615ED35D1006CD57C /* MDDetailViewController.h */,
-				CE8B7F7715ED35D1006CD57C /* MDDetailViewController.m */,
 				CE071EC11659C58B007290B1 /* ProfilePopoverViewController.h */,
 				CE071EC21659C58B007290B1 /* ProfilePopoverViewController.m */,
 			);
@@ -703,8 +687,6 @@
 		CE0AE47A1645F53C00EC15B4 /* Manager-Classes */ = {
 			isa = PBXGroup;
 			children = (
-				CE8B7F7A15ED35D1006CD57C /* MDMultipleMasterDetailManager.h */,
-				CE8B7F7B15ED35D1006CD57C /* MDMultipleMasterDetailManager.m */,
 				CEFDC23A163E15480011C3CF /* DetailViewManager.h */,
 				CEFDC23B163E15480011C3CF /* DetailViewManager.m */,
 				CE03516916AE30C400752192 /* ParticipantDataManager.h */,
@@ -853,7 +835,6 @@
 		CE8B7F4515ED358B006CD57C = {
 			isa = PBXGroup;
 			children = (
-				CEF97D7E17418DF000237730 /* MobileCoreServices.framework */,
 				CEF386E716C023D80082C372 /* Libraries */,
 				CE8B7F5A15ED358B006CD57C /* uni-project */,
 				CEA0263B16BEF3D4005CE31A /* EcoMeterLogicTests */,
@@ -876,6 +857,7 @@
 		CE8B7F5315ED358B006CD57C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CEF97D7E17418DF000237730 /* MobileCoreServices.framework */,
 				CE54E7BE168292B500F91C5E /* SystemConfiguration.framework */,
 				CE0D631816611B1600381D05 /* CoreData.framework */,
 				CEEAE27315F2749500A550FA /* QuartzCore.framework */,
@@ -1215,8 +1197,6 @@
 			children = (
 				CEEAE27615F275CA00A550FA /* Constants.h */,
 				CEEAE27715F275CA00A550FA /* Constants.m */,
-				CEEAE27815F275CA00A550FA /* CPDStockPriceStore.h */,
-				CEEAE27915F275CA00A550FA /* CPDStockPriceStore.m */,
 			);
 			name = "Starter Files";
 			path = "../Starter Files";
@@ -1556,12 +1536,8 @@
 			files = (
 				CEBBD6481676D7D4008051D2 /* libCorePlot-CocoaTouch.a in Sources */,
 				CE8B7F7C15ED35D1006CD57C /* EcoMeterAppDelegate.m in Sources */,
-				CE8B7F7D15ED35D1006CD57C /* MDDetailViewController.m in Sources */,
-				CE8B7F7E15ED35D1006CD57C /* MDMasterViewController.m in Sources */,
-				CE8B7F7F15ED35D1006CD57C /* MDMultipleMasterDetailManager.m in Sources */,
 				CE8B7F8315ED3630006CD57C /* main.m in Sources */,
 				CEEAE27A15F275CA00A550FA /* Constants.m in Sources */,
-				CEEAE27B15F275CA00A550FA /* CPDStockPriceStore.m in Sources */,
 				CEA0BE9C163CD2D700ED0599 /* LoginScreenTVC.m in Sources */,
 				CEA0BEA1163CD99B00ED0599 /* FirstTVC.m in Sources */,
 				CEFDC23C163E15480011C3CF /* DetailViewManager.m in Sources */,

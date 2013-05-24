@@ -58,8 +58,8 @@
     User *me = [User findFirstByAttribute:@"sensorid" withValue:@(MySensorID)];
     Participant *participantObj = [Participant findFirstByAttribute:@"sensorid" withValue:@(MySensorID)];
     NSData *imgData = me.profileimage;
-    NSLog(@"getting image data with size: %@ ", [NSByteCountFormatter stringFromByteCount:imgData.length countStyle:NSByteCountFormatterCountStyleFile]);
-    NSLog(@"getting image data with size: %@ ", [NSByteCountFormatter stringFromByteCount:participantObj.profileimage.length countStyle:NSByteCountFormatterCountStyleFile]);
+    DLog(@"getting image data with size: %@ ", [NSByteCountFormatter stringFromByteCount:imgData.length countStyle:NSByteCountFormatterCountStyleFile]);
+    DLog(@"getting image data with size: %@ ", [NSByteCountFormatter stringFromByteCount:participantObj.profileimage.length countStyle:NSByteCountFormatterCountStyleFile]);
     if ([imgData length] > 0) {
         UIImage *profileImg = [[UIImage alloc]initWithData: imgData];
         [self.imageView setImage:profileImg];

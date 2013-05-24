@@ -16,6 +16,7 @@
 #import "EnergyClockViewController.h"
 #import "EMNetworkManager.h"
 #import "AFHTTPRequestOperation.h"
+#import "User.h"
 
 @interface PublicScoreTVC ()
 
@@ -25,6 +26,10 @@
 @property (nonatomic, strong) NSMutableDictionary *nameForUser;
 @property (nonatomic, strong) NSMutableDictionary *imageForUser;
 @property (nonatomic, strong) NSMutableDictionary *scoreForUser;
+@property (strong, nonatomic) User *me;
+@property (strong ,nonatomic) NSDictionary *rowNrForUserId;
+
+
 @end
 
 @implementation PublicScoreTVC
@@ -52,7 +57,7 @@ enum SectionType : NSUInteger {
     
     self.tableView.backgroundColor = [UIColor clearColor];
     self.parentViewController.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"patternBg.png"]];
-    NSLog(@"AFTER ALLOC INIT");
+    DLog(@"AFTER ALLOC INIT");
     self.participants = [[NSArray alloc] initWithObjects:
                          [NSNumber numberWithInteger:FirstSensorID],
                          [NSNumber numberWithInteger:SecondSensorID],
@@ -63,20 +68,18 @@ enum SectionType : NSUInteger {
      selector:@selector(updateRankWithNotification:)
      name:ScoreWasCalculatedWithId
      object:nil];
-    
     self.navigationItem.title = @"Teilnehmer-Büros";
     [self.tableView setAllowsSelection:YES];
-    NSLog(@"PTVC: viewDidLoad");
-    NSLog(@"delegate:%@ dataSource:%@", self.tableView.delegate, self.tableView.dataSource);
+    DLog(@"PTVC: viewDidLoad");
+    DLog(@"delegate:%@ dataSource:%@", self.tableView.delegate, self.tableView.dataSource);
     // allocate a reachability object
     Reachability* reach = [Reachability reachabilityWithHostname:currentCostServerBaseURLHome];
     NSNumber *numberofentities = [Participant numberOfEntities];
     reach.reachableBlock = ^(Reachability * reachability)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"Block Says Reachable");
+            DLog(@"Block Says Reachable");
             self.deviceIsOnline = YES;
-            
             [self getPublicUsernames];
             [self getPublicAvatars];
             
@@ -86,11 +89,11 @@ enum SectionType : NSUInteger {
     reach.unreachableBlock = ^(Reachability * reachability)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"Block Says Unreachable");
+            DLog(@"Block Says Unreachable");
             self.deviceIsOnline = NO;
             // No Data, we are offline
             if ([numberofentities intValue]==0) {
-                NSLog(@"No Data in the Participant Table!");
+                DLog(@"No Data in the Participant Table!");
                 
             }
             // We have some data
@@ -99,6 +102,7 @@ enum SectionType : NSUInteger {
                 for (Participant *user in allObjects) {
                     [self.nameForUser setObject:user.name forKey:user.sensorid];
                     [self.userForName setObject:user.sensorid forKey:user.name];
+                    // and Images?
                 }
                 [self.tableView reloadData];
             }
@@ -119,11 +123,11 @@ enum SectionType : NSUInteger {
 - (void)viewWillDisappear:(BOOL)animated {
     
     [super viewWillDisappear:animated];
-    NSLog(@"PTVC: viewWillDisappear");
+    DLog(@"PTVC: viewWillDisappear");
     DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
     FirstDetailViewController *prevDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
     detailViewManager.detailViewController = prevDetailViewController;
-    prevDetailViewController.navigationBar.topItem.title = @"Summary";
+    prevDetailViewController.navigationBar.topItem.title = @"Home";
     
 }
 
@@ -132,6 +136,13 @@ enum SectionType : NSUInteger {
         _userForName = [[NSMutableDictionary alloc] init];
     }
     return _userForName;
+}
+
+- (User *)me {
+    if (! _me) {
+        _me = [User findFirstByAttribute:@"sensorid" withValue:@(MySensorID)];
+    }
+    return _me;
 }
 
 - (NSMutableDictionary *)nameForUser {
@@ -155,6 +166,13 @@ enum SectionType : NSUInteger {
     return _scoreForUser;
 }
 
+- (NSDictionary *)rowNrForUserId {
+    if (! _rowNrForUserId) {
+        _rowNrForUserId = @{@(FirstSensorID): @(0), @(SecondSensorID): @(1), @(ThirdSensorID): @(2)};
+    }
+    return _rowNrForUserId;
+}
+
 -(void)updateRankWithNotification:(NSNotification *)pNotification{
     
 //    NSDictionary *rankWithId = (NSDictionary *)[pNotification object];
@@ -166,9 +184,17 @@ enum SectionType : NSUInteger {
     for (NSNumber *sensorId in self.participants) {
         Participant *obj = [Participant findFirstByAttribute:@"sensorid" withValue:sensorId];
         [self.scoreForUser setObject:obj.score forKey:sensorId];
+        
+        NSIndexPath *myIP = [NSIndexPath indexPathForRow:[[self.rowNrForUserId objectForKey:sensorId] integerValue]
+                                               inSection:ParticipantSection];
+        UITableViewCell *cellToUpdate = [self.tableView cellForRowAtIndexPath:myIP];
+        UILabel *label = (UILabel *)[cellToUpdate viewWithTag:4353]; // Score Textfield
+        label.text = [obj.score stringValue];
+        [cellToUpdate setNeedsLayout];
     }
-    NSLog(@"self.scoreForUser : %@", self.scoreForUser );
-    [self.tableView reloadData];
+    DLog(@"self.scoreForUser : %@", self.scoreForUser );
+    //[self.tableView reloadData];
+    
     [self.tableView selectRowAtIndexPath:selected animated:NO scrollPosition:UITableViewScrollPositionNone];
     
 }
@@ -188,19 +214,21 @@ enum SectionType : NSUInteger {
     } completion:^{
         
         NSArray *allObjects = [Participant findAll];
-        NSLog(@"all Participants after avatars update: %@, total number: %@", allObjects, [Participant numberOfEntities]);
+        DLog(@"all Participants after avatars update: %@, total number: %@", allObjects, [Participant numberOfEntities]);
     }];
     
     
     [[NSManagedObjectContext defaultContext]  saveInBackgroundCompletion:^{
         NSArray *allObjects = [Participant findAll];
-        NSLog(@"all Participants after avatars update: %@, total number: %@", allObjects, [Participant numberOfEntities]);
+        DLog(@"all Participants after avatars update: %@, total number: %@", allObjects, [Participant numberOfEntities]);
     }];
     
 }
 
 - (void)getPublicAvatars {
-    
+    if ([self.imageForUser count] > 0) {
+        return;
+    }
     NSMutableArray *requestsStorage = [[NSMutableArray alloc] init];
     
     for (NSNumber *sensorId in self.participants) {
@@ -221,15 +249,52 @@ enum SectionType : NSUInteger {
      } completionBlock:^(NSArray *operations) {
          for (AFHTTPRequestOperation *ro in operations) {
              if (ro.error) {
-                 NSLog(@"++++++++++++++ Operation error");
+                 DLog(@"++++++++++++++ Operation error");
              } else {
                  if (ro.responseData != nil && ro.responseData.length > 0) {
                      NSDictionary *urlParameters = [self getURLParameters:ro.request.URL];
                      // Get userID from Request Parameters
                      NSString *userID = [urlParameters objectForKey:@"userID"];
-                     UIImage *publicName = [[UIImage alloc] initWithData:ro.responseData];
-                     [self.imageForUser setObject:publicName forKey:userID];
-                     NSLog(@"new avatar: %@", publicName);
+                     UIImage *imgFromServer = [[UIImage alloc] initWithData:ro.responseData];
+                     UIImage *imageToUse = nil;
+                     // If its my account:
+                     if ([userID integerValue] == MySensorID) {
+                         // Check whether the image from response equals the image in our DB
+                         if ([ro.responseData isEqualToData:self.me.profileimage] || self.me.profileimage == nil) {
+                             imageToUse = imgFromServer;
+                             [self.imageForUser setObject:imgFromServer forKey:userID];
+                         }
+                         // OK. they are not the same, lets sync. DB-Image has higher priority
+                         else {
+                             UIImage *imgFromDB = [[UIImage alloc] initWithData: self.me.profileimage];
+                             imageToUse = imgFromDB;
+                             [self.imageForUser setObject:imgFromDB forKey:userID];
+                             // Send the DB-Image to the server
+                             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                 [self sendImageToServer:self.me.profileimage];
+                             });
+                             
+                         }
+                         
+                     }
+                     // Other Users
+                     else{
+                         imageToUse = imgFromServer;
+                         [self.imageForUser setObject:imgFromServer forKey:userID];
+                     }
+                     
+                     // Update the cell immediatly
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         NSIndexPath *myIP = [NSIndexPath indexPathForRow:[[self.rowNrForUserId objectForKey:[NSNumber numberWithInt:[userID intValue]]] integerValue ]
+                                                                inSection:ParticipantSection];
+                         UITableViewCell *cellToUpdate = [self.tableView cellForRowAtIndexPath:myIP];
+                         UIImageView *cellImage = (UIImageView *)[cellToUpdate viewWithTag:4354]; // UIImageView
+                         [cellImage setImage:imageToUse];
+                         [cellToUpdate setNeedsLayout];
+                     });
+                     
+                     
+                     DLog(@"new avatar: %@", imgFromServer);
                      
                  }//end if responsedata check
                  
@@ -238,16 +303,46 @@ enum SectionType : NSUInteger {
              
          }//end for completionBlock - operations
          
-         dispatch_async(dispatch_get_main_queue(), ^{
-             [self.tableView reloadData];
-         });
          [self saveNewAvatars];
          
      }];
 }
 
+- (void)sendImageToServer:(NSData *)image {
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    [parameters setObject:@"put" forKey:@"action"];
+    [parameters setObject:@(1) forKey:@"avatar"];
+    [parameters setObject:@(MySensorID) forKey:@"userID"];
+    
+    NSMutableURLRequest *request = [[EMNetworkManager sharedClient] multipartFormRequestWithMethod:@"POST"
+                                                                                              path:@"rpc.php"
+                                                                                        parameters:parameters
+                                                                         constructingBodyWithBlock: ^(id <AFMultipartFormData>formData) {
+                                                                             [formData appendPartWithFileData:image name:@"image" fileName:@"avatar.jpg" mimeType:@"image/jpeg"];
+                                                                         }];
+    
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString *response = [operation responseString];
+        DLog(@"response: [%@], responseObj: %@",response, responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if([operation.response statusCode] == 403){
+            DLog(@"Upload Failed");
+            return;
+        }
+        DLog(@"error: %@", [operation error]);
+    }];
+    
+    [operation start];
+}
+
 - (void)getPublicUsernames {
-    NSLog(@"\n getPublicUsernames \n");
+    
+    if ([self.userForName count] > 0) {
+        return;
+    }
+    DLog(@"\n getPublicUsernames \n");
     NSMutableArray *requestsStorage = [[NSMutableArray alloc] init];
     
     for (NSNumber *sensorId in self.participants) {
@@ -268,7 +363,7 @@ enum SectionType : NSUInteger {
      } completionBlock:^(NSArray *operations) {
          for (AFHTTPRequestOperation *ro in operations) {
              if (ro.error) {
-                 NSLog(@"++++++++++++++ Operation error");
+                 DLog(@"++++++++++++++ Operation error");
              } else {
                  
                  if (ro.responseData != nil && ro.responseData.length > 0) {
@@ -276,11 +371,47 @@ enum SectionType : NSUInteger {
                      // Get userID from Request Parameters
                      NSString *userID = [urlParameters objectForKey:@"userID"];
                      NSString *publicName = [[NSString alloc] initWithData:ro.responseData encoding:NSUTF8StringEncoding];
+                     NSString *nameToUse = nil;
+                     
+                     // If its my account:
+                     if ([userID integerValue] == MySensorID) {
+                         // Check whether the username from response equals the username on our iPad
+                         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                         if ([publicName isEqualToString:[defaults objectForKey:@"publicUserName"]]) {
+                             nameToUse = publicName;
+                         }
+                         // OK. they are not the same, lets sync. Username in NSUserDefaults has higher priority
+                         else {
+                             nameToUse = [defaults objectForKey:@"publicUserName"];
+                             // Send the DB-Image to the server
+                             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                 [self sendPublicUsernameToServer:nameToUse];
+                             });
+                             
+                         }
+                         
+                     }
+                     // Other Users
+                     else{
+                         nameToUse = publicName;
+                     }
+                     
                      if ([publicName isEqualToString:@"Anonymous"]) {
                          publicName = [[publicName stringByAppendingString:@" "] stringByAppendingString:userID];
+                         nameToUse = publicName;
                      }
-                     [self.userForName setObject:userID forKey:publicName];
-                     [self.nameForUser setObject:publicName forKey:userID];
+                     // Update the cell immediatly
+                     dispatch_async(dispatch_get_main_queue(), ^{
+                         NSIndexPath *myIP = [NSIndexPath indexPathForRow:[[self.rowNrForUserId objectForKey:[NSNumber numberWithInt:[userID intValue]]] integerValue ]
+                                                                inSection:ParticipantSection];
+                         UITableViewCell *cellToUpdate = [self.tableView cellForRowAtIndexPath:myIP];
+                         UILabel *label = (UILabel *)[cellToUpdate viewWithTag:4352]; // User Name Textfield
+                         label.text = nameToUse;
+                         [cellToUpdate setNeedsLayout];
+                     });
+                     
+                     [self.userForName setObject:userID forKey:nameToUse];
+                     [self.nameForUser setObject:nameToUse forKey:userID];
                      
                  }//end if responsedata check
                  
@@ -288,13 +419,28 @@ enum SectionType : NSUInteger {
              
              
          }//end for completionBlock - operations
-         
-         dispatch_async(dispatch_get_main_queue(), ^{
-             [self.tableView reloadData];
-         });
+
          [self saveNewParticipants];
          
      }];
+}
+
+
+- (void)sendPublicUsernameToServer:(NSString *)publicName {
+    
+    NSString *postPath = @"rpc.php?userID=";
+    postPath = [postPath stringByAppendingString: [NSString stringWithFormat:@"%i", MySensorID]];
+    postPath = [postPath stringByAppendingString:@"&action=put&username="];
+    postPath = [postPath stringByAppendingString:publicName];
+    
+    [[EMNetworkManager sharedClient] postPath:postPath parameters:nil
+                                      success:^(AFHTTPRequestOperation *operation, id response) {
+                                          DLog(@"Public Username sent...");
+                                      }
+                                      failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                          DLog(@"Error with request, while sending public user name!");
+                                          DLog(@"%@",[error localizedDescription]);
+                                      }];
 }
 
 // Help Method
@@ -314,7 +460,7 @@ enum SectionType : NSUInteger {
 
 - (void)saveNewParticipants
 {
-    NSLog(@"PTVC: initParticipants");
+    DLog(@"PTVC: initParticipants");
     if (self.deviceIsOnline)
     {
         //[Participant truncateAll]; // !!!!!
@@ -334,21 +480,32 @@ enum SectionType : NSUInteger {
             } completion:^{
                 
                 //                 NSArray *allObjects = [Participant findAll];
-                //                 NSLog(@"all Participants after creating: %@, total number: %@", allObjects, [Participant numberOfEntities]);
+                //                 DLog(@"all Participants after creating: %@, total number: %@", allObjects, [Participant numberOfEntities]);
             }];
         }
-        // we have already saved our participants objects -> update only
+        // we have already saved some participants objects
         else {
             [MagicalRecord saveInBackgroundWithBlock:^(NSManagedObjectContext *localContext) {
                 Participant *participant1 = [Participant findFirstByAttribute:@"sensorid" withValue:@(FirstSensorID)];
+                if (participant1 == nil) {
+                    participant1 = [Participant createInContext:localContext];
+                    [participant1 setSensorid: [NSNumber numberWithInteger:FirstSensorID]];
+                }
                 [participant1 setName:[self.nameForUser objectForKey:[NSString stringWithFormat:@"%i", FirstSensorID]]];
                 Participant *participant2 = [Participant findFirstByAttribute:@"sensorid" withValue:@(SecondSensorID)];
+                if (participant2 == nil) {
+                    participant2 = [Participant createInContext:localContext];
+                    [participant2 setSensorid: [NSNumber numberWithInteger:SecondSensorID]];
+                }
                 [participant2 setName:[self.nameForUser objectForKey:[NSString stringWithFormat:@"%i", SecondSensorID]]];
                 Participant *participant3 = [Participant findFirstByAttribute:@"sensorid" withValue:@(ThirdSensorID)];
+                if (participant3 == nil) {
+                    participant3 = [Participant createInContext:localContext];
+                    [participant3 setSensorid: [NSNumber numberWithInteger:ThirdSensorID]];
+                }
                 [participant3 setName:[self.nameForUser objectForKey:[NSString stringWithFormat:@"%i", ThirdSensorID]]];
             } completion:^{
-                NSArray *allObjects = [Participant findAll];
-                NSLog(@"all Participants after username update: %@, total number: %@", allObjects, [Participant numberOfEntities]);
+                DLog(@"all Participants after username update: %@, total number: %@", [Participant findAll], [Participant numberOfEntities]);
             }];
             
         }
@@ -366,54 +523,16 @@ enum SectionType : NSUInteger {
 // -------------------------------------------------------------------------------
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    //NSLog(@"calling didSelectRowAtIndexPath from SecondTableViewController");
-    //NSLog(@"didSelectRowAtIndexPath: detailViewManager: %@", self.splitViewController.delegate);
-    // Get a reference to the DetailViewManager.
-    // DetailViewManager is the delegate of our split view.
-    //DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
-    //NSLog(@"self.splitViewController: %@", self.splitViewController);
-    
-    // Create and configure a new detail view controller appropriate for the selection.
-    //UIViewController <SubstitutableDetailViewController> *detailViewController = nil;
-    
-    //PublicDetailViewController *newDetailViewController = [[PublicDetailViewController alloc] initWithNibName:@"SecondDetailView" bundle:nil];
-    //PublicDetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"SecondDetailView"];
-    
-    //detailViewController = newDetailViewController;
-    
-    //detailViewController.title = [tableView cellForRowAtIndexPath:indexPath].textLabel.text;
-    //detailViewController.selectedParticipant = [[users objectForKey:[tableView cellForRowAtIndexPath:indexPath].textLabel.text]integerValue];
-    
-    //NSLog(@"didSelectRowAtIndexPath: %@", detailViewController);
-    /*if (indexPath.row == 0) {
-     detailViewController.view.backgroundColor = [UIColor purpleColor];
-     }
-     else if (indexPath.row == 1) {
-     detailViewController.view.backgroundColor = [UIColor orangeColor];
-     }
-     else if (indexPath.row == 2) {
-     detailViewController.view.backgroundColor = [UIColor blueColor];
-     }
-     else {
-     detailViewController.view.backgroundColor = [UIColor magentaColor];
-     }*/
-    
-    // DetailViewManager exposes a property, detailViewController.  Set this property
-    // to the detail view controller we want displayed.  Configuring the detail view
-    // controller to display the navigation button (if needed) and presenting it
-    // happens inside DetailViewManager
-    //detailViewManager.detailViewController = detailViewController;
-    NSLog(@"<PublicTableViewController> _____didSelectRowAtIndexPath_____");
+    DLog(@"<PublicTableViewController> _____didSelectRowAtIndexPath_____");
     
     //            [self performSegueWithIdentifier:@"publicDataDetails"
     //                                      sender:[users objectForKey:[tableView cellForRowAtIndexPath:indexPath].textLabel.text]];
     
     if (indexPath.section == ParticipantSection){
-        NSLog(@"<PublicTableViewController> self.selectedParticipantId: %@", self.selectedParticipantId);
+        DLog(@"<PublicTableViewController> self.selectedParticipantId: %@", self.selectedParticipantId);
         [self performSegueWithIdentifier:@"publicDataDetails"
                                   sender:[self.userForName objectForKey:[tableView cellForRowAtIndexPath:indexPath].textLabel.text]];
-        NSLog(@"<PublicTableViewController> sender: %@", [self.userForName objectForKey:[tableView cellForRowAtIndexPath:indexPath].textLabel.text]);
+        DLog(@"<PublicTableViewController> sender: %@", [self.userForName objectForKey:[tableView cellForRowAtIndexPath:indexPath].textLabel.text]);
         //        DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
         //        PublicDetailViewController <SubstitutableDetailViewController> *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PublicDetailViewController"];
         //        detailViewController.selectedParticipant = [self.selectedParticipantId integerValue];
@@ -431,10 +550,11 @@ enum SectionType : NSUInteger {
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == ParticipantSection){
-        NSLog(@"<PublicTableViewController> willSelectRowAtIndexPath");
-        NSArray *usersSorted = [[self.userForName allKeys]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-        self.selectedParticipantId = [self.userForName objectForKey:usersSorted[indexPath.row]];
-        NSLog(@"<PublicTableViewController> willSelectRowAtIndexPath : self.selectedParticipantId: %@", self.selectedParticipantId);
+        DLog(@"<PublicTableViewController> willSelectRowAtIndexPath");
+        //NSArray *usersSorted = [[self.userForName allKeys]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+        //self.selectedParticipantId = [self.userForName objectForKey:usersSorted[indexPath.row]];
+        self.selectedParticipantId = [self.participants[indexPath.row] stringValue];
+        DLog(@"<PublicTableViewController> willSelectRowAtIndexPath : self.selectedParticipantId: %@", self.selectedParticipantId);
     }
     return indexPath;
 }
@@ -442,16 +562,16 @@ enum SectionType : NSUInteger {
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSLog(@"<PublicTableViewController> segue : %@", segue);
+    DLog(@"<PublicTableViewController> segue : %@", segue);
     
     if ([segue.identifier isEqualToString:@"publicDataDetails"])
     {
-        NSLog(@"<PublicTableViewController> segue : %@", segue);
-        NSLog(@"<PublicTableViewController> sender: %@", sender);
+        DLog(@"<PublicTableViewController> segue : %@", segue);
+        DLog(@"<PublicTableViewController> sender: %@", sender);
         //here is segue an instance of our MCachedModalStoryboardSegue
         MCachedModalStoryboardSegue *customSegue = (MCachedModalStoryboardSegue *)segue;
         PublicDetailViewController *destViewController = customSegue.destinationViewController;
-        NSLog(@"<PublicTableViewController> customSegue.destinationViewController: %@", customSegue.destinationViewController);
+        DLog(@"<PublicTableViewController> customSegue.destinationViewController: %@", customSegue.destinationViewController);
         destViewController.instanceWasCached  = customSegue.destinationWasCached;
         destViewController.selectedParticipant = [self.selectedParticipantId integerValue];
         //get username from DB TODO
@@ -468,9 +588,9 @@ enum SectionType : NSUInteger {
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    //NSLog(@"users: %@", users);
+    //DLog(@"users: %@", users);
     if (section == ParticipantSection){
-        NSLog(@"PTVC: numberOfRowsInSection");
+        DLog(@"PTVC: numberOfRowsInSection");
         //return [self.userForName count];
         return 3;
     }
@@ -504,25 +624,52 @@ enum SectionType : NSUInteger {
     
 }
 
-// Customize the appearance of table view cells.
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = nil;
-    NSLog(@"cellForRowAtIndexPath");
+    DLog(@"cellForRowAtIndexPath");
     if (indexPath.section == ParticipantSection)
     {
         
-        NSLog(@"cellForRowAtIndexPath ParticipantSection");
+        DLog(@"cellForRowAtIndexPath ParticipantSection");
         // Adding data to a cell using tags, we are using custom cells //
         cell = [tableView dequeueReusableCellWithIdentifier:@"participant"];
-        if (cell == nil)
-        {
+        if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"participant"] ;
         }
+        NSString *userID = [self.participants[indexPath.row] stringValue];
+        if([self.imageForUser objectForKey:userID] != nil){
+            UIImage *avatar = [self.imageForUser objectForKey:userID];
+            UIImageView *cellImage = (UIImageView *)[cell viewWithTag:4354];
+            [cellImage setImage:avatar];
+        }
+        // Image Not in the cache
+        else {
+            ((UIImageView *)[cell viewWithTag:4354]).image = nil;
+        }
+        if([self.userForName objectForKey:userID] != nil){
+            UILabel *label = (UILabel *)[cell viewWithTag:4352]; // User Name Textfield
+            label.text = [self.userForName objectForKey:userID];
+            
+        }
+        // Username Not in the cache
+        else {
+            ((UILabel *)[cell viewWithTag:4352]).text = @" ";
+        }
+        if ([self.scoreForUser objectForKey:self.participants[indexPath.row]] != nil) {
+            UILabel *label = (UILabel *)[cell viewWithTag:4353]; // Score Textfield
+            label.text = [[self.scoreForUser objectForKey:self.participants[indexPath.row]] stringValue];
+        }
+        // Score Not in the cache
+        else {
+            ((UILabel *)[cell viewWithTag:4353]).text = @" ";
+        }
+    
         
-        if ([self.userForName count] > 0 && [self.imageForUser count] > 0) {
+        /*if ([self.userForName count] > 0 && [self.imageForUser count] > 0) {
             NSArray *usersSorted = [[self.userForName allKeys]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-            NSLog(@"cellForRowAtIndexPath usersSorted: %@", usersSorted);
+            DLog(@"cellForRowAtIndexPath usersSorted: %@", usersSorted);
             // Configure the cell text
             // cell.textLabel.text = usersSorted[indexPath.row];
             UILabel *label;
@@ -534,19 +681,19 @@ enum SectionType : NSUInteger {
             UIImage *avatar = [self.imageForUser objectForKey:userID];
             cellImage = (UIImageView *)[cell viewWithTag:4354]; // Thumbnail
             [cellImage setImage:avatar];
-            NSLog(@"setting avatar: %@", avatar);
-            NSLog(@"self.imageForUser: %@", self.imageForUser);
-            NSLog(@"[userID stringValue]: %@", userID );
+            DLog(@"setting avatar: %@", avatar);
+            DLog(@"self.imageForUser: %@", self.imageForUser);
+            DLog(@"[userID stringValue]: %@", userID );
             
             label = (UILabel *)[cell viewWithTag:4353]; // Score Textfield
             if ([self.scoreForUser objectForKey:@([userID intValue])] != NULL) {
                 label.text = [[self.scoreForUser objectForKey:@([userID intValue])] stringValue];
-                NSLog(@" label.text: %@",  label.text );
+                DLog(@" label.text: %@",  label.text );
             }
             else {
                 label.text = @" ";
             }
-        }
+        }*/
         
     }
     // Overview
@@ -559,8 +706,8 @@ enum SectionType : NSUInteger {
         }
         cell.textLabel.text = @"Energieuhr";
     }
-    NSLog(@"section: %i", indexPath.section);
-    NSLog(@"cell: %@", cell);
+    DLog(@"section: %i, row: %i", indexPath.section, indexPath.row);
+    DLog(@"cell: %@", cell);
     NSAssert(cell!=nil, @"cell is nil!");
     return cell;
 }

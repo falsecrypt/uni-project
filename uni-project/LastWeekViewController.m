@@ -93,7 +93,7 @@ NSMutableArray *navigationBarItems;
         reach.reachableBlock = ^(Reachability * reachability)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(@"Block Says Reachable");
+                DLog(@"Block Says Reachable");
                 self.deviceIsOnline = YES;
                 [self initPieChartOnline];
             });
@@ -102,7 +102,7 @@ NSMutableArray *navigationBarItems;
         reach.unreachableBlock = ^(Reachability * reachability)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(@"Block Says Unreachable");
+                DLog(@"Block Says Unreachable");
                 self.deviceIsOnline = NO;
                 [self initPieChartOffline];
             });
@@ -120,7 +120,7 @@ NSMutableArray *navigationBarItems;
         
         [reach startNotifier];
         
-        NSLog(@"calling viewDidLoad - Last Week!");
+        DLog(@"calling viewDidLoad - Last Week!");
         
     }
 }
@@ -130,17 +130,17 @@ NSMutableArray *navigationBarItems;
  
  if([reach isReachable])
  {
- NSLog(@"Notification Says Reachable");
+ DLog(@"Notification Says Reachable");
  }
  else
  {
- NSLog(@"Notification Says Unreachable");
+ DLog(@"Notification Says Unreachable");
  }
  }
  */
 
 - (void) initPieChartOnline {
-    NSLog(@"calling initPieChartOnline!");
+    DLog(@"calling initPieChartOnline!");
     // Prepare Data for the 7-Days-Pie Chart TODO
     
     if (self.permanentHud) {
@@ -160,16 +160,16 @@ NSMutableArray *navigationBarItems;
         // Lets look for Week Data in our DB
         
         // We are online
-        NSLog(@"deviceIsOnline : %i", self.deviceIsOnline);
+        DLog(@"deviceIsOnline : %i", self.deviceIsOnline);
         
         // No Data, our App has been started for the first time
         if ([WeekData countOfEntities]==0) {
-            NSLog(@"No Data in the WeekData Table!");
+            DLog(@"No Data in the WeekData Table!");
             [self getWeekData];
         }
         // We have some data, we are online so lets sync
         else {
-            NSLog(@"number of entities before sync : %i", [WeekData countOfEntities]);
+            DLog(@"number of entities before sync : %i", [WeekData countOfEntities]);
             //[WeekData truncateAll];
             [self getWeekData];
         }
@@ -182,7 +182,7 @@ NSMutableArray *navigationBarItems;
 }
 
 - (void) initPieChartOffline{
-    NSLog(@"calling initPieChart!");
+    DLog(@"calling initPieChart!");
     // Prepare Data for the 7-Days-Pie Chart TODO
     
     if ( self.dayDataDictionary == nil ) {
@@ -196,7 +196,7 @@ NSMutableArray *navigationBarItems;
         // Lets look for Week Data in our DB
         // We are offline
         // retrieve the data from the DB
-        NSLog(@"deviceIsOnline : %i", self.deviceIsOnline);
+        DLog(@"deviceIsOnline : %i", self.deviceIsOnline);
         // ooops, No Data. Show error message
         if ([WeekData countOfEntities]==0) {
             if (self.HUD) {
@@ -204,7 +204,7 @@ NSMutableArray *navigationBarItems;
                 [self.HUD removeFromSuperview];
                 self.HUD = nil;
             }
-            NSLog(@"No Data in the WeekData Table! and the Device is not connected to the internet..");
+            DLog(@"No Data in the WeekData Table! and the Device is not connected to the internet..");
             self.permanentHud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             // Configure for text only and offset down
             self.permanentHud.labelText = @"Keine Daten vorhanden";
@@ -225,11 +225,11 @@ NSMutableArray *navigationBarItems;
          [newData setConsumption:(NSDecimalNumber *)[NSDecimalNumber numberWithFloat:2.34f]];
          [[NSManagedObjectContext defaultContext] saveNestedContexts];
          NSArray *result = [WeekData findAllSortedBy:@"day" ascending:YES];
-         NSLog(@"TEST, result: %@", result);*/
+         DLog(@"TEST, result: %@", result);*/
         
         [self.piePlot reloadData];
         
-        NSLog(@"initPieChart END-> dayDataDictionary: %@", self.dayDataDictionary);
+        DLog(@"initPieChart END-> dayDataDictionary: %@", self.dayDataDictionary);
     }
     else {
         [self readyToMakePieChart];
@@ -238,7 +238,7 @@ NSMutableArray *navigationBarItems;
 }
 
 -(void)getWeekData {
-    NSLog(@"startSynchronization...");
+    DLog(@"startSynchronization...");
     
     // Start this first timer immediately, without delay
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -256,9 +256,9 @@ NSMutableArray *navigationBarItems;
 -(void)readyToMakePieChart {
     [MBProgressHUD hideHUDForView:self.view animated:YES];
     NSArray *results = [WeekData findAllSortedBy:@"day" ascending:YES];
-    NSLog(@"readyToMakePieChart -> results: %@", results);
+    DLog(@"readyToMakePieChart -> results: %@", results);
     WeekData *weekdata = results[0];
-    NSLog(@"readyToMakePieChart -> first: %@", [weekdata day]);
+    DLog(@"readyToMakePieChart -> first: %@", [weekdata day]);
     self.dayDataDictionary = [[NSMutableDictionary alloc] init];
     plotDataConsumption = [[NSMutableArray alloc] init];
     plotDataDates = [[NSMutableArray alloc] init];
@@ -267,24 +267,24 @@ NSMutableArray *navigationBarItems;
         self.dayDataDictionary[[weekdata consumption]] = [weekdata day]; //NSMutableDictionary is unordered
         [plotDataConsumption addObject:[weekdata consumption]];
         [plotDataDates addObject:[weekdata day]];
-        NSLog(@"adding [weekdata day]: %@", [weekdata day]);
+        DLog(@"adding [weekdata day]: %@", [weekdata day]);
     }
     if (USEDUMMYDATA == NO || self.newDataSuccess) {
         [plotDataConsumption removeObjectsInRange:NSMakeRange(0, 7)]; // delete the first 7 days
         [plotDataDates removeObjectsInRange:NSMakeRange(0, 7)]; // start at position 0, length = 7
     }
-    NSLog(@"readyToMakePieChart -> plotDataDates: %@", plotDataDates);
+    DLog(@"readyToMakePieChart -> plotDataDates: %@", plotDataDates);
     [self calculateColorValuesForDays];
     [self createPieChart];
     
-    NSLog(@"readyToMakePieChart -> dayDataDictionary: %@", self.dayDataDictionary);
-    NSLog(@"readyToMakePieChart -> plotDataConsumption: %@", plotDataConsumption);
+    DLog(@"readyToMakePieChart -> dayDataDictionary: %@", self.dayDataDictionary);
+    DLog(@"readyToMakePieChart -> plotDataConsumption: %@", plotDataConsumption);
     
 }
 
 - (void)getDataFromServer:(NSTimer *)timer {
     
-    NSLog(@"getDataFromServer...");
+    DLog(@"getDataFromServer...");
     //Get user's aggregated kilowatt values per day (max 14 days, semicolon separated, latest first).
     // userID should be set by the user! TODO
     NSString *getPath = @"rpc.php?userID=";
@@ -300,7 +300,7 @@ NSMutableArray *navigationBarItems;
                                          for (NSString *obj in components) {
                                              
                                              NSArray *day = [obj componentsSeparatedByString:@"="];
-                                             NSLog(@"day : %@", day);
+                                             DLog(@"day : %@", day);
                                              NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
                                              [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
                                              [dateFormatter setDateFormat:@"yy-MM-dd"];
@@ -308,7 +308,7 @@ NSMutableArray *navigationBarItems;
                                              NSString *withoutComma = [day[1] stringByReplacingOccurrencesOfString:@"," withString:@"."];
                                              double temp = [withoutComma doubleValue];
                                              NSDecimalNumber *dayConsumption = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:temp];
-                                             NSLog(@"dayConsumption : %@", dayConsumption);
+                                             DLog(@"dayConsumption : %@", dayConsumption);
                                              
                                              WeekData *newData = [WeekData createEntity];
                                              [newData setDay:date];
@@ -323,7 +323,7 @@ NSMutableArray *navigationBarItems;
                                          });
                                          
                                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                         NSLog(@"Failed during getting 7-Weeks-Data: %@",[error localizedDescription]);
+                                         DLog(@"Failed during getting 7-Weeks-Data: %@",[error localizedDescription]);
                                          if (USEDUMMYDATA)
                                          {
                                              [WeekData truncateAll]; // OK, Lets remove all old DB-Objects and generate new ones..
@@ -360,7 +360,7 @@ NSMutableArray *navigationBarItems;
 {
     CGRect bounds = self.graphHostingView.bounds;
     
-    NSLog(@"__calling createPieChart");
+    DLog(@"__calling createPieChart");
     
     self.graph = [[CPTXYGraph alloc] initWithFrame:bounds];
     self.graphHostingView.hostedGraph = self.graph;
@@ -448,7 +448,7 @@ NSMutableArray *navigationBarItems;
            animationCurve:CPTAnimationCurveBounceOut
                  delegate:nil];
     
-    NSLog(@"createPieChart: graph: %@, piePlot: %@", self.graph, self.piePlot);
+    DLog(@"createPieChart: graph: %@, piePlot: %@", self.graph, self.piePlot);
     
     self.selecting = FALSE;
     self.repeatingTouch = FALSE;
@@ -456,13 +456,13 @@ NSMutableArray *navigationBarItems;
 }
 
 -(void)selectSliceOnFirstLaunch {
-    NSLog(@"calling selectSliceOnFirstLaunch");
+    DLog(@"calling selectSliceOnFirstLaunch");
     /*selecting = TRUE;
      repeatingTouch = NO;
      firstTime = NO;
      NSUInteger index = [plotDataConsumption count]-1;
      currentSliceIndex = index;
-     NSLog(@"selectSliceOnFirstLaunch: graph: %@, piePlot: %@", self.graph, piePlot);
+     DLog(@"selectSliceOnFirstLaunch: graph: %@, piePlot: %@", self.graph, piePlot);
      [piePlot reloadData];
      
      [piePlot setNeedsDisplay];*/
@@ -477,7 +477,7 @@ NSMutableArray *navigationBarItems;
 
 -(void)pieChart:(CPTPieChart *)plot sliceWasSelectedAtRecordIndex:(NSUInteger)index
 {
-    NSLog(@"%@ slice was selected at index %lu. Value = %@", plot.identifier, (unsigned long)index, plotDataConsumption[index]);
+    DLog(@"%@ slice was selected at index %lu. Value = %@", plot.identifier, (unsigned long)index, plotDataConsumption[index]);
     
     self.selecting = TRUE;
     if (self.currentSliceIndex==index && !self.repeatingTouch) {
@@ -527,7 +527,7 @@ NSMutableArray *navigationBarItems;
 
 -(CPTFill *)sliceFillForPieChart:(CPTPieChart *)pieChart recordIndex:(NSUInteger)index{
     
-    NSLog(@"calling sliceFillForPieChart: %@", pieChart);
+    DLog(@"calling sliceFillForPieChart: %@", pieChart);
     
     CPTFill *sector = [[CPTFill alloc] init];
     
@@ -566,9 +566,9 @@ NSMutableArray *navigationBarItems;
     //                                                         endingColor:endColor];
     //sector=[CPTFill fillWithGradient:areaGradientUI];
     NSNumber *consumption = plotDataConsumption[index];
-    NSLog(@"consumption: %@", consumption);
+    DLog(@"consumption: %@", consumption);
     UIColor *sliceColor = (self.daysColors)[[consumption stringValue]];
-    NSLog(@"sliceColor: %@", sliceColor);
+    DLog(@"sliceColor: %@", sliceColor);
     sector=[CPTFill fillWithColor:(CPTColor *)sliceColor];
     return sector;
 }
@@ -578,7 +578,7 @@ NSMutableArray *navigationBarItems;
 
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
-    NSLog(@"[plotDataConsumption count]: %i", [plotDataConsumption count]);
+    DLog(@"[plotDataConsumption count]: %i", [plotDataConsumption count]);
     return [plotDataConsumption count];
 }
 
@@ -590,16 +590,16 @@ NSMutableArray *navigationBarItems;
         num = plotDataConsumption[index];
     }
     else {
-        NSLog(@"numberForPlot returning index = %i", index);
+        DLog(@"numberForPlot returning index = %i", index);
         return [NSNumber numberWithInt:index];
     }
-    NSLog(@"numberForPlot returning num = %@", num);
+    DLog(@"numberForPlot returning num = %@", num);
     return num;
 }
 
 -(CPTLayer *)dataLabelForPlot:(CPTPlot *)plot recordIndex:(NSUInteger)index
 {
-    NSLog(@"calling dataLabelForPlot");
+    DLog(@"calling dataLabelForPlot");
     static CPTMutableTextStyle *whiteText = nil;
     
     CPTTextLayer *newLayer = nil;
@@ -612,7 +612,7 @@ NSMutableArray *navigationBarItems;
         }
         //NSDate *dayDate = [dayDataDictionary objectForKey:[plotDataConsumption objectAtIndex:index]];
         NSDate *dayDate = plotDataDates[index];
-        NSLog(@"dayDate: %@", dayDate);
+        DLog(@"dayDate: %@", dayDate);
         NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
         [formatter setDateStyle:NSDateFormatterLongStyle];
         [formatter setDateFormat:@"EE"];
@@ -645,7 +645,7 @@ NSMutableArray *navigationBarItems;
 {
     CGFloat result = 0.0;
     
-    NSLog(@"radialOffsetForPieChart: recordIndex %i, currentSliceIndex %i, selecting %i, repeatingTouch %i", index, self.currentSliceIndex, self.selecting, self.repeatingTouch);
+    DLog(@"radialOffsetForPieChart: recordIndex %i, currentSliceIndex %i, selecting %i, repeatingTouch %i", index, self.currentSliceIndex, self.selecting, self.repeatingTouch);
     
     if ( [(NSString *)pieChart.identifier isEqualToString:pieChartName] && self.selecting && index==self.currentSliceIndex) {
         result = 20.0;
@@ -670,23 +670,23 @@ NSMutableArray *navigationBarItems;
 #pragma mark Profile Button Methods
 
 - (void)hideProfileAfterUserLoggedOff {
-    NSLog(@"hideProfileAfterUserLoggedOff...");
+    DLog(@"hideProfileAfterUserLoggedOff...");
     if (self.profilePopover){
         [self.profilePopover dismissPopoverAnimated:YES];
-        NSLog(@"profile popover dissmissed...");
+        DLog(@"profile popover dissmissed...");
     }
     [navigationBarItems removeObject:self.profileBarButtonItem];
     [self.navigationBar.topItem setRightBarButtonItems:navigationBarItems animated:YES];
     [self.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
-    //    NSLog(@"rightBarButtonItems: %@", [self.navigationBar.topItem rightBarButtonItems]);
-    //    NSLog(@"navigationBarItems: %@", navigationBarItems);
-    //    NSLog(@"self.profileBarButtonItem: %@", self.profileBarButtonItem);
+    //    DLog(@"rightBarButtonItems: %@", [self.navigationBar.topItem rightBarButtonItems]);
+    //    DLog(@"navigationBarItems: %@", navigationBarItems);
+    //    DLog(@"self.profileBarButtonItem: %@", self.profileBarButtonItem);
     // Going back
     [(self.splitViewController.viewControllers)[0]popToRootViewControllerAnimated:TRUE];
     DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
     FirstDetailViewController *startDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
     detailViewManager.detailViewController = startDetailViewController;
-    startDetailViewController.navigationBar.topItem.title = @"Summary";
+    startDetailViewController.navigationBar.topItem.title = @"Home";
     
 }
 
@@ -705,7 +705,7 @@ NSMutableArray *navigationBarItems;
     if (!self.daysColors) {
         self.daysColors = [[NSMutableDictionary alloc] init];
     }
-    NSLog(@"calculateColorValuesForDays -> plotDataDates: %@", plotDataDates);
+    DLog(@"calculateColorValuesForDays -> plotDataDates: %@", plotDataDates);
     float avgConsumption = 0.0f;
     float specificYearConsumption = 0.0f;
     float daysNumberInYear = 0.0f;
@@ -723,17 +723,17 @@ NSMutableArray *navigationBarItems;
     for (NSDecimalNumber *dayConsumption in plotDataConsumption) {
         
         avgConsumption = [dayConsumption floatValue] * daysNumberInYear;
-        NSLog(@"___avgConsumption: %f", avgConsumption);
+        DLog(@"___avgConsumption: %f", avgConsumption);
         specificYearConsumption = avgConsumption/OfficeArea;
-        NSLog(@"___specificYearConsumption: %f", specificYearConsumption);
+        DLog(@"___specificYearConsumption: %f", specificYearConsumption);
         if (specificYearConsumption <= AvgOfficeEnergyConsumption) {
             float redComponent = 255.0f - ((AvgOfficeEnergyConsumption - specificYearConsumption)*(256.0f/AvgOfficeEnergyConsumption));
             if (redComponent < 0.0) {
                 redComponent = 0.0;
             }
             UIColor *dayColor = [UIColor colorWithRed:redComponent/255.0f green:1.0f blue:0.0f alpha:0.7f];
-            NSLog(@"___redComponent: %f", redComponent);
-            NSLog(@"___redComponent/255: %f", redComponent/255.0f);
+            DLog(@"___redComponent: %f", redComponent);
+            DLog(@"___redComponent/255: %f", redComponent/255.0f);
             [self.daysColors setValue:dayColor forKey: [dayConsumption stringValue]];
         }
         else {
@@ -742,8 +742,8 @@ NSMutableArray *navigationBarItems;
                 greenComponent = 0.0;
             }
             UIColor *dayColor = [UIColor colorWithRed:1.0f green:greenComponent/255.0f blue:0.0f alpha:0.7f];
-            NSLog(@"___greenComponent: %f", greenComponent);
-            NSLog(@"___greenComponent/255: %f", greenComponent/255.0f);
+            DLog(@"___greenComponent: %f", greenComponent);
+            DLog(@"___greenComponent/255: %f", greenComponent/255.0f);
             [self.daysColors setValue:dayColor forKey: [dayConsumption stringValue]];
         }
         

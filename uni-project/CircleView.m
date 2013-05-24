@@ -112,13 +112,13 @@
 - (void)drawRect:(CGRect)rect
 {
     if (self.monthDataObjects!=nil) {
-        NSLog(@"\n drawRect: self.monthDataObjects: %@", self.monthDataObjects);
+        DLog(@"\n drawRect: self.monthDataObjects: %@", self.monthDataObjects);
         CGPoint point;
         self.circleObjectsDictionary = [[NSMutableDictionary alloc] init];
         point.x = self.bounds.origin.x + (self.bounds.size.width/5);
         point.y = self.bounds.origin.y + (self.bounds.size.height/3);
         
-        //NSLog(@"START point.x = %f, point.y = %f", point.x, point.y);
+        //DLog(@"START point.x = %f, point.y = %f", point.x, point.y);
         [self calculateColorValuesForMonths:self.monthDataObjects];
 
         NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
@@ -130,12 +130,12 @@
             MonthData *monthObj = (self.monthDataObjects)[i-1];
             CircleObjectView *circleObjectView = [[CircleObjectView alloc] initWithFrame:CGRectZero];
             [circleObjectView setBackgroundColor:(self.monthColors)[[monthObj.month stringValue]]];
-            NSLog(@"color: %@", (self.monthColors)[[monthObj.month stringValue]]);
+            DLog(@"color: %@", (self.monthColors)[[monthObj.month stringValue]]);
             circleObjectView.layer.cornerRadius = radius;
             circleObjectView.bounds = CGRectMake(0, 0, 2*radius, 2*radius); //bounds of the view’s own coordinates
             //for consumtion = 0kWh
             if (radius==0) {
-                NSLog(@"radius=0!");
+                DLog(@"radius=0!");
                 circleObjectView.layer.borderColor = [[UIColor greenColor] colorWithAlphaComponent:0.7f].CGColor;
                 circleObjectView.layer.borderWidth = 3.0f;
                 circleObjectView.layer.cornerRadius = 20.0f;
@@ -152,7 +152,7 @@
             [self addSubview:circleObjectView];
             (self.circleObjectsDictionary)[[monthObj.month stringValue]] = circleObjectView;
 
-            //NSLog(@"point.x = %f, point.y = %f", point.x, point.y);
+            //DLog(@"point.x = %f, point.y = %f", point.x, point.y);
             // Add a label with a month's name
             CGFloat labelWidth = 2*radius > 50 ? 2.0*radius : 50.0f;
             CGFloat labelX = labelWidth==50.0f ? point.x-25.0f : point.x-radius;
@@ -201,7 +201,7 @@
         MonthData *monthLastObj = (self.monthDataObjects)[[self.monthDataObjects count]-1];
         CircleObjectView *currentCircle =
         (self.circleObjectsDictionary)[[NSString stringWithFormat:@"%i",[[monthLastObj month]intValue]]];
-        //NSLog(@"self.circleObjectsDictionary = %@, self.monthDataObjects = %@", self.circleObjectsDictionary, self.monthDataObjects);
+        //DLog(@"self.circleObjectsDictionary = %@, self.monthDataObjects = %@", self.circleObjectsDictionary, self.monthDataObjects);
         [UIView animateWithDuration:0.3 animations:^{
             UIColor *animColorStart = [(self.monthColors)[[NSString stringWithFormat:@"%i",currentCircle.tag]] colorWithAlphaComponent: 1.0f];
             currentCircle.backgroundColor = animColorStart;
@@ -250,7 +250,7 @@
             if (specificYearConsumption==0) {
                 monthColor = [UIColor clearColor];
             }
-            NSLog(@"___redComponent: %f and specificYearConsumption: %f", redComponent, specificYearConsumption);
+            DLog(@"___redComponent: %f and specificYearConsumption: %f", redComponent, specificYearConsumption);
             [self.monthColors setValue:monthColor forKey:[NSString stringWithFormat:@"%i",[[month month]intValue]]];
         }
         else {
@@ -259,7 +259,7 @@
                 greenComponent = 0.0;
             }
             UIColor *monthColor = [UIColor colorWithRed:1.0f green:greenComponent/255.0f blue:0.0f alpha:0.7f];
-            NSLog(@"___greenComponent: %f and specificYearConsumption: %f", greenComponent, specificYearConsumption);
+            DLog(@"___greenComponent: %f and specificYearConsumption: %f", greenComponent, specificYearConsumption);
             [self.monthColors setValue:monthColor forKey:[NSString stringWithFormat:@"%i",[[month month]intValue]]];
         }
 

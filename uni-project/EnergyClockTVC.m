@@ -47,9 +47,9 @@
 - (void)viewWillDisappear:(BOOL)animated {
     
     [super viewWillDisappear:animated];
-    NSLog(@"PTVC: viewWillDisappear");
+    DLog(@"PTVC: viewWillDisappear");
     
-    //NSLog(@"calling SecondTableViewController - viewWillDisappear");
+    //DLog(@"calling SecondTableViewController - viewWillDisappear");
 //        DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
 //        FirstDetailViewController *prevDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
 //        detailViewManager.detailViewController = prevDetailViewController;
@@ -130,16 +130,16 @@
 
 //- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 //{
-//    NSLog(@"<EnergyClockTVC> segue : %@", segue);
+//    DLog(@"<EnergyClockTVC> segue : %@", segue);
 //    
 //    if ([segue.identifier isEqualToString:@"publicEnergyClock"])
 //    {
-//        NSLog(@"<EnergyClockTVC> segue : %@", segue);
-//        NSLog(@"<EnergyClockTVC> sender: %@", sender);
+//        DLog(@"<EnergyClockTVC> segue : %@", segue);
+//        DLog(@"<EnergyClockTVC> sender: %@", sender);
 //        //here is segue an instance of our MCachedModalStoryboardSegue
 //        MCachedModalStoryboardSegue *customSegue = (MCachedModalStoryboardSegue *)segue;
 //        EnergyClockViewController *destViewController = customSegue.destinationViewController;
-//        NSLog(@"<PublicTableViewController> customSegue.destinationViewController: %@", customSegue.destinationViewController);
+//        DLog(@"<PublicTableViewController> customSegue.destinationViewController: %@", customSegue.destinationViewController);
 //        destViewController.instanceWasCached  = customSegue.destinationWasCached;
 //
 //    }

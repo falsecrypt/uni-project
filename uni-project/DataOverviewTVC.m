@@ -127,14 +127,14 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"showLastWeekData"]) {
-        NSLog(@"segue : %@", segue);
+        DLog(@"segue : %@", segue);
         //here is segue an instance of our MCachedModalStoryboardSegue
         MCachedModalStoryboardSegue *customSegue = (MCachedModalStoryboardSegue *)segue;
         LastWeekViewController *destViewController = customSegue.destinationViewController;
         destViewController.instanceWasCached  = customSegue.destinationWasCached;
     }
     else if ([segue.identifier isEqualToString:@"showLastMonthsData"]) {
-        NSLog(@"segue : %@", segue);
+        DLog(@"segue : %@", segue);
         //here is segue an instance of our MCachedModalStoryboardSegue
         MCachedModalStoryboardSegue *customSegue = (MCachedModalStoryboardSegue *)segue;
         LastMonthsViewController *destViewController = customSegue.destinationViewController;

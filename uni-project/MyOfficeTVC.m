@@ -8,6 +8,7 @@
 #import "MyOfficeTVC.h"
 #import "MCachedModalStoryboardSegue.h"
 #import "CurrentDataViewController.h"
+#import  "FirstDetailViewController.h"
 
 @interface MyOfficeTVC ()
 
@@ -42,6 +43,17 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    
+    [super viewWillDisappear:animated];
+    DLog(@"PTVC: viewWillDisappear");
+    DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
+    FirstDetailViewController *prevDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
+    detailViewManager.detailViewController = prevDetailViewController;
+    prevDetailViewController.navigationBar.topItem.title = @"Home";
+    
 }
 
 /*
@@ -125,7 +137,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([segue.identifier isEqualToString:@"showCurrentDataVC"]) {
-        NSLog(@"segue : %@", segue);
+        DLog(@"segue : %@", segue);
         //here is segue an instance of our MCachedModalStoryboardSegue
         MCachedModalStoryboardSegue *customSegue = (MCachedModalStoryboardSegue *)segue;
         CurrentDataViewController *destViewController = customSegue.destinationViewController;

@@ -9,13 +9,16 @@
 #import "ParticipantDataManager.h"
 #import "Reachability.h"
 #import "Participant.h"
-
+#import "ProfilePopoverViewController.h"
+#import "KeychainItemWrapper.h"
 
 @interface PublicDetailViewController ()
 
 @property (nonatomic, strong) UIView *borderView;
 @property (nonatomic, weak)   IBOutlet UINavigationBar *navigationBar;
-
+@property (nonatomic, weak)   IBOutlet UIBarButtonItem *profileBarButtonItem;
+@property (nonatomic, strong) UIPopoverController *profilePopover;
+@property (nonatomic, strong) ProfilePopoverViewController *userProfile;
 @end
 
 @implementation PublicDetailViewController
@@ -65,11 +68,11 @@ typedef enum {
 // -------------------------------------------------------------------------------
 - (void)viewDidLoad
 {
-    NSLog(@"<PublicDetailViewController> viewDidLoad");
+    DLog(@"<PublicDetailViewController> viewDidLoad");
     
     if (!self.instanceWasCached) {
         
-            NSLog(@"<PublicDetailViewController> viewDidLoad first init..");
+            DLog(@"<PublicDetailViewController> viewDidLoad first init..");
         // -setNavigationPaneBarButtonItem may have been invoked when before the
         // interface was loaded.  This will occur when setNavigationPaneBarButtonItem
         // is called as part of DetailViewManager preparing this view controller
@@ -100,24 +103,45 @@ typedef enum {
          name:scoreNotificationName
          object:nil];
         
+        NSString *firstNotificationName = @"UserLoggedInNotification";
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(showProfileAfterUserLoggedIn)
+         name:firstNotificationName
+         object:nil];
+        
+        NSString *registeredNotificationName = @"UserRegisteredNotification";
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(showProfileAfterUserLoggedIn)
+         name:registeredNotificationName
+         object:nil];
+        
+        NSString *secondNotificationName = @"UserLoggedOffNotification";
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(hideProfileAfterUserLoggedOff)
+         name:secondNotificationName
+         object:nil];
+        
         Reachability* reach = [Reachability reachabilityWithHostname:currentCostServerBaseURLHome];
         ParticipantDataManager *dataManager = [[ParticipantDataManager alloc] initWithParticipantId:self.selectedParticipant];
         reach.reachableBlock = ^(Reachability * reachability)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                //NSLog(@"Block Says Reachable");
+                //DLog(@"Block Says Reachable");
                 deviceIsOnline = YES;
                 [dataManager startCalculatingRankAndScoreWithNetworkStatus:deviceIsOnline];
                 
                 //NSArray *results = [Participant findAllSortedBy:@"sensorid" ascending:YES];
-                //NSLog(@"<PublicDetailViewController> consumption from getParticipantScore: %@", consumption);
+                //DLog(@"<PublicDetailViewController> consumption from getParticipantScore: %@", consumption);
             });
         };
         
         reach.unreachableBlock = ^(Reachability * reachability)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                //NSLog(@"Block Says Unreachable");
+                //DLog(@"Block Says Unreachable");
                 deviceIsOnline = NO;
                 [dataManager startCalculatingRankAndScoreWithNetworkStatus:deviceIsOnline];
             });
@@ -144,11 +168,11 @@ typedef enum {
     Participant *participant =
     [Participant findFirstByAttribute:@"sensorid" withValue:[NSNumber numberWithInt:self.selectedParticipant] inContext:[NSManagedObjectContext defaultContext]];
     
-    NSLog(@"<PublicDetailViewController> addScore participant: %@", participant);
+    DLog(@"<PublicDetailViewController> addScore participant: %@", participant);
     
     
     calculatedScore = [[pNotification object] floatValue];
-    NSLog(@"<PublicDetailViewController> calculatedScore: %f", calculatedScore);
+    DLog(@"<PublicDetailViewController> calculatedScore: %f", calculatedScore);
     NSString *scoreAsText = [NSString stringWithFormat:@"%.2f",calculatedScore];
     
     // TEST add Score View
@@ -177,7 +201,7 @@ typedef enum {
 -(void)addRankViewWithNotification:(NSNotification *)pNotification{
     calculatedRank = [[pNotification object] integerValue];
 
-    NSLog(@"<PublicDetailViewController> addRankViewWithNotification, rank = %i", calculatedRank);
+    DLog(@"<PublicDetailViewController> addRankViewWithNotification, rank = %i", calculatedRank);
     static CGFloat const WIDTH  = 170;
     static CGFloat const HEIGHT = 70;
     static CGFloat const XVALUE = 475;
@@ -190,7 +214,7 @@ typedef enum {
             UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgFilepath];
             [imgView setImage:img];
             [self.view addSubview:imgView];
-            //NSLog(@"imgView = %@", imgView);
+            //DLog(@"imgView = %@", imgView);
             break;
         }
         case _APlusPlus:{
@@ -199,7 +223,7 @@ typedef enum {
             UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgFilepath];
             [imgView setImage:img];
             [self.view addSubview:imgView];
-            //NSLog(@"imgView = %@", imgView);
+            //DLog(@"imgView = %@", imgView);
             break;
         }
         case _APlus:{
@@ -208,7 +232,7 @@ typedef enum {
             UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgFilepath];
             [imgView setImage:img];
             [self.view addSubview:imgView];
-            //NSLog(@"imgView = %@", imgView);
+            //DLog(@"imgView = %@", imgView);
             break;
         }
         case _A:{
@@ -217,7 +241,7 @@ typedef enum {
             UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgFilepath];
             [imgView setImage:img];
             [self.view addSubview:imgView];
-            //NSLog(@"imgView = %@", imgView);
+            //DLog(@"imgView = %@", imgView);
             break;
         }
         case _B:{
@@ -226,7 +250,7 @@ typedef enum {
             UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgFilepath];
             [imgView setImage:img];
             [self.view addSubview:imgView];
-            //NSLog(@"imgView = %@", imgView);
+            //DLog(@"imgView = %@", imgView);
             break;
         }
         case _C:{
@@ -235,7 +259,7 @@ typedef enum {
             UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgFilepath];
             [imgView setImage:img];
             [self.view addSubview:imgView];
-            //NSLog(@"imgView = %@", imgView);
+            //DLog(@"imgView = %@", imgView);
             break;
         }
         case _D:{
@@ -244,7 +268,7 @@ typedef enum {
             UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgFilepath];
             [imgView setImage:img];
             [self.view addSubview:imgView];
-            //NSLog(@"imgView = %@", imgView);
+            //DLog(@"imgView = %@", imgView);
             break;
         }
             
@@ -253,7 +277,7 @@ typedef enum {
     }
 
     
-    NSLog(@"<PublicDetailViewController> imageview: %@ added to view %@", imgView, self.view);
+    DLog(@"<PublicDetailViewController> imageview: %@ added to view %@", imgView, self.view);
 }
 
 // -------------------------------------------------------------------------------
@@ -264,6 +288,14 @@ typedef enum {
     [super viewWillAppear:animated];
     
     self.navigationBar.topItem.title = self.title;
+    KeychainItemWrapper *keychain =
+    [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
+    if ( ([[keychain objectForKey:(__bridge id)(kSecAttrLabel)] isEqualToString:@"LOGGEDOFF"] )
+        || ( [[keychain objectForKey:(__bridge id)kSecAttrAccount] length] == 0 ) /* Or Username is empty */
+        || ( [[keychain objectForKey:(__bridge id)kSecValueData] length]== 0) ) /* Or Password is empty */ {
+        DLog(@"user is not logged in, removing profileBarButtonItem");
+        [self.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
+    }
     
 }
 
@@ -281,6 +313,36 @@ typedef enum {
 	self.navigationBar = nil;
 }
 
+
+- (void)hideProfileAfterUserLoggedOff {
+    DLog(@"hideProfileAfterUserLoggedOff...");
+    if (self.profilePopover)
+        [self.profilePopover dismissPopoverAnimated:YES];
+    // Dismiss the Profile button
+    //[self.navigationItem setRightBarButtonItem:nil animated:YES];
+    [self.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
+    
+}
+
+- (IBAction)profileButtonTapped:(UIBarButtonItem *)sender {
+    if (_userProfile == nil) {
+        self.userProfile = [[ProfilePopoverViewController alloc] init];
+        //_userProfile.delegate = self;
+        self.profilePopover = [[UIPopoverController alloc] initWithContentViewController:_userProfile];
+        
+    }
+    [self.profilePopover presentPopoverFromBarButtonItem:sender
+                                permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+    
+}
+
+- (void)showProfileAfterUserLoggedIn {
+    //DLog(@"!!!!! 1 calling showProfileAfterUserLoggedIn !!!!!!!!!!");
+    //[navigationBarItems addObject:self.profileBarButtonItem];
+    DLog(@"FirstDetail: user logged in: adding profileBarButtonItem: %@", self.profileBarButtonItem);
+    [self.navigationBar.topItem setRightBarButtonItem:self.profileBarButtonItem animated:YES];
+    //[self.navigationItem setRightBarButtonItem:self.profileBarButtonItem  animated:YES];
+}
 #pragma mark -
 #pragma mark Rotation support
 
@@ -289,8 +351,8 @@ typedef enum {
 // -------------------------------------------------------------------------------
 /*- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     
-    NSLog(@"<PublicDetailViewController> shouldAutorotateToInterfaceOrientation, frame w:%f h:%f", self.view.frame.size.width, self.view.frame.size.height);
-    NSLog(@"<PublicDetailViewController> shouldAutorotateToInterfaceOrientation, bounds w:%f h:%f", self.view.bounds.size.width, self.view.bounds.size.height);
+    DLog(@"<PublicDetailViewController> shouldAutorotateToInterfaceOrientation, frame w:%f h:%f", self.view.frame.size.width, self.view.frame.size.height);
+    DLog(@"<PublicDetailViewController> shouldAutorotateToInterfaceOrientation, bounds w:%f h:%f", self.view.bounds.size.width, self.view.bounds.size.height);
     return YES;
 }*/
 

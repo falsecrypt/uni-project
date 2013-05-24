@@ -81,7 +81,7 @@
             }
             
             if (error) {
-                NSLog(@"%@ %@: %@", [self class], NSStringFromSelector(_cmd), error);
+                DLog(@"%@ %@: %@", [self class], NSStringFromSelector(_cmd), error);
             }
         }
     }

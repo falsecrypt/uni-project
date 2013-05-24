@@ -1,17 +1,6 @@
 
 @interface Constants : NSObject
 
-// Deprecated
-extern NSString * const CPDThemeNameDarkGradient;
-extern NSString * const CPDThemeNamePlainBlack;
-extern NSString * const CPDThemeNamePlainWhite;
-extern NSString * const CPDThemeNameSlate;
-extern NSString * const CPDThemeNameStocks;
-
-extern NSString * const CPDTickerSymbolAAPL;
-extern NSString * const CPDTickerSymbolGOOG;
-extern NSString * const CPDTickerSymbolMSFT;
-
 // Constants used 
 extern NSString * const pieChart;
 extern NSString * const barGraph;

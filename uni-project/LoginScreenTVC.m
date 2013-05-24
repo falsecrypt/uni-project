@@ -97,7 +97,7 @@
         // now set UserLoggedIn, using keychain
         [keychain setObject:@"LOGGEDIN" forKey:(__bridge id)(kSecAttrLabel)];
         
-        NSLog(@"Credentials accepted-userLoggedIn from the keychain: %@", [keychain objectForKey:(__bridge id)(kSecAttrLabel)]);
+        DLog(@"Credentials accepted-userLoggedIn from the keychain: %@", [keychain objectForKey:(__bridge id)(kSecAttrLabel)]);
         [self.delegate didDismissPresentedViewControllerLogin];
         
         NSString *notificationName = @"UserLoggedInNotification";

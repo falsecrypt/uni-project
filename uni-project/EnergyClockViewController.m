@@ -14,6 +14,9 @@
 #import "EnergyClockDataManager.h"
 #import "EcoMeterAppDelegate.h"
 #import "MBProgressHUD.h"
+#import "Participant.h"
+#import "ProfilePopoverViewController.h"
+#import "KeychainItemWrapper.h"
 
 // identifiers/tags
 static const int numberPages    = 2;
@@ -53,6 +56,12 @@ static const int sliceDetailsView = 13;
 @property (assign, nonatomic) NSInteger selectedParticipantId;
 @property (nonatomic, strong) MBProgressHUD *HUD;
 
+@property (nonatomic, strong) ProfilePopoverViewController *userProfile;
+@property (nonatomic, strong) UIPopoverController *profilePopover;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem *profileBarButtonItem;
+
+- (IBAction)profileButtonTapped:(id)sender;
+
 @end
 
 @implementation EnergyClockViewController
@@ -64,7 +73,7 @@ static const NSArray *participants;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-        NSLog(@"EnergyClockViewController-initWithNibName");
+        DLog(@"EnergyClockViewController-initWithNibName");
     }
     return self;
 }
@@ -87,6 +96,26 @@ static const NSArray *participants;
                     [NSNumber numberWithInteger:SecondSensorID],
                     [NSNumber numberWithInteger:ThirdSensorID], nil];
     
+    NSString *firstNotificationName = @"UserLoggedInNotification";
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showProfileAfterUserLoggedIn)
+     name:firstNotificationName
+     object:nil];
+    
+    NSString *registeredNotificationName = @"UserRegisteredNotification";
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(showProfileAfterUserLoggedIn)
+     name:registeredNotificationName
+     object:nil];
+    
+    NSString *secondNotificationName = @"UserLoggedOffNotification";
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(hideProfileAfterUserLoggedOff)
+     name:secondNotificationName
+     object:nil];
     
     self.sliceDetailsView.datasource = self;
     self.sliceDetailsView.tag = sliceDetailsView;
@@ -122,7 +151,7 @@ static const NSArray *participants;
     self.CPTColorsForParticipants = CPTColorsForParticipantsMutable;
     
     // Segmented Control #1
-    UILabel *segmentedControl1Label = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + 10.0, 400.0, 300.0, 20.0)]; // x,y,width,height
+    UILabel *segmentedControl1Label = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + 10.0, 400.0, 380.0, 20.0)]; // x,y,width,height
                                                                                                                                        //[segmentedControl1Label setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     [segmentedControl1Label setText:SegmentedControlLabelText];
     [segmentedControl1Label setTextAlignment:NSTextAlignmentCenter];
@@ -134,7 +163,7 @@ static const NSArray *participants;
     
     [self.mainScrollView addSubview:segmentedControl1Label];
     self.participantSelector = [[AKSegmentedControl alloc] initWithFrame:CGRectMake(self.view.frame.origin.x + 10.0,
-                                                                                    CGRectGetMaxY(segmentedControl1Label.frame) + 10.0, 300.0, 37.0)];
+                                                                                    CGRectGetMaxY(segmentedControl1Label.frame) + 10.0, 380.0, 37.0)];
     [self.participantSelector addTarget:self action:@selector(segmentedViewController:) forControlEvents:UIControlEventValueChanged];
     [self.participantSelector setSegmentedControlMode:AKSegmentedControlModeSticky];
     [self.participantSelector setSelectedIndex:0];
@@ -175,22 +204,27 @@ static const NSArray *participants;
     //[self.energyClockView reloadData];
     [self checkSyncStatus];
     
-    NSLog(@"viewDidLoad-after checkSyncStatus, self.sliceValues: %@", self.sliceValues);
-    NSLog(@"viewDidLoad-after checkSyncStatus, self.slotValuesForSlice: %@", self.slotValuesForSlice);
+    DLog(@"viewDidLoad-after checkSyncStatus, self.sliceValues: %@", self.sliceValues);
+    DLog(@"viewDidLoad-after checkSyncStatus, self.slotValuesForSlice: %@", self.slotValuesForSlice);
     EcoMeterAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     DetailViewManager *detailViewManager = appDelegate.detailViewManager;
-    NSLog(@"viewDidLoad detailViewManager.splitViewController.viewControllers: %@", detailViewManager.splitViewController.viewControllers);
+    DLog(@"viewDidLoad detailViewManager.splitViewController.viewControllers: %@", detailViewManager.splitViewController.viewControllers);
     
 }
 
-//- (void)viewWillAppear:(BOOL)animated {
-//    [super viewWillAppear:animated];
-//
-//
-//    // OK we're done, lets reload the energyclock
-//    //[self.energyClockView reloadData];
-//
-//}
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    KeychainItemWrapper *keychain =
+    [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
+    if ( ([[keychain objectForKey:(__bridge id)(kSecAttrLabel)] isEqualToString:@"LOGGEDOFF"] )
+        || ( [[keychain objectForKey:(__bridge id)kSecAttrAccount] length] == 0 ) /* Or Username is empty */
+        || ( [[keychain objectForKey:(__bridge id)kSecValueData] length]== 0) ) /* Or Password is empty */ {
+        DLog(@"user is not logged in, removing profileBarButtonItem");
+        [self.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
+    }
+
+}
 
 - (void)viewWillDisappear:(BOOL)animated {
     
@@ -207,18 +241,18 @@ static const NSArray *participants;
     //            }
     // CANNOT REMOVE THE MAINSCROLLVIEW -> CRASH
     //for(UIView *view in self.view.subviews){
-    //    NSLog(@"view: %@ removing in progress..", view);
+    //    DLog(@"view: %@ removing in progress..", view);
     //    if (view.tag == mainScrollView) {
     //        for (UIView *v in view.subviews) {
     //            if (v.tag == sliceDetailsView) {
-    //                NSLog(@"[inside] - bingo!");
+    //                DLog(@"[inside] - bingo!");
     //                [(SliceDetailsView *)v killAll];
-    //                NSLog(@"[inside] - vorbei!");
+    //                DLog(@"[inside] - vorbei!");
     //            }
     //        }
     //    }
     //    [view removeFromSuperview];
-    //    NSLog(@"view: %@ removed!", view);
+    //    DLog(@"view: %@ removed!", view);
     //}
     
 }
@@ -232,7 +266,7 @@ static const NSArray *participants;
     
     self.mainScrollView.contentSize =
     CGSizeMake(CGRectGetWidth(self.mainScrollView.frame), CGRectGetHeight(self.energyClockView.frame) + CGRectGetHeight(self.sliceDetailsView.frame));
-    NSLog(@"self.mainScrollView.contentSize h: %f, w: %f", self.mainScrollView.contentSize.height, self.mainScrollView.contentSize.width);
+    DLog(@"self.mainScrollView.contentSize h: %f, w: %f", self.mainScrollView.contentSize.height, self.mainScrollView.contentSize.width);
     
     // pages are created on demand
     // load the visible page
@@ -264,12 +298,12 @@ static const NSArray *participants;
      //[self.energyClockView insertSliceAtIndex:insertIndex animate:YES];
      }*/
     
-    
+    DLog(@"before calling reloadData!");
     [self.energyClockView reloadData];
     
     if (self.waitingForNewData == NO) {
         self.sliceDetailsView.slotValuesForSlice = self.slotValuesForSlice;
-        NSLog(@"<EnergyClockVC> calling viewDidAppear");
+        DLog(@"<EnergyClockVC> calling viewDidAppear");
         [self.sliceDetailsView initPlots];
         [self hideHUD];
     }
@@ -291,7 +325,7 @@ static const NSArray *participants;
     [MBProgressHUD hideHUDForView:self.mainScrollView animated:YES];
     //[self.HUD removeFromSuperview];
     //self.HUD = nil;
-    //NSLog(@"after|self.mainScrollView.contentSize h: %f, w: %f", self.mainScrollView.contentSize.height, self.mainScrollView.contentSize.width);
+    //DLog(@"after|self.mainScrollView.contentSize h: %f, w: %f", self.mainScrollView.contentSize.height, self.mainScrollView.contentSize.width);
 }
 
 // should we display the energyclock of the last date immediately
@@ -305,10 +339,10 @@ static const NSArray *participants;
     [calendar components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[NSDate date]];
     System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
     NSAssert(systemObj!=nil, @"System Object with id=primary doesnt exist");
-    NSLog(@"checkSyncStatus systemObj: %@", systemObj);
+    DLog(@"checkSyncStatus systemObj: %@", systemObj);
     NSDate *lastSyncDate = systemObj.daysupdated;
-    NSLog(@"checkSyncStatus lastSyncDate: %@", lastSyncDate);
-    NSLog(@"checkSyncStatus todayComponents: %@", todayComponents);
+    DLog(@"checkSyncStatus lastSyncDate: %@", lastSyncDate);
+    DLog(@"checkSyncStatus todayComponents: %@", todayComponents);
     
     if ([lastSyncDate isKindOfClass:[NSDate class]] && !FORCEDAYCHARTSUPDATE){
         
@@ -319,7 +353,7 @@ static const NSArray *participants;
            ([todayComponents month] == [lastSyncComponents month]) &&
            ([todayComponents day]   == [lastSyncComponents day]))
         {
-            NSLog(@"checkSyncStatus, we synced already");
+            DLog(@"checkSyncStatus, we synced already");
             // we have synced today already
             self.waitingForNewData = NO;
             EnergyClockSlice *slice = [EnergyClockSlice findFirstOrderedByAttribute:@"date" ascending:NO];
@@ -337,17 +371,18 @@ static const NSArray *participants;
 
 -(void)initEnergyClockAfterSavingData
 {
-    NSLog(@"initEnergyClockAfterSavingData");
-    NSLog(@"System numberOfEntities in initEnergyClockAfterSavingData: %@", [System numberOfEntities]);
+    DLog(@"initEnergyClockAfterSavingData");
+    DLog(@"System numberOfEntities in initEnergyClockAfterSavingData: %@", [System numberOfEntities]);
     NSArray *allsystems = [System findAll];
     
     for (System *sys in allsystems) {
-        NSLog(@"System object daysupdated: %@", sys.daysupdated);
+        DLog(@"System object daysupdated: %@", sys.daysupdated);
     }
     EnergyClockSlice *slice = [EnergyClockSlice findFirstOrderedByAttribute:@"date" ascending:NO];
     [self initValuesForNewDate:slice.date];
     self.currentDate = slice.date;
     // OK we're done, lets reload the energyclock and init the detail plots
+    DLog(@"before calling reloadData!");
     [self.energyClockView reloadData];
     self.sliceDetailsView.slotValuesForSlice = self.slotValuesForSlice;
     [self.sliceDetailsView initPlots];
@@ -407,7 +442,7 @@ static const NSArray *participants;
 
 - (void)loadScrollViewWithPage:(NSUInteger)page
 {
-    NSLog(@"loadScrollViewWithPage...");
+    DLog(@"loadScrollViewWithPage...");
     // replace the placeholder if necessary
     ScrollViewContentVC *controller = [self.viewControllers objectAtIndex:page];
     if ((NSNull *)controller == [NSNull null])
@@ -427,8 +462,8 @@ static const NSArray *participants;
         [self addChildViewController:controller];
         [self.scrollView addSubview:controller.view];
         [controller didMoveToParentViewController:self];
-        NSLog(@"<EnergyClockViewController> controller.view: %@", controller.view);
-        NSLog(@"<EnergyClockViewController> controller.view.subviews: %@", controller.view.subviews);
+        DLog(@"<EnergyClockViewController> controller.view: %@", controller.view);
+        DLog(@"<EnergyClockViewController> controller.view.subviews: %@", controller.view.subviews);
         
         /*
          NSDictionary *numberItem = [self.contentList objectAtIndex:page];
@@ -440,14 +475,14 @@ static const NSArray *participants;
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
 {
-    NSLog(@"<EnergyClockViewController> scrollViewWillBeginDecelerating...");
+    DLog(@"<EnergyClockViewController> scrollViewWillBeginDecelerating...");
     
 }
 
 // at the end of scroll animation, reset the boolean used when scrolls originate from the UIPageControl
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    NSLog(@"<EnergyClockViewController> scrollViewDidEndDecelerating...");
+    DLog(@"<EnergyClockViewController> scrollViewDidEndDecelerating...");
     // Top ScrollView with day-Pie-Charts
     if (scrollView.tag == topScrollView) {
         // switch the indicator when more than 50% of the previous/next page is visible
@@ -479,7 +514,7 @@ static const NSArray *participants;
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     // Load the pages which are now on screen
-    //NSLog(@"<EnergyClockViewController> scrollViewDidScroll...");
+    //DLog(@"<EnergyClockViewController> scrollViewDidScroll...");
 }
 
 - (void)didReceiveMemoryWarning
@@ -492,13 +527,14 @@ static const NSArray *participants;
 -(void)loadEnergyClockForDate:(NSDate *)date
 {
     if ([self.currentDate isEqualToDate:date]) {
-        NSLog(@"<EnergyClockViewController> -loadEnergyClockForWeekDay, plot with date: %@ touched, same date as the current -> returning..", date);
+        DLog(@"<EnergyClockViewController> -loadEnergyClockForWeekDay, plot with date: %@ touched, same date as the current -> returning..", date);
         return;
     }
-    NSLog(@"<EnergyClockViewController> -loadEnergyClockForWeekDay, plot with date: %@ touched", date);
+    DLog(@"<EnergyClockViewController> -loadEnergyClockForWeekDay, plot with date: %@ touched", date);
     
     [self initValuesForNewDate:date];
     self.currentDate = date;
+    DLog(@"before calling reloadData!");
     [self.energyClockView reloadData];
     // Reload Details Pie Charts
     self.selectedEnergyClockSlice = 0; // select the first slice
@@ -512,14 +548,14 @@ static const NSArray *participants;
 {
     // check if data exists @todo
     NSArray *slicesData = [EnergyClockSlice findByAttribute:@"date" withValue:date andOrderBy:@"hour" ascending:YES];
-    NSLog(@"initValuesForNewDate: slicesData: %i Objs found", [slicesData count]);
+    DLog(@"initValuesForNewDate: slicesData: %i Objs found", [slicesData count]);
     NSMutableArray *slotValuesForSliceTemp = [[NSMutableArray alloc] init];
     NSMutableArray *sliceValuesTemp = [[NSMutableArray alloc] init];
     NSMutableArray *dayUserConsumptionTemp = [[NSMutableArray alloc]init];
     // DEBUGGING
     for (int i=0; i<[slicesData count]; i++) {
         EnergyClockSlice *slice = slicesData[i];
-        NSLog(@"date: %@, hour: %@, consumption: %@, tempUsers: %@", slice.date, slice.hour, slice.consumption, [NSKeyedUnarchiver unarchiveObjectWithData:slice.temperatureUsers]);
+        DLog(@"date: %@, hour: %@, consumption: %@, tempUsers: %@", slice.date, slice.hour, slice.consumption, [NSKeyedUnarchiver unarchiveObjectWithData:slice.temperatureUsers]);
     }
     if ([slicesData count] > 0) {
         
@@ -540,11 +576,11 @@ static const NSArray *participants;
             else {
                 [self.temperatureValues replaceObjectAtIndex:[slicesData count]-1 withObject:slice.temperature];
             }
-            NSLog(@"slice.date: %@, slice.hour: %@, slice.temperature: %@", slice.date, slice.hour, slice.temperature);
+            DLog(@"slice.date: %@, slice.hour: %@, slice.temperature: %@", slice.date, slice.hour, slice.temperature);
             NSMutableDictionary *slotValuesDict = [NSKeyedUnarchiver unarchiveObjectWithData:slice.slotValues];
             NSArray *sortedkeys = [[slotValuesDict allKeys]sortedArrayUsingSelector:@selector(compare:)];
-            NSLog(@"slotValuesDict: %@", slotValuesDict);
-            NSLog(@"sortedkeys: %@", sortedkeys);
+            DLog(@"slotValuesDict: %@", slotValuesDict);
+            DLog(@"sortedkeys: %@", sortedkeys);
             NSAssert(numberOfParticipants == [sortedkeys count], @"Check the number of users");
             for (int i = 0; i < numberOfParticipants; i++) {
                 [innerArray insertObject:[slotValuesDict objectForKey:sortedkeys[i]] atIndex:i];
@@ -558,13 +594,13 @@ static const NSArray *participants;
             
         }
         self.sliceValues = sliceValuesTemp;
-        NSLog(@"self.sliceValues: %@", self.sliceValues);
+        DLog(@"self.sliceValues: %@", self.sliceValues);
         self.slotValuesForSlice = slotValuesForSliceTemp;
         self.dayUserConsumption = dayUserConsumptionTemp;
-        NSLog(@"slotValuesForSlice: %@", self.slotValuesForSlice);
-        NSLog(@"original setting userTemperatureValues : %@", self.userTemperatureValues );
-        NSLog(@"dayUserConsumption: %@", self.dayUserConsumption);
-        NSLog(@"\n initValuesForNewDate self.temperatureValues %@ \n", self.temperatureValues);
+        DLog(@"slotValuesForSlice: %@", self.slotValuesForSlice);
+        DLog(@"original setting userTemperatureValues : %@", self.userTemperatureValues );
+        DLog(@"dayUserConsumption: %@", self.dayUserConsumption);
+        DLog(@"\n initValuesForNewDate self.temperatureValues %@ \n", self.temperatureValues);
     }
 }
 
@@ -592,15 +628,15 @@ static const NSArray *participants;
 }
 
 - (IBAction)changePage:(id)sender {
-    NSLog(@"<EnergyClockViewController> changePage...");
+    DLog(@"<EnergyClockViewController> changePage...");
     [self gotoPage:YES];    // YES = animate
 }
 
 #pragma mark - BTSPieView Data Source
 
 - (NSUInteger)numberOfSlicesInPieView:(BTSPieView *)pieView {
-    NSLog(@"numberOfSlicesInPieView:");
-    NSLog(@"sliceValues: %@", self.sliceValues);
+    DLog(@"numberOfSlicesInPieView:");
+    DLog(@"sliceValues: %@", self.sliceValues);
     return [self.sliceValues count];
     //return numberSlices;
 }
@@ -611,7 +647,7 @@ static const NSArray *participants;
 }
 
 - (CGFloat)pieView:(BTSPieView *)pieView valueForSliceAtIndex:(NSUInteger)index {
-    NSLog(@"valueForSliceAtIndex, returning: %f", (CGFloat)[[self.sliceValues objectAtIndex:index]floatValue]);
+    
     CGFloat result = 0.0f;
     if (index < [self.sliceValues count]-1) {
         result = (CGFloat)[[self.sliceValues objectAtIndex:index+1]floatValue];
@@ -619,7 +655,7 @@ static const NSArray *participants;
     else {
         result = (CGFloat)[[self.sliceValues objectAtIndex:0]floatValue];
     }
-    
+    DLog(@"returning: %f", result);
     return result;
 }
 
@@ -637,11 +673,11 @@ static const NSArray *participants;
     // return 12 Values for the current participant
     // using dayUserConsumption-Array
     NSDecimalNumber *result = [[self.dayUserConsumption objectAtIndex:index] objectForKey: [NSString stringWithFormat:@"%i",self.selectedParticipantId] ];
-    NSLog(@"detailsSliceValueAtIndex - result: %@", result);
-    NSLog(@"detailsSliceValueAtIndex - self.selectedParticipantId: %i", self.selectedParticipantId);
-    NSLog(@"detailsSliceValueAtIndex - selectedParticipantId as string: %@", [NSString stringWithFormat:@"%i",self.selectedParticipantId]);
-    NSLog(@"detailsSliceValueAtIndex - [self.dayUserConsumption objectAtIndex:index] %@", [self.dayUserConsumption objectAtIndex:index]);
-    NSLog(@"detailsSliceValueAtIndex - self.dayUserConsumption: %@", self.dayUserConsumption);
+    DLog(@"detailsSliceValueAtIndex - result: %@", result);
+    DLog(@"detailsSliceValueAtIndex - self.selectedParticipantId: %i", self.selectedParticipantId);
+    DLog(@"detailsSliceValueAtIndex - selectedParticipantId as string: %@", [NSString stringWithFormat:@"%i",self.selectedParticipantId]);
+    DLog(@"detailsSliceValueAtIndex - [self.dayUserConsumption objectAtIndex:index] %@", [self.dayUserConsumption objectAtIndex:index]);
+    DLog(@"detailsSliceValueAtIndex - self.dayUserConsumption: %@", self.dayUserConsumption);
     return result;
 }
 
@@ -650,15 +686,15 @@ static const NSArray *participants;
 }
 
 - (CPTColor *)getColorForParticipantId:(NSUInteger)idx {
-    NSLog(@"self.CPTColorsForParticipants: %@", self.CPTColorsForParticipants);
-    NSLog(@"input idx: %@", @(idx));
+    DLog(@"self.CPTColorsForParticipants: %@", self.CPTColorsForParticipants);
+    DLog(@"input idx: %@", @(idx));
     return [self.CPTColorsForParticipants objectForKey:@(idx)];
 }
 
 - (UIColor *)getColorForTempLabel:(NSUInteger)idx {
-    NSLog(@"self.CPTColorsForParticipants: %@", self.availableSliceColors);
-    NSLog(@"input idx: %@", @(idx));
-    NSLog(@"getColorForTempLabel returning: %@", [self.availableSliceColors objectAtIndex:idx]);
+    DLog(@"self.CPTColorsForParticipants: %@", self.availableSliceColors);
+    DLog(@"input idx: %@", @(idx));
+    DLog(@"getColorForTempLabel returning: %@", [self.availableSliceColors objectAtIndex:idx]);
     return [self.availableSliceColors objectAtIndex:idx];
 }
 
@@ -673,12 +709,12 @@ static const NSArray *participants;
 }
 
 - (NSArray *)getTemperatureValues {
-    NSLog(@"\n self.temperatureValues %@ !\n", self.temperatureValues);
+    DLog(@"\n self.temperatureValues %@ !\n", self.temperatureValues);
     return self.temperatureValues;
 }
 
 - (NSDictionary *)getUserTemperatureValues {
-    NSLog(@"\n getUserTemperatureValues %@ !\n", self.userTemperatureValues);
+    DLog(@"\n getUserTemperatureValues %@ !\n", self.userTemperatureValues);
     return self.userTemperatureValues;
 }
 
@@ -694,7 +730,7 @@ static const NSArray *participants;
 
 // TODO : new
 - (UIColor *)pieView:(BTSPieView *)pieView colorForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex sliceCount:(NSUInteger)sliceCount {
-    NSLog(@"color for slotIndex %i found color: %@!", slotIndex, [self.availableSliceColors objectAtIndex:slotIndex]);
+    DLog(@"color for slotIndex %i found color: %@!", slotIndex, [self.availableSliceColors objectAtIndex:slotIndex]);
     
     return [self.availableSliceColors objectAtIndex:slotIndex];
 }
@@ -720,7 +756,7 @@ static const NSArray *participants;
      [_selectedSliceValueSlider setMaximumTrackTintColor:[sliceData color]];
      */
     
-    NSLog(@"slice %i ws selected!", index);
+    DLog(@"slice %i ws selected!", index);
     self.selectedEnergyClockSlice = index;
     [self.sliceDetailsView reloadPieChartForNewSlice:index];
 }
@@ -776,7 +812,16 @@ static const NSArray *participants;
     // Dynamically create buttons for segemented control
     for (NSUInteger i=0; i < numberOfParticipants; i++) {
         UIButton *userButton = [[UIButton alloc] init];
-        NSString *buttonName = [NSString stringWithFormat:@"Sensor %@", participants[i]];
+        NSString *buttonName = @"";
+        if ([participants[i] isEqualToNumber:@(MySensorID)]) {
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            buttonName = [defaults objectForKey:@"publicUserName"];
+        }
+        else {
+            Participant *participant = [Participant findFirstByAttribute:@"sensorid" withValue:participants[i]];
+            buttonName = participant.name;
+        }
+        //NSString *buttonName = [NSString stringWithFormat:@"Sensor %@", participants[i]];
         //        UIColor *colorWithApha = [[self.availableSliceColors objectAtIndex:i] colorWithAlphaComponent:0.6];
         //        UIColor *color = [self.availableSliceColors objectAtIndex:i];
         //        [userButton setBackgroundImage:[self imageFromColor:colorWithApha] forState:UIControlStateNormal];
@@ -804,7 +849,7 @@ static const NSArray *participants;
             [userButton setBackgroundImage:buttonBackgroundImagePressedCenter forState:(UIControlStateHighlighted|UIControlStateSelected)];
         }
         
-        NSLog(@"[self.availableSliceColors objectAtIndex:i]: %@", [self.availableSliceColors objectAtIndex:i]);
+        DLog(@"[self.availableSliceColors objectAtIndex:i]: %@", [self.availableSliceColors objectAtIndex:i]);
         [userButton setImageEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 5.0)];
         [userButton setTitle:buttonName forState:UIControlStateNormal];
         [userButton setTitleColor:[self.availableSliceColors objectAtIndex:i] forState:UIControlStateNormal];
@@ -821,8 +866,8 @@ static const NSArray *participants;
     [self.participantSelector setButtonsArray:buttonsArray];
     [self.mainScrollView addSubview:self.participantSelector];
     
-    NSLog(@"self.participantSelector: %@", self.participantSelector);
-    NSLog(@"self.participantSelector: %@", self.mainScrollView.subviews);
+    DLog(@"self.participantSelector: %@", self.participantSelector);
+    DLog(@"self.participantSelector: %@", self.mainScrollView.subviews);
 }
 
 #pragma mark - AKSegmentedControl callbacks
@@ -834,7 +879,7 @@ static const NSArray *participants;
     if (segmentedControl == self.participantSelector) {
         self.selectedParticipantId = [participants[indexSet.firstIndex] integerValue];
         [self.sliceDetailsView reloadPieChartForNewParticipant:[participants[indexSet.firstIndex] integerValue]]; // sending sensor-id/user-id ?
-        NSLog(@"SegmentedControl #1 : Selected Index %@, selectedIndex: %i", [segmentedControl selectedIndexes], indexSet.firstIndex);
+        DLog(@"SegmentedControl #1 : Selected Index %@, selectedIndex: %i", [segmentedControl selectedIndexes], indexSet.firstIndex);
     }
 }
 
@@ -864,5 +909,32 @@ static const NSArray *participants;
     return img;
 }
 
+
+- (IBAction)profileButtonTapped:(id)sender {
+    if (_userProfile == nil) {
+        self.userProfile = [[ProfilePopoverViewController alloc] init];
+        //_userProfile.delegate = self;
+        self.profilePopover = [[UIPopoverController alloc] initWithContentViewController:_userProfile];
+        
+    }
+    [self.profilePopover presentPopoverFromBarButtonItem:sender
+                                permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+}
+
+- (void)showProfileAfterUserLoggedIn {
+    //DLog(@"!!!!! 1 calling showProfileAfterUserLoggedIn !!!!!!!!!!");
+    //[navigationBarItems addObject:self.profileBarButtonItem];
+    DLog(@"FirstDetail: user logged in: adding profileBarButtonItem: %@", self.profileBarButtonItem);
+    [self.navigationBar.topItem setRightBarButtonItem:self.profileBarButtonItem animated:YES];
+}
+
+- (void)hideProfileAfterUserLoggedOff {
+    if (self.profilePopover)
+        [self.profilePopover dismissPopoverAnimated:YES];
+    //[navigationBarItems removeObject:self.profileBarButtonItem];
+    //DLog(@"FirstDetail: user logged off: removing profileBarButtonItem: %@", self.profileBarButtonItem);
+    [self.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
+    //DLog(@"FirstDetail: user logged off: after removing profileBarButtonItem, navigationBarItems: %@", navigationBarItems);
+}
 
 @end

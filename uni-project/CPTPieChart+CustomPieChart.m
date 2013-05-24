@@ -43,7 +43,7 @@ static char shouldCenterLabelKey; // we store the address of the shouldCenterLab
         addedAngleValueEcoMeter  = 16.0;
     }*/
     
-    //NSLog(@"positionLabelAnnotation: %@", contentLayer);
+    //DLog(@"positionLabelAnnotation: %@", contentLayer);
     CPTPlotArea *thePlotArea = self.plotArea;
     
     if ( contentLayer && thePlotArea ) {
@@ -76,9 +76,9 @@ static char shouldCenterLabelKey; // we store the address of the shouldCenterLab
             NSInteger numberOfRecords = 0;
             numberOfRecords = [self.dataSource numberOfRecordsForPlot:self];
             if ( [self.shouldCenterLabel isEqualToString:@"YES"] ) {
-                //NSLog(@"shouldCenterLabel: %@", self.shouldCenterLabel );
+                //DLog(@"shouldCenterLabel: %@", self.shouldCenterLabel );
                 labelAngle = [self radiansForPieSliceValue:startingWidth];
-                //NSLog(@"Inside CorePlot: labelAngle: %f for index: %i and startingWidth: %f, currentWidth: %f", labelAngle, idx, startingWidth, currentWidth);
+                //DLog(@"Inside CorePlot: labelAngle: %f for index: %i and startingWidth: %f, currentWidth: %f", labelAngle, idx, startingWidth, currentWidth);
                 if( numberOfRecords > 2) { // dirty hack: select only details-charts
                     //if ( idx < numberOfRecords - 1 ) {
                      //   nextLabelAngle = [self radiansForPieSliceValue:(CGFloat)[self cachedDoubleForField : CPTPieChartFieldSliceWidthSum recordIndex : idx + 1]];
@@ -129,12 +129,12 @@ static char shouldCenterLabelKey; // we store the address of the shouldCenterLab
                         currentPrevAngleDiff = (M_PI_2-labelAngle) + (labelAngle+3*M_PI_2);
                     }
                     if ( (currentPrevAngleDiff < 0.21 && currentPrevAngleDiff > 0.0) || ( (M_PI_2-labelAngle) < 0.21 && currentPrevAngleDiff == 0.0) || (idx==0 && (M_PI_2-nextLabelAngle)<0.21)) {
-                        NSLog(@"labelAngle: %f idx: %i", labelAngle, idx);
-                        NSLog(@"prevLabelangle: %f", prevLabelangle);
-                        NSLog(@"currentPrevAngleDiff: %f", currentPrevAngleDiff);
-                        //NSLog(@"currentNextAngleDiff: %f", currentNextAngleDiff);
+                        DLog(@"labelAngle: %f idx: %i", labelAngle, idx);
+                        DLog(@"prevLabelangle: %f", prevLabelangle);
+                        DLog(@"currentPrevAngleDiff: %f", currentPrevAngleDiff);
+                        //DLog(@"currentNextAngleDiff: %f", currentNextAngleDiff);
                         if ( currentPrevAngleDiff < 0.07  ) {
-                            NSLog(@"hiding with currentPrevAngleDiff: %f", currentPrevAngleDiff);
+                            DLog(@"hiding with currentPrevAngleDiff: %f", currentPrevAngleDiff);
                             contentLayer.hidden = YES;
                             label = nil;
                             return;
@@ -217,7 +217,7 @@ static char shouldCenterLabelKey; // we store the address of the shouldCenterLab
             // Compute and return the angle that is halfway between the slice's starting and ending angles
             CGFloat startingAngle  = [self radiansForPieSliceValue:startingWidth];
             CGFloat finishingAngle = [self radiansForPieSliceValue:startingWidth + currentWidth];
-            //NSLog(@"medianAngleForPieSliceIndex startingAngle: %f, finishingAngle: %f, return: %f", startingAngle, finishingAngle, (startingAngle + finishingAngle) / 2);
+            //DLog(@"medianAngleForPieSliceIndex startingAngle: %f, finishingAngle: %f, return: %f", startingAngle, finishingAngle, (startingAngle + finishingAngle) / 2);
             return (startingAngle + finishingAngle) / 2;
         }
         

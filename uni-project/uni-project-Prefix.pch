@@ -4,6 +4,21 @@
 
 #import <Availability.h>
 
+// Note: Code taken from http://iphoneincubator.com/blog/debugging/the-evolution-of-a-replacement-for-nslog
+// DLog is almost a drop-in replacement for NSLog
+// DLog();
+// DLog(@"here");
+// DLog(@"value: %d", x);
+// Unfortunately this doesn't work DLog(aStringVariable); you have to do this instead DLog(@"%@", aStringVariable);
+#ifdef DEBUG
+#	define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#	define DLog(...)
+#endif
+
+// ALog always displays output regardless of the DEBUG setting
+#define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+
 #ifndef __IPHONE_5_0
 #warning "This project uses features only available in iOS SDK 5.0 and later."
 #endif
@@ -11,12 +26,12 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
-    #import "CorePlot-CocoaTouch.h"
+    #import "CorePlot-CocoaTouch.h" // Core Plot Plotting Framework
     #import "Constants.h"
     #import <SystemConfiguration/SystemConfiguration.h>
-    #import "CPDStockPriceStore.h"
-    #define MR_SHORTHAND
+    //#import "CPDStockPriceStore.h"
+    #define MR_SHORTHAND // For Magical Record
     #import "CoreData+MagicalRecord.h"
-    #import "System.h"
+    #import "System.h" // For logging
 
 #endif

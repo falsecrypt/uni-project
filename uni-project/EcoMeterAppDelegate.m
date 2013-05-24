@@ -49,14 +49,14 @@ extern CFAbsoluteTime StartTime;
         [self.splitViewController setPresentsWithGesture:YES];
     
     self.detailViewManager = [[DetailViewManager alloc] initWithSplitViewController:splitViewController];
-    NSLog(@"calling didFinishLaunchingWithOptions, detailViewManager: %@", self.detailViewManager);
+    DLog(@"calling didFinishLaunchingWithOptions, detailViewManager: %@", self.detailViewManager);
     self.splitViewController.delegate = self.detailViewManager;
     
     self.window.rootViewController = self.splitViewController;
     
 #if MEASURE_LAUNCH_TIME
     dispatch_async(dispatch_get_main_queue(), ^ {
-        NSLog(@"Launched in %f sec", CFAbsoluteTimeGetCurrent() - StartTime);
+        DLog(@"Launched in %f sec", CFAbsoluteTimeGetCurrent() - StartTime);
     });
 #endif
     
@@ -78,13 +78,13 @@ extern CFAbsoluteTime StartTime;
             else {
                 NSNumber *appstartNumberTemp = localSystem.appstartlog;
                 appstartNumber = [NSNumber numberWithInt:[appstartNumberTemp integerValue] +1 ];
-                NSLog(@"Starting: appstartNumber: %@", appstartNumber);
+                DLog(@"Starting: appstartNumber: %@", appstartNumber);
             }
         localSystem.appstartlog = appstartNumber;
     } completion:^{
         System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
-        NSLog(@"saved System Object :%@", systemObj);
-        NSLog(@"saved System Object, appstartlog :%@", systemObj.appstartlog);
+        DLog(@"saved System Object :%@", systemObj);
+        DLog(@"saved System Object, appstartlog :%@", systemObj.appstartlog);
     }];
     /* LOGGING END
      ****************/
@@ -93,13 +93,13 @@ extern CFAbsoluteTime StartTime;
     /*
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setBool:NO forKey:@"userLoggedIn"];
-    NSLog(@"calling didFinishLaunchingWithOptions, userLoggedIn: %i", [defaults boolForKey:@"userLoggedIn"]);
+    DLog(@"calling didFinishLaunchingWithOptions, userLoggedIn: %i", [defaults boolForKey:@"userLoggedIn"]);
      */
     
     // Delete Account, Testing
-//    KeychainItemWrapper *keychain =
-//    [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
-//    [keychain resetKeychainItem];
+    //KeychainItemWrapper *keychain =
+    //[[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
+    //[keychain resetKeychainItem];
     
     
     return YES;
@@ -119,7 +119,7 @@ extern CFAbsoluteTime StartTime;
     // Customize the title text for *all* UINavigationBars
     [[UINavigationBar appearance] setTitleTextAttributes:  [NSDictionary dictionaryWithObjectsAndKeys:
                                                            [UIColor colorWithRed:155/255.0f green:155/255.0f blue:155/255.0f alpha:1.0f], UITextAttributeTextColor,
-                                                           [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.6],UITextAttributeTextShadowColor,
+                                                           /*[UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.6],UITextAttributeTextShadowColor,*/
                                                            [NSValue valueWithUIOffset:UIOffsetMake(0, 1)],UITextAttributeTextShadowOffset,
                                                            [UIFont fontWithName:@"QuicksandBold-Regular" size:21.0], UITextAttributeFont, nil]];
     

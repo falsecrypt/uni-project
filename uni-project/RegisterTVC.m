@@ -76,7 +76,7 @@
 
 - (void)dismissKeyboard:(UITapGestureRecognizer *)sender
 {
-    NSLog(@"dismissKeyboard");
+    DLog(@"dismissKeyboard");
     [[self view] endEditing: YES];
 //    [self.usernameField resignFirstResponder];
 //    [self.emailField resignFirstResponder];
@@ -179,8 +179,8 @@
         [self sendPublicUsernameToServer:inputPublicUsername];
         
         NSString *publicUsernameRetrieved = [defaults stringForKey:@"publicUserName"];
-        NSLog(@"userLoggedIn from the keychain (kSecAttrLabel): %@", [keychain objectForKey:(__bridge id)(kSecAttrLabel)]);
-        NSLog(@"publicUsernameRetrieved from NSUserDefaults: %@", publicUsernameRetrieved);
+        DLog(@"userLoggedIn from the keychain (kSecAttrLabel): %@", [keychain objectForKey:(__bridge id)(kSecAttrLabel)]);
+        DLog(@"publicUsernameRetrieved from NSUserDefaults: %@", publicUsernameRetrieved);
         [self.delegate didDismissPresentedViewControllerRegister];
         //[self.delegate userDidRegistered];
         
@@ -190,7 +190,7 @@
             newUser.created = [NSDate date];
             newUser.sensorid = @(MySensorID);
         } completion:^{
-            NSLog(@"NEW USER SAVED!");
+            DLog(@"NEW USER SAVED!");
         }];
         
         NSString *notificationName = @"UserRegisteredNotification";
@@ -211,11 +211,11 @@
     
     [[EMNetworkManager sharedClient] postPath:postPath parameters:nil
                  success:^(AFHTTPRequestOperation *operation, id response) {
-                     NSLog(@"Public Username sent...");
+                     DLog(@"Public Username sent...");
                  }
                  failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                     NSLog(@"Error with request, while sending public user name!");
-                     NSLog(@"%@",[error localizedDescription]);
+                     DLog(@"Error with request, while sending public user name!");
+                     DLog(@"%@",[error localizedDescription]);
                  }];
 }
 

@@ -45,7 +45,7 @@
     
     if (isReachable) {
         NSNumber *numberofentities = [Participant numberOfEntities];
-        NSLog(@"startCalculatingRankAndScoreWithNetworkStatus numberofentities %@", numberofentities);
+        DLog(@"startCalculatingRankAndScoreWithNetworkStatus numberofentities %@", numberofentities);
         [self startCalculatingConsumptionSumForParticipantId:self.currentParticipantId];
         
     }
@@ -79,13 +79,13 @@
     self.currentPathForMonths = [self.currentPathForMonths stringByAppendingString:@"rpc.php?userID="];
     self.currentPathForMonths = [self.currentPathForMonths stringByAppendingString:[NSString stringWithFormat:@"%i",_id ]];
     self.currentPathForMonths = [self.currentPathForMonths stringByAppendingString:@"&action=get&what=aggregation_m"];
-    //NSLog(@"currentPathForMonths = %@", self.currentPathForMonths);
+    //DLog(@"currentPathForMonths = %@", self.currentPathForMonths);
     
     self.currentPathForDays = currentCostServerBaseURLString;
     self.currentPathForDays =[self.currentPathForDays stringByAppendingString:@"rpc.php?userID="];
     self.currentPathForDays =[self.currentPathForDays stringByAppendingString:[NSString stringWithFormat:@"%d",_id ]];
     self.currentPathForDays =[self.currentPathForDays stringByAppendingString:@"&action=get&what=aggregation_d"];
-    //NSLog(@"currentPathForDays = %@", self.currentPathForDays);
+    //DLog(@"currentPathForDays = %@", self.currentPathForDays);
     
     //Create 2 NSURLRequests
     NSURL *urlFirst = [[NSURL alloc] initWithString:self.currentPathForMonths];
@@ -104,7 +104,7 @@
 
     [self syncConsumptionWithOperations:tempOperations];
 
-    //NSLog(@"Returning...");
+    //DLog(@"Returning...");
     
 }
 
@@ -119,7 +119,7 @@
      enqueueBatchOfHTTPRequestOperations:operations
      progressBlock:^(NSUInteger numberOfCompletedOperations, NSUInteger totalNumberOfOperations) {
          
-         //NSLog(@"numberOfCompletedOperations:%d / totalNumberOfOperations:%d", numberOfCompletedOperations, totalNumberOfOperations);
+         //DLog(@"numberOfCompletedOperations:%d / totalNumberOfOperations:%d", numberOfCompletedOperations, totalNumberOfOperations);
          
      } completionBlock:^(NSArray *operations) {
 
@@ -128,12 +128,12 @@
              
              if (ro.error) {
                  
-                 NSLog(@"++++++++++++++ Operation error");
+                 DLog(@"++++++++++++++ Operation error");
                  
              }else {
                  
-                 //NSLog(@"Operation OK: %@", [ro.responseData description]);
-                 //NSLog(@"ro.request.URL.absoluteURL: %@", ro.request.URL.absoluteURL);
+                 //DLog(@"Operation OK: %@", [ro.responseData description]);
+                 //DLog(@"ro.request.URL.absoluteURL: %@", ro.request.URL.absoluteURL);
                  //Months request
                  if ([ro.request.URL.absoluteString isEqualToString:self.currentPathForMonths]) {
                      
@@ -143,22 +143,22 @@
                      for (NSString *obj in components) {
                          
                          NSArray *month = [obj componentsSeparatedByString:@"="];
-                         //NSLog(@"<==month : %@", month);
+                         //DLog(@"<==month : %@", month);
                          NSArray *monthAndYear = [month[0] componentsSeparatedByString:@"-"];
                          NSInteger year = [monthAndYear[0] integerValue];
                          // consider only consumption of the current year
                          if (year == currentYear) {
                              
-                             //NSLog(@"[monthAndYear objectAtIndex:1] : %@", monthAndYear[1]);
-                             //NSLog(@"[monthAndYear objectAtIndex:0] : %@", monthAndYear[0]);
-                             //NSLog(@"monthAndYear : %@==>", monthAndYear);
+                             //DLog(@"[monthAndYear objectAtIndex:1] : %@", monthAndYear[1]);
+                             //DLog(@"[monthAndYear objectAtIndex:0] : %@", monthAndYear[0]);
+                             //DLog(@"monthAndYear : %@==>", monthAndYear);
                              double temp = [month[1] doubleValue];
                              //NSDecimalNumber *monthConsumption = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:temp];
                              self.consumptionMonthsSum += temp;
                              self.monthsCounter++;
                              
                          }
-                         //NSLog(@"monthConsumption(inside block): %@",monthConsumption);
+                         //DLog(@"monthConsumption(inside block): %@",monthConsumption);
                      }
                  }
                  //Days request
@@ -169,7 +169,7 @@
                      for (NSString *obj in components) {
                          
                          NSArray *day = [obj componentsSeparatedByString:@"="];
-                         //NSLog(@"<==day : %@", day);
+                         //DLog(@"<==day : %@", day);
                          NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
                          [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"de_DE"]];
                          [dateFormatter setDateFormat:@"yy-MM-dd"];
@@ -185,10 +185,10 @@
                              }
                          }
                          
-                         NSLog(@"day date : %@", date);
+                         DLog(@"day date : %@", date);
                          NSString *withoutComma = [day[1] stringByReplacingOccurrencesOfString:@"," withString:@"."];
                          double temp = [withoutComma doubleValue];
-                         //NSLog(@"dayConsumption : %@", dayConsumption);
+                         //DLog(@"dayConsumption : %@", dayConsumption);
                          self.consumptionDaysSum += temp;
                          self.daysCounter++;
                          
@@ -202,19 +202,19 @@
              
          }//end completionBlock
          
-         //NSLog(@"****** JOB DONE! ******");
+         //DLog(@"****** JOB DONE! ******");
          //convert to days
          self.totalDays = (self.monthsCounter * 30.0f) + (self.daysCounter);
          float yearPart = self.totalDays/365.0f;
          self.yearExtrapolation = (self.consumptionMonthsSum + self.consumptionDaysSum)/yearPart;
-//         NSLog(@"calling getConsumptionSumForParticipantId:");
-//         NSLog(@"yearExtrapolation: %f",self.yearExtrapolation);
-//         NSLog(@"yearPart: %f",yearPart);
-//         NSLog(@"totalDays: %f",totalDays);
-//         NSLog(@"monthsCounter: %i",self.monthsCounter);
-//         NSLog(@"daysCounter: %i",self.daysCounter);
+//         DLog(@"calling getConsumptionSumForParticipantId:");
+//         DLog(@"yearExtrapolation: %f",self.yearExtrapolation);
+//         DLog(@"yearPart: %f",yearPart);
+//         DLog(@"totalDays: %f",totalDays);
+//         DLog(@"monthsCounter: %i",self.monthsCounter);
+//         DLog(@"daysCounter: %i",self.daysCounter);
          [self readyToSubmitRank];
-         NSLog(@"self.lastSyncDate : %@",self.lastSyncDate);
+         DLog(@"self.lastSyncDate : %@",self.lastSyncDate);
          
      }];
 
@@ -223,7 +223,7 @@
 
 -(void)readyToSubmitRank {
     self.consumptionWithOfficeArea = self.yearExtrapolation/OfficeArea;
-    NSLog(@"consumptionWithOfficeArea: %f",self.consumptionWithOfficeArea);
+    DLog(@"consumptionWithOfficeArea: %f",self.consumptionWithOfficeArea);
     NSInteger currentRank = 0;
     if (self.consumptionWithOfficeArea < 25.0f) {
         currentRank = APlusPlusPlus;
@@ -257,21 +257,21 @@
             participantLocal.rank = rankAsNumber;
             //participantLocal.updated = self.lastSyncDate;
             [participantLocal setUpdated:self.lastSyncDate];
-            NSLog(@"<ParticipantDataManager> saving rank - participant.rank: %@", participantLocal.rank);
-            NSLog(@"<ParticipantDataManager> saving sync date - participant.updated: %@", participantLocal.updated);
+            DLog(@"<ParticipantDataManager> saving rank - participant.rank: %@", participantLocal.rank);
+            DLog(@"<ParticipantDataManager> saving sync date - participant.updated: %@", participantLocal.updated);
 
             
         } completion:^{
             
             Participant *participant =
             [Participant findFirstByAttribute:@"sensorid" withValue:[NSNumber numberWithInt:self.currentParticipantId]];
-            NSLog(@"<ParticipantDataManager> readyToSubmitRank current score: %@, self.currentParticipantId: %i, participantObj: %@", participant.score, self.currentParticipantId, participant);
+            DLog(@"<ParticipantDataManager> readyToSubmitRank current score: %@, self.currentParticipantId: %i, participantObj: %@", participant.score, self.currentParticipantId, participant);
             
             [[NSManagedObjectContext contextForCurrentThread] saveNestedContexts];
             
             [self calculateParticipantScore];
             
-            //NSLog(@"!!!!!!!!! <ParticipantDataManager> sending 'RankWasCalculated' Notification !!!!!!!!!!!");
+            //DLog(@"!!!!!!!!! <ParticipantDataManager> sending 'RankWasCalculated' Notification !!!!!!!!!!!");
 
             NSString *RankWasCalculatedWithId_ = [RankWasCalculated stringByAppendingString:[NSString stringWithFormat:@"%d",self.currentParticipantId]];
             // notify the corresponding instance of PublicDetailViewController
@@ -288,7 +288,7 @@
     
     Participant *participant =
     [Participant findFirstByAttribute:@"sensorid" withValue:[NSNumber numberWithInt:self.currentParticipantId]];
-    NSLog(@"<ParticipantDataManager> calculateParticipantScore current score: %@, self.currentParticipantId: %i, participantObj: %@", participant.score, self.currentParticipantId, participant);
+    DLog(@"<ParticipantDataManager> calculateParticipantScore current score: %@, self.currentParticipantId: %i, participantObj: %@", participant.score, self.currentParticipantId, participant);
     // he has no score yet
     if (participant.score.intValue == 0) {
         // 'Zaehler'
@@ -307,7 +307,7 @@
             Participant *participant =
             [Participant findFirstByAttribute:@"sensorid" withValue:[NSNumber numberWithInt:self.currentParticipantId] inContext:localContext];
             participant.score = [NSNumber numberWithFloat:score];
-            //NSLog(@"<ParticipantDataManager> saving score - participant.rank: %@", participant.score);
+            //DLog(@"<ParticipantDataManager> saving score - participant.rank: %@", participant.score);
             
         } completion:^{
             
@@ -316,7 +316,7 @@
             
              [[NSManagedObjectContext contextForCurrentThread] saveNestedContexts];
             
-            NSLog(@"<ParticipantDataManager> saving score!! - participant.score: %@", participant.score);
+            DLog(@"<ParticipantDataManager> saving score!! - participant.score: %@", participant.score);
             
             NSString *ScoreWasCalculatedWithId_ = [ScoreWasCalculated stringByAppendingString:[NSString stringWithFormat:@"%d",self.currentParticipantId]];
             // notify the corresponding instance of PublicDetailViewController
@@ -325,7 +325,7 @@
         }];
         
         
-        NSLog(@"<ParticipantDataManager> score: %f", score);
+        DLog(@"<ParticipantDataManager> score: %f", score);
         
     }
     // get 'updated' from participant object

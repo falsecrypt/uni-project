@@ -86,7 +86,7 @@ NSMutableArray *navigationBarItems;
         reach.reachableBlock = ^(Reachability * reachability)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(@"Block Says Reachable");
+                DLog(@"Block Says Reachable");
                 self.deviceIsOnline = YES;
                 [self initCirclesOnline];
             });
@@ -95,7 +95,7 @@ NSMutableArray *navigationBarItems;
         reach.unreachableBlock = ^(Reachability * reachability)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(@"Block Says Unreachable");
+                DLog(@"Block Says Unreachable");
                 self.deviceIsOnline = NO;
                 [self initCirclesOffline];
             });
@@ -103,35 +103,35 @@ NSMutableArray *navigationBarItems;
         
         [reach startNotifier];
         
-        NSLog(@"calling viewDidLoad - Last Months!");
+        DLog(@"calling viewDidLoad - Last Months!");
         
     }
     
 }
 
 - (void) initCirclesOnline {
-    NSLog(@"calling initCirclesOnline!");
+    DLog(@"calling initCirclesOnline!");
 
         // Lets look for Week Data in our DB
     
         // We are online
-        NSLog(@"deviceIsOnline : %i", self.deviceIsOnline);
+        DLog(@"deviceIsOnline : %i", self.deviceIsOnline);
         
         // No Data, our App has been started for the first time
         if ([MonthData countOfEntities]==0) {
-            NSLog(@"No Data in the WeekData Table!");
+            DLog(@"No Data in the WeekData Table!");
             [self getMonthsData];
         }
         // We have some data, we are online so lets sync
         else {
-            NSLog(@"number of entities before sync : %i", [MonthData countOfEntities]);
+            DLog(@"number of entities before sync : %i", [MonthData countOfEntities]);
             //[MonthData truncateAll]; not here
             [self getMonthsData];
         }
 }
 
 - (void) initCirclesOffline{
-    NSLog(@"calling initCirclesOffline!");
+    DLog(@"calling initCirclesOffline!");
     
     //dispatch_async(dispatch_get_main_queue(), ^{
     [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -141,7 +141,7 @@ NSMutableArray *navigationBarItems;
     
     // We are offline
     // retrieve the data from the DB
-    NSLog(@"deviceIsOnline : %i", self.deviceIsOnline);
+    DLog(@"deviceIsOnline : %i", self.deviceIsOnline);
     // ooops, No Data. Show error TODO
     if ([MonthData countOfEntities]==0) {
         if (self.HUD) {
@@ -149,7 +149,7 @@ NSMutableArray *navigationBarItems;
             [self.HUD removeFromSuperview];
             self.HUD = nil;
         }
-        NSLog(@"No Data in the WeekData Table! and the Device is not connected to the internet..");
+        DLog(@"No Data in the WeekData Table! and the Device is not connected to the internet..");
         self.HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         // Configure for text only and offset down
         self.HUD.labelText = @"Keine Daten vorhanden";
@@ -168,7 +168,7 @@ NSMutableArray *navigationBarItems;
 }
 
 -(void)getMonthsData {
-    NSLog(@"startSynchronization...");
+    DLog(@"startSynchronization...");
     
     // Start this first timer immediately, without delay
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -185,7 +185,7 @@ NSMutableArray *navigationBarItems;
 
 - (void)getDataFromServer:(NSTimer *)timer {
     
-    NSLog(@"getDataFromServer...");
+    DLog(@"getDataFromServer...");
     //Get user's aggregated kilowatt values per month (max 12 months, semicolon separated, latest first).
     NSString *getPath = @"rpc.php?userID=";
     getPath = [getPath stringByAppendingString: [NSString stringWithFormat:@"%i", MySensorID] ];
@@ -198,13 +198,13 @@ NSMutableArray *navigationBarItems;
                                              
                                              for (NSString *obj in components) {
                                                  NSArray *month = [obj componentsSeparatedByString:@"="];
-                                                 NSLog(@"month : %@", month);
+                                                 DLog(@"month : %@", month);
                                                  NSArray *monthAndYear = [month[0] componentsSeparatedByString:@"-"];
-                                                 NSLog(@"[month objectAtIndex:0] : %@", month[0]);
-                                                 NSLog(@"monthAndYear : %@", monthAndYear);
+                                                 DLog(@"[month objectAtIndex:0] : %@", month[0]);
+                                                 DLog(@"monthAndYear : %@", monthAndYear);
                                                  double temp = [month[1] doubleValue];
                                                  NSDecimalNumber *monthConsumption = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:temp];
-                                                 NSLog(@"monthConsumption : %@", monthConsumption);
+                                                 DLog(@"monthConsumption : %@", monthConsumption);
                                                  NSNumber *yearNumber = (NSNumber *)@([monthAndYear[1] doubleValue]);
                                                  NSNumber *monthNumber = (NSNumber *)@([monthAndYear[0] doubleValue]);
                                                  NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
@@ -226,7 +226,7 @@ NSMutableArray *navigationBarItems;
                                              [self calculateRadiusForCircles];
                                              
                                          } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                             NSLog(@"Failed during getting 12-Months-Data: %@",[error localizedDescription]);
+                                             DLog(@"Failed during getting 12-Months-Data: %@",[error localizedDescription]);
                                              if (USEDUMMYDATA)
                                              {
                                                  //[MonthData truncateAll]; // OK, Lets remove all old DB-Objects and generate new ones..
@@ -278,13 +278,13 @@ NSMutableArray *navigationBarItems;
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     });
     NSArray *results = [MonthData findAllSortedBy:@"consumption" ascending:NO];
-    //NSLog(@"calculateRadiusForCircle -> results: %@", results);
+    //DLog(@"calculateRadiusForCircle -> results: %@", results);
     // check if we have exactly 12 objects (last 12 months)
     if ([MonthData countOfEntities] > 12) {
         NSArray *sortedByDate = [ results sortedArrayUsingDescriptors:@[ [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:NO] ] ];
-        //NSLog(@"sortedByDate: %@", sortedByDate);
+        //DLog(@"sortedByDate: %@", sortedByDate);
         NSArray *deleteThese = [sortedByDate subarrayWithRange:NSMakeRange(12, [sortedByDate count]-12)];
-        // NSLog(@"deleteThese: %@", deleteThese);
+        // DLog(@"deleteThese: %@", deleteThese);
         for (MonthData *month in deleteThese) {
             [month deleteEntity];
         }
@@ -297,17 +297,17 @@ NSMutableArray *navigationBarItems;
     NSDecimalNumber *consumptionMax = [results[0]consumption];
     // Calculate the max. Circle's Area
     NSNumber *maxCircleArea = @(M_PI * pow(50.0, 2.0));
-    //NSLog(@"calculateRadiusForCircle -> consumptionMax after: %@", consumptionMax);
+    //DLog(@"calculateRadiusForCircle -> consumptionMax after: %@", consumptionMax);
     
     // Calculate radius and area for every object
     for (MonthData *monthdata in results){
         float currentConsInPercent = ([[monthdata consumption] floatValue]) / ([consumptionMax floatValue]/100.);
-        //NSLog(@"\n currentConsInPercent -> %f", currentConsInPercent);
+        //DLog(@"\n currentConsInPercent -> %f", currentConsInPercent);
         float currentCircleArea = ([maxCircleArea floatValue]/100.) * (currentConsInPercent);
-        //NSLog(@"\n currentCircleArea -> %f", currentCircleArea);
+        //DLog(@"\n currentCircleArea -> %f", currentCircleArea);
         // Now calculate the radius and save it in the DB
         NSUInteger circleradius = round(sqrt( currentCircleArea / M_PI ));
-        //NSLog(@"\n calculated radius -> %i for consumption -> %@", circleradius, [monthdata consumption]);
+        //DLog(@"\n calculated radius -> %i for consumption -> %@", circleradius, [monthdata consumption]);
         circleradius = circleradius > 19 ? circleradius : circleradius > 0 ? 20 : 0; // if bigger than 0 : min. 20
         [monthdata setCircleradius:(NSDecimalNumber *)[NSDecimalNumber numberWithInt:circleradius]];
     }
@@ -326,23 +326,23 @@ NSMutableArray *navigationBarItems;
 #pragma mark Profile Button Methods
 
 - (void)hideProfileAfterUserLoggedOff {
-    NSLog(@"hideProfileAfterUserLoggedOff...");
+    DLog(@"hideProfileAfterUserLoggedOff...");
     if (self.profilePopover){
         [self.profilePopover dismissPopoverAnimated:YES];
-        NSLog(@"profile popover dissmissed...");
+        DLog(@"profile popover dissmissed...");
     }
     [navigationBarItems removeObject:self.profileBarButtonItem];
     [self.navigationBar.topItem setRightBarButtonItems:navigationBarItems animated:YES];
     [self.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
-    //    NSLog(@"rightBarButtonItems: %@", [self.navigationBar.topItem rightBarButtonItems]);
-    //    NSLog(@"navigationBarItems: %@", navigationBarItems);
-    //    NSLog(@"self.profileBarButtonItem: %@", self.profileBarButtonItem);
+    //    DLog(@"rightBarButtonItems: %@", [self.navigationBar.topItem rightBarButtonItems]);
+    //    DLog(@"navigationBarItems: %@", navigationBarItems);
+    //    DLog(@"self.profileBarButtonItem: %@", self.profileBarButtonItem);
     // Going back
     [(self.splitViewController.viewControllers)[0]popToRootViewControllerAnimated:TRUE];
     DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
     FirstDetailViewController *startDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
     detailViewManager.detailViewController = startDetailViewController;
-    startDetailViewController.navigationBar.topItem.title = @"Summary";
+    startDetailViewController.navigationBar.topItem.title = @"Home";
     
 }
 

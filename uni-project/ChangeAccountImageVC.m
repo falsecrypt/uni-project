@@ -122,7 +122,7 @@ static bool _newMedia;
     self.imageView.image = chosenImage;
     NSData *imgData = UIImageJPEGRepresentation(chosenImage, 0.5);
     NSString *imgType = [self contentTypeForImageData:imgData]; // jpeg or png?
-    NSLog(@"imgType %@ ", imgType);
+    DLog(@"imgType %@ ", imgType);
     if (![imgType isEqualToString:@"image/jpeg"]) {
         UIAlertView *myAlertView = [[UIAlertView alloc] initWithTitle:@"Error"
                                                               message:@"Nur JPG-Bilder sind erlaubt"
@@ -143,8 +143,8 @@ static bool _newMedia;
     [picker dismissViewControllerAnimated:YES completion:NULL];
     
     CGSize size = chosenImage.size;
-    NSLog(@"saving new image with size: height: %f width: %f ", size.height, size.width);
-    NSLog(@"storing image data with size: %@ ", [NSByteCountFormatter stringFromByteCount:imgData.length countStyle:NSByteCountFormatterCountStyleFile]);
+    DLog(@"saving new image with size: height: %f width: %f ", size.height, size.width);
+    DLog(@"storing image data with size: %@ ", [NSByteCountFormatter stringFromByteCount:imgData.length countStyle:NSByteCountFormatterCountStyleFile]);
     // Now save the image in the DB
 
     self.me = [User findFirstByAttribute:@"sensorid" withValue:@(MySensorID)];
@@ -152,7 +152,7 @@ static bool _newMedia;
     
     [[NSManagedObjectContext defaultContext]  saveInBackgroundCompletion:^{
         User *me = [User findFirstByAttribute:@"sensorid" withValue:@(MySensorID)];
-        NSLog(@"NEW USER SAVED! me: %@", me);
+        DLog(@"NEW USER SAVED! me: %@", me);
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:NewAccountImageAvailable
                                                                 object:self];
@@ -202,13 +202,13 @@ static bool _newMedia;
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSString *response = [operation responseString];
-        NSLog(@"response: [%@], responseObj: %@",response, responseObject);
+        DLog(@"response: [%@], responseObj: %@",response, responseObject);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if([operation.response statusCode] == 403){
-            NSLog(@"Upload Failed");
+            DLog(@"Upload Failed");
             return;
         }
-        NSLog(@"error: %@", [operation error]);
+        DLog(@"error: %@", [operation error]);
     }];
     
     [operation start];

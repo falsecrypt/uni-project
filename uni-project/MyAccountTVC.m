@@ -80,7 +80,7 @@
     if ( ([[keychain objectForKey:(__bridge id)(kSecAttrLabel)] isEqualToString:@"LOGGEDOFF"] )
         || ( [[keychain objectForKey:(__bridge id)kSecAttrAccount] length] == 0 ) /* Or Username is empty */
         || ( [[keychain objectForKey:(__bridge id)kSecValueData] length]== 0) ) /* Or Password is empty */ {
-        NSLog(@"user is not logged in, removing profileBarButtonItem");
+        DLog(@"user is not logged in, removing profileBarButtonItem");
         [self.navigationItem setRightBarButtonItem:self.profileBarButtonItem animated:YES];
     }
     
@@ -147,16 +147,16 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSLog(@"prepareForSegue: %@", segue.identifier);
+    DLog(@"prepareForSegue: %@", segue.identifier);
     
     ((UIViewController *)segue.destinationViewController).navigationItem.rightBarButtonItem = self.profileBarButtonItem;
 
 }
 
 - (void)showProfileAfterUserLoggedIn {
-    //NSLog(@"!!!!! 1 calling showProfileAfterUserLoggedIn !!!!!!!!!!");
+    //DLog(@"!!!!! 1 calling showProfileAfterUserLoggedIn !!!!!!!!!!");
     //[navigationBarItems addObject:self.profileBarButtonItem];
-    NSLog(@"FirstDetail: user logged in: adding profileBarButtonItem: %@", self.profileBarButtonItem);
+    DLog(@"FirstDetail: user logged in: adding profileBarButtonItem: %@", self.profileBarButtonItem);
     [self.navigationItem setRightBarButtonItem:self.profileBarButtonItem animated:YES];
 }
 
@@ -172,7 +172,7 @@
     DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
     FirstDetailViewController *startDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
     detailViewManager.detailViewController = startDetailViewController;
-    startDetailViewController.navigationBar.topItem.title = @"Summary";
+    startDetailViewController.navigationBar.topItem.title = @"Home";
 }
 
 - (IBAction)profileButtonTapped:(UIBarButtonItem *)sender {

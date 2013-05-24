@@ -30,7 +30,7 @@
         splitViewController.delegate = self;
         FirstDetailViewController *initialDetailViewController = [splitViewController.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
         self.detailViewController = initialDetailViewController;
-        NSLog(@"Calling DetailViewManager initWithSplitViewcontroller, setting detailViewController = %@", self.detailViewController);
+        DLog(@"Calling DetailViewManager initWithSplitViewcontroller, setting detailViewController = %@", self.detailViewController);
     }
     
     return self;
@@ -42,7 +42,7 @@
 // -------------------------------------------------------------------------------
 - (void)setDetailViewController:(UIViewController<SubstitutableDetailViewController> *)detailViewController
 {
-    NSLog(@"<DetailViewManager> calling setDetailViewController, with detailViewController: %@", detailViewController);
+    DLog(@"<DetailViewManager> calling setDetailViewController, with detailViewController: %@", detailViewController);
     // Clear any bar button item from the detail view controller that is about to
     // no longer be displayed.
     //self.detailViewController.navigationPaneBarButtonItem = nil;
@@ -74,13 +74,13 @@
 //            view =nil;
 //        }
 //        [detail removeFromParentViewController];
-//        NSLog(@"<DetailViewManager> ((EnergyClockViewController *)detail).viewControllers: %@", ((EnergyClockViewController *)detail).viewControllers);
+//        DLog(@"<DetailViewManager> ((EnergyClockViewController *)detail).viewControllers: %@", ((EnergyClockViewController *)detail).viewControllers);
 //    }
     NSArray *viewControllers = @[navigationViewController, _detailViewController];
     self.splitViewController.viewControllers = viewControllers;
-    //NSLog(@"<DetailViewManager> self.splitViewController.viewControllers: %@", self.splitViewController.viewControllers);
-    NSLog(@"<DetailViewManager> detail prev: %@", detail);
-    NSLog(@"<DetailViewManager> detail prev: %@", detail.view);
+    //DLog(@"<DetailViewManager> self.splitViewController.viewControllers: %@", self.splitViewController.viewControllers);
+    DLog(@"<DetailViewManager> detail prev: %@", detail);
+    DLog(@"<DetailViewManager> detail prev: %@", detail.view);
     // Dismiss the navigation popover if one was present.  This will
     // only occur if the device is in portrait.
 //    if (self.navigationPopoverController)
@@ -108,7 +108,7 @@
           withBarButtonItem:(UIBarButtonItem *)barButtonItem
        forPopoverController:(UIPopoverController *)pc
 {
-    NSLog(@"calling splitViewController:willHideViewController");
+    DLog(@"calling splitViewController:willHideViewController");
     // If the barButtonItem does not have a title (or image) adding it to a toolbar
     // will do nothing.
     barButtonItem.title = @"Navigation";
@@ -138,7 +138,7 @@
 - (void)splitViewController:(UISplitViewController *)svc
           popoverController:(UIPopoverController *)pc
   willPresentViewController:(UIViewController *)aViewController {
-    NSLog(@"calling splitViewController:popoverController:willPresentViewController");
+    DLog(@"calling splitViewController:popoverController:willPresentViewController");
 }
 
 

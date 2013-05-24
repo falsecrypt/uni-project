@@ -98,7 +98,7 @@ static NSMutableDictionary * _Cached_PublicDetailViews;
 
 - (id)initWithIdentifier:(NSString *)identifier source:(UIViewController *)source destination:(UIViewController *)destination
 {
-    NSLog(@"<MCachedModalStoryboardSegue> start identifier= %@, destination=%@, source=%@", identifier, destination, source);
+    DLog(@"<MCachedModalStoryboardSegue> start identifier= %@, destination=%@, source=%@", identifier, destination, source);
     UIViewController *newDest;
     // Alloc the static dict if required
     if (!_MCachedModalStoryboardSegueCache) {
@@ -111,13 +111,13 @@ static NSMutableDictionary * _Cached_PublicDetailViews;
     if ([destination isKindOfClass:[PublicDetailViewController class]]) {
         PublicScoreTVC *Newsource = (PublicScoreTVC *)source;
         if (![[_Cached_PublicDetailViews allKeys] containsObject:Newsource.selectedParticipantId]) {
-            NSLog(@"<MCachedModalStoryboardSegue> adding destination: %@", destination);
+            DLog(@"<MCachedModalStoryboardSegue> adding destination: %@", destination);
             [_Cached_PublicDetailViews setObject:destination forKey:Newsource.selectedParticipantId];
             _destinationWasCached = NO;
         }
         newDest = [_Cached_PublicDetailViews objectForKey:Newsource.selectedParticipantId];
-        NSLog(@"<MCachedModalStoryboardSegue> return newDest: %@", newDest);
-        NSLog(@"<MCachedModalStoryboardSegue> _Cached_PublicDetailViews: %@", _Cached_PublicDetailViews);
+        DLog(@"<MCachedModalStoryboardSegue> return newDest: %@", newDest);
+        DLog(@"<MCachedModalStoryboardSegue> _Cached_PublicDetailViews: %@", _Cached_PublicDetailViews);
     }
     else {
         
@@ -151,9 +151,9 @@ static NSMutableDictionary * _Cached_PublicDetailViews;
     // some kind of a custom replace segue with detail split as destination ;)
     //if (![detailViewManager.detailViewController isEqual:self.destinationViewController]) {
     detailViewManager.detailViewController = self.destinationViewController;
-    NSLog(@"<MCachedModalStoryboardSegue> custom segue, destinationViewController: %@", self.destinationViewController);
-    NSLog(@"<MCachedModalStoryboardSegue> detailViewManager.detailViewController.view.subviews: %@", detailViewManager.detailViewController.view.subviews);
-    NSLog(@"<MCachedModalStoryboardSegue> detailViewManager.detailViewController.view: %@", detailViewManager.detailViewController.view);
+    DLog(@"<MCachedModalStoryboardSegue> custom segue, destinationViewController: %@", self.destinationViewController);
+    DLog(@"<MCachedModalStoryboardSegue> detailViewManager.detailViewController.view.subviews: %@", detailViewManager.detailViewController.view.subviews);
+    DLog(@"<MCachedModalStoryboardSegue> detailViewManager.detailViewController.view: %@", detailViewManager.detailViewController.view);
     //}
 
 }

@@ -162,12 +162,12 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
     // Calculate the center and radius based on the parent layer's bounds. This version
     // of the BTSPieChart assumes the view does not change size.
     CGRect parentLayerBounds = [[self layer] bounds];
-    CGFloat centerX = parentLayerBounds.size.width / 2.0f;
-    CGFloat centerY = parentLayerBounds.size.height / 2.0f;
-    _center = CGPointMake(centerX, centerY);
+    CGFloat centerX = parentLayerBounds.size.width  / 2.0f;
+    CGFloat centerY = (parentLayerBounds.size.height / 2.0f);
+    _center = CGPointMake(centerX, centerY+10.0);
     
     // Reduce the radius just a bit so the the pie chart layers do not hug the edge of the view.
-    _radius = MIN(centerX, centerY) - 20;
+    _radius = MIN(centerX, centerY) - 25;
     
     [self refreshLayers];
 }
@@ -188,14 +188,14 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
     [[pieLayer sliceLayers] insertSublayer:sliceLayer atIndex:index];
     
     // Changed by Pavel Ermolin //
-    //NSLog(@"insertSliceLayerAtIndex");
+    //DLog(@"insertSliceLayerAtIndex");
     
     // Insert sublayers for our slots (number of participants/users)
     if (_dataSource) {
         NSUInteger slotCount = [_dataSource numberOfSlotsInPieView:self];
         NSUInteger sliceCount = [_dataSource numberOfSlicesInPieView:self];
         NSMutableArray *slotValues = [[NSMutableArray alloc] init];
-        NSLog(@"number of Slots: %i", slotCount);
+        DLog(@"number of Slots: %i", slotCount);
         for (int i=0; i<slotCount; i++) {
             UIColor *slotColor = [_delegate pieView:self
                                 colorForSlotAtIndex:(slotCount-1)-i      // Slot Number
@@ -208,10 +208,10 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
             [sliceLayer insertSublayer:sliceLayerInside atIndex:i];
         }
         sliceLayer.slotValues = slotValues;
-        NSLog(@"sliceLayer.slotValues: %@", sliceLayer.slotValues);
+        DLog(@"sliceLayer.slotValues: %@", sliceLayer.slotValues);
     }
     
-    //NSLog(@"[sliceLayer sublayers]: %@", [sliceLayer sublayers]);
+    //DLog(@"[sliceLayer sublayers]: %@", [sliceLayer sublayers]);
     //*************************//
     
     return sliceLayer;
@@ -223,7 +223,9 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
     
     //[labelLayer setString:[_labelFormatter stringFromNumber:[NSNumber numberWithDouble:value]]]; // 4%
     NSString *timeString = [[NSString alloc] init];
-    if ((index*2) < 10) {
+    if(value == 9999.9999) {
+        timeString = @" ";
+    }else if ((index*2) < 10) {
         timeString = [NSString stringWithFormat:@"0%i:00",index*2];
     }
     else {
@@ -240,13 +242,15 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
 - (CATextLayer *)insertTemperatureLabelLayerAtIndex:(NSUInteger)index value:(int)value hour:(NSUInteger)hourValue  {
     
     CATextLayer *labelLayer = [BTSPieView createLabelLayer];
+    NSUInteger originalIndex = index;
+    [labelLayer setBounds:CGRectMake(0.0, 0.0, 25.0, 15.0)]; // (CGFloat x, CGFloat y, CGFloat width, CGFloat height)
     NSDictionary *userTemperatureValues = [temperatureUserValues objectForKey:@(hourValue)];
-    NSLog(@"@(hourValue): %@", @(hourValue));
-    NSLog(@"userTemperatureValues: %@", userTemperatureValues);
+    DLog(@"@(hourValue): %@", @(hourValue));
+    DLog(@"userTemperatureValues: %@", userTemperatureValues);
     if ([[userTemperatureValues allKeys] count] > 0) {
         
         NSArray *allKeys = [[userTemperatureValues allKeys]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-        NSLog(@"allKeys: %@", allKeys);
+        DLog(@"allKeys: %@", allKeys);
         // Method for getting the correct color:
         // 1. Sort all User IDs in the array [4,3,5] -> [3,4,5]
         // 2. Given the User ID we can now calculate the color-index, e.g UserID 5 has color-index 2 in the color-array
@@ -261,15 +265,26 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
                     index++;
                 }
             }
-            NSLog(@"index: %i", index);
+            DLog(@"index: %i", index);
             CGColor *userLabelColor = [_dataSource getColorForTempLabel:index].CGColor;
-            NSLog(@"userLabelColor: %@", userLabelColor);
+            DLog(@"userLabelColor: %@", userLabelColor);
             [anotherLayer setForegroundColor: userLabelColor];
             NSNumber *temperatureNumber = [userTemperatureValues objectForKey:allKeys[j]];
             //NSString *temperature = [temperatureNumber stringValue];
             NSString *temperature = [NSString stringWithFormat:@"%@%@",temperatureNumber, @"\u00B0"];
+            if (value == 9999) {
+                temperature = @" ";
+            }
+            if (originalIndex >= 5) {
+                [anotherLayer setFrame:CGRectMake((labelLayer.frame.origin.x-5.0)-(j*25.0), labelLayer.frame.origin.y+16.0, 25.0, 15.0)];
+                // (CGFloat x, CGFloat y, CGFloat width, CGFloat height)
+            }
+            else {
+                [anotherLayer setFrame:CGRectMake((labelLayer.frame.origin.x+25.0)+(j*25.0), labelLayer.frame.origin.y+16.0, 25.0, 15.0)];
+            }
+
             [anotherLayer setString:temperature];
-            //[anotherLayer setAnchorPoint:CGPointMake(-0.3, -0.3)];
+            [anotherLayer setBounds:CGRectMake(0.0, 0.0, 25.0, 15.0)]; // (CGFloat x, CGFloat y, CGFloat width, CGFloat height)
             //[anotherLayer setBackgroundColor:[UIColor grayColor].CGColor];
             [labelLayer addSublayer:anotherLayer];
         }
@@ -278,7 +293,12 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
     //[labelLayer setString:[_labelFormatter stringFromNumber:[NSNumber numberWithDouble:value]]]; // 4%
     NSString *tempString = [[NSString alloc] init];
     tempString = [NSString stringWithFormat:@"%i%@", value, @"\u00B0"]; //number with degree sign
+    if (value == 9999) {
+        tempString = @" ";
+    }
     [labelLayer setString:tempString];
+    
+    //[labelLayer setBackgroundColor:[UIColor lightGrayColor].CGColor];
     [labelLayer setForegroundColor:[UIColor colorWithRed:110/255.0f green:110/255.0f blue:110/255.0f alpha:1.0f].CGColor];
     BTSPieLayer *pieLayer = (BTSPieLayer *) [self layer];
     CALayer *layer = [pieLayer tempLabelLayers]; // special labels for temperature
@@ -286,36 +306,10 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
     return labelLayer;
 }
 
-- (CATextLayer *)insertUserTemperatureLabelLayerAtIndex:(NSUInteger)index hour:(NSUInteger)hourValue {
-//    CATextLayer *labelLayer = [BTSPieView createLabelLayer];
-//    NSDictionary *userTemperatureValues = [temperatureUserValues objectForKey:@(hourValue)];
-//    NSArray *allKeys = [[userTemperatureValues allKeys]sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-//    for (int i=0; i<[allKeys count]; i++) {
-//        CATextLayer *anotherLayer = [BTSPieView createLabelLayer];
-//        CGColor *userLabelColor = [_dataSource getColorForTempLabel:[allKeys[i] integerValue]].CGColor;
-//        [anotherLayer setForegroundColor: userLabelColor];
-//        NSString *temperature = [userTemperatureValues objectForKey:@([allKeys[i] integerValue])];
-//        [temperature stringByAppendingString:[NSString stringWithFormat:@"%@", @"\u00B0" ]];
-//        [anotherLayer setString:temperature];
-//        [anotherLayer setBackgroundColor:[UIColor greenColor].CGColor];
-//        [labelLayer addSublayer:anotherLayer];
-//    }
-//    
-//    NSString *tempString = [[NSString alloc] init];
-//    
-//    
-//    //tempString = [NSString stringWithFormat:@"%i%@", value, @"\u00B0"]; //number with degree sign
-//    [labelLayer setString:tempString];
-//    [labelLayer setForegroundColor:[UIColor colorWithRed:110/255.0f green:110/255.0f blue:110/255.0f alpha:1.0f].CGColor];
-//    BTSPieLayer *pieLayer = (BTSPieLayer *) [self layer];
-//    CALayer *layer = [pieLayer tempLabelLayers]; // special labels for temperature
-//    [layer insertSublayer:labelLayer atIndex:index];
-//    return labelLayer;
-}
 
 - (CAShapeLayer *)insertLineLayerAtIndex:(NSUInteger)index color:(UIColor *)color
 {
-    
+    DLog(@"index: %i", index);
     CAShapeLayer *lineLayer = [CAShapeLayer layer];
     [lineLayer setStrokeColor:color.CGColor];
     BTSPieLayer *pieLayer = (BTSPieLayer *) [self layer];
@@ -326,7 +320,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
 
 - (void)reloadData
 {
-    NSLog(@"reloadData");
+    DLog(@"reloadData calling");
     //[CATransaction begin];
     //[CATransaction setDisableActions:YES];
     
@@ -335,31 +329,64 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
     
     if (_dataSource) {
         
-        [self beginCATransaction];
+        //[self beginCATransaction];
         
         NSUInteger sliceCount = [_dataSource numberOfSlicesInPieView:self];
         radiusArray = [_dataSource getRadiusArray];
         slotValuesForSlice = [_dataSource getSlotValuesForSliceArray];
         temperatureValuesArray = [_dataSource getTemperatureValues];
         temperatureUserValues = [_dataSource getUserTemperatureValues];
-        NSLog(@"setting temperatureUserValues: %@", temperatureUserValues);
+        DLog(@"setting temperatureUserValues: %@", temperatureUserValues);
         BTSPieViewValues values(sliceCount, ^(NSUInteger index) {
             return [_dataSource pieView:self valueForSliceAtIndex:index];
         });
         
         CGFloat startAngle = (CGFloat) -M_PI_2;
         CGFloat endAngle = startAngle;
-        //NSLog(@"sliceCount: %i", sliceCount);
+        DLog(@"sliceCount: %i", sliceCount);
         for (NSUInteger sliceIndex = 0; sliceIndex < sliceCount; sliceIndex++) {
-            
+            //DLog(@"endAngle before: %f", endAngle);
             endAngle += values.angles()[sliceIndex];
-            //NSLog(@"reloadData: endAngle: %f", endAngle);
+            //DLog(@"endAngle after: %f", endAngle);
+            DLog(@"reloadData: endAngle: %f, startAngle: %f, ", endAngle, startAngle);
             //UIColor *color = [_delegate pieView:self colorForSlotAtIndex:sliceIndex sliceAtIndex:sliceIndex sliceCount:sliceCount];
             BTSSliceLayer *sliceLayer = [self insertSliceLayerAtIndex:sliceIndex];
             [sliceLayer setSliceAngle:endAngle];
-            [self insertLabelLayerAtIndex:sliceIndex value:values.percentages()[sliceIndex]];
+            float diffAngle = 0.0f;
+            if ( (startAngle <= 0 && endAngle <= 0) || (startAngle >= 0 && endAngle >= 0) ) {
+                float absStartAngle = ABS(startAngle);
+                DLog(@"absStartAngle: %f", absStartAngle);
+                float absEndAngle = ABS(endAngle);
+                DLog(@"absEndAngle: %f", absEndAngle);
+                diffAngle = ABS(absEndAngle - absStartAngle);
+                DLog(@"diffAngle: %f", diffAngle);
+            }
+            else if ( (startAngle >= 0 && endAngle <=0) || (endAngle >= 0 && startAngle <=0) ) {
+                float absStartAngle = ABS(startAngle);
+                DLog(@"absStartAngle: %f", absStartAngle);
+                float absEndAngle = ABS(endAngle);
+                DLog(@"absEndAngle: %f", absEndAngle);
+                diffAngle = absEndAngle + absStartAngle;
+                DLog(@"diffAngle: %f", diffAngle);
+            }
+
             NSUInteger hourValue = sliceIndex*2;
-            [self insertTemperatureLabelLayerAtIndex:sliceIndex value:[temperatureValuesArray[sliceIndex] integerValue] hour:hourValue];
+            if (diffAngle < 0.2) { // <- feel free to change this value
+                DLog(@"diffAngle < 0.3! Hide the labels!");
+                DLog(@"for hourValue: %i", hourValue);
+                DLog(@"for sliceIndex: %i", sliceIndex);
+                DLog(@"value for this slice: %f", [_dataSource pieView:self valueForSliceAtIndex:sliceIndex]);
+                // no labels please
+                // these are hacks, i know
+                [self insertLabelLayerAtIndex:sliceIndex value:9999.9999];
+                [self insertTemperatureLabelLayerAtIndex:sliceIndex value:9999 hour:hourValue];
+            }
+            else {
+                DLog(@"diffAngle > 0.5. OK.");
+                [self insertLabelLayerAtIndex:sliceIndex value:values.percentages()[sliceIndex]];
+                [self insertTemperatureLabelLayerAtIndex:sliceIndex value:[temperatureValuesArray[sliceIndex] integerValue] hour:hourValue];
+            }
+            
             //[self insertUserTemperatureLabelLayerAtIndex:sliceIndex hour:hourValue];
             [self insertLineLayerAtIndex:sliceIndex color:[UIColor blackColor]];
             //BTSPieLayer *pieLayer = (BTSPieLayer *)[self layer];
@@ -370,7 +397,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
             
             startAngle = endAngle;
         }
-        [CATransaction commit];
+        //[CATransaction commit];
     }
     //[CATransaction setDisableActions:NO];
     // [CATransaction commit];
@@ -380,7 +407,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
 
 - (void)insertSliceAtIndex:(NSUInteger)indexToInsert animate:(BOOL)animate
 {
-    //NSLog(@"insertSliceAtIndex: animate: %i", animate);
+    //DLog(@"insertSliceAtIndex: animate: %i", animate);
     if (!animate) {
         [self reloadData];
         return;
@@ -415,7 +442,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
             [CATransaction setDisableActions:NO];
             
             // Remember because "sliceAngle" is a dynamic property this ends up calling the actionForLayer:forKey: method on each layer with a non-nil delegate
-            //NSLog(@"<insertSliceAtIndex> endAngle: %f", endAngle);
+            //DLog(@"<insertSliceAtIndex> endAngle: %f", endAngle);
             [sliceLayer setSliceAngle:endAngle];
             [sliceLayer setDelegate:nil];
             
@@ -428,9 +455,9 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
 
 - (BTSSliceLayer *)insertSliceAtIndex:(NSUInteger)index values:(BTSPieViewValues*)values startAngle:(CGFloat)startAngle endAngle:(CGFloat)endAngle
 {
-    //NSLog(@"insertSliceAtIndex: values: startAngle: endAngle:");
+    //DLog(@"insertSliceAtIndex: values: startAngle: endAngle:");
     NSUInteger sliceCount = values->count();
-    //NSLog(@"sliceCount: %i", sliceCount);
+    //DLog(@"sliceCount: %i", sliceCount);
     //UIColor *color = [_delegate pieView:self colorForSliceAtIndex:index sliceCount:sliceCount];
     
     BTSSliceLayer *sliceLayer = [self insertSliceLayerAtIndex:index];
@@ -438,7 +465,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
     [sliceLayer setDelegate:delegate];
     
     CGFloat initialLabelAngle = [self initialLabelAngleForSliceAtIndex:index sliceCount:sliceCount startAngle:startAngle endAngle:endAngle];
-    //NSLog(@"insertSliceAtIndex, angle calling");
+    //DLog(@"insertSliceAtIndex, angle calling");
     CATextLayer *labelLayer = [self insertLabelLayerAtIndex:index value:values->percentages()[index]];
     BTSUpdateLabelPosition(labelLayer, _center, _radius, initialLabelAngle, initialLabelAngle);
     
@@ -455,7 +482,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
 
 - (BTSSliceLayer *)updateSliceAtIndex:(NSUInteger)currentIndex values:(BTSPieViewValues*)values
 {
-    //NSLog(@"updateSliceAtIndex:values:");
+    //DLog(@"updateSliceAtIndex:values:");
     BTSPieLayer *pieLayer = (BTSPieLayer *)[self layer];
     
     NSArray *sliceLayers = [[pieLayer sliceLayers] sublayers];
@@ -466,7 +493,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
     CATextLayer *labelLayer = [labelLayers objectAtIndex:currentIndex];
     double value = values->percentages()[currentIndex];
     NSString *label = [_labelFormatter stringFromNumber:[NSNumber numberWithDouble:value]];
-    //NSLog(@"label: %@", label);
+    //DLog(@"label: %@", label);
     [labelLayer setString:label];
     return sliceLayer;
 }
@@ -501,7 +528,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
      }*/
     
     initialLabelAngle = startAngle;
-    //NSLog(@"initialLabelAngle: %f", initialLabelAngle);
+    //DLog(@"initialLabelAngle: %f", initialLabelAngle);
     return initialLabelAngle;
 }
 
@@ -588,7 +615,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
 
 - (void)reloadSliceAtIndex:(NSUInteger)index animate:(BOOL)animate
 {
-    //NSLog(@"reloadSliceAtIndex:animate:");
+    //DLog(@"reloadSliceAtIndex:animate:");
     if (!animate) {
         [self reloadData];
         return;
@@ -625,7 +652,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
             double value = values.percentages()[sliceIndex];
             NSNumber *valueAsNumber = [NSNumber numberWithDouble:value];
             NSString *label = [_labelFormatter stringFromNumber:valueAsNumber];
-            //NSLog(@"label: %@", label);
+            //DLog(@"label: %@", label);
             [labelLayer setString:label];
         }
         
@@ -635,7 +662,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
 
 - (void)refreshLayers
 {
-    //NSLog(@"refreshLayers");
+    //DLog(@"refreshLayers");
     BTSPieLayer *pieLayer = (BTSPieLayer *) [self layer];
     NSArray *sliceLayers = [[pieLayer sliceLayers] sublayers];
     NSArray *labelLayers = [[pieLayer labelLayers] sublayers];
@@ -653,7 +680,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
 
 - (void)updateTimerFired:(CADisplayLink *)displayLink
 {
-    //NSLog(@"updateTimerFired:");
+    //DLog(@"updateTimerFired:");
     BTSPieLayer *parentLayer = (BTSPieLayer *) [self layer];
     NSArray *pieLayers = [[parentLayer sliceLayers] sublayers];
     NSArray *labelLayers = [[parentLayer labelLayers] sublayers];
@@ -705,7 +732,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
     CGPoint point = [touch locationInView:self];
     // Distance betw. center and touch point, pythagorean theorem approach:
     float distance = sqrt(pow((_center.x - point.x), 2.0) + pow((_center.y - point.y), 2.0));
-    //NSLog(@"distance between cebter and touch: %f", distance);
+    //DLog(@"distance between cebter and touch: %f", distance);
     __block NSInteger selectedIndex = -1;
     
     BTSPieLayer *pieLayer = (BTSPieLayer *) [self layer];
@@ -716,8 +743,8 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
     
     [sliceLayers enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
         BTSSliceLayer *sliceLayer = (BTSSliceLayer *) obj;
-        //NSLog(@"sliceLayer: %@", sliceLayer);
-        //NSLog(@"sublayers: %@", [sliceLayer sublayers]);
+        //DLog(@"sliceLayer: %@", sliceLayer);
+        //DLog(@"sublayers: %@", [sliceLayer sublayers]);
         CGPathRef path = [sliceLayer path];
         
         CGFloat startAngle = BTSLookupPreviousLayerAngle(sliceLayers, index, (CGFloat) -M_PI_2);
@@ -732,17 +759,17 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
             }
             else if (touchedContainerSliceLayerPrev == nil && touchedContainerSliceLayer == nil) { // first time
                 touchedContainerSliceLayer = sliceLayer;
-                NSLog(@"touchesMoved if: FIRST TIME!");
+                DLog(@"touchesMoved if: FIRST TIME!");
             }
             else if(touchedContainerSliceLayerPrev == nil && touchedContainerSliceLayer != nil) { // second time
                 if (touchedContainerSliceLayer == sliceLayer) {
                     touchedContainerSliceLayerPrev = sliceLayer; // touched the same slice twice
-                    NSLog(@"touchesMoved if: THE SAME!");
+                    DLog(@"touchesMoved if: THE SAME!");
                 }
                 else {
                     touchedContainerSliceLayerPrev = touchedContainerSliceLayer; // second time but different slice
                     touchedContainerSliceLayer = sliceLayer;
-                    NSLog(@"touchesMoved if: NOT THE SAME!");
+                    DLog(@"touchesMoved if: NOT THE SAME!");
                 }
                 
             }
@@ -768,7 +795,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
                 
                 CGFloat centerX = xOffset;
                 CGFloat centerY = yOffset;
-                /*NSLog(@"_center.x: %f, _center.y: %f, xOffset: %f, yOffset: %f, startAngle: %f, endAngle: %f, index: %i",
+                /*DLog(@"_center.x: %f, _center.y: %f, xOffset: %f, yOffset: %f, startAngle: %f, endAngle: %f, index: %i",
                  _center.x, _center.y, xOffset, yOffset, startAngle, endAngle, index); */
                 CGAffineTransform translationTransform = CGAffineTransformMakeTranslation(centerX, centerY);
                 [sliceLayer setAffineTransform:translationTransform];
@@ -786,12 +813,12 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
                 //                [sliceLayersInside enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
                 //                    BTSSliceLayer *sliceLayerInside = (BTSSliceLayer *) obj;
                 //                    CGFloat slotRadius = sliceLayerInside.radius;
-                //                    NSLog(@"slotRadius: %f", slotRadius);
+                //                    DLog(@"slotRadius: %f", slotRadius);
                 //                    if (((slotRadius-distance) < diff) && (slotRadius >= distance)) {
                 //                        diff = (slotRadius-distance);
-                //                        NSLog(@"new diff: %f", diff);
+                //                        DLog(@"new diff: %f", diff);
                 //                        touchedSliceLayerInsideTemp = sliceLayerInside;
-                //                        NSLog(@"touchedSliceLayerInsideTemp: %@", touchedSliceLayerInsideTemp);
+                //                        DLog(@"touchedSliceLayerInsideTemp: %@", touchedSliceLayerInsideTemp);
                 //                    }
                 //
                 //                }];
@@ -832,7 +859,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
                 //
                 //                    }];
                 //
-                //                    NSLog(@"touched sliceLayerInside: %@ with Radius: %f", touchedSliceLayerInside, touchedSliceLayerInside.radius);
+                //                    DLog(@"touched sliceLayerInside: %@ with Radius: %f", touchedSliceLayerInside, touchedSliceLayerInside.radius);
                 //
                 //
                 //                }
@@ -862,8 +889,8 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
     NSArray *tempLabelLayers = [[pieLayer tempLabelLayers] sublayers];
     
     if (touchedContainerSliceLayer == touchedContainerSliceLayerPrev) {
-        NSLog(@"touchesEnded: THE SAME!");
-        //NSLog(@"touchedContainerSliceLayer: %@,  touchedContainerSliceLayerPrev: %@", touchedContainerSliceLayer, touchedContainerSliceLayerPrev);
+        DLog(@"touchesEnded: THE SAME!");
+        //DLog(@"touchedContainerSliceLayer: %@,  touchedContainerSliceLayerPrev: %@", touchedContainerSliceLayer, touchedContainerSliceLayerPrev);
         [touchedContainerSliceLayer setAffineTransform:CGAffineTransformIdentity];
         [[labelLayers objectAtIndex:touchedSliceLayerIndex] setAffineTransform:CGAffineTransformIdentity];
         [[lineLayers objectAtIndex:touchedSliceLayerIndex] setAffineTransform:CGAffineTransformIdentity];
@@ -884,7 +911,7 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
 
 - (void)maybeNotifyDelegateOfSelectionChangeFrom:(NSInteger)previousSelection to:(NSInteger)newSelection
 {
-    NSLog(@"maybeNotifyDelegateOfSelectionChangeFrom:");
+    DLog(@"maybeNotifyDelegateOfSelectionChangeFrom:");
     if (previousSelection != newSelection) {
         
         if (previousSelection != -1) {
@@ -915,14 +942,14 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
 {
     CATextLayer *textLayer = [CATextLayer layer];
     [textLayer setContentsScale:[[UIScreen mainScreen] scale]];
-    CGFontRef font = CGFontCreateWithFontName((__bridge CFStringRef) [[UIFont systemFontOfSize:14.0] fontName]);
+    CGFontRef font = CGFontCreateWithFontName((__bridge CFStringRef) [[UIFont systemFontOfSize:12.0] fontName]);
     [textLayer setFont:font];
     CFRelease(font);
-    [textLayer setFontSize:14.0];
+    [textLayer setFontSize:12.0];
     [textLayer setAnchorPoint:CGPointMake(0.5, 0.5)];
     [textLayer setAlignmentMode:kCAAlignmentCenter];
     //[textLayer setBackgroundColor:[UIColor greenColor].CGColor];
-    CGSize size = [@"100.00%" sizeWithFont:[UIFont systemFontOfSize:14.0]];
+    CGSize size = [@"100.00%" sizeWithFont:[UIFont systemFontOfSize:12.0]];
     [textLayer setBounds:CGRectMake(0.0, 0.0, size.width, size.height)];
     return textLayer;
 }
@@ -940,7 +967,7 @@ CGPathRef CGPathCreateArc(CGPoint center, CGFloat radius, CGFloat startAngle, CG
 }
 
 CGPathRef CGPathCreateArcLineForAngle(CGPoint center, CGFloat radius, CGFloat angle, bool drawArrow) {
-    NSLog(@"CGPathCreateArcLineForAngle - angle: %f", angle);
+    DLog(@"CGPathCreateArcLineForAngle - angle: %f", angle);
     CGMutablePathRef linePath = CGPathCreateMutable();
     CGPathMoveToPoint(linePath, NULL, center.x, center.y);
     CGPathAddLineToPoint(linePath, NULL, (CGFloat) (center.x + (radius+13.0) * cos(angle)), (CGFloat) (center.y + (radius+13.0) * sin(angle)));
@@ -962,7 +989,7 @@ void BTSUpdateLabelPosition(CALayer *labelLayer, CGPoint center, CGFloat radius,
 
 void BTSUpdateTempLabelPosition(CALayer *tempLabelLayer, CGPoint center, CGFloat radius, CGFloat startAngle, CGFloat endAngle) {
     CGFloat midAngle = (startAngle + endAngle) / 2.0f;
-    CGFloat halfRadius = radius + 23.0f;
+    CGFloat halfRadius = radius + 27.0f;
     //CGFloat midAngle = startAngle;
     [tempLabelLayer setPosition:CGPointMake((CGFloat) (center.x + (halfRadius * cos(midAngle))), (CGFloat) (center.y + (halfRadius * sin(midAngle))))];
 }
@@ -971,9 +998,9 @@ void BTSUpdateLayers(NSArray *sliceLayers, NSArray *labelLayers, NSArray *tempLa
     
     {
         CAShapeLayer *lineLayer = [lineLayers objectAtIndex:layerIndex];
-        NSLog(@"BTSUpdateLayers, with startAngle: %f and layerIndex: %i and sliceLayers: %@ and lineLayers: %@", startAngle, layerIndex, sliceLayers, lineLayers);
+        DLog(@"BTSUpdateLayers, with startAngle: %f and layerIndex: %i and sliceLayers: %@ and lineLayers: %@", startAngle, layerIndex, sliceLayers, lineLayers);
         if (layerIndex == 11) {
-            NSLog(@"BTSUpdateLayers, start found!");
+            DLog(@"BTSUpdateLayers, start found!");
             bool drawArrow = true;
             CGPathRef linePath = CGPathCreateArcLineForAngle(center, radius + 5, endAngle, drawArrow);
             
@@ -992,7 +1019,7 @@ void BTSUpdateLayers(NSArray *sliceLayers, NSArray *labelLayers, NSArray *tempLa
         }
         else {
             CGPathRef linePath = CGPathCreateArcLineForAngle(center, radius, endAngle, false);
-            NSLog(@"BTSUpdateLayers, linePath: %@", linePath);
+            DLog(@"BTSUpdateLayers, linePath: %@", linePath);
             [lineLayer setPath:linePath];
             CFRelease(linePath);
         }
@@ -1010,33 +1037,35 @@ void BTSUpdateLayers(NSArray *sliceLayers, NSArray *labelLayers, NSArray *tempLa
          }
          NSSortDescriptor* sortOrder = [NSSortDescriptor sortDescriptorWithKey: @"self" ascending: YES];
          NSArray *sortedArray = [radiusStepArray sortedArrayUsingDescriptors: [NSArray arrayWithObject: sortOrder]];*/
-        //NSLog(@"sliceLayer: %@", sliceLayer);
-        //NSLog(@"sliceLayer sublayers: %@", [sliceLayer sublayers]);
+        //DLog(@"sliceLayer: %@", sliceLayer);
+        //DLog(@"sliceLayer sublayers: %@", [sliceLayer sublayers]);
         
         //int i = 0;
         
         CGFloat angleBetween = ABS(ABS(startAngle) - ABS(endAngle));
-        NSArray *slotValues = slotValuesForSlice[layerIndex];
-        NSLog(@"BTSUpdateLayers: slotValuesForSlice at index %i : %@ ", layerIndex, slotValues);
+        NSArray *slotValues = [[NSArray alloc] init];
+        if (layerIndex < [slotValuesForSlice count] - 1) {
+            slotValues = slotValuesForSlice[layerIndex + 1];
+        }
+        else {
+            slotValues = slotValuesForSlice[0];
+        }
+        DLog(@"BTSUpdateLayers: slotValuesForSlice at index %i : %@ ", layerIndex, slotValues);
         int slotsCount = [slotValues count];
         int j = slotsCount-1; // slot number
         NSArray *radiusValuesForSlice = calculateRadiusValues(slotValues, radius, angleBetween);
         
-        NSLog(@"BTSUpdateLayers: startAngle: %f", startAngle);
-        NSLog(@"BTSUpdateLayers: endAngle: %f", endAngle);
+        DLog(@"BTSUpdateLayers: startAngle: %f", startAngle);
+        DLog(@"BTSUpdateLayers: endAngle: %f", endAngle);
         for (CAShapeLayer *sliceLayerInside in [sliceLayer sublayers]) {
-            //NSLog(@"radius: %f", radius);
-            //NSLog(@"new radius: %f", radius-[sortedArray[i]integerValue]);
-            //NSLog(@"sortedArray[i]: %@", sortedArray[i]);
+            //DLog(@"radius: %f", radius);
+            //DLog(@"new radius: %f", radius-[sortedArray[i]integerValue]);
+            //DLog(@"sortedArray[i]: %@", sortedArray[i]);
             ((BTSSliceLayer *) sliceLayerInside).radius = [radiusValuesForSlice[j] floatValue];
             //CGPathRef pathInside = CGPathCreateArc(center, radius-i, startAngle, endAngle);
             CGPathRef pathInside = CGPathCreateArc(center, [radiusValuesForSlice[j] floatValue], startAngle, endAngle);
             [sliceLayerInside setPath:pathInside];
             CFRelease(pathInside);
-            //NSLog(@"layerIndex: %i, j: %i", layerIndex, j);
-            //int step = [[[radiusArray objectAtIndex:layerIndex] objectAtIndex:j] integerValue];
-            //NSLog(@"step: %i", step);
-            //i+=step;
             j--;
         }
         
@@ -1062,28 +1091,29 @@ void BTSUpdateLayers(NSArray *sliceLayers, NSArray *labelLayers, NSArray *tempLa
 
 NSArray *calculateRadiusValues(NSArray *slotValues, CGFloat radius, CGFloat angleBetween)
 {
-    NSLog(@"calculateRadiusValues - slotValues: %@, radius: %f", slotValues, radius);
+    DLog(@"calculateRadiusValues - slotValues: %@, radius: %f", slotValues, radius);
     // Calculate total area of the circle segment
     CGFloat totalArea = 0.5 * (radius * radius) * angleBetween;
     NSMutableArray *resultRadiusValues = [[NSMutableArray alloc] init];
     // Area pieces
     CGFloat sum = 0.0;
     //NSMutableArray *areaPieces = [[NSMutableArray alloc] init];
-    CGFloat areaPieces[[slotValues count]];
+    //CGFloat areaPieces[[slotValues count]];
+    NSMutableArray *areaPieces = [[NSMutableArray alloc] init]; // float values
     for (int i=0; i<[slotValues count]; i++) {
         sum+= [slotValues[i] floatValue];
     }
-    NSLog(@"calculateRadiusValues - sum: %f", sum);
+    DLog(@"calculateRadiusValues - sum: %f", sum);
     for (int i=0; i<[slotValues count]; i++) {
-        areaPieces[i] = ([slotValues[i] floatValue]/sum) * totalArea;
+        areaPieces[i] = @(([slotValues[i] floatValue]/sum) * totalArea);
     }
-    NSLog(@"calculateRadiusValues - areaPieces values: %f, %f, %f", areaPieces[0], areaPieces[1], areaPieces[2]);
+    DLog(@"calculateRadiusValues - areaPieces values: %f, %f, %f", [areaPieces[0] floatValue], [areaPieces[1] floatValue], [areaPieces[2] floatValue]);
     CGFloat currentArea = 0.0;
     for (int i=0; i<[slotValues count]; i++) {
-        currentArea += areaPieces[i];
+        currentArea += [areaPieces[i] floatValue];
         resultRadiusValues[i] = [NSNumber numberWithFloat:sqrtf( (2.0 * currentArea) / angleBetween )];
     }
-    NSLog(@"calculateRadiusValues - resultRadiusValues: %@", resultRadiusValues);
+    DLog(@"calculateRadiusValues - resultRadiusValues: %@", resultRadiusValues);
     return resultRadiusValues;
 }
 

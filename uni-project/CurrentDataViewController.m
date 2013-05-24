@@ -99,7 +99,7 @@ NSMutableArray *navigationBarItems;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"viewDidLoad...");
+    DLog(@"viewDidLoad...");
     DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
     detailViewManager.detailViewController = self;
     
@@ -134,7 +134,7 @@ NSMutableArray *navigationBarItems;
     self.reachabilityObj.reachableBlock = ^(Reachability * reachability)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"Block Says Reachable");
+            DLog(@"Block Says Reachable");
             weakSelf.deviceIsOnline = YES;
             if (hud) {
                 [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
@@ -148,7 +148,7 @@ NSMutableArray *navigationBarItems;
     self.reachabilityObj.unreachableBlock = ^(Reachability * reachability)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"Block Says Unreachable");
+            DLog(@"Block Says Unreachable");
             weakSelf.deviceIsOnline = NO;
             hud = [MBProgressHUD showHUDAddedTo:weakSelf.view animated:YES];
             // Configure for text only and offset down
@@ -173,7 +173,7 @@ NSMutableArray *navigationBarItems;
 // -------------------------------------------------------------------------------
 - (void)viewDidAppear:(BOOL)animated {
     if (!self.instanceWasCached) {
-        NSLog(@"viewDidAppear...");
+        DLog(@"viewDidAppear...");
         [self addMeterViewContents];
         [self initPlotForScatterPlot];
     }
@@ -194,8 +194,8 @@ NSMutableArray *navigationBarItems;
     } completion:^{
         
         System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
-        NSLog(@"saved System Object :%@", systemObj);
-        NSLog(@"saved System Object, currentdatalog :%@", systemObj.currentdatalog);
+        DLog(@"saved System Object :%@", systemObj);
+        DLog(@"saved System Object, currentdatalog :%@", systemObj.currentdatalog);
         
     }];
     /* LOGGING END
@@ -208,9 +208,9 @@ NSMutableArray *navigationBarItems;
 // -------------------------------------------------------------------------------
 - (void)viewWillAppear:(BOOL)animated
 {
-    NSLog(@"calling CurrentDataViewController - viewWillAppear start");
+    DLog(@"calling CurrentDataViewController - viewWillAppear start");
     [super viewWillAppear:animated];
-    // NSLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
+    // DLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
     KeychainItemWrapper *keychain =
     [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
     if (!(BOOL)[keychain objectForKey:(__bridge id)(kSecAttrLabel)]) {
@@ -225,7 +225,7 @@ NSMutableArray *navigationBarItems;
     NSString *startText = @"Daten für heute, ";
     self.navigationBar.topItem.title = [startText stringByAppendingString:dateString];
     
-    //NSLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
+    //DLog(@"calling FirstDetailViewController - viewWillAppear: rightBarButtonItems %@", self.navigationBar.topItem.rightBarButtonItems);
     
 }
 
@@ -237,11 +237,11 @@ NSMutableArray *navigationBarItems;
 
 -(void)initPlotForScatterPlot {
     
-    NSLog(@"Calling initPlotForScatterPlot");
+    DLog(@"Calling initPlotForScatterPlot");
     self.hostingView.allowPinchScaling = YES;
     self.dataForPlot  = [[NSMutableArray alloc] initWithCapacity:kMaxDataPoints];
     [self createScatterPlot];
-    NSLog(@"<initPlotForScatterPlot> self.deviceIsOnline: %i",self.deviceIsOnline);
+    DLog(@"<initPlotForScatterPlot> self.deviceIsOnline: %i",self.deviceIsOnline);
     if (self.deviceIsOnline) {
         [self generateData];
     }
@@ -249,7 +249,7 @@ NSMutableArray *navigationBarItems;
 
 -(void)generateData
 {
-    NSLog(@"Calling generateData");
+    DLog(@"Calling generateData");
     [self.dataForPlot removeAllObjects];
     [self.dataForPlot addObject:@0];
     self.currentIndex = 1; //0
@@ -269,7 +269,7 @@ NSMutableArray *navigationBarItems;
 }
 
 -(void)createScatterPlot {
-    NSLog(@"Calling createScatterPlot");
+    DLog(@"Calling createScatterPlot");
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
     CGRect bounds = self.hostingView.bounds;
 #else
@@ -278,7 +278,7 @@ NSMutableArray *navigationBarItems;
     BOOL drawAxis = YES;
     if ( bounds.size.width < 200.0f ) {
         drawAxis = NO;
-        //NSLog(@"drawAxis=NO");
+        //DLog(@"drawAxis=NO");
     }
     self.scatterGraph = [[CPTXYGraph alloc] initWithFrame:bounds];
     self.hostingView.hostedGraph = self.scatterGraph;
@@ -286,7 +286,7 @@ NSMutableArray *navigationBarItems;
     //[self.scatterGraph applyTheme:[CPTTheme themeNamed:kCPTDarkGradientTheme]];
     
     if ( drawAxis ) {
-        //NSLog(@"drawAxis=YES");
+        //DLog(@"drawAxis=YES");
         self.scatterGraph.paddingLeft   = 1.0;
         self.scatterGraph.paddingTop    = 1.0;
         self.scatterGraph.paddingRight  = 1.0;
@@ -359,7 +359,7 @@ NSMutableArray *navigationBarItems;
     CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.scatterGraph.defaultPlotSpace;
     plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(0) length:CPTDecimalFromUnsignedInteger(kMaxDataPoints - 1)];
     plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(0) length:CPTDecimalFromUnsignedInteger(100)];
-     NSLog(@"self.userCurrentWatt: %i", self.userCurrentWatt);
+     DLog(@"self.userCurrentWatt: %i", self.userCurrentWatt);
     
 }
 
@@ -375,16 +375,16 @@ NSMutableArray *navigationBarItems;
 -(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)index
 {
     NSNumber *num = nil;
-    NSLog(@"Calling numberForPlot");
+    DLog(@"Calling numberForPlot");
     switch ( fieldEnum ) {
         case CPTScatterPlotFieldX:
             num = @(index + self.currentIndex - self.dataForPlot.count);
-            NSLog(@"X Value, num = %@, index = %i", num, index);
+            DLog(@"X Value, num = %@, index = %i", num, index);
             break;
             
         case CPTScatterPlotFieldY:
             num = (self.dataForPlot)[index];
-            NSLog(@"Y value, num = %@, index = %i", num, index);
+            DLog(@"Y value, num = %@, index = %i", num, index);
             break;
             
         default:
@@ -413,7 +413,7 @@ NSMutableArray *navigationBarItems;
 
 -(void)newData:(NSTimer *)theTimer
 {
-    NSLog(@"---newData:theTimer---");
+    DLog(@"---newData:theTimer---");
     CPTGraph *theGraph = self.scatterGraph;
     CPTPlot *thePlot   = [theGraph plotWithIdentifier:kPlotIdentifier];
     
@@ -423,7 +423,7 @@ NSMutableArray *navigationBarItems;
             [thePlot deleteDataInIndexRange:NSMakeRange(0, 1)];
         }
         
-        NSLog(@"---newData:theTimer---setting yRange");
+        DLog(@"---newData:theTimer---setting yRange");
         
         CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)theGraph.defaultPlotSpace;
         NSUInteger location       = (self.currentIndex >= kMaxDataPoints ? self.currentIndex - kMaxDataPoints + 1 : 0);
@@ -438,7 +438,7 @@ NSMutableArray *navigationBarItems;
         [thePlot insertDataAtIndex:self.dataForPlot.count - 1 numberOfRecords:1];
     }
     
-    NSLog(@"self.dataForPlot: %@", self.dataForPlot);
+    DLog(@"self.dataForPlot: %@", self.dataForPlot);
     
 }
 
@@ -449,8 +449,8 @@ NSMutableArray *navigationBarItems;
 //----------------------------------------------------------------------------------------
 
 - (void) initDataDisplayView {
-    NSLog(@"calling initDataDisplayView");
-    NSLog(@"lastWattValues count: %i", [self.lastWattValues count]);
+    DLog(@"calling initDataDisplayView");
+    DLog(@"lastWattValues count: %i", [self.lastWattValues count]);
     if ([self.lastWattValues count] > 0) {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"HH"];
@@ -458,7 +458,7 @@ NSMutableArray *navigationBarItems;
         if (hours==0) {
             hours = 1;
         }
-        //NSLog(@"hours: %i", hours);
+        //DLog(@"hours: %i", hours);
         //NSNumber *total = [self.lastWattValues valueForKeyPath:@"@sum.value"];
         float total = 0.00;
         for(NSNumber *wattValue in self.lastWattValues){
@@ -466,23 +466,23 @@ NSMutableArray *navigationBarItems;
         }
         total = total/[self.lastWattValues count]; // calculate average value
         float averageKwhTemp = (total/1000)*hours;
-         NSLog(@"averageKwhTemp: %f", averageKwhTemp);
+         DLog(@"averageKwhTemp: %f", averageKwhTemp);
         averageKwhTemp = (ceil(averageKwhTemp * 100.0)) / 100.0;
-        NSLog(@"total: %f", total);
-        NSLog(@"averageKwhTemp: %f", averageKwhTemp);
+        DLog(@"total: %f", total);
+        DLog(@"averageKwhTemp: %f", averageKwhTemp);
         NSString *averageKwh = [NSString stringWithFormat:@"%.2f", averageKwhTemp];
         
-        NSLog(@"averageKwh: %@", averageKwh);
+        DLog(@"averageKwh: %@", averageKwh);
         self.kwhDataLabel.text = averageKwh;
         
         // electricity tariff: Stadtwerke Strom Basis, over 10000 kWh
         float averageCostsTemp = averageKwhTemp * (28.77/100.0);
         NSString *averageCosts = [NSString stringWithFormat:@"%.2f", averageCostsTemp];
-        NSLog(@"averageCosts: %@", averageCosts);
+        DLog(@"averageCosts: %@", averageCosts);
         self.eurDataLabel.text = averageCosts;
     }
     else {
-        //NSLog(@"setting kwhDataLabel and eurDataLabel = 0");
+        //DLog(@"setting kwhDataLabel and eurDataLabel = 0");
         self.kwhDataLabel.text = @"0.00";
         self.eurDataLabel.text = @"0.00";
     }
@@ -499,7 +499,7 @@ NSMutableArray *navigationBarItems;
 
 - (void)startSynchronization
 {
-    NSLog(@"startSynchronization...");
+    DLog(@"startSynchronization...");
     //self.HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     self.HUD = [[MBProgressHUD alloc] initWithView:self.view];
     //[self.view addSubview:self.HUD];
@@ -540,7 +540,7 @@ NSMutableArray *navigationBarItems;
     
     __block NSTimer *checkForTimeOutTimer;
     
-    NSLog(@"getDataFromServer...");
+    DLog(@"getDataFromServer...");
     //max consumption is a value, beeing aggregated during a period of time, i.e. 14 days
     // we should store this value in our DB, using Core Data
     // TODO
@@ -573,16 +573,16 @@ NSMutableArray *navigationBarItems;
             });
             self.userMaximumWatt = [userMaxWattString intValue];
             self.maxVal = [userMaxWattString intValue];
-            NSLog(@"Max Watt changed! setting maxVal: %i, setting userMaximumWatt: %i ", self.maxVal, self.userMaximumWatt);
+            DLog(@"Max Watt changed! setting maxVal: %i, setting userMaximumWatt: %i ", self.maxVal, self.userMaximumWatt);
             [self changeSpeedometerNumbers];
             [self calculateDeviationAngle];
             
         }
-        NSLog(@"Success! user's maximum watt consumption(userMaximumWatt): %i Watt, maxVal: %i Watt", self.userMaximumWatt, self.maxVal);
+        DLog(@"Success! user's maximum watt consumption(userMaximumWatt): %i Watt, maxVal: %i Watt", self.userMaximumWatt, self.maxVal);
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
-        NSLog(@"Failed during getting maximum watt: %ld",(long)[error code]);
+        DLog(@"Failed during getting maximum watt: %ld",(long)[error code]);
         if (USEDUMMYDATA) {
             // stop the timer
             if(self.continiousTimer){
@@ -594,7 +594,7 @@ NSMutableArray *navigationBarItems;
             });
             self.userMaximumWatt = 600;
             self.maxVal = 600;
-            NSLog(@"USING DUMMY DATA: Max Watt changed! setting maxVal: %i, setting userMaximumWatt: %i ", self.maxVal, self.userMaximumWatt);
+            DLog(@"USING DUMMY DATA: Max Watt changed! setting maxVal: %i, setting userMaximumWatt: %i ", self.maxVal, self.userMaximumWatt);
             [self changeSpeedometerNumbers];
             [self calculateDeviationAngle];
         }
@@ -658,14 +658,14 @@ NSMutableArray *navigationBarItems;
             if ([self.lastWattValues count] <= 20) {
                 [self.lastWattValues addObject:@(self.userCurrentWatt)];
                 //[self.lastWattValues addObject:[NSNull null]];
-                //NSLog(@"__lastWattValues: %@", self.lastWattValues);
-                //NSLog(@"__object: %@", [self.lastWattValues objectAtIndex:0]);
+                //DLog(@"__lastWattValues: %@", self.lastWattValues);
+                //DLog(@"__object: %@", [self.lastWattValues objectAtIndex:0]);
             }
             else {
                 [self.lastWattValues removeObjectAtIndex:0];
                 [self.lastWattValues addObject:@(self.userCurrentWatt)];
                 //[self.lastWattValues addObject:[NSNull null]];
-                //NSLog(@"_lastWattValues: %@", self.lastWattValues);
+                //DLog(@"_lastWattValues: %@", self.lastWattValues);
             }
             
             // Update the dataDisplayView
@@ -677,12 +677,12 @@ NSMutableArray *navigationBarItems;
             //pendingTimer = [NSTimer  scheduledTimerWithTimeInterval:5 target:self selector:@selector(rotatePendingNeedle) userInfo:nil repeats:YES];
             //[self rotatePendingNeedle];
         }
-        NSLog(@"Success! user's current watt consumption: %i Watt", self.userCurrentWatt);
+        DLog(@"Success! user's current watt consumption: %i Watt", self.userCurrentWatt);
         // Update the dataDisplayView
         [self initDataDisplayView];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Failed during getting current watt: %@",[error localizedDescription]);
+        DLog(@"Failed during getting current watt: %@",[error localizedDescription]);
         if (USEDUMMYDATA) {
             // stop the timer
             if(self.continiousTimer){
@@ -697,7 +697,7 @@ NSMutableArray *navigationBarItems;
             [self setSpeedometerCurrentValue:self.userCurrentWatt];
             [self.lastWattValues addObject:@(self.userCurrentWatt)];
             
-            NSLog(@"USING DUMMY DATA: Max Watt changed! setting maxVal: %i, setting userMaximumWatt: %i ", self.maxVal, self.userMaximumWatt);
+            DLog(@"USING DUMMY DATA: Max Watt changed! setting maxVal: %i, setting userMaximumWatt: %i ", self.maxVal, self.userMaximumWatt);
             [self initDataDisplayView];
         }
     }];
@@ -717,20 +717,20 @@ NSMutableArray *navigationBarItems;
 
 - (void)changeSpeedometerNumbers
 {
-    NSLog(@"changeSpeedometerNumbers, self.labelsWithNumbersCollection: %@", self.labelsWithNumbersCollection);
+    DLog(@"changeSpeedometerNumbers, self.labelsWithNumbersCollection: %@", self.labelsWithNumbersCollection);
     int step = (int)floorf(self.userMaximumWatt/12);
     step = ((step+2)/5)*5;
-    NSLog(@"changeSpeedometerNumbers, step: %i", step);
+    DLog(@"changeSpeedometerNumbers, step: %i", step);
     int temp = step;
-    NSLog(@"changeSpeedometerNumbers, step: %i", step);
+    DLog(@"changeSpeedometerNumbers, step: %i", step);
     for (UILabel *spLabel in self.labelsWithNumbersCollection) {
-        NSLog(@"changeSpeedometerNumbers, temp: %i", temp);
+        DLog(@"changeSpeedometerNumbers, temp: %i", temp);
         spLabel.text = [NSString stringWithFormat:@"%i", temp];
         temp += step;
     }
-    NSLog(@"changeSpeedometerNumbers, setting new maxVal: %i", self.maxVal);
+    DLog(@"changeSpeedometerNumbers, setting new maxVal: %i", self.maxVal);
     self.userMaximumWatt = temp - step;
-    NSLog(@"changeSpeedometerNumbers, setting new userMaximumWatt: %i", self.userMaximumWatt);
+    DLog(@"changeSpeedometerNumbers, setting new userMaximumWatt: %i", self.userMaximumWatt);
 }
 
 
@@ -780,14 +780,14 @@ NSMutableArray *navigationBarItems;
 
 -(void) calculateDeviationAngle
 {
-	NSLog(@"calculateDeviationAngle - self.maxVal: %i", self.maxVal);
-    NSLog(@"calculateDeviationAngle - userMaximumWatt: %i", self.userMaximumWatt);
+	DLog(@"calculateDeviationAngle - self.maxVal: %i", self.maxVal);
+    DLog(@"calculateDeviationAngle - userMaximumWatt: %i", self.userMaximumWatt);
     
 	if(self.userMaximumWatt>0){
 		self.angle = ((self.speedometerCurrentValue * 241)/self.userMaximumWatt-120.5);  // 241 - Total angle between 0 - maxVal
-        //NSLog(@"calculateDeviationAngle - case 1");
-        //NSLog(@"with self.speedometerCurrentValue: %i", self.speedometerCurrentValue);
-        //NSLog(@"with self.maxVal: %i", self.maxVal);
+        //DLog(@"calculateDeviationAngle - case 1");
+        //DLog(@"with self.speedometerCurrentValue: %i", self.speedometerCurrentValue);
+        //DLog(@"with self.maxVal: %i", self.maxVal);
 	}
 	else{
 		self.angle = -120.5;
@@ -799,7 +799,7 @@ NSMutableArray *navigationBarItems;
 		self.angle = 120.5;
 	}
 	
-	NSLog(@"self.angle: %f", self.angle);
+	DLog(@"self.angle: %f", self.angle);
     
 	// If Calculated angle is greater than 180 deg, to avoid the needle to rotate in reverse direction first rotate the needle 1/3 of the calculated angle and then 2/3. //
 	if(abs(self.angle-self.prevAngleFactor) >180)
@@ -829,7 +829,7 @@ NSMutableArray *navigationBarItems;
 #pragma mark rotatePendingNeedle Method
 -(void) rotatePendingNeedle
 {
-    //NSLog(@"rotatePendingNeedle...");
+    //DLog(@"rotatePendingNeedle...");
     [UIView animateWithDuration: 2.0 delay: 0.0 options: UIViewAnimationOptionCurveLinear animations:^{
                         [self.needleImageView setTransform: CGAffineTransformMakeRotation((M_PI / 180) * self.angle + 0.02)];
                      }
@@ -854,8 +854,8 @@ NSMutableArray *navigationBarItems;
         self.pendingTimer = nil;
      }
 
-    NSLog(@"rotateNeedle...");
-    NSLog(@"self.needleImageView: %@", self.needleImageView);
+    DLog(@"rotateNeedle...");
+    DLog(@"self.needleImageView: %@", self.needleImageView);
     [UIView animateWithDuration: 2.5 delay: 1.0 options: UIViewAnimationOptionCurveLinear animations:^{
         [self.needleImageView setTransform: CGAffineTransformMakeRotation((M_PI / 180) * self.angle + 0.02)];
     }
@@ -876,7 +876,7 @@ NSMutableArray *navigationBarItems;
 
 -(void) setSpeedometerCurrentValue:(int)value
 {
-    NSLog(@"setSpeedometerCurrentValue...");
+    DLog(@"setSpeedometerCurrentValue...");
 	_speedometerCurrentValue = value;
 	NSString *currentValueAsString = [NSString stringWithFormat:@"%i", self.speedometerCurrentValue];
     NSMutableArray *characters = [[NSMutableArray alloc] initWithCapacity:[currentValueAsString length]];
@@ -910,7 +910,7 @@ NSMutableArray *navigationBarItems;
 
 -(void) rotateIt:(float)angl
 {
-    // NSLog(@"rotateIt...");
+    // DLog(@"rotateIt...");
 	[UIView beginAnimations:nil context:nil];
 	[UIView setAnimationDuration:0.01f];
 	[self.needleImageView setTransform: CGAffineTransformMakeRotation((M_PI / 180) *angl)];
@@ -921,17 +921,17 @@ NSMutableArray *navigationBarItems;
 #pragma mark Profile Button Methods
 
 - (void)hideProfileAfterUserLoggedOff {
-    NSLog(@"hideProfileAfterUserLoggedOff...");
+    DLog(@"hideProfileAfterUserLoggedOff...");
     if (self.profilePopover){
         [self.profilePopover dismissPopoverAnimated:YES];
-        NSLog(@"profile popover dissmissed...");
+        DLog(@"profile popover dissmissed...");
     }
     [navigationBarItems removeObject:self.profileBarButtonItem];
     [self.navigationBar.topItem setRightBarButtonItems:navigationBarItems animated:YES];
     [self.navigationBar.topItem setRightBarButtonItem:nil animated:YES];
-    NSLog(@"rightBarButtonItems: %@", [self.navigationBar.topItem rightBarButtonItems]);
-    NSLog(@"navigationBarItems: %@", navigationBarItems);
-    NSLog(@"self.profileBarButtonItem: %@", self.profileBarButtonItem);
+    DLog(@"rightBarButtonItems: %@", [self.navigationBar.topItem rightBarButtonItems]);
+    DLog(@"navigationBarItems: %@", navigationBarItems);
+    DLog(@"self.profileBarButtonItem: %@", self.profileBarButtonItem);
     if (self.pendingTimer) {
         [self.pendingTimer invalidate];
         _pendingTimer = nil;
@@ -945,7 +945,7 @@ NSMutableArray *navigationBarItems;
     DetailViewManager *detailViewManager = (DetailViewManager*)self.splitViewController.delegate;
     FirstDetailViewController *startDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"FirstDetailView"];
     detailViewManager.detailViewController = startDetailViewController;
-    startDetailViewController.navigationBar.topItem.title = @"Summary";
+    startDetailViewController.navigationBar.topItem.title = @"Home";
 
 }
 
@@ -984,8 +984,8 @@ NSMutableArray *navigationBarItems;
 
 //- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
 //
-//    NSLog(@"DETAIL frame w:%f h:%f", self.view.frame.size.width, self.view.frame.size.height);
-//    NSLog(@"DETAIL bounds w:%f h:%f", self.view.bounds.size.width, self.view.bounds.size.height);
+//    DLog(@"DETAIL frame w:%f h:%f", self.view.frame.size.width, self.view.frame.size.height);
+//    DLog(@"DETAIL bounds w:%f h:%f", self.view.bounds.size.width, self.view.bounds.size.height);
 //    
 //}
 
@@ -994,12 +994,12 @@ NSMutableArray *navigationBarItems;
 //    
 //    if(interfaceOrientation == UIInterfaceOrientationLandscapeLeft || interfaceOrientation == UIInterfaceOrientationLandscapeRight)
 //    {
-//        NSLog(@"Rotating to Landscape");
+//        DLog(@"Rotating to Landscape");
 //        [self.needleImageView setCenter:self.speedometerImageView.center];
 //        [self.meterImageViewDot setFrame:CGRectMake((self.speedometerImageView.frame.origin.x)+(155), 213, 57, 57)];
 //    }
 //    else {
-//        NSLog(@"Rotating to Portrait");
+//        DLog(@"Rotating to Portrait");
 //        [self.needleImageView setCenter:self.speedometerImageView.center];
 //        [self.meterImageViewDot setFrame:CGRectMake((self.speedometerImageView.frame.origin.x)+(155), 213, 57, 57)];
 //    }
