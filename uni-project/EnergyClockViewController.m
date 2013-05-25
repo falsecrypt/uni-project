@@ -687,7 +687,15 @@ static const NSArray *participants;
 - (NSNumber *)detailsSliceValueAtIndex:(NSUInteger)index {
     // return 12 Values for the current participant
     // using dayUserConsumption-Array
-    NSDecimalNumber *result = [[self.dayUserConsumption objectAtIndex:index] objectForKey: [NSString stringWithFormat:@"%i",self.selectedParticipantId] ];
+    
+    NSDecimalNumber *result = nil;
+    if (index < [self.dayUserConsumption count]-1) {
+        result = [[self.dayUserConsumption objectAtIndex:index +1] objectForKey: [NSString stringWithFormat:@"%i",self.selectedParticipantId] ];
+    }
+    else {
+        result = [[self.dayUserConsumption objectAtIndex:0] objectForKey: [NSString stringWithFormat:@"%i",self.selectedParticipantId] ];
+    }
+
     DLog(@"detailsSliceValueAtIndex - result: %@", result);
     DLog(@"detailsSliceValueAtIndex - self.selectedParticipantId: %i", self.selectedParticipantId);
     DLog(@"detailsSliceValueAtIndex - selectedParticipantId as string: %@", [NSString stringWithFormat:@"%i",self.selectedParticipantId]);
