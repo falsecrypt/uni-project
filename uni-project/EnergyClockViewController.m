@@ -661,12 +661,27 @@ static const NSArray *participants;
 
 // TODO : new
 - (CGFloat)pieView:(BTSPieView *)pieView valueForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex {
-    return (CGFloat)[[[self.slotValuesForSlice objectAtIndex:sliceIndex] objectAtIndex:slotIndex] floatValue];
+    CGFloat result = 0.0f;
+    if (sliceIndex < [self.sliceValues count]-1) {
+        result = (CGFloat)[[[self.slotValuesForSlice objectAtIndex:sliceIndex+1] objectAtIndex:slotIndex] floatValue];
+    }
+    else {
+        result = (CGFloat)[[[self.slotValuesForSlice objectAtIndex:0] objectAtIndex:slotIndex] floatValue];
+    }
+    return result;
     
 }
 // for SliceDetailsView
 - (NSNumber *)valueForSlotAtIndex:(NSUInteger)slotIndex sliceAtIndex:(NSUInteger)sliceIndex {
-    return [[self.slotValuesForSlice objectAtIndex:sliceIndex] objectAtIndex:slotIndex];
+    DLog(@"return sliceIndex: %i", sliceIndex);
+    NSNumber *result = nil;
+    if (sliceIndex < [self.sliceValues count]-1) {
+        result = [[self.slotValuesForSlice objectAtIndex:sliceIndex+1] objectAtIndex:slotIndex];
+    }
+    else {
+        result = [[self.slotValuesForSlice objectAtIndex:0] objectAtIndex:slotIndex];
+    }
+    return result;
 }
 
 - (NSNumber *)detailsSliceValueAtIndex:(NSUInteger)index {
