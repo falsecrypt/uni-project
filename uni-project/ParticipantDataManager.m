@@ -151,7 +151,7 @@
                              
                              //DLog(@"[monthAndYear objectAtIndex:1] : %@", monthAndYear[1]);
                              //DLog(@"[monthAndYear objectAtIndex:0] : %@", monthAndYear[0]);
-                             //DLog(@"monthAndYear : %@==>", monthAndYear);
+                             DLog(@"monthAndYear : %@", monthAndYear);
                              double temp = [month[1] doubleValue];
                              //NSDecimalNumber *monthConsumption = (NSDecimalNumber *)[NSDecimalNumber numberWithDouble:temp];
                              self.consumptionMonthsSum += temp;

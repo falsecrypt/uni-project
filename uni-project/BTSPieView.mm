@@ -244,7 +244,14 @@ CGFloat BTSLookupPreviousLayerAngle(NSArray *pieLayers, NSUInteger currentPieLay
     CATextLayer *labelLayer = [BTSPieView createLabelLayer];
     NSUInteger originalIndex = index;
     [labelLayer setBounds:CGRectMake(0.0, 0.0, 25.0, 15.0)]; // (CGFloat x, CGFloat y, CGFloat width, CGFloat height)
-    NSDictionary *userTemperatureValues = [temperatureUserValues objectForKey:@(hourValue)];
+                                                             //NSUInteger sliceCount = [_dataSource numberOfSlicesInPieView:self]; // max 12
+    NSDictionary *userTemperatureValues;
+    //if (index < sliceCount-1) {
+        userTemperatureValues = [temperatureUserValues objectForKey:@(hourValue + 2)];
+    //}
+    //else {
+    //  userTemperatureValues = [temperatureUserValues objectForKey:@(hourValue + 2)];
+    //}
     DLog(@"@(hourValue): %@", @(hourValue));
     DLog(@"userTemperatureValues: %@", userTemperatureValues);
     if ([[userTemperatureValues allKeys] count] > 0) {
