@@ -90,11 +90,10 @@ extern CFAbsoluteTime StartTime;
      ****************/
     
     // Log off user
-    /*
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:NO forKey:@"userLoggedIn"];
-    DLog(@"calling didFinishLaunchingWithOptions, userLoggedIn: %i", [defaults boolForKey:@"userLoggedIn"]);
-     */
+    KeychainItemWrapper *keychain =
+    [[KeychainItemWrapper alloc] initWithIdentifier:@"EcoMeterAccountData" accessGroup:nil];
+    [keychain setObject:@"LOGGEDOFF" forKey:(__bridge id)(kSecAttrLabel)];
+
     
     // Delete Account, Testing
     //KeychainItemWrapper *keychain =

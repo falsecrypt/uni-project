@@ -8,7 +8,7 @@
 #import "MyOfficeTVC.h"
 #import "MCachedModalStoryboardSegue.h"
 #import "CurrentDataViewController.h"
-#import  "FirstDetailViewController.h"
+#import "FirstDetailViewController.h"
 
 @interface MyOfficeTVC ()
 

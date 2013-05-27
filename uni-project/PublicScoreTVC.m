@@ -381,7 +381,8 @@ enum SectionType : NSUInteger {
                      if ([userID integerValue] == MySensorID) {
                          // Check whether the username from response equals the username on our iPad
                          NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-                         if ([publicName isEqualToString:[defaults objectForKey:@"publicUserName"]]) {
+                         if ([publicName isEqualToString:[defaults objectForKey:@"publicUserName"]] ||
+                             [[defaults objectForKey:@"publicUserName"] length] == 0) {
                              nameToUse = publicName;
                          }
                          // OK. they are not the same, lets sync. Username in NSUserDefaults has higher priority
