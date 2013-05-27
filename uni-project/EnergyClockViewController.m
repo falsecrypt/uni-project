@@ -334,9 +334,11 @@ static const NSArray *participants;
 {
     /* Get last sync date, ==today? -> then do nothing! */
     NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    [calendar setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    //[calendar setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    
     NSDateComponents *todayComponents =
     [calendar components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[NSDate date]];
+    [todayComponents setTimeZone:[NSTimeZone systemTimeZone]];
     System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
     NSAssert(systemObj!=nil, @"System Object with id=primary doesnt exist");
     DLog(@"checkSyncStatus systemObj: %@", systemObj);

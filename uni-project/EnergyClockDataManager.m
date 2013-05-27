@@ -71,9 +71,10 @@ static NSDictionary *sunriseSunset;
         if ([mode isEqualToString:DayChartsMode])
         {
             NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-            [calendar setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+            //[calendar setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
             NSDateComponents *todayComponents =
             [calendar components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[NSDate date]];
+            [todayComponents setTimeZone:[NSTimeZone systemTimeZone]];
             System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
             NSAssert(systemObj!=nil, @"System Object with id=primary doesnt exist");
             NSDate *lastSyncDate = systemObj.daysupdated;

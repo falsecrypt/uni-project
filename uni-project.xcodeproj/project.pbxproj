@@ -317,7 +317,7 @@
 		CE54E7C01682943400F91C5E /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		CE54E7C11682943400F91C5E /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		CE56031716E976CF0062FB70 /* EnergyClockDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnergyClockDataManager.h; sourceTree = "<group>"; };
-		CE56031816E976CF0062FB70 /* EnergyClockDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnergyClockDataManager.m; sourceTree = "<group>"; };
+		CE56031816E976CF0062FB70 /* EnergyClockDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EnergyClockDataManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CE6A008416AF7E1200F845EE /* DSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = DSelected.png; sourceTree = "<group>"; };
 		CE6A008516AF7E1200F845EE /* CSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CSelected.png; sourceTree = "<group>"; };
 		CE6A008616AF7E1200F845EE /* BSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BSelected.png; sourceTree = "<group>"; };

@@ -192,9 +192,10 @@ static float maxConsumption = 0.0f;
 {
     /* Get last sync date, ==today? -> then do nothing! */
     NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-    [calendar setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
+    //[calendar setTimeZone:[NSTimeZone timeZoneWithName:@"GMT"]];
     NSDateComponents *todayComponents =
     [calendar components:NSDayCalendarUnit | NSMonthCalendarUnit | NSYearCalendarUnit fromDate:[NSDate date]];
+    [todayComponents setTimeZone:[NSTimeZone systemTimeZone]]; // IMPORTANT
     System *systemObj = [System findFirstByAttribute:@"identifier" withValue:@"primary"];
     NSAssert(systemObj!=nil, @"System Object with id=primary doesnt exist");
     DLog(@"viewDidAppear systemObj: %@", systemObj);

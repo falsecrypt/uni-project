@@ -100,11 +100,17 @@ enum SectionType : NSUInteger {
             else {
                 NSArray *allObjects = [Participant findAll];
                 for (Participant *user in allObjects) {
-                    [self.nameForUser setObject:user.name forKey:user.sensorid];
+                    [self.nameForUser setObject:user.name forKey:[user.sensorid stringValue]];
                     [self.userForName setObject:user.sensorid forKey:user.name];
-                    // and Images?
+                    if (user.profileimage) {
+                        UIImage *avatarImg = [[UIImage alloc] initWithData: user.profileimage];
+                        [self.imageForUser setObject:avatarImg forKey:[user.sensorid stringValue]];
+                    }
                 }
-                [self.tableView reloadData];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    DLog(@"Unreachable, self.nameForUser: %@", self.nameForUser);
+                    [self.tableView reloadData];
+                 });  
             }
         });
     };
@@ -213,14 +219,12 @@ enum SectionType : NSUInteger {
         [participant3 setProfileimage:imageData3];
     } completion:^{
         
-        NSArray *allObjects = [Participant findAll];
-        DLog(@"all Participants after avatars update: %@, total number: %@", allObjects, [Participant numberOfEntities]);
+        DLog(@"all Participants after avatars update: %@, total number: %@", [Participant findAll], [Participant numberOfEntities]);
     }];
     
     
     [[NSManagedObjectContext defaultContext]  saveInBackgroundCompletion:^{
-        NSArray *allObjects = [Participant findAll];
-        DLog(@"all Participants after avatars update: %@, total number: %@", allObjects, [Participant numberOfEntities]);
+        DLog(@"all Participants after avatars update: %@, total number: %@", [Participant findAll], [Participant numberOfEntities]);
     }];
     
 }
@@ -633,6 +637,7 @@ enum SectionType : NSUInteger {
     {
         
         DLog(@"cellForRowAtIndexPath ParticipantSection");
+        DLog(@"self.nameForUser: %@, userForName: %@", self.nameForUser, self.userForName);
         // Adding data to a cell using tags, we are using custom cells //
         cell = [tableView dequeueReusableCellWithIdentifier:@"participant"];
         if (cell == nil) {
@@ -648,9 +653,10 @@ enum SectionType : NSUInteger {
         else {
             ((UIImageView *)[cell viewWithTag:4354]).image = nil;
         }
-        if([self.userForName objectForKey:userID] != nil){
+        DLog(@"nameForUser valueForKey:userID: %@ userID: %@", [self.nameForUser valueForKey:userID], userID);
+        if([self.nameForUser objectForKey:userID] != nil){
             UILabel *label = (UILabel *)[cell viewWithTag:4352]; // User Name Textfield
-            label.text = [self.userForName objectForKey:userID];
+            label.text = [self.nameForUser objectForKey:userID];
             
         }
         // Username Not in the cache
