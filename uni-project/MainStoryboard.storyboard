@@ -623,7 +623,7 @@
                                         </constraints>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="4xV-aa-yBy">
-                                        <rect key="frame" x="0.0" y="99" width="540" height="45"/>
+                                        <rect key="frame" x="0.0" y="99" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="31" y="0.0" width="478" height="43"/>
@@ -658,7 +658,7 @@
                             <tableViewSection id="GA4-Sa-gk7">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" rowHeight="51" id="lQe-YD-c8F">
-                                        <rect key="frame" x="0.0" y="213" width="540" height="53"/>
+                                        <rect key="frame" x="0.0" y="213" width="540" height="52"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="31" y="1" width="478" height="50"/>
@@ -755,7 +755,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="akc-Bk-Vmh" customClass="SliceDetailsView">
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="400" id="J6l-dv-vwc"/>
+                                            <constraint firstAttribute="height" constant="380" id="RS5-ns-Idp"/>
                                             <constraint firstAttribute="width" constant="703" id="ZPS-fp-nXv"/>
                                         </constraints>
                                     </view>
@@ -763,11 +763,11 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="AGo-9u-OXp" firstAttribute="trailing" secondItem="mCr-T7-Uy3" secondAttribute="trailing" type="default" id="1R9-d7-U2C"/>
+                                    <constraint firstAttribute="bottom" secondItem="akc-Bk-Vmh" secondAttribute="bottom" constant="-46" id="DZU-ss-3Ml"/>
                                     <constraint firstItem="akc-Bk-Vmh" firstAttribute="leading" secondItem="mCr-T7-Uy3" secondAttribute="leading" type="default" id="EG1-4C-b8h"/>
                                     <constraint firstItem="AGo-9u-OXp" firstAttribute="centerX" secondItem="mCr-T7-Uy3" secondAttribute="centerX" type="default" id="KsT-Fk-d5f"/>
-                                    <constraint firstItem="akc-Bk-Vmh" firstAttribute="top" secondItem="mCr-T7-Uy3" secondAttribute="top" constant="423" id="S8D-oE-pJi"/>
-                                    <constraint firstAttribute="bottom" secondItem="AGo-9u-OXp" secondAttribute="bottom" constant="124" id="d0P-uf-MWz"/>
-                                    <constraint firstItem="AGo-9u-OXp" firstAttribute="top" secondItem="mCr-T7-Uy3" secondAttribute="top" constant="7" id="mvi-pK-JwO"/>
+                                    <constraint firstItem="AGo-9u-OXp" firstAttribute="top" secondItem="mCr-T7-Uy3" secondAttribute="top" constant="8" id="cLk-Jm-EVx"/>
+                                    <constraint firstItem="akc-Bk-Vmh" firstAttribute="top" secondItem="mCr-T7-Uy3" secondAttribute="top" constant="467" id="cba-Ni-Ftc"/>
                                 </constraints>
                             </scrollView>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="2" translatesAutoresizingMaskIntoConstraints="NO" id="iCU-fv-64G">
@@ -784,17 +784,17 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="mCr-T7-Uy3" firstAttribute="top" secondItem="S3Y-ee-Fbw" secondAttribute="top" constant="233" id="70d-Ue-dmk"/>
                             <constraint firstItem="ZDI-tn-T2G" firstAttribute="top" secondItem="8GQ-3D-bOP" secondAttribute="bottom" type="default" id="E4v-aV-nuN"/>
                             <constraint firstItem="8GQ-3D-bOP" firstAttribute="leading" secondItem="S3Y-ee-Fbw" secondAttribute="leading" type="default" id="GIG-03-aXE"/>
                             <constraint firstItem="iCU-fv-64G" firstAttribute="centerX" secondItem="ZDI-tn-T2G" secondAttribute="centerX" type="default" id="MkZ-hp-buj"/>
                             <constraint firstItem="mCr-T7-Uy3" firstAttribute="leading" secondItem="S3Y-ee-Fbw" secondAttribute="leading" type="default" id="PmU-L9-2jM"/>
                             <constraint firstItem="iCU-fv-64G" firstAttribute="top" secondItem="S3Y-ee-Fbw" secondAttribute="top" constant="205" id="Qo1-tw-smX"/>
                             <constraint firstAttribute="bottom" secondItem="ZDI-tn-T2G" secondAttribute="bottom" constant="536" id="Ufx-wN-pse"/>
-                            <constraint firstItem="mCr-T7-Uy3" firstAttribute="bottom" secondItem="S3Y-ee-Fbw" secondAttribute="bottom" type="default" id="Wad-BB-4Vt"/>
                             <constraint firstItem="8GQ-3D-bOP" firstAttribute="top" secondItem="S3Y-ee-Fbw" secondAttribute="top" type="default" id="Wqa-xh-uCw"/>
+                            <constraint firstItem="mCr-T7-Uy3" firstAttribute="top" secondItem="S3Y-ee-Fbw" secondAttribute="top" constant="218" id="X9z-ha-aFH"/>
                             <constraint firstItem="ZDI-tn-T2G" firstAttribute="trailing" secondItem="8GQ-3D-bOP" secondAttribute="trailing" type="default" id="XVl-Hy-5NI"/>
                             <constraint firstItem="ZDI-tn-T2G" firstAttribute="leading" secondItem="S3Y-ee-Fbw" secondAttribute="leading" type="default" id="a0N-Pu-H10"/>
+                            <constraint firstAttribute="bottom" secondItem="mCr-T7-Uy3" secondAttribute="bottom" constant="-15" id="amG-hG-aBk"/>
                             <constraint firstItem="mCr-T7-Uy3" firstAttribute="trailing" secondItem="ZDI-tn-T2G" secondAttribute="trailing" type="default" id="lgc-ZB-paz"/>
                         </constraints>
                     </view>

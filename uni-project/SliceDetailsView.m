@@ -105,7 +105,7 @@
     
     // 1 - Set up view frames
     CGRect rectParticipant = self.bounds;
-    rectParticipant = CGRectMake(rectParticipant.origin.x, rectParticipant.origin.y + 10.0, self.bounds.size.width/2, (rectParticipant.size.height));
+    rectParticipant = CGRectMake(rectParticipant.origin.x, rectParticipant.origin.y - 35.0f, self.bounds.size.width/2, (rectParticipant.size.height) + 20.0f);
     
     CGRect rectTotalSlice = CGRectMake(self.bounds.size.width/2, rectParticipant.origin.y, self.bounds.size.width/2, (rectParticipant.size.height));
     
@@ -116,7 +116,7 @@
     // 2 - Create host views
     self.participantHostingView.frame = rectParticipant;
     self.participantHostingView.allowPinchScaling = NO;
-    self.participantHostingView.backgroundColor =[UIColor clearColor];
+    self.participantHostingView.backgroundColor = [UIColor clearColor];
     [self addSubview:self.participantHostingView];
     
     self.totalSliceHostingView.frame = rectTotalSlice;
@@ -189,7 +189,7 @@
     self.participantPieChart.identifier = @"participantPieChart";
     self.participantPieChart.startAngle = M_PI_2;
     self.participantPieChart.sliceDirection = CPTPieDirectionClockwise;
-    self.participantPieChart.labelOffset = -1.0;
+    self.participantPieChart.labelOffset = 2.0;
     self.participantPieChart.shouldCenterLabel = @"YES"; // kind of clock-design
     CPTMutableLineStyle *customLineStyle = [CPTMutableLineStyle lineStyle];
     customLineStyle.lineColor = [[CPTColor blackColor]colorWithAlphaComponent:0.3];
@@ -207,7 +207,7 @@
     self.totalSlicePieChart.sliceDirection = CPTPieDirectionCounterClockwise;
     //self.totalSlicePieChart.labelRotationRelativeToRadius = YES;
     //pieChart.labelRotation                 = -M_PI_2;
-    self.totalSlicePieChart.labelOffset = -1.0;
+    self.totalSlicePieChart.labelOffset = 1.0;
     
     // Create gradient
     CPTGradient *overlayGradient = [[CPTGradient alloc] init];

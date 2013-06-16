@@ -265,7 +265,7 @@ static const NSArray *participants;
     CGSizeMake(CGRectGetWidth(self.scrollView.frame) * numberPages, CGRectGetHeight(self.scrollView.frame));
     
     self.mainScrollView.contentSize =
-    CGSizeMake(CGRectGetWidth(self.mainScrollView.frame), CGRectGetHeight(self.energyClockView.frame) + CGRectGetHeight(self.sliceDetailsView.frame));
+    CGSizeMake(CGRectGetWidth(self.mainScrollView.frame), CGRectGetHeight(self.energyClockView.frame) + CGRectGetHeight(self.sliceDetailsView.frame)+ 50.0f);
     DLog(@"self.mainScrollView.contentSize h: %f, w: %f", self.mainScrollView.contentSize.height, self.mainScrollView.contentSize.width);
     
     // pages are created on demand
